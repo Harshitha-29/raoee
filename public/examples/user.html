@@ -96,9 +96,9 @@
               <div class="card">
                 <div class="card-header" style="display: flex;">
                   <h5 class="title">My Profile</h5>
-                  <h5 class="title responsiveEdit" style="float: right;margin-left: 80%;">
+                  <!-- <h5 class="title responsiveEdit" style="float: right;margin-left: 80%;">
                     <i class="fa fa-pencil-alt"></i>
-                  </h5>
+                  </h5> -->
                 </div>
                
                 <div class="card-body">
@@ -274,23 +274,33 @@
                 </div>
               </div>
             </div>
+            
             <div class="col-md-4">
               <div class="card card-user">
                 <div class="image">
-                  <img src="../assets/img/bg5.jpg" alt="..." />
+                  <img src="https://www.desktopbackground.org/download/1024x768/2014/06/28/784958_nature-trains-railroad-tracks-railway-wallpapers_1920x1200_h.jpg" alt="..." />
                 </div>
+                
                 <div class="card-body">
+                  <input type="file" accept="image/*" id="userImage" onchange="readURL(this)" hidden>
                   <div class="author">
-                    <a href="#">
-                      <img
-                        class="avatar border-gray"
-                        src="../assets/img/mike.jpg"
-                        alt="..."
-                      />
-                      <h5 class="title">Mike Andrew</h5>
-                    </a>
-                    <p class="description">michael24</p>
+                    
+                      <a href="#popup2"  class="lightbox">
+                        <img
+                          id="blah"
+                          class="avatar border-gray"
+                          src="../assets/img/mike.jpg"
+                          alt="..."
+                          style="object-fit: cover;"
+                        />
+                        <label for="userImage">
+                          <i class="fa fa-pencil-alt" style="padding:10px;position: absolute !important;cursor: pointer;color: black;"></i>
+                        </label>
+                        <h5 class="title" style="color: black;">User Name</h5>
+                      </a>
+                      
                   </div>
+                 
                   <p class="description text-center">
                     "Lamborghini Mercy <br />
                     Your chick she so thirsty <br />
@@ -298,25 +308,10 @@
                   </p>
                 </div>
                 <hr />
+                
                 <div class="button-container">
-                  <button
-                    href="#"
-                    class="btn btn-neutral btn-icon btn-round btn-lg"
-                  >
-                    <i class="fab fa-facebook-f"></i>
-                  </button>
-                  <button
-                    href="#"
-                    class="btn btn-neutral btn-icon btn-round btn-lg"
-                  >
-                    <i class="fab fa-twitter"></i>
-                  </button>
-                  <button
-                    href="#"
-                    class="btn btn-neutral btn-icon btn-round btn-lg"
-                  >
-                    <i class="fab fa-google-plus-g"></i>
-                  </button>
+                  <input type="file" accept="image/*" hidden id="userImage">
+                      <button id="updateBtn" style="background-color:black;color:peru;font-weight: 700;border-radius: 20px;" type="button" class="btn btn-elegant center"><i class="now-ui-icons users_single-02 pr-2" aria-hidden="true"></i>Update Image</button>
                 </div>
               </div>
             </div>
@@ -372,7 +367,23 @@
             : $label.removeClass("has-file").html(labelVal);
         });
       });
+
     })();
 
+    function readURL(input) {
+
+      if (input.files && input.files[0]) {
+        
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#blah')
+            .attr('src', e.target.result);
+        };
+        selectedFile=input.files[0];
+        reader.readAsDataURL(input.files[0]);
+      
+
+      }
+    }
   </script>
 </html>
