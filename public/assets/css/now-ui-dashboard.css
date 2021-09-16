@@ -3667,7 +3667,7 @@ Created using IcoMoon - icomoon.io
 
 .table>thead>tr>th {
   border-bottom-width: 1px;
-  font-size: 1.45em;
+  
   font-weight: 300;
   border: 0;
 }
@@ -3927,7 +3927,7 @@ Created using IcoMoon - icomoon.io
   display: block;
   height: auto;
   white-space: nowrap;
-  color:peru;
+  color:dimgray;
   font-size: 15px;
   font-weight: 700 !important;
 }
@@ -5435,7 +5435,7 @@ Created using IcoMoon - icomoon.io
   .navbar-collapse {
     background: none !important;
   }
-
+ 
   .navbar .navbar-toggle {
     display: none;
   }
@@ -5505,6 +5505,33 @@ Created using IcoMoon - icomoon.io
   .landing-page .section-story-overview .image-container:nth-child(2) {
     margin-left: 0;
     margin-bottom: 30px;
+  }
+
+  .register .nav-tabs{
+    margin-top: 3%;
+    border: none;
+    background: #05426b;
+    border-radius: 1.5rem;
+    width: 18% !important;
+    padding-left: 30px;
+    padding-right: 32%;
+  
+    float: right;
+    
+  }
+  .show-small{
+    display: inline-block !important;
+  }
+  .register-right{
+    background: #f8f9fa;
+    border-top-left-radius: 0% 0% !important;
+    border-bottom-left-radius: 0% 0% !important;
+  }
+  .hide-small{
+    display: none !important;
+  }
+  .adjust-small{
+    margin-left: 3% !important;
   }
 }
 
@@ -6144,3 +6171,152 @@ a:hover, a:active {
   }
 }
 
+
+
+.register{
+  background:#ebecf1;
+  margin-top: 3%;
+  padding: 3%;
+}
+.register-left{
+  text-align: center;
+  color: #fff;
+  margin-top: 4%;
+}
+.register-left input{
+  border: none;
+  border-radius: 1.5rem;
+  padding: 2%;
+  width: 60%;
+  background: #f8f9fa;
+  font-weight: bold;
+  color: #383d41;
+  margin-top: 10%;
+  margin-bottom: 3%;
+  cursor: pointer;
+}
+.register-right{
+  background: #f8f9fa;
+  border-top-left-radius: 10% 50%;
+  border-bottom-left-radius: 10% 50%;
+}
+.register-left img{
+  margin-top: 15%;
+  margin-bottom: 5%;
+  width: 25%;
+  -webkit-animation: mover 2s infinite  alternate;
+  animation: mover 1s infinite  alternate;
+}
+@-webkit-keyframes mover {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+@keyframes mover {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-20px); }
+}
+.register-left p{
+  font-weight: lighter;
+  padding: 12%;
+  margin-top: -9%;
+}
+.register .register-form{
+  padding: 10%;
+  margin-top: 10%;
+}
+.btnRegister{
+  float: right;
+  margin-top: 10%;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 2%;
+  background: #05426b;
+  color: #fff;
+  font-weight: 600;
+  width: 50%;
+  cursor: pointer;
+}
+.register .nav-tabs{
+  margin-top: 3%;
+  border: none;
+  background: #05426b;
+  border-radius: 1.5rem;
+  width: 28%;
+  float: right;
+}
+.register .nav-tabs .nav-link{
+  padding: 2%;
+  height: 34px;
+  font-weight: 600;
+  color: #fff;
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+.register .nav-tabs .nav-link:hover{
+  border: none;
+}
+.register .nav-tabs .nav-link.active{
+  width: 100px;
+  color: #05426b;
+  border: 2px solid #05426b;
+  border-top-left-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+}
+.register-heading{
+  text-align: center;
+  margin-top: 8%;
+  margin-bottom: -15%;
+  color: #495057;
+}
+.border-line {
+  border-right: 1px solid #EEEEEE
+}
+
+.facebook {
+  background-color: rgb(179, 49, 49);
+  color: #ffffff;
+  font-size: 18px;
+  padding-top: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer
+}
+
+.twitter {
+  background-color: #1DA1F2;
+  color: #fff;
+  font-size: 18px;
+  padding-top: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer
+}
+
+.linkedin {
+  background-color: #2867B2;
+  color: #fff;
+  font-size: 18px;
+  padding-top: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer
+}
+
+.line {
+  height: 1px;
+  width: 45%;
+  background-color: #E0E0E0;
+  margin-top: 10px
+}
+
+.or {
+  width: 10%;
+  font-weight: bold
+}
+
+.text-sm {
+  font-size: 14px !important
+}
