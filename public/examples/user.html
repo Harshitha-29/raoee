@@ -25,6 +25,10 @@
       integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
       crossorigin="anonymous"
     />
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
@@ -41,12 +45,19 @@
       integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU"
       crossorigin="anonymous"
     />
+
+    
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
+    />
   </head>
   <style>
     .choices__inner {
       border-radius: 20px;
       background-color: transparent;
       height: 10px !important;
+      overflow-y: scroll;
     }
 
     .btn-tertiary {
@@ -86,6 +97,10 @@
     .input-file + .js-labelFile.has-file .icon:before {
       content: "";
       color: #5aac7b;
+    }
+
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+      width: 100% !important;
     }
   </style>
   <body class="user-profile">
@@ -137,7 +152,7 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-12 pr-1">
+                      <div class="col-md-6 pr-1">
                         <div class="form-group">
                           <label for="exampleInputEmail1"
                             >Email address
@@ -152,9 +167,24 @@
                           />
                         </div>
                       </div>
+                      <div class="col-md-6 pl-1">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1"
+                            >Phone Number
+                            <span style="color: red">*</span></label
+                          >
+                          <input
+                            name="phone"
+                            type="number"
+                            class="form-control"
+                            placeholder="Phone"
+                            required
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-7">
+                      <div class="col-md-12">
                         <div class="form-group">
                           <label
                             >Your Vertical
@@ -166,6 +196,7 @@
                             multiple
                             required
                             name="domain"
+                            style="overflow-y: scroll !important"
                           >
                             <option value="Signalling & Telecommunication">
                               Signalling & Telecommunication
@@ -186,95 +217,207 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-5">
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
                         <div class="form-group">
                           <label
-                            >Vertical Level
+                            >Vertical Sub-Cat
                             <span style="color: red">*</span></label
                           >
                           <select
+                            id="choices-multiple-remove-button"
                             class="form-control"
-                            name="domain-level"
+                            multiple
                             required
+                            name="domain"
+                            style="overflow-y: scroll !important"
                           >
-                            <option value="entry">Entry - Level</option>
-                            <option value="mid">Mid - Level</option>
-                            <option value="senior">Senior - Level</option>
-                            <option value="executive">Executive - Level</option>
+                            <option value="entry">Desgin</option>
+                            <option value="mid">Installation</option>
+                            <option value="senior">Testing</option>
+                            <option value="executive">Maintainance</option>
+                            <option value="executive">
+                              PRoject Management
+                            </option>
+                            <option value="executive">
+                              Site - Supervision
+                            </option>
                           </select>
                         </div>
                       </div>
                     </div>
-                    <h6 style="font-weight:600;">Select Expertise  ( <b style="color: red;">Vertical Selected : Signalling</b> ) </h6>
+                    <h6 style="font-weight: 600">
+                      Select Expertise (
+                      <b style="color: red">Vertical Selected : Signalling</b> )
+                    </h6>
                     <label>Tick the box if applicable</label>
                     <table class="table table-bordered">
                       <thead class="thead-dark">
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Expertise</th>
-                          <th scope="col">Designation</th>
-                          <th scope="col">Applicable?</th>
+                        <tr style="text-align: center">
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col center"
+                          >
+                            Area of Expertise
+                          </th>
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Applicable ?
+                          </th>
+                          <th style="text-align: center;font-weight: 600" scope="col">
+                            Your Profession / Experience
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <th scope="row">1</th>
-
-                          <td>Signal Interlocking Plan</td>
-                          <td>Design Engineer</td>
+                          <td>Signal Experience</td>
                           <td>
-                            <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="customCheck2"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="customCheck2"
-                                >Yes</label
-                              >
-                            </div>
+                            <label class="switch">
+                              <input type="checkbox" />
+                              <span class="slider round"></span>
+                            </label>
+                            <span
+                              style="color: rgb(180, 179, 76); font-weight: 699"
+                            >
+                              No</span
+                            >
+                          </td>
+                          <td>
+                            <select
+                              class="selectpicker"
+                              style="overflow-y: scroll; cursor: no-drop"
+                              disabled
+                            >
+                              <option>Fresher</option>
+                              <option>Fresher & Trained</option>
+                              <option>Less Than 2 Years</option>
+                              <option>Between 2 - 5 Years</option>
+                              <option>Between 5 - 10 Years</option>
+                              <option disabled="disabled">
+                                More Than 10 Years
+                              </option>
+                            </select>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">2</th>
-
-                          <td>Control Table/Route Control Chart</td>
-                          <td>Asst.Design Engineer</td>
+                          <td>Signal Design</td>
                           <td>
-                            <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="customCheck1"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="customCheck1"
-                                >Yes</label
-                              >
-                            </div>
+                            <label class="switch">
+                              <input type="checkbox" checked />
+                              <span class="slider round"></span>
+                            </label>
+                            <span style="color: green; font-weight: 699">
+                              Yes
+                            </span>
+                          </td>
+                          <td>
+                            <select
+                              class="selectpicker"
+                              style="overflow-y: scroll"
+                            >
+                              <option>Assistant Designer</option>
+                              <option>Fresher & Trained</option>
+                              <option>Less Than 2 Years</option>
+                              <option>Between 2 - 5 Years</option>
+                              <option>Between 5 - 10 Years</option>
+                              <option disabled="disabled">
+                                More Than 10 Years
+                              </option>
+                            </select>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>Signal Installation</td>
+                          <td>
+                            <label class="switch">
+                              <input type="checkbox" />
+                              <span class="slider round"></span>
+                            </label>
+                            <span
+                              style="color: rgb(180, 179, 76); font-weight: 699"
+                            >
+                              No</span
+                            >
+                          </td>
+                          <td>
+                            <select
+                              class="selectpicker"
+                              style="overflow-y: scroll"
+                            >
+                              <option>Assistant Installer</option>
+                              <option>Installer</option>
+                              <option>Senior Installer</option>
+                              <option>Between 2 - 5 Years</option>
+                              <option>Between 5 - 10 Years</option>
+                              <option disabled="disabled">
+                                More Than 10 Years
+                              </option>
+                            </select>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">3</th>
-
-                          <td>Relay chart Analysis</td>
-                          <td>Draugftsmen</td>
+                          <td>Signalling Wiring</td>
                           <td>
-                            <div class="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                class="custom-control-input"
-                                id="customCheck3"
-                              />
-                              <label
-                                class="custom-control-label"
-                                for="customCheck3"
-                                >Yes</label
-                              >
-                            </div>
+                            <label class="switch">
+                              <input type="checkbox" />
+                              <span class="slider round"></span>
+                            </label>
+                            <span
+                              style="color: rgb(180, 179, 76); font-weight: 699"
+                            >
+                              No</span
+                            >
+                          </td>
+                          <td>
+                            <select
+                              class="selectpicker"
+                              style="overflow-y: scroll"
+                              disabled
+                            >
+                              <option>Fresher</option>
+                              <option>Fresher & Trained</option>
+                              <option>Less Than 2 Years</option>
+                              <option>Between 2 - 5 Years</option>
+                              <option>Between 5 - 10 Years</option>
+                              <option disabled="disabled">
+                                More Than 10 Years
+                              </option>
+                            </select>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>Signalling Cabel Trenching</td>
+                          <td>
+                            <label class="switch">
+                              <input type="checkbox" />
+                              <span class="slider round"></span>
+                            </label>
+                            <span
+                              style="color: rgb(180, 179, 76); font-weight: 699"
+                            >
+                              No</span
+                            >
+                          </td>
+                          <td>
+                            <select
+                              class="selectpicker"
+                              style="overflow-y: scroll"
+                            >
+                              <option>Fresher</option>
+                              <option>Fresher & Trained</option>
+                              <option>Less Than 2 Years</option>
+                              <option>Between 2 - 5 Years</option>
+                              <option>Between 5 - 10 Years</option>
+                              <option disabled="disabled">
+                                More Than 10 Years
+                              </option>
+                            </select>
                           </td>
                         </tr>
                       </tbody>
@@ -392,6 +535,8 @@
                             rows="4"
                             cols="80"
                             class="form-control"
+                            style="border:1px solid lightgray;border-radius: 30px;"
+
                             placeholder="Here can be your description"
                             name="about-me"
                           >
@@ -400,7 +545,7 @@
                         <button
                           type="submit"
                           id="updateBtn"
-                          style="background-color: green"
+                          style="background-color: green;color: white;"
                           type="button"
                           class="btn btn-elegant center"
                         >
@@ -468,23 +613,12 @@
 
                 <div class="button-container">
                   <input type="file" accept="image/*" hidden id="userImage" />
-                  <button
-                    id="updateBtn"
-                    style="
-                      background-color: #05426b;
-                      color: peru;
-                      font-weight: 700;
-                      border-radius: 20px;
-                    "
-                    type="button"
-                    class="btn btn-elegant center"
-                  >
-                    <i
-                      class="now-ui-icons users_single-02 pr-2"
-                      aria-hidden="true"
-                    ></i
-                    >Update Image
-                  </button>
+                  <p>
+                    Selected Verticals :
+                    <b style="color: green; font-weight: 800"
+                      >Signalling , Telecom</b
+                    >
+                  </p>
                 </div>
               </div>
             </div>
@@ -496,6 +630,7 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   </body>
   <script>
     $(document).ready(function () {
