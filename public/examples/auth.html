@@ -34,7 +34,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
     <link
       rel="stylesheet"
@@ -43,9 +46,7 @@
       crossorigin="anonymous"
     />
   </head>
-  <style>
-
-  </style>
+  <style></style>
   <body class="user-profile">
     <div class="wrapper">
       <div id="navigation"></div>
@@ -53,159 +54,320 @@
         <!-- Navbar -->
         <div id="topbar"></div>
         <!-- End Navbar -->
-        <div class="panel-header panel-header-sm" style="height: 64px;padding-bottom: 0px;"></div>
+        <div
+          class="panel-header panel-header-sm"
+          style="height: 64px; padding-bottom: 0px"
+        ></div>
         <div class="content">
-            <div class="container register">
-                <div class="row">
-                    <div class="col-md-3 register-left">
-                        <img src="../assets/img/loginimg.png" alt=""/>
-                        <h3 style="color: black;font-weight: 800;">Welcome To RAOEE</h3>
-                        <p style="color:#000000">Create Your Free Account Now And Get A Job Opprtunity</p>
-                        <div class="hide-small">
-                            <label style="color: black;font-weight: 800;">Already a member?</label>
-                            <a class="nav-link" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="false"><input onclick="showlogin()" type="submit" name="" value="Login"/></a><br/>
-                        </div>
-                     
-                    </div>
-                    <div class="col-md-9 register-right" >
-                        <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Employee</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Hirer</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show " id="login" role="tabpanel" aria-labelledby="login-tab">
-                                <h3 class="register-heading">Welcome Back User !</h3>
-                                <div class="row register-form">
-                                    <div class="col-md-6">
-                                      
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" placeholder="Your Email *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control" placeholder="Password *" value="" />
-                                        </div>
-                                       
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="submit" class="btnRegister"  value="Login"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <h3 class="register-heading">Apply as a Employee</h3>
-                                <div class="row register-form">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="First Name *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" placeholder="Your Email *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control" placeholder="Password *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option class="hidden"  selected disabled>Gender</option>
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                                <option>Others</option>
-                                            </select>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Last Name *" value="" />
-                                        </div>
-                                  
-                                        <div class="form-group">
-                                            <input type="text" minlength="10" maxlength="10" name="txtEmpPhone" class="form-control" placeholder="Your Phone *" value="" />
-                                        </div>
-
-                                       
-                                        
-                                        <input type="submit" class="btnRegister"  value="Register"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <h3  class="register-heading">Apply as a Hirer</h3>
-                                <div class="row register-form">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="First Name *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Last Name *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" placeholder="Email *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" maxlength="10" minlength="10" class="form-control" placeholder="Phone *" value="" />
-                                        </div>
-
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="password" class="form-control" placeholder="Password *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control" placeholder="Confirm Password *" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <select class="form-control">
-                                                <option class="hidden"  selected disabled>Please select your Sequrity Question</option>
-                                                <option>What is your Birthdate?</option>
-                                                <option>What is Your old Phone Number</option>
-                                                <option>What is your Pet Name?</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="`Answer *" value="" />
-                                            
-                                        </div>
-                                        <input type="submit" class="btnRegister"  value="Register"/>
-                                
-                                      
-                                    </div>
-                             
-                                </div>
-                                
-                            </div>
-                  
-                            <div class="row mb-4 px-9 adjust-small" style="margin-left:30%;">
-                                <h6 class="mb-0 mr-4 mt-2"> Or Sign in with</h6>
-                                <div class="facebook text-center mr-3">
-                                    <div class="fa fa-google"></div>
-                                </div>
-                                <div class="twitter text-center mr-3">
-                                    <div class="fa fa-twitter"></div>
-                                </div>
-                                <div class="linkedin text-center mr-3">
-                                    <div class="fa fa-linkedin"></div>
-                                </div>
-                            </div>
-                            <div class="show-small" style="display: none;">
-                                <label style="color: black;font-weight: 800;">Already a member?</label>
-                              <button class="btn btn-primary"  id="login-tab"  onclick="showlogin()" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="false" style="width: 34%;background-color: #05426b;border-radius: 20px;" >Login</button><br/>
-                            </div>
-                            
-                        </div>
-                       
-                    </div>
+          <div class="container register">
+            <div class="row">
+              <div class="col-md-3 register-left">
+                <img src="../assets/img/loginimg.png" alt="" />
+                <h3 style="color: black; font-weight: 800">Welcome To RAOEE</h3>
+                <p style="color: #000000">
+                  Create Your Free Account Now And Get A Job Opprtunity
+                </p>
+                <div class="hide-small">
+                  <label style="color: black; font-weight: 800"
+                    >Already a member?</label
+                  >
+                  <a
+                    class="nav-link"
+                    id="login-tab"
+                    data-toggle="tab"
+                    href="#login"
+                    role="tab"
+                    aria-controls="login"
+                    aria-selected="false"
+                    ><input
+                      onclick="showlogin()"
+                      type="submit"
+                      name=""
+                      value="Login" /></a
+                  ><br />
                 </div>
+              </div>
+              <div class="col-md-9 register-right">
+                <ul
+                  class="nav nav-tabs nav-justified"
+                  id="myTab"
+                  role="tablist"
+                >
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active"
+                      id="home-tab"
+                      data-toggle="tab"
+                      href="#home"
+                      role="tab"
+                      aria-controls="home"
+                      aria-selected="true"
+                      >Employee</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="profile-tab"
+                      data-toggle="tab"
+                      href="#profile"
+                      role="tab"
+                      aria-controls="profile"
+                      aria-selected="false"
+                      >Hirer</a
+                    >
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div
+                    class="tab-pane fade show"
+                    id="login"
+                    role="tabpanel"
+                    aria-labelledby="login-tab"
+                  >
+                    <h3 class="register-heading">Welcome Back User !</h3>
+                    <div class="row register-form">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input
+                            type="email"
+                            class="form-control"
+                            placeholder="Your Email *"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Password *"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <input
+                          type="submit"
+                          class="btnRegister"
+                          value="Login"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-            </div>	
+                  <div
+                    class="tab-pane fade show active"
+                    id="home"
+                    role="tabpanel"
+                    aria-labelledby="home-tab"
+                  >
+                    <h3 class="register-heading">Apply as a Employee</h3>
+                    <form id="employeeForm">
+                      <div class="row register-form">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="First Name *"
+                              name="fname"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <input
+                              type="email"
+                              class="form-control"
+                              placeholder="Your Email *"
+                              name="email"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <input
+                              type="password"
+                              class="form-control"
+                              placeholder="Password *"
+                              name="password"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <select name="gender" class="form-control">
+                              <option class="hidden" selected disabled>
+                                Gender
+                              </option>
+                              <option value="Male" >Male</option>
+                              <option value="Female" >Female</option>
+                              <option value="Others" >Others</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Last Name *"
+                              name="lname"
+                            />
+                          </div>
+
+                          <div class="form-group">
+                            <input
+                              type="text"
+                              minlength="10"
+                              maxlength="10"
+                              class="form-control"
+                              placeholder="Your Phone *"
+                              name="phone"
+                            />
+                          </div>
+                          <div class="form-group">
+                            <input
+                              type="password"
+                              class="form-control"
+                              placeholder="Confirm Password *"
+                              name="cpassword"
+                            />
+                          </div>
+
+                          <input
+                            type="submit"
+                            class="btnRegister"
+                            value="Register"
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div
+                    class="tab-pane fade show"
+                    id="profile"
+                    role="tabpanel"
+                    aria-labelledby="profile-tab"
+                  >
+                    <h3 class="register-heading">Apply as a Hirer</h3>
+                    <form id="employerForm">
+                    <div class="row register-form">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="First Name *"
+                            name="fname"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Last Name *"
+                            name="lname"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="email"
+                            class="form-control"
+                            placeholder="Email *"
+                            name="email"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            maxlength="10"
+                            minlength="10"
+                            class="form-control"
+                            placeholder="Phone *"
+                            name="phone"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Password *"
+                            name="password"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="password"
+                            class="form-control"
+                            placeholder="Confirm Password *"
+                            name="cpassword"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <select name="question" class="form-control">
+                            <option class="hidden" selected disabled>
+                              Please select your Sequrity Question
+                            </option>
+                            <option value="birthday" >What is your Birthdate?</option>
+                            <option value="oldPhoneNumber">What is Your old Phone Number</option>
+                            <option value="petName" >What is your Pet Name?</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="`Answer *"
+                            name="answer"
+                          />
+                        </div>
+                        <input
+                          type="submit"
+                          class="btnRegister"
+                          value="Register"
+                        />
+                      </div>
+                    </div>
+                  </form>
+                  </div>
+
+                  <div
+                    class="row mb-4 px-9 adjust-small"
+                    style="margin-left: 30%"
+                  >
+                    <h6 class="mb-0 mr-4 mt-2">Or Sign in with</h6>
+                    <div class="facebook text-center mr-3">
+                      <div class="fa fa-google"></div>
+                    </div>
+                    <div class="twitter text-center mr-3">
+                      <div class="fa fa-twitter"></div>
+                    </div>
+                    <div class="linkedin text-center mr-3">
+                      <div class="fa fa-linkedin"></div>
+                    </div>
+                  </div>
+                  <div class="show-small" style="display: none">
+                    <label style="color: black; font-weight: 800"
+                      >Already a member?</label
+                    >
+                    <button
+                      class="btn btn-primary"
+                      id="login-tab"
+                      onclick="showlogin()"
+                      data-toggle="tab"
+                      href="#login"
+                      role="tab"
+                      aria-controls="login"
+                      aria-selected="false"
+                      style="
+                        width: 34%;
+                        background-color: #05426b;
+                        border-radius: 20px;
+                      "
+                    >
+                      Login</button
+                    ><br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <!-- footer -->
         <div id="footer"></div>
       </div>
     </div>
@@ -218,61 +380,67 @@
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
-      var multipleCancelButton = new Choices(
-        "#choices-multiple-remove-button",
-        {
-          removeItemButton: true,
-          maxItemCount: 10,
-          searchResultLimit: 10,
-          renderChoiceLimit: 10,
-        }
-      );
-      $(".files").attr(
-        "data-before",
-        "Drag file here or click the above button"
-      );
-      $('input[type="file"]').change(function (e) {
-        var fileName = e.target.files[0].name;
-        $(".files").attr("data-before", fileName);
-      });
+      // var multipleCancelButton = new Choices(
+      //   "#choices-multiple-remove-button",
+      //   {
+      //     removeItemButton: true,
+      //     maxItemCount: 10,
+      //     searchResultLimit: 10,
+      //     renderChoiceLimit: 10,
+      //   }
+      // );
+      // $(".files").attr(
+      //   "data-before",
+      //   "Drag file here or click the above button"
+      // );
+      // $('input[type="file"]').change(function (e) {
+      //   var fileName = e.target.files[0].name;
+      //   $(".files").attr("data-before", fileName);
+      // });
     });
-    (function () {
-      "use strict";
+    // (function () {
+    //   "use strict";
 
-      $(".input-file").each(function () {
-        var $input = $(this),
-          $label = $input.next(".js-labelFile"),
-          labelVal = $label.html();
+    //   $(".input-file").each(function () {
+    //     var $input = $(this),
+    //       $label = $input.next(".js-labelFile"),
+    //       labelVal = $label.html();
 
-        $input.on("change", function (element) {
-          var fileName = "";
-          if (element.target.value) {
-            $("#uploadBtn").show();
-            $("#removeBtn").show();
-          }
-          if (element.target.value)
-            fileName = element.target.value.split("\\").pop();
-          fileName
-            ? $label.addClass("has-file").find(".js-fileName").html(fileName)
-            : $label.removeClass("has-file").html(labelVal);
-        });
-      });
-    })();
+    //     $input.on("change", function (element) {
+    //       var fileName = "";
+    //       if (element.target.value) {
+    //         $("#uploadBtn").show();
+    //         $("#removeBtn").show();
+    //       }
+    //       if (element.target.value)
+    //         fileName = element.target.value.split("\\").pop();
+    //       fileName
+    //         ? $label.addClass("has-file").find(".js-fileName").html(fileName)
+    //         : $label.removeClass("has-file").html(labelVal);
+    //     });
+    //   });
+    // })();
 
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          $("#blah").attr("src", e.target.result);
-        };
-        selectedFile = input.files[0];
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
+    // function readURL(input) {
+    //   if (input.files && input.files[0]) {
+    //     var reader = new FileReader();
+    //     reader.onload = function (e) {
+    //       $("#blah").attr("src", e.target.result);
+    //     };
+    //     selectedFile = input.files[0];
+    //     reader.readAsDataURL(input.files[0]);
+    //   }
+    // }
 
-    function showlogin(){
-       
-        document.getElementById("myTab").style.display="none"
+    function showlogin() {
+      document.getElementById("myTab").style.display = "none";
     }
   </script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+
+  <script src="./../assets//firebase.js"></script>
+  <script src="./auth1.js"></script>
 </html>
