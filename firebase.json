@@ -4,6 +4,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
+    "site" : "raoeesite",
     "public": "public",
     "ignore": [
       "firebase.json",
@@ -13,7 +14,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "examples/dashboard.html"
       }
     ]
   },

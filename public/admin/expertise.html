@@ -113,6 +113,7 @@
       border-radius: 4px;
       max-width: 100%;
       line-height: 22px;
+      width: 100%;;
       cursor: text;
     }
     .bootstrap-tagsinput input {
@@ -123,7 +124,7 @@
       padding: 10px 6px;
       margin: 0;
 
-      width: auto;
+      width: 100%;;
       max-width: inherit;
     }
     .bootstrap-tagsinput.form-control input::-moz-placeholder {
@@ -161,6 +162,10 @@
     .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
       box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     }
+    .bootstrap-select>.btn {
+    width: 100%;
+    padding-right: 25px;
+}
   </style>
   <body class="user-profile">
     <div class="wrapper">
@@ -188,7 +193,8 @@
                             <span style="color: red">*</span></label
                           >
                           <select
-                            style="overflow-y: scroll"
+                          
+                            style="overflow-y: scroll;width: 100%;padding: 10px;"
                             id="verticalsDropdown"
                             name="vertical"
                           >
@@ -225,14 +231,28 @@
                         </div>
                         </div>
                       </div>
+                      <div class="col-md-8 pr-1">
+                        <div class="form-group" id="subVerticalsHolder22">
+                          <label
+                            >Enter Area of Expertise
+                            <span style="color: red">*</span></label
+                          >
+                        
+                          <div >
+                          <input type="text" placeholder="Enter Area of Expertise" style="width: 100%;padding: 10px;">
+                        </div>
+                        </div>
+                      </div>
                       <div class="col-md-8">
                         <div class="form-group">
                           <label>Enter Profession/Experience Level</label>
+                          <br>
                           <input
                             name="expertises"
                             type="text"
                             class="form-control"
                             data-role="tagsinput"
+                            style="width: 100% !important;"
                             placeholder="Add tags Ex : Fresher , Less than 2 years"
                           />
                         </div>
@@ -271,20 +291,28 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   </body>
   <script>
-    $(document).ready(function () {
+  
+    
+      $(document).ready(function () {
+ 
       // Javascript method's body can be found in assets/js/demos.js
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
-      // var multipleCancelButton = new Choices(
-      //   "#choices-multiple-remove-button",
-      //   {
-      //     removeItemButton: true,
-      //     maxItemCount: 10,
-      //     searchResultLimit: 10,
-      //     renderChoiceLimit: 10,
-      //   }
-      // );
+      setTimeout(function(){
+       
+      var multipleCancelButton = new Choices(
+        "#choices-multiple-remove-button",
+        {
+          removeItemButton: true,
+          maxItemCount: 10,
+          searchResultLimit: 10,
+          renderChoiceLimit: 10,
+        }
+      );
+     },900)
+  
+  
       // $(".files").attr(
       //   "data-before",
       //   "Drag file here or click the above button"
@@ -294,39 +322,7 @@
       //   $(".files").attr("data-before", fileName);
       // });
     });
-    // (function () {
-    //   "use strict";
-
-    //   $(".input-file").each(function () {
-    //     var $input = $(this),
-    //       $label = $input.next(".js-labelFile"),
-    //       labelVal = $label.html();
-
-    //     $input.on("change", function (element) {
-    //       var fileName = "";
-    //       if (element.target.value) {
-    //         $("#uploadBtn").show();
-    //         $("#removeBtn").show();
-    //       }
-    //       if (element.target.value)
-    //         fileName = element.target.value.split("\\").pop();
-    //       fileName
-    //         ? $label.addClass("has-file").find(".js-fileName").html(fileName)
-    //         : $label.removeClass("has-file").html(labelVal);
-    //     });
-    //   });
-    // })();
-
-    // function readURL(input) {
-    //   if (input.files && input.files[0]) {
-    //     var reader = new FileReader();
-    //     reader.onload = function (e) {
-    //       $("#blah").attr("src", e.target.result);
-    //     };
-    //     selectedFile = input.files[0];
-    //     reader.readAsDataURL(input.files[0]);
-    //   }
-    // }
+    
   </script>
   <script src="./../assets/js/tag-input.js"></script>
 
