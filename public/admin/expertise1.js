@@ -5,7 +5,7 @@ const verticalsDropdownHTML = document.querySelector("#verticalsDropdown");
 const subVerticalsDropdownHTML = document.querySelector(
   "#subVerticalsDropdown"
 );
-// const subVerticalsHolder = document.querySelector("#subVerticalsHolder");
+const subVerticalsHolderHTML = document.querySelector("#subVerticalsHolder");
 
 // ///////////////////////////////////////
 
@@ -21,7 +21,10 @@ db.collection("verticals").onSnapshot((snaps) => {
     VERTICALS.push({ name: docData.name, subVerticals: docData.subVerticals });
     verticalsDropdownHTML.innerHTML += `<option value="${docData.name}">${docData.name}</option>`;
   });
-  verticalsDropdownHTML.classList.add("selectpicker");
+  
+    verticalsDropdownHTML.classList.add("selectpicker");
+ 
+ 
 
   if (VERTICALS.length === 0) {
     return;
@@ -31,20 +34,22 @@ db.collection("verticals").onSnapshot((snaps) => {
   subVerticalsDropdownHTML.innerHTML = "";
   VERTICALS[0].subVerticals.map((subVer) => {
     subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
+    subOptions += `<option value="${subVer}">${subVer}</option>`;
   });
-  // subVerticalsHolder.innerHTML = `
-  // <label>Select Sub-Vertical
-  //   <span style="color: red">*</span>
-  // </label>
-  // <select
-  //   id="choices-multiple-remove-button"
-  //   class="form-control"
-  //   multiple
-  //   required
-  //   style="overflow-y: scroll">
-  //   ${subOptions}
-  // </select>
-  // `;
+  
+  subVerticalsHolderHTML.innerHTML = `
+  <label>Select Sub-Vertical
+    <span style="color: red">*</span>
+  </label>
+  <select
+    id="choices-multiple-remove-button"
+    class="form-control"
+    multiple
+    required
+    style="overflow-y: scroll">
+    ${subOptions}
+  </select>
+  `;
   console.log(subVerticalsDropdownHTML);
 });
 
