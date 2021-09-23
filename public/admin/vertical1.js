@@ -107,12 +107,11 @@ const addVertical = async (e) => {
       name: name,
       subVerticals: []
     });
-
-    alert("Vertical Added");
+    nowuiDashboard.showNotification('top','center',"Vertical Added Successfully","primary");
     verticalFormHTML.reset();
   } catch (error) {
     console.error(error);
-    alert(`Cound not be added: ${error.message}`);
+    nowuiDashboard.showNotification('top','center',"Some Error Occured ! try again","red");
   }
 };
 
@@ -138,11 +137,11 @@ const addSubVertical = async (e) => {
     refData.subVerticals.push(subVertical);
     await ref.update(refData);
 
-    alert("Sub Vertical Added");
+    nowuiDashboard.showNotification('top','center',"Sub-Vertical Added Successfully","primary");
     subVerticalFormHTML.reset();
   } catch (error) {
     console.error(error);
-    alert(`Cound not be added: ${error.message}`);
+    nowuiDashboard.showNotification('top','center',"Error Occured`","primary");
   }
 };
 
