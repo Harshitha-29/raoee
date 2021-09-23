@@ -193,7 +193,7 @@
                             <span style="color: red">*</span></label
                           >
                           <select
-                          
+                            
                             style="overflow-y: scroll;width: 100%;padding: 10px;"
                             id="verticalsDropdown"
                             name="vertical"
@@ -206,10 +206,10 @@
                       <hr />
                       <div class="col-md-8 pr-1">
                         <div class="form-group" id="subVerticalsHolder">
-                          <label
+                          <!-- <label
                             >Select Sub-Vertical
                             <span style="color: red">*</span></label
-                          >
+                          > -->
                           <!-- <select
                           
                             multiple
@@ -220,14 +220,14 @@
                             <option>Installation</option>
                           </select> -->
                           <div >
-                          <select name="field1" id="subVerticalsDropdown" multiple >
-                            <!-- <option value="1">Audi</option>
+                          <!-- <select name="field1" id="subVerticalsDropdown" multiple >
+                            <option value="1">Audi</option>
                             <option selected value="2">BMW</option>
                             <option selected value="3">Mercedes</option>
                             <option value="4">Volvo</option>
                             <option value="5">Lexus</option>
-                            <option value="6">Tesla</option> -->
-                          </select>
+                            <option value="6">Tesla</option>
+                          </select>  -->
                         </div>
                         </div>
                       </div>
@@ -235,11 +235,9 @@
                         <div class="form-group" id="subVerticalsHolder22">
                           <label
                             >Enter Area of Expertise
-                            <span style="color: red">*</span></label
-                          >
-                        
+                            <span style="color: red">*</span></label>
                           <div >
-                          <input type="text" placeholder="Enter Area of Expertise" style="width: 100%;padding: 10px;">
+                          <input name="expertiseCategory" type="text" placeholder="Enter Area of Expertise" style="width: 100%;padding: 10px;">
                         </div>
                         </div>
                       </div>
@@ -248,7 +246,7 @@
                           <label>Enter Profession/Experience Level</label>
                           <br>
                           <input
-                            name="expertises"
+                            name="expertisesTags"
                             type="text"
                             class="form-control"
                             data-role="tagsinput"
@@ -262,7 +260,7 @@
                     <div class="row">
                       <div class="col-md-8">
                         <button
-                          id="expertisesBtn"
+                          id="expertisesFormBtn"
                           style="
                             background-color: rgb(146, 44, 141);
                             color: white;

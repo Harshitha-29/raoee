@@ -109,6 +109,7 @@ const addVertical = async (e) => {
     });
 
     alert("Vertical Added");
+    verticalFormHTML.reset();
   } catch (error) {
     console.error(error);
     alert(`Cound not be added: ${error.message}`);
@@ -138,6 +139,7 @@ const addSubVertical = async (e) => {
     await ref.update(refData);
 
     alert("Sub Vertical Added");
+    subVerticalFormHTML.reset();
   } catch (error) {
     console.error(error);
     alert(`Cound not be added: ${error.message}`);

@@ -305,57 +305,9 @@
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
-      // var multipleCancelButton = new Choices(
-      //   "#choices-multiple-remove-button",
-      //   {
-      //     removeItemButton: true,
-      //     maxItemCount: 10,
-      //     searchResultLimit: 10,
-      //     renderChoiceLimit: 10,
-      //   }
-      // );
-      // $(".files").attr(
-      //   "data-before",
-      //   "Drag file here or click the above button"
-      // );
-      // $('input[type="file"]').change(function (e) {
-      //   var fileName = e.target.files[0].name;
-      //   $(".files").attr("data-before", fileName);
-      // });
+  
     });
-    // (function () {
-    //   "use strict";
-
-    //   $(".input-file").each(function () {
-    //     var $input = $(this),
-    //       $label = $input.next(".js-labelFile"),
-    //       labelVal = $label.html();
-
-    //     $input.on("change", function (element) {
-    //       var fileName = "";
-    //       if (element.target.value) {
-    //         $("#uploadBtn").show();
-    //         $("#removeBtn").show();
-    //       }
-    //       if (element.target.value)
-    //         fileName = element.target.value.split("\\").pop();
-    //       fileName
-    //         ? $label.addClass("has-file").find(".js-fileName").html(fileName)
-    //         : $label.removeClass("has-file").html(labelVal);
-    //     });
-    //   });
-    // })();
-
-    // function readURL(input) {
-    //   if (input.files && input.files[0]) {
-    //     var reader = new FileReader();
-    //     reader.onload = function (e) {
-    //       $("#blah").attr("src", e.target.result);
-    //     };
-    //     selectedFile = input.files[0];
-    //     reader.readAsDataURL(input.files[0]);
-    //   }
-    // }
+  
   </script>
 
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>

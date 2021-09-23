@@ -2,9 +2,9 @@ const db = firebase.firestore();
 
 const VERTICALS = [];
 const verticalsDropdownHTML = document.querySelector("#verticalsDropdown");
-const subVerticalsDropdownHTML = document.querySelector(
-  "#subVerticalsDropdown"
-);
+// const subVerticalsDropdownHTML = document.querySelector(
+//   "#subVerticalsDropdown"
+// );
 const subVerticalsHolderHTML = document.querySelector("#subVerticalsHolder");
 
 // ///////////////////////////////////////
@@ -21,68 +21,63 @@ db.collection("verticals").onSnapshot((snaps) => {
     VERTICALS.push({ name: docData.name, subVerticals: docData.subVerticals });
     verticalsDropdownHTML.innerHTML += `<option value="${docData.name}">${docData.name}</option>`;
   });
-  
-    verticalsDropdownHTML.classList.add("selectpicker");
- 
- 
+
+  verticalsDropdownHTML.classList.add("selectpicker");
 
   if (VERTICALS.length === 0) {
     return;
   }
 
   let subOptions = "";
-  subVerticalsDropdownHTML.innerHTML = "";
+  // subVerticalsDropdownHTML.innerHTML = "";
   VERTICALS[0].subVerticals.map((subVer) => {
-    subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
+    // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
     subOptions += `<option value="${subVer}">${subVer}</option>`;
   });
-  
+
   subVerticalsHolderHTML.innerHTML = `
-  <label>Select Sub-Vertical
-    <span style="color: red">*</span>
-  </label>
-  <select
-    id="choices-multiple-remove-button"
-    class="form-control"
-    multiple
-    required
-    style="overflow-y: scroll">
-    ${subOptions}
-  </select>
-  `;
-  console.log(subVerticalsDropdownHTML);
+    <label>Select Sub-Vertical
+      <span style="color: red">*</span>
+    </label>
+    <select
+      id="choices-multiple-remove-button"
+      class="form-control"
+      multiple
+      required >
+      ${subOptions}
+    </select>
+    `;
+  // console.log(subVerticalsDropdownHTML);
 });
 
 // ///////////////////////////////////////////////
 
 const expertiseFormHTML = document.querySelector("#expertiseForm");
-const expertisesBtnHTML = document.querySelector("#expertisesBtn");
+const expertisesFromBtnHTML = document.querySelector("#expertisesFormBtn");
 
 const expertiseForm = async (e) => {
   e.preventDefault();
 
   const vertical = expertiseFormHTML["vertical"].value;
-  const expertises = expertiseFormHTML["expertises"].value;
+  const expertiseCategory = expertiseFormHTML["expertiseCategory"].value;
+  const expertisesTags = expertiseFormHTML["expertisesTags"].value;
 
-  console.log(vertical);
-  console.log(expertises);
-  console.log(subV);
-
-  const expertiseList = expertises.split(",").map((str) => str);
-console.log(expertiseList);
+  const expertiseTagList = expertisesTags.split(",").map((str) => str);
   try {
-    for (let i = 0; i < subV.length; i++) {
-      console.log(subV[i]);
+    for (let i = 0; i < subVerticalsSelected.length; i++) {
       const ref = await db
         .collection("verticals")
         .doc(vertical)
-        .collection(subV[i])
-        .doc(subV[i]);
+        .collection(subVerticalsSelected[i])
+        .doc(subVerticalsSelected[i]);
       const refDoc = await ref.get();
       const refData = await refDoc.data();
-      console.log(refData);
-      refData.expertise.push(...expertiseList);
+      refData.expertise.push({
+        tags: [...expertiseTagList],
+        category: expertiseCategory,
+      });
       await ref.update(refData);
+      expertiseFormHTML.reset();
       alert("Expertises Saved");
     }
   } catch (error) {
@@ -91,13 +86,45 @@ console.log(expertiseList);
   }
 };
 
-// expertiseFormHTML.addEventListener('submit', expertiseForm)
-expertisesBtnHTML.addEventListener("click", expertiseForm);
+expertisesFromBtnHTML.addEventListener("click", expertiseForm);
 
 // /////////////////////////////////////////////
 
-let subV = [];
+let subVerticalsSelected = [];
 
 expertiseFormHTML.addEventListener("change", (e) => {
-  subV = Array.from(e.target.selectedOptions).map((x) => x.value ?? x.text);
+  subVerticalsSelected = Array.from(e.target.selectedOptions).map(
+    (x) => x.value ?? x.text
+  );
 });
+
+// /////////////////////////////////////////////
+
+const changeSubVertical = (e) => {
+  e.preventDefault();
+  console.log(e.target.value);
+  console.log(VERTICALS);
+  const verticalIndex = VERTICALS.findIndex(ver => ver.name === e.target.value)
+  console.log(verticalIndex);
+  let subOptions = "";
+  // subVerticalsDropdownHTML.innerHTML = "";
+  VERTICALS[verticalIndex].subVerticals.map((subVer) => {
+    // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
+    subOptions += `<option value="${subVer}">${subVer}</option>`;
+  });
+
+  subVerticalsHolderHTML.innerHTML = `
+    <label>Select Sub-Vertical
+      <span style="color: red">*</span>
+    </label>
+    <select
+      id="choices-multiple-remove-button"
+      class="form-control"
+      multiple
+      required >
+      ${subOptions}
+    </select>
+    `;
+};
+
+expertiseFormHTML["vertical"].addEventListener("change", changeSubVertical);

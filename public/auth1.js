@@ -170,3 +170,30 @@ const createUserAuth = async (email, password, type) => {
 // createUserAuth('a@gmail.com', 'qqqqqq', 'employee')
 
 // //////////////////////////////////////////
+
+// login
+
+const signinFormHTML = document.querySelector('#signinForm');
+
+const login = (e) => {
+  e.preventDefault();
+
+  const email = signinFormHTML['email'].value;
+  const password = signinFormHTML['password'].value;
+
+  auth.signInWithEmailAndPassword(email, password).then(user => {
+    // console.log(user);
+    // console.log(user.user);
+
+    let userType = user.user.displayName;
+    
+
+  }).catch(error => {
+    console.error(error);
+    alert(`Failed: ${error.message}`)
+  })
+
+}
+
+signinFormHTML.addEventListener('submit', login);
+
