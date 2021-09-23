@@ -14,6 +14,9 @@
   <script src="../assets/demo/demo.js"></script>
 </head>
 <style>
+  .sidebar .nav p, .off-canvas-sidebar .nav p {
+    font-size: 12px !important;
+  }
   .panel-header {
    
     background: #141E30;
@@ -38,6 +41,9 @@
     box-shadow: 0 1px 15px 1px rgb(39 39 39 / 10%);
     color: white !important;
 }
+.now-ui-icons{
+  color: rgb(196, 28, 56)!important;
+}
 </style>
 <body>
  
@@ -60,19 +66,31 @@
     </div>
     <div class="sidebar-wrapper" id="sidebar-wrapper">
       <ul class="nav">
-        <li class="active">
+        <li class="active" id="dash">
           <a href="./dashboard.html">
             <i class="now-ui-icons design_app"></i>
-            <p>Home</p>
+            <p>Dashboard</p>
           </a>
         </li>
-        <li>
+        <li class="" id="slider">
+          <a href="./sliders.html" >
+            <i class="now-ui-icons design_app"></i>
+            <p>Sliders</p>
+          </a>
+        </li>
+        <li class="" id="aboutwhy">
+          <a href="./about-why.html" >
+            <i class="now-ui-icons design_app"></i>
+            <p>About/Why Us</p>
+          </a>
+        </li>
+        <li id="vertical">
           <a href="./vertical.html">
             <i class="now-ui-icons education_atom"></i>
             <p>Add Verticals</p>
           </a>
         </li>
-        <li>
+        <li id="expertise"> 
           <a href="./expertise.html">
             <i class="now-ui-icons location_map-big"></i>
             <p>Add Expertise</p>
@@ -102,14 +120,41 @@
             <p>Login / Register</p>
           </a>
         </li>
-        <li class="active-pro">
+        <!-- <li class="active-pro">
           <a href="./upgrade.html">
             <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-            <p> Login / Register</p>
+            <p> RAOEE</p>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
   
+  <script>
+    if(window.location.href.includes("about-why.html")){
+      $("#dash").removeClass("active")
+      $("#vertical").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#slider").removeClass("active")
+      $('#aboutwhy').addClass('active')
+    }else if(window.location.href.includes("sliders.html")){
+      $("#dash").removeClass("active")
+      $("#vertical").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#slider').addClass('active')
+    }else if(window.location.href.includes("vertical.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').addClass('active')
+    }else if(window.location.href.includes("expertise.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").addClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').removeClass('active')
+    }
+  </script>
 </body>
