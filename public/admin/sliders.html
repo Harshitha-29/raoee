@@ -1,280 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="../assets/img/apple-icon.png"
+    />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>RAOEE</title>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
-        name="viewport" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+      name="viewport"
+    />
     <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-        integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU" crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+      integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU"
+      crossorigin="anonymous"
+    />
 
-    <link rel="stylesheet"
-        href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
-</head>
-<style>
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
+    />
+  </head>
+  <style>
     .choices__inner {
-        border-radius: 20px;
-        background-color: transparent;
-        height: 10px !important;
-        overflow-y: scroll;
+      border-radius: 20px;
+      background-color: transparent;
+      height: 10px !important;
+      overflow-y: scroll;
     }
 
-#upload {
-    opacity: 0;
-}
+    #uploadFile {
+      opacity: 0;
+    }
 
-#upload-label {
-    position: absolute;
-    top: 50%;
-    left: 1rem;
-    transform: translateY(-50%);
-}
+    #upload-label {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+    }
 
-.image-area {
-    border: 2px dashed black;
-    padding: 1rem;
-    position: relative;
-}
+    .image-area {
+      border: 2px dashed black;
+      padding: 1rem;
+      position: relative;
+    }
 
-.image-area::before {
-    content: 'Uploaded image result';
-    color: black;
-    font-weight: bold;
-    text-transform: uppercase;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.8rem;
-    z-index: 1;
-}
+    .image-area::before {
+      content: "Uploaded image result";
+      color: black;
+      font-weight: bold;
+      text-transform: uppercase;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.8rem;
+      z-index: 1;
+    }
 
-.image-area img {
-    z-index: 2;
-    position: relative;
-}
+    .image-area img {
+      z-index: 2;
+      position: relative;
+    }
+  </style>
 
-
-</style>
-
-<body class="user-profile">
+  <body class="user-profile">
     <div class="wrapper">
-        <div id="navigation"></div>
-        <div class="main-panel" id="main-panel">
-            <!-- Navbar -->
-            <div id="topbar"></div>
-            <!-- End Navbar -->
-            <div class="panel-header panel-header-sm"></div>
-            <div class="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header" style="display: flex">
-                                <h5 class="title">Add Slider Images </h5>
+      <div id="navigation"></div>
+      <div class="main-panel" id="main-panel">
+        <!-- Navbar -->
+        <div id="topbar"></div>
+        <!-- End Navbar -->
+        <div class="panel-header panel-header-sm"></div>
+        <div class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">Add Slider Images</h5>
+                </div>
+
+                <div class="card-body">
+                  <form id="sliderForm">
+                    <div class="row">
+                      <div class="col-md-8 pr-1">
+                        <div class="forms-group" id="subVerticalsHolder22">
+                          <label
+                            >Enter Slider Text
+                            <span style="color: red">*</span></label
+                          >
+
+                          <div>
+                            <input
+                            name="title"
+                              type="text"
+                              placeholder="Something about Slider here"
+                              style="width: 100%; padding: 10px"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-8">
+                        <div class="row py-4">
+                          <div class="col-lg-12 mx-auto">
+                            <label
+                              >Select an image
+                              <span style="color: red">*</span></label
+                            >
+                            <!-- Upload image input-->
+                            <div
+                              class="
+                                input-group
+                                mb-3
+                                px-2
+                                py-2
+                                rounded-pill
+                                bg-white
+                                shadow-sm
+                              "
+                            >
+                              <input
+                                id="uploadFile"
+                                type="file"
+                                onchange="readURL(this);"
+                                class="form-control border-0"
+                              />
+                              <label
+                                id="upload-label"
+                                for="uploadFile"
+                                class="font-weight-light text-muted"
+                                >Choose file</label
+                              >
+                              <div class="input-group-append">
+                                <label
+                                  for="uploadFile"
+                                  class="btn btn-light m-0 rounded-pill px-4"
+                                >
+                                  <i
+                                    class="fa fa-cloud-upload mr-2 text-muted"
+                                  ></i
+                                  ><small
+                                    class="
+                                      text-uppercase
+                                      font-weight-bold
+                                      text-muted
+                                    "
+                                    >Choose file</small
+                                  ></label
+                                >
+                              </div>
                             </div>
 
-                            <div class="card-body">
-                                <form id="expertiseForm">
-                                    <div class="row">
-
-                                        <div class="col-md-8 pr-1">
-                                            <div class="forms-group" id="subVerticalsHolder22">
-                                                <label>Enter Slider Text
-                                                    <span style="color: red">*</span></label>
-
-                                                <div>
-                                                    <input type="text" placeholder="Something about Slider here"
-                                                        style="width: 100%;padding: 10px;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-8">
-                                            <div class="row py-4">
-                                                <div class="col-lg-12 mx-auto">
-                                                    <label>Select an image
-                                                        <span style="color: red">*</span></label>
-                                                    <!-- Upload image input-->
-                                                    <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-                                                        <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
-                                                        <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
-                                                        <div class="input-group-append">
-                                                            <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <!-- Uploaded image area-->
-                                                    <p class="font-italic text-white text-center" style="color: black !important;;">The image uploaded will be rendered inside the box below.</p>
-                                                    <button id="removeBtn" style="
-                                                        padding:2px;    
-                                                        color: black;
-                                                        display: none;
-                                                    " type="button" class="btn btn-elegant center" onclick="removeImage()">
-
-                                                        Remove Image
-                                                    </button>
-                                                    <div class="image-area mt-4"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
-                                        
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <button id="expertisesBtn" style="
+                            <!-- Uploaded image area-->
+                            <p
+                              class="font-italic text-white text-center"
+                              style="color: black !important "
+                            >
+                              The image uploaded will be rendered inside the box
+                              below.
+                            </p>
+                            <button
+                              id="removeBtn"
+                              style="padding: 2px; color: black; display: none"
+                              type="button"
+                              class="btn btn-elegant center"
+                              onclick="removeImage()"
+                            >
+                              Remove Image
+                            </button>
+                            <div class="image-area mt-4">
+                              <img
+                                id="imageResult"
+                                src="#"
+                                alt=""
+                                class="
+                                  img-fluid
+                                  rounded
+                                  shadow-sm
+                                  mx-auto
+                                  d-block
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-md-8">
+                        <button
+                          id="expertisesBtn"
+                          style="
                             background-color: rgb(146, 44, 141);
                             color: white;
-                          " type="button" class="btn btn-elegant center">
-
-                                                Add Slider
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header" style="display: flex">
-                                <h5 class="title">All added slider images</h5>
-                            </div>
-
-                            <div class="card-body">
-                                <div class="container">
-                                    <div class="row">
-                                      <div class="col-12">
-                                        <table class="table table-bordered">
-                                          <thead>
-                                            <tr>
-                                              <th scope="col">Id</th>
-                                              <th scope="col">Image</th>
-                                              <th scope="col">Slider Text</th>
-                                              <th scope="col">Actions</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <th scope="row">1</th>
-                                              <td>
-                                                  <img src="../assets/img/slide1.jpeg" alt=""  style="width: 80px;object-fit: contain;">
-                                              </td>
-                                              <td>Some Dynamic Text</td>    
-                                              <td>
-                                              <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>
-                                                    <img src="../assets/img/header.jpg" alt=""  style="width: 80px;object-fit: contain;">
-                                                </td>
-                                                <td>Some Dynamic Text</td>    
-                                                <td>
-                                                <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <th scope="row">1</th>
-                                                <td>
-                                                    <img src="../assets/img/about.png" alt=""  style="width: 80px;object-fit: contain;">
-                                                </td>
-                                                <td>Some Dynamic Text</td>    
-                                                <td>
-                                                <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                                                </td>
-                                              </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-                            </div>
-                        </div>
+                          "
+                          type="submit"
+                          class="btn btn-elegant center"
+                        >
+                          Add Slider
+                        </button>
+                      </div>
                     </div>
-
+                  </form>
                 </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">All added slider images</h5>
+                </div>
+
+                <div class="card-body">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-12">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th scope="col">Image</th>
+                              <th scope="col">Slider Text</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody">
+                            <!-- <tr>
+                              <td>
+                                <img
+                                  src="../assets/img/slide1.jpeg"
+                                  alt=""
+                                  style="width: 80px; object-fit: contain"
+                                />
+                              </td>
+                              <td>Some Dynamic Text</td>
+                              <td>
+                                <button type="button" class="btn btn-danger">
+                                  <i class="far fa-trash-alt"></i>
+                                </button>
+                              </td>
+                            </tr> -->
+                            
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <!-- footer -->
-            <div id="footer"></div>
+          </div>
         </div>
+        <!-- footer -->
+        <div id="footer"></div>
+      </div>
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
-</body>
-<script>
-
-
+  </body>
+  <script>
     $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      $("#navigation").load("commonNavigation.html");
+      $("#topbar").load("topBar.html");
+      $("#footer").load("footer.html");
+      
+    });
+    function readURL(input) {
+      console.log(input);
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
 
-        // Javascript method's body can be found in assets/js/demos.js
-        $("#navigation").load("commonNavigation.html");
-        $("#topbar").load("topBar.html");
-        $("#footer").load("footer.html");
-    
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#imageResult')
-                        .attr('src', e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
-                $('#removeBtn').show();
-            }
+          reader.onload = function (e) {
+            $("#imageResult").attr("src", e.target.result);
+          };
+          reader.readAsDataURL(input.files[0]);
+          $("#removeBtn").show();
         }
-        
-        $(function () {
-            $('#upload').on('change', function () {
-                readURL(input);
-            });
+      }
+
+      $(function () {
+        $("#uploadFile").on("change", function () {
+          readURL(input);
         });
+      });
 
+      var input = document.getElementById("upload");
+      var infoArea = document.getElementById("upload-label");
 
-
-        var input = document.getElementById( 'upload' );
-        var infoArea = document.getElementById( 'upload-label' );
-
-        input.addEventListener( 'change', showFileName );
-        function showFileName( event ) {
+      input.addEventListener("change", showFileName);
+      function showFileName(event) {
         var input = event.srcElement;
         var fileName = input.files[0].name;
-        infoArea.textContent = 'File name: ' + fileName;
-        }
-        
-    });
-    function removeImage(){
-        $('#imageResult').attr('src', '');
-        $('#removeBtn').hide()
+        infoArea.textContent = "File name: " + fileName;
+      }
+    function removeImage() {
+      $("#imageResult").attr("src", "");
+      $("#removeBtn").hide();
     }
-    
+  </script>
+  <script src="./../assets/js/tag-input.js"></script>
 
-</script>
-<script src="./../assets/js/tag-input.js"></script>
-
-<script src="./../assets/js/multiselect-dropdown.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
-<script src="./../assets/firebase.js"></script>
-
-
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+  <script src="./../assets/firebase.js"></script>
+  <script src="./sliders1.js"></script>
 </html>
