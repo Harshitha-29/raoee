@@ -5478,12 +5478,17 @@ Created using IcoMoon - icomoon.io
   }
 
   .responsiveEdit{
-    margin-left: 60% !important ;
+    margin-left: 40% !important ;
   }
   .nav-tabs .nav-item>.nav-link {
     margin-bottom: 5px;
   }
-
+  .display-big{
+    display: none;
+  }
+  .display-small{
+    display: block !important;
+  }
   .user-profile [class*="col-"] {
     padding-left: 15px !important;
     padding-right: 15px !important;

@@ -111,14 +111,14 @@
         <!-- End Navbar -->
         <div class="panel-header panel-header-sm"></div>
         <div class="content">
-          <div class="row">
+          <div class="row flex-column-reverse flex-md-row">
             <div class="col-md-8">
               <div class="card">
                 <div class="card-header" style="display: flex">
                   <h5 class="title">My Profile</h5>
-                  <h5 class="title responsiveEdit" style="float: right;margin-left: 80%;">
+                  <!-- <h5 class="title responsiveEdit" style="float: right;margin-left: 80%;">
                     <i style="color: green; cursor: pointer;" class="fa fa-pencil-alt"></i>
-                  </h5>
+                  </h5> -->
                 </div>
 
                 <div class="card-body">
@@ -260,48 +260,270 @@
                       </div>
                     </div>
                     <div style="width: 100%;">
-                      <!-- <button
-                          type="submit"
-                          id="updateBtn"
-                          style="background-color: green; color: white"
-                          type="button"
-                          class="btn btn-elegant center"
-                        >
-                          <i
-                            class="now-ui-icons loader_refresh pr-2"
-                            aria-hidden="true"
-                          ></i
-                          >Update Profile
-                        </button> -->
+                      <div class="col-md-12">
+                        <button
+                            id="uploadBtn"
+                            style="background-color: rgb(31, 126, 189);color:#ffffff ;display:none"
+                            type="button"
+                            class=" center btn btn-elegant display-small"
+        
+                            >
+                            <i
+                              class="
+                                now-ui-icons
+                                arrows-1_cloud-upload-94
+                                pr-2
+                              "
+                              aria-hidden="true"
+                            ></i
+                            >Update Basic Profile
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </div>
               </div>
 
+           
+            </div>
+
+            <div class="col-md-4">
+              <div class="card card-user">
+                <div class="image">
+                  <img
+                    src="https://www.desktopbackground.org/download/1024x768/2014/06/28/784958_nature-trains-railroad-tracks-railway-wallpapers_1920x1200_h.jpg"
+                    alt="..."
+                  />
+                </div>
+
+                <div class="card-body">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="userImage"
+                    onchange="readURL(this)"
+                    hidden
+                  />
+                  <div class="author">
+                    <a href="#popup2" class="lightbox">
+                      <img
+                        id="blah"
+                        class="avatar border-gray"
+                        src="../assets/img/userProfile.png"
+                        alt="..."
+                        style="object-fit: cover"
+                      />
+                      <label for="userImage">
+                        <i
+                          class="fa fa-pencil-alt"
+                          style="
+                            padding: 10px;
+                            position: absolute !important;
+                            cursor: pointer;
+                            color: #05426b;
+                          "
+                        ></i>
+                      </label>
+                      <h5 class="title" style="color: black">User Name</h5>
+                    </a>
+                  </div>
+
+                  <p class="description text-center">
+                    About Employee <br />
+                    Some Description <br />
+                    Same goes here"
+                  </p>
+                  
+                </div>
+                
+               
+                  <!-- <div class="button-container">
+                    <input type="file" accept="image/*" hidden id="userImage" />
+                    <p>
+                      Selected Verticals :
+                      <b style="color: green; font-weight: 800"
+                        >Signalling , Telecom</b
+                      >
+                    </p>
+                  </div> -->
+                
+               
+                
+              </div>
+              <div class="col-md-12">
+                <button
+                    id="uploadBtn"
+                    style="background-color: rgb(31, 126, 189);color:#ffffff "
+                    type="button"
+                    class=" center btn btn-elegant display-big"
+
+                    >
+                    <i
+                      class="
+                        now-ui-icons
+                        arrows-1_cloud-upload-94
+                        pr-2
+                      "
+                      aria-hidden="true"
+                    ></i
+                    >Update Basic Profile
+                </button>
+              </div>
+            </div>
+
+           
+          </div>
+          <div class="row">
+            <div class="col-md-12">
               <div class="card">
                 <div class="card-header" style="display: flex">
-                  <h5 class="title">My CV's</h5>
-                  <h5 class="title responsiveEdit" style="float: right;margin-left: 80%;">
-                    <button
-                      style="background-color: green; color: white"
-                    >
-                    Update New CV
-                    </button>
+                  <h5 class="title">Upload/Edit My CV's</h5>
+                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 65%;">
+                    <label class="switch">
+                      <input type="checkbox" />
+                      <span class="slider round"></span>
+                      <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;"> Edit</span>
+                    </label>
+                    
+                    <!-- <span
+                      style="color: rgb(180, 179, 76); font-weight: 699;font-size: 14px;"
+                      >Edit
+                     </span> -->
                   </h5>
+                  
                 </div>
-                <div class="card-body">
-                  <div><h4>Applied for</h4></div>
-                  <div>Vertical:</div>
-                  <div>Sub Verticals:</div>
-                  <div>Expertise:</div>
-                  <table>
-                    <tr>
-                      <td>design</td>
-                      <td>Yes</td>
-                      <td>Fressher</td>
-                    </tr>
-                  </table>
-                  <div></div>
+                <div class="form-group" style="display: flex;margin-right: 65%;">
+                  
+
+                  <label
+                    for=""
+                    class="btn btn-tertiary js-labelFile"
+                    style="background-color: transparent"
+                  >
+                    <i class="icon fa fa-eye"></i>
+
+                    <span class="js-fileName"
+                      >View Your CSV</span
+                    >
+                  </label>
+                  
+                </div>
+                <div class="card-body" id="acd">
+                  <h6 style="font-weight: 400">
+                    Selected Verticals (Click To Expand)
+                   
+                  </h6>
+
+                  <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#signalling">Signalling ></button>
+                  <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);"data-parent="#acd" data-toggle="collapse" href="#telecom">Telecom ></button>
+                  <div id="signalling" class="collapse">
+                    <table class="table table-bordered">
+                      <thead class="thead-dark">
+                        <tr style="text-align: center">
+                          
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Sub-Vertical
+                          </th>
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Expertise
+                          </th>
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Experience
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          
+                          <td>
+                           Designing
+                          </td>
+                          <td>
+                            Signal Experience
+                          </td>
+                          <td>
+                            Fresher
+                          </td>
+                        </tr>
+  
+                        <tr>
+                         
+                          <td>
+                           Testing
+                          </td>
+                          <td>
+                            Signal Experience
+                          </td>
+                          <td>
+                            Trined
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div id="telecom"" class="collapse">
+                    <table class="table table-bordered">
+                      <thead class="thead-dark">
+                        <tr style="text-align: center">
+                          
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Sub-Vertical
+                          </th>
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Expertise
+                          </th>
+                          <th
+                            style="text-align: center; font-weight: 600"
+                            scope="col"
+                          >
+                            Experience
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          
+                          <td>
+                           Designing
+                          </td>
+                          <td>
+                            Signal Experience
+                          </td>
+                          <td>
+                            Fresher
+                          </td>
+                        </tr>
+  
+                        <tr>
+                         
+                          <td>
+                           Testing
+                          </td>
+                          <td>
+                            Signal Experience
+                          </td>
+                          <td>
+                            Trined
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
                 <div class="card-body" style="display: none;">
@@ -474,67 +696,6 @@
                 </div>
               </div>
             </div>
-
-            <div class="col-md-4">
-              <div class="card card-user">
-                <div class="image">
-                  <img
-                    src="https://www.desktopbackground.org/download/1024x768/2014/06/28/784958_nature-trains-railroad-tracks-railway-wallpapers_1920x1200_h.jpg"
-                    alt="..."
-                  />
-                </div>
-
-                <div class="card-body">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="userImage"
-                    onchange="readURL(this)"
-                    hidden
-                  />
-                  <div class="author">
-                    <a href="#popup2" class="lightbox">
-                      <img
-                        id="blah"
-                        class="avatar border-gray"
-                        src="../assets/img/userProfile.png"
-                        alt="..."
-                        style="object-fit: cover"
-                      />
-                      <label for="userImage">
-                        <i
-                          class="fa fa-pencil-alt"
-                          style="
-                            padding: 10px;
-                            position: absolute !important;
-                            cursor: pointer;
-                            color: #05426b;
-                          "
-                        ></i>
-                      </label>
-                      <h5 class="title" style="color: black">User Name</h5>
-                    </a>
-                  </div>
-
-                  <p class="description text-center">
-                    About Employee <br />
-                    Some Description <br />
-                    Same goes here"
-                  </p>
-                </div>
-                <hr />
-
-                <div class="button-container">
-                  <input type="file" accept="image/*" hidden id="userImage" />
-                  <p>
-                    Selected Verticals :
-                    <b style="color: green; font-weight: 800"
-                      >Signalling , Telecom</b
-                    >
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <!-- footer -->
@@ -548,9 +709,9 @@
   <script>
     $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
-      $("#navigation").load("commonNavigation.html");
-      $("#topbar").load("topBar.html");
-      $("#footer").load("footer.html");
+      $("#navigation").load("./../common/commonNavigation.html");
+      $("#topbar").load("./../common/topBar.html");
+      $("#footer").load("./../common/footer.html");
       var multipleCancelButton = new Choices(
         "#choices-multiple-remove-button",
         {
