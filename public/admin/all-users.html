@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>RAOEE</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+        name="viewport" />
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+        integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU" crossorigin="anonymous" />
+    
+    <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
+</head>
+<style>
+    .choices__inner {
+        border-radius: 20px;
+        background-color: transparent;
+        height: 10px !important;
+        overflow-y: scroll;
+    }
+    .ck.ck-editor__editable_inline>:last-child {
+  
+        height: 18em;
+    }
+
+    #upload {
+        opacity: 0;
+    }
+
+    #upload-label {
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+    }
+
+    .image-area {
+        border: 2px dashed black;
+        padding: 1rem;
+        position: relative;
+    }
+
+    .image-area::before {
+        content: 'Uploaded image result';
+        color: black;
+        font-weight: bold;
+        text-transform: uppercase;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        z-index: 1;
+    }
+
+    .image-area img {
+        z-index: 2;
+        position: relative;
+    }
+
+
+</style>
+
+<body class="user-profile">
+    <div class="wrapper">
+        <div id="navigation"></div>
+        <div class="main-panel" id="main-panel">
+            <!-- Navbar -->
+            <div id="topbar"></div>
+            <!-- End Navbar -->
+            <div class="panel-header panel-header-sm"></div>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header" style="display: flex">
+                                <h5 class="title">All Registered Employees</h5>
+                            </div>
+
+                            <div class="card-body">
+                                <form id="expertiseForm">
+                                    <div class="row">
+
+                                        <div class="col-md-12 ">
+                                            <div class="container">
+                                                <div id="toolbar">
+                                                        <select class="form-control">
+                                                                <option value="">Export Basic</option>
+                                                                <option value="all">Export All</option>
+                                                                <option value="selected">Export Selected</option>
+                                                        </select>
+                                                </div>
+                                                
+                                                <table id="table"  class="table-bordered "
+                                                             data-toggle="table"
+                                                             data-filter-control="true" 
+                                                             data-show-export="true"
+                                                             data-click-to-select="true"
+                                                             data-search="true"
+                                                             data-toolbar="#toolbar">
+                                                    <thead class="">
+                                                        <tr>
+                                                            <th data-field="state" data-checkbox="true"></th>
+                                                            <th data-field="prenom" data-filter-control="input" data-sortable="true">Name</th>
+                                                            <th data-field="vertical" data-filter-control="select" data-sortable="true">Vertical</th>
+                                                            <th data-field="sub-vertical" data-filter-control="select" data-sortable="true">Sub-Vertical</th>
+                                                            <th data-field="expertise" data-filter-control="select" data-sortable="true">Expertise</th>
+                                                            <th data-field="Experience" data-filter-control="select" data-sortable="true">Experience</th>
+                                                            <th data-field="note" data-sortable="true">Action</th>
+                                                        </tr>
+                                                        
+                                                    </thead>
+                                                    
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+                                                            <td>Reetik</td>
+                                                            <td>Signalling</td>
+                                                            <td>Desgin</td>
+                                                            <td>Sign Tech</td>
+                                                            <td>Fresher</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bs-checkbox "><input data-index="1" name="btSelectItem" type="checkbox"></td>
+                                                            <td>Bhagat</td>
+                                                            <td>Telecom</td>
+                                                            <td>Desgin</td>
+                                                            <td>Sign Tech</td>
+                                                            <td>Fresher</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bs-checkbox "><input data-index="2" name="btSelectItem" type="checkbox"></td>
+                                                            <td>Anshuman</td>
+                                                            <td>Signalling</td>
+                                                            <td>Desgin</td>
+                                                            <td>Sign Tech</td>
+                                                            <td>Fresher</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bs-checkbox "><input data-index="3" name="btSelectItem" type="checkbox"></td>
+                                                            <td>Rakesh</td>
+                                                            <td>Signalling</td>
+                                                            <td>Desgin</td>
+                                                            <td>Sign Tech</td>
+                                                            <td>Fresher</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+                                                            <td>Anmol</td>
+                                                            <td>Signalling</td>
+                                                            <td>Desgin</td>
+                                                            <td>Sign Tech</td>
+                                                            <td>Trained</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="bs-checkbox "><input data-index="4" name="btSelectItem" type="checkbox"></td>
+                                                            <td>Anshika</td>
+                                                            <td>Telecom</td>
+                                                            <td>Installation</td>
+                                                            <td>Sign Tech</td>
+                                                            <td>Trained</td>
+                                                        </tr>
+                                                        
+                                                        
+                                                        
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                        </div>
+                                        
+                                       
+                                    </div>
+                                    <br>
+                                    
+                                </form>
+                            </div>
+                        </div>
+
+                    
+                    </div>
+
+                </div>
+            </div>
+            <!-- footer -->
+            <div id="footer"></div>
+        </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/extensions/export/bootstrap-table-export.js"></script>
+    <script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+<script>
+
+
+    $(document).ready(function () {
+
+        // Javascript method's body can be found in assets/js/demos.js
+        $("#navigation").load("commonNavigation.html");
+        $("#topbar").load("topBar.html");
+        $("#footer").load("footer.html");
+    });
+    //exporte les données sélectionnées
+    var $table = $('#table');
+        $(function () {
+            $('#toolbar').find('select').change(function () {
+                $table.bootstrapTable('refreshOptions', {
+                    exportDataType: $(this).val()
+                });
+            });
+        })
+
+            var trBoldBlue = $("table");
+
+        $(trBoldBlue).on("click", "tr", function (){
+                $(this).toggleClass("bold-blue");
+        });
+    
+
+</script>
+<script src="./../assets/js/tag-input.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+<script src="./../assets/js/multiselect-dropdown.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+<script src="./../assets/firebase.js"></script>
+
+
+</html>
