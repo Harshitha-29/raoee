@@ -47,6 +47,16 @@ db.collection("verticals").onSnapshot((snaps) => {
       ${subOptions}
     </select>
     `;
+
+    new Choices(
+      "#choices-multiple-remove-button",
+      {
+        removeItemButton: true,
+        maxItemCount: 10,
+        searchResultLimit: 10,
+        renderChoiceLimit: 10,
+      }
+    );
   // console.log(subVerticalsDropdownHTML);
 });
 
@@ -125,6 +135,15 @@ const changeSubVertical = (e) => {
       ${subOptions}
     </select>
     `;
+    new Choices(
+      "#choices-multiple-remove-button",
+      {
+        removeItemButton: true,
+        maxItemCount: 10,
+        searchResultLimit: 10,
+        renderChoiceLimit: 10,
+      }
+    );
 };
 
 expertiseFormHTML["vertical"].addEventListener("change", changeSubVertical);

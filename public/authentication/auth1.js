@@ -181,12 +181,16 @@ const login = (e) => {
   const email = signinFormHTML['email'].value;
   const password = signinFormHTML['password'].value;
 
+  console.log(email, password);
   auth.signInWithEmailAndPassword(email, password).then(user => {
     // console.log(user);
     // console.log(user.user);
 
     let userType = user.user.displayName;
-    
+    console.log(userType);
+    if(userType === 'employee') {
+      window.location.href = `./../employee/user.html`;
+    }
 
   }).catch(error => {
     console.error(error);

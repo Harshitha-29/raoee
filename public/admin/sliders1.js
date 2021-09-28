@@ -100,7 +100,7 @@ const uploadFileToStorage = async () => {
     };
   } catch (error) {
     console.error(error);
-    if (storageReTry > 2) {
+    if (storageReTry < 2) {
       storageReTry++;
       alert(`ReTry Attempt: ${storageReTry} Reason: ${error.message}`);
       uploadFileToStorage();

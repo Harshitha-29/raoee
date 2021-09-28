@@ -113,7 +113,7 @@
       border-radius: 4px;
       max-width: 100%;
       line-height: 22px;
-      width: 100%;;
+      width: 100%;
       cursor: text;
     }
     .bootstrap-tagsinput input {
@@ -124,7 +124,7 @@
       padding: 10px 6px;
       margin: 0;
 
-      width: 100%;;
+      width: 100%;
       max-width: inherit;
     }
     .bootstrap-tagsinput.form-control input::-moz-placeholder {
@@ -162,10 +162,10 @@
     .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
       box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     }
-    .bootstrap-select>.btn {
-    width: 100%;
-    padding-right: 25px;
-}
+    .bootstrap-select > .btn {
+      width: 100%;
+      padding-right: 25px;
+    }
   </style>
   <body class="user-profile">
     <div class="wrapper">
@@ -193,8 +193,11 @@
                             <span style="color: red">*</span></label
                           >
                           <select
-                            
-                            style="overflow-y: scroll;width: 100%;padding: 10px;"
+                            style="
+                              overflow-y: scroll;
+                              width: 100%;
+                              padding: 10px;
+                            "
                             id="verticalsDropdown"
                             name="vertical"
                           >
@@ -219,8 +222,8 @@
                             <option>Designing</option>
                             <option>Installation</option>
                           </select> -->
-                          <div >
-                          <!-- <select name="field1" id="subVerticalsDropdown" multiple >
+                          <div>
+                            <!-- <select name="field1" id="subVerticalsDropdown" multiple >
                             <option value="1">Audi</option>
                             <option selected value="2">BMW</option>
                             <option selected value="3">Mercedes</option>
@@ -228,35 +231,41 @@
                             <option value="5">Lexus</option>
                             <option value="6">Tesla</option>
                           </select>  -->
-                        </div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-8 pr-1">
                         <div class="form-group" id="subVerticalsHolder22">
                           <label
                             >Enter Area of Expertise
-                            <span style="color: red">*</span></label>
-                          <div >
-                          <input name="expertiseCategory" type="text" placeholder="Enter Area of Expertise" style="width: 100%;padding: 10px;">
-                        </div>
+                            <span style="color: red">*</span></label
+                          >
+                          <div>
+                            <input
+                              name="expertiseCategory"
+                              type="text"
+                              placeholder="Enter Area of Expertise"
+                              style="width: 100%; padding: 10px"
+                            />
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-8">
                         <div class="form-group">
                           <label>Enter Profession/Experience Level</label>
-                          <br>
+                          <br />
                           <input
                             name="expertisesTags"
                             type="text"
                             class="form-control"
                             data-role="tagsinput"
-                            style="width: 100% !important;"
+                            style="width: 100% !important"
                             placeholder="Add tags Ex : Fresher , Less than 2 years"
                           />
                         </div>
                       </div>
                     </div>
-                    <br>
+                    <br />
                     <div class="row">
                       <div class="col-md-8">
                         <button
@@ -268,8 +277,7 @@
                           type="button"
                           class="btn btn-elegant center"
                         >
-                          
-                          Add Expertise 
+                          Add Expertise
                         </button>
                       </div>
                     </div>
@@ -277,7 +285,6 @@
                 </div>
               </div>
             </div>
-            
           </div>
         </div>
         <!-- footer -->
@@ -289,38 +296,12 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   </body>
   <script>
-  
-    
-      $(document).ready(function () {
- 
+    $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
-      setTimeout(function(){
-       
-      var multipleCancelButton = new Choices(
-        "#choices-multiple-remove-button",
-        {
-          removeItemButton: true,
-          maxItemCount: 10,
-          searchResultLimit: 10,
-          renderChoiceLimit: 10,
-        }
-      );
-     },900)
-  
-  
-      // $(".files").attr(
-      //   "data-before",
-      //   "Drag file here or click the above button"
-      // );
-      // $('input[type="file"]').change(function (e) {
-      //   var fileName = e.target.files[0].name;
-      //   $(".files").attr("data-before", fileName);
-      // });
     });
-    
   </script>
   <script src="./../assets/js/tag-input.js"></script>
 
@@ -330,5 +311,4 @@
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
   <script src="./../assets/firebase.js"></script>
   <script src="./expertise1.js"></script>
-
 </html>
