@@ -34,7 +34,7 @@ db.collection("verticals").onSnapshot((snaps) => {
     // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
     subOptions += `<option value="${subVer}">${subVer}</option>`;
   });
-
+  
   subVerticalsHolderHTML.innerHTML = `
     <label>Select Sub-Vertical
       <span style="color: red">*</span>
@@ -47,6 +47,15 @@ db.collection("verticals").onSnapshot((snaps) => {
       ${subOptions}
     </select>
     `;
+    var multipleCancelButton = new Choices(
+      "#choices-multiple-remove-button",
+      {
+        removeItemButton: true,
+        maxItemCount: 10,
+        searchResultLimit: 10,
+        renderChoiceLimit: 10,
+      }
+    );
   // console.log(subVerticalsDropdownHTML);
 });
 
@@ -101,6 +110,10 @@ expertiseFormHTML.addEventListener("change", (e) => {
 // /////////////////////////////////////////////
 
 const changeSubVertical = (e) => {
+ 
+       
+    
+   
   e.preventDefault();
   console.log(e.target.value);
   console.log(VERTICALS);
@@ -125,6 +138,17 @@ const changeSubVertical = (e) => {
       ${subOptions}
     </select>
     `;
+    var multipleCancelButton = new Choices(
+      "#choices-multiple-remove-button",
+      {
+        removeItemButton: true,
+        maxItemCount: 10,
+        searchResultLimit: 10,
+        renderChoiceLimit: 10,
+      }
+    );
 };
+
+
 
 expertiseFormHTML["vertical"].addEventListener("change", changeSubVertical);
