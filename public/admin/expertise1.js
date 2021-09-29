@@ -34,7 +34,7 @@ db.collection("verticals").onSnapshot((snaps) => {
     // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
     subOptions += `<option value="${subVer}">${subVer}</option>`;
   });
-
+  
   subVerticalsHolderHTML.innerHTML = `
     <label>Select Sub-Vertical
       <span style="color: red">*</span>
@@ -111,6 +111,10 @@ expertiseFormHTML.addEventListener("change", (e) => {
 // /////////////////////////////////////////////
 
 const changeSubVertical = (e) => {
+ 
+       
+    
+   
   e.preventDefault();
   console.log(e.target.value);
   console.log(VERTICALS);
@@ -145,5 +149,7 @@ const changeSubVertical = (e) => {
       }
     );
 };
+
+
 
 expertiseFormHTML["vertical"].addEventListener("change", changeSubVertical);
