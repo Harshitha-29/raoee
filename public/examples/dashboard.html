@@ -41,10 +41,7 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
     />
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
-    ></script>
+ <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 
   </head>
@@ -63,13 +60,97 @@
       margin-top: 0px !important;
     }
     .profile-pic{
-      width: 300px !important;
+      width: 100px !important;
       object-fit:cover;
+    }
+    .now-ui-icons{
+    color: black !important;
+    }
+    .slick-prev:before
+      {
+          content: '←';
+          color: black;
+      }
+    .slick-next:before
+    {
+      
+        color: black;
     }
   </style>
   <body class="" onload="essentials()">
     <div class="wrapper">
-      <div id="navigation"></div>
+      <div id="navigation">
+        <div class="sidebar" data-color="orange">
+          <!--
+                Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+            -->
+          <div class="logo">
+            <!-- <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+                  RAO
+                </a>
+                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+                  Employement Exchange
+                </a> -->
+            <a href="dashboard.html"><img
+              style="margin-right: auto; margin-left: auto; display: block"
+              src="./../assets/img/RAOEE.png"
+              alt=""
+            /></a>
+          </div>
+          <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <ul class="nav">
+              <li class="active">
+                <a href="./../examples/dashboard.html">
+                  <i class="now-ui-icons design_app"></i>
+                  <p>Home</p>
+                </a>
+              </li>
+              <li>
+                <a href="#about-us">
+                  <i class="now-ui-icons education_atom"></i>
+                  <p>About Us</p>
+                </a>
+              </li>
+              <li>
+                <a href="#why-us">
+                  <i class="now-ui-icons location_map-big"></i>
+                  <p>Why Us</p>
+                </a>
+              </li>
+              <!-- <li>
+                <a href="./notifications.html">
+                  <i class="now-ui-icons ui-1_bell-53"></i>
+                  <p>Notifications</p>
+                </a>
+              </li> -->
+              <li class="ace">
+                <a href="../employee/user.html">
+                  <i class="now-ui-icons users_single-02"></i>
+                  <p>User Profile</p>
+                </a>
+              </li>
+              <!-- <li>
+                <a href="./tables.html">
+                  <i class="now-ui-icons design_bullet-list-67"></i>
+                  <p>Some Link</p>
+                </a>
+              </li> -->
+              <li>
+                <a href="../authentication/auth.html">
+                  <i class="now-ui-icons objects_key-25"></i>
+                  <p>Login / Register</p>
+                </a>
+              </li>
+              <li class="active-pro">
+                <a href="./upgrade.html">
+                  <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+                  <p> Login / Register</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div class="main-panel" id="main-panel">
         <!-- Navbar -->
         <div id="topbar"></div>
@@ -159,7 +240,7 @@
         </div>
         <br />
         <div class="content">
-          <div class="card aboutus-section" style="background-color: #f7f7f7;">
+          <div class="card aboutus-section" id="about-us" style="background-color: #f7f7f7;">
             <div class="container">
               <div class="row">
                 <div class="col-md-5 col-sm-6 col-xs-12">
@@ -186,7 +267,7 @@
             </div>
           </div>
 
-          <div class="card aboutus-section" style="padding: 30px !important;background-color: #00838F;">
+          <div class="card aboutus-section"  style="padding: 30px !important;background-color: #00838F;">
             <div class="container">
               <div class="row">
                 <div class="col-md-7 col-sm-6 col-xs-12">
@@ -218,7 +299,7 @@
             </div>
           </div>
 
-          <div class="aboutus-section" style="">
+          <div class="aboutus-section" id="why-us" style="">
             <div class="container" style=" ">
               <div class="row">
                 <div class="col-md-5 col-sm-6 col-xs-12">
@@ -243,7 +324,7 @@
               </div>
             </div>
           </div>
-          <div class="card aboutus-section " style="padding: 50px !important;">
+          <div class="card aboutus-section " style="">
             <div class="container ">
               <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -697,55 +778,74 @@
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+
+  <!--  Google Maps Plugin    -->
+
+  <!-- Chart JS -->
+  <!-- <script src="../assets/js/plugins/chartjs.min.js"></script> -->
+  <!--  Notifications Plugin    -->
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
     <script>
       function essentials() {}
       $(document).ready(function () {
         // Javascript method's body can be found in assets/js/demos.js
-        $("#navigation").load("./../common/commonNavigation.html");
-        $("#topbar").load("./../common/topBar.html");
-        $("#footer").load("./../common/footer.html");
-        demo.initDashboardPageCharts();
+        var cnt=0;
+        let int= setInterval(function(){
+          cnt++;
+          console.log(cnt)
+          if(cnt==5){
+            
+            clearInterval(int)
+          }
+         // $("#navigation").load("./../common/commonNavigation.html");
+          $("#topbar").load("./../common/topBar.html");
+          $("#footer").load("./../common/footer.html");
+        },300)
+     
+    
+        //demo.initDashboardPageCharts();
+        $('.items').slick({
+          dots: true,
+          infinite: true,
+          speed: 800,
+          autoplay: true,
+          autoplaySpeed: 2000,
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          responsive: [
+          {
+          breakpoint: 1024,
+          settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+          }
+          },
+          {
+          breakpoint: 600,
+          settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+          }
+          },
+          {
+          breakpoint: 480,
+          settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+          }
+          }
+
+          ]
+});
       });
     </script>
-    <script>
-      $(document).ready(function(){
-
-$('.items').slick({
-dots: true,
-infinite: true,
-speed: 800,
-autoplay: true,
-autoplaySpeed: 2000,
-slidesToShow: 3,
-slidesToScroll: 3,
-responsive: [
-{
-breakpoint: 1024,
-settings: {
-slidesToShow: 3,
-slidesToScroll: 3,
-infinite: true,
-dots: true
-}
-},
-{
-breakpoint: 600,
-settings: {
-slidesToShow: 2,
-slidesToScroll: 2
-}
-},
-{
-breakpoint: 480,
-settings: {
-slidesToShow: 1,
-slidesToScroll: 1
-}
-}
-
-]
-});
-});
-    </script>
+   
   </body>
 </html>

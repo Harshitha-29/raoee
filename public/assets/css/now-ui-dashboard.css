@@ -22,6 +22,10 @@ Licensed under the MIT license - http://opensource.org/licenses/MIT
 
 Copyright (c) 2015 Daniel Eden
 */
+
+html{
+  scroll-behavior: smooth;
+}
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
@@ -3597,9 +3601,13 @@ Created using IcoMoon - icomoon.io
 }
 
 .now-ui-icons.users_single-02:before {
+  
   content: "\ea51";
 }
-
+.now-ui-icons.users_single-03:before {
+  color: white;
+  content: "\ea51";
+}
 .all-icons .font-icon-detail {
   text-align: center;
   padding: 45px 0px 30px;
@@ -3919,7 +3927,7 @@ Created using IcoMoon - icomoon.io
 
 .sidebar .nav li.active>a,
 .off-canvas-sidebar .nav li.active>a {
-  background-color: #05426b;
+  background-color: ghostwhite;
   box-shadow: 0 1px 15px 1px rgba(39, 39, 39, 0.1);
 }
 
