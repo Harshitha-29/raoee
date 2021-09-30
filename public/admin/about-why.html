@@ -162,12 +162,12 @@
                               <input
                                 id="aboutFile"
                                 type="file"
-                                onchange="readURL(this);"
+                                onchange="readURLAbout(this);"
                                 class="form-control border-0"
                               />
                               <label
                                 id="upload-label"
-                                for="upload"
+                                for="aboutFile"
                                 class="font-weight-light text-muted"
                                 >Choose file</label
                               >
@@ -198,13 +198,13 @@
                               style="padding: 2px; color: black; display: none"
                               type="button"
                               class="btn btn-elegant center"
-                              onclick="removeImage()"
+                              onclick="removeImageAbout()"
                             >
                               Remove Image
                             </button>
                             <div class="image-area mt-4">
                               <img
-                                id="imageResult"
+                                id="imgResAbout"
                                 src="../assets/img/about.png"
                                 alt=""
                                 class="
@@ -287,12 +287,12 @@
                               <input
                                 id="whyFile"
                                 type="file"
-                                onchange="readURL(this);"
+                                onchange="readURLWhy(this);"
                                 class="form-control border-0"
                               />
                               <label
                                 id="upload-label"
-                                for="upload"
+                                for="whyFile"
                                 class="font-weight-light text-muted"
                                 >Choose file</label
                               >
@@ -323,13 +323,13 @@
                               style="padding: 2px; color: black; display: none"
                               type="button"
                               class="btn btn-elegant center"
-                              onclick="removeImage()"
+                              onclick="removeImageWhy()"
                             >
                               Remove Image
                             </button>
                             <div class="image-area mt-4">
                               <img
-                                id="imageResult"
+                                id="imgResWhy"
                                 src="../assets/img/why.png"
                                 alt=""
                                 class="
@@ -382,36 +382,64 @@
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
 
-      function readURL(input) {
-        if (input.files && input.files[0]) {
+      
+    });
+    function readURLAbout(aboutFile) {
+        if (aboutFile.files && aboutFile.files[0]) {
           var reader = new FileReader();
 
           reader.onload = function (e) {
-            $("#imageResult").attr("src", e.target.result);
+            $("#imgResAbout").attr("src", e.target.result);
           };
-          reader.readAsDataURL(input.files[0]);
-          $("#removeBtn").show();
+          reader.readAsDataURL(aboutFile.files[0]);
+          $("#aboutFileRemove").show();
+        }
+      }
+      function readURLWhy(whyFile) {
+        if (whyFile.files && whyFile.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $("#imgReswhy").attr("src", e.target.result);
+          };
+          reader.readAsDataURL(whyFile.files[0]);
+          $("#whyFileRemove").show();
         }
       }
 
       $(function () {
-        $("#upload").on("change", function () {
-          readURL(input);
+        $("#whyFile").on("change", function () {
+          readURLWhy(whyFile);
         });
       });
-      var input = document.getElementById("upload");
+      $(function () {
+        $("#aboutFile").on("change", function () {
+          readURLAbout(aboutFile);
+        });
+      });
+      var whyFile = document.getElementById("whyFile");
       var infoArea = document.getElementById("upload-label");
+      var aboutFile = document.getElementById("aboutFile");
 
-      input.addEventListener("change", showFileName);
-      function showFileName(event) {
+      whyFile.addEventListener("change", showFileNameW);
+      aboutFile.addEventListener("change", showFileNameA);
+      function showFileNameA(event) {
         var input = event.srcElement;
         var fileName = input.files[0].name;
         infoArea.textContent = "File name: " + fileName;
       }
-    });
-    function removeImage() {
-      $("#imageResult").attr("src", "");
-      $("#removeBtn").hide();
+      function showFileNameW(event) {
+        var input = event.srcElement;
+        var fileName = input.files[0].name;
+        infoArea.textContent = "File name: " + fileName;
+      }
+    function removeImageAbout() {
+      $("#imgResAbout").attr("src", "");
+      $("#aboutFileRemove").hide();
+    }
+    function removeImageWhy() {
+      $("#imgResWhy").attr("src", "");
+      $("#whyFileRemove").hide();
     }
   </script>
 
@@ -420,6 +448,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
   <script src="./../assets/firebase.js"></script>
   <script src="./about-why1.js"></script>
 </html>

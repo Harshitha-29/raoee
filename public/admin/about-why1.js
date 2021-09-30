@@ -11,6 +11,7 @@ ClassicEditor.create(document.querySelector("#editor"))
   .catch((error) => {
     console.error(error);
   });
+
 ClassicEditor.create(document.querySelector("#editor2"))
   .then((editor) => {
     WHY_EDITOR = editor;
@@ -34,7 +35,7 @@ async function fetchAboutData() {
 }
 
 async function fetchWhyData() {
-  WHY_REF = await db.collection('miscellaneous').doc('aboutUs');
+  WHY_REF = await db.collection('miscellaneous').doc('whyUs');
   const refDoc = await ABOUT_REF.get();
   WHY_DATA = await refDoc.data();
   displayWhyData();
@@ -194,7 +195,7 @@ const submitAboutUs = (e) => {
   let aboutUs = ABOUT_EDITOR.getData();
 
   if(ABOUT_IMG) {
-    const res
+  
   }
 
 };
