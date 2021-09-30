@@ -1,12 +1,12 @@
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBZ9GloNJ_vsg25V5ttBQPoXh05_nzLZfs",
-  authDomain: "raoee-project.firebaseapp.com",
-  projectId: "raoee-project",
-  storageBucket: "raoee-project.appspot.com",
-  messagingSenderId: "447816816862",
-  appId: "1:447816816862:web:7af8a2e19a344d56df8a4f",
-  measurementId: "G-LZVB86MS4C",
+  apiKey: "AIzaSyCK6-yugCM4DTwjuB6Jmx2WUo_s8EuB1mk",
+  authDomain: "raoee-8ec0e.firebaseapp.com",
+  projectId: "raoee-8ec0e",
+  storageBucket: "raoee-8ec0e.appspot.com",
+  messagingSenderId: "773865176384",
+  appId: "1:773865176384:web:d168ee27ea018155bc4ea5",
+  measurementId: "G-NDHREXWG0S"
 };
 const app = firebase.initializeApp(firebaseConfig);
 // const analytics = firebase.getAnalytics(app);

@@ -101,10 +101,12 @@ const verticalFormHTML = document.querySelector("#verticalForm");
 const addVertical = async (e) => {
   e.preventDefault();
   const name = verticalFormHTML["name"].value;
+  const id = verticalFormHTML["id"].value;
 
   try {
     await db.collection("verticals").doc(name).set({
       name: name,
+      _id: id,
       subVerticals: []
     });
     nowuiDashboard.showNotification('top','center',"Vertical Added Successfully","primary");
