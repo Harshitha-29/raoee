@@ -22,6 +22,8 @@ async function getUserDetails({ uid, userType }) {
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
     console.log(USER);
+    $('#username').text(USER.fname)
+    $('#userimg').attr('src',USER.basicInfo.imgUrl);
     displayUserDetails();
     displayCvDetails();
   } catch (error) {
@@ -95,7 +97,7 @@ const aboutMeProfileHTML = document.querySelector("#aboutMeProfile");
 const blahHTML = document.querySelector("#blah");
 
 function displayUserDetails() {
-  console.log(USER);
+  //console.log(USER);
   userBasicFormHTML["fname"].value = USER.fname;
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;

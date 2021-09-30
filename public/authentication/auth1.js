@@ -43,7 +43,7 @@ const signupEmployee = async (e) => {
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
 
   if (!dbRes) {
-    alert(dbRes.message);
+    
     nowuiDashboard.showNotification('top','center',dbRes.message,"primary");
     return;
   }
@@ -62,7 +62,7 @@ const signupEmployer = async(e) => {
   const cpassword = employerFormHTML["cpassword"].value;
 
   if (password !== cpassword) {
-    alert("Passwords didnt match");
+    nowuiDashboard.showNotification('top','center',"Password Missed Match","primary");
     return;
   }
   let userType = "employer";
