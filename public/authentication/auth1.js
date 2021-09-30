@@ -12,7 +12,7 @@ const signupEmployee = async (e) => {
   const cpassword = emplyeeFormHTML["cpassword"].value;
 
   if (password !== cpassword) {
-    alert("Passwords didnt match");
+    nowuiDashboard.showNotification('top','center',"Password Mis-Matched","primary");
     return;
   }
   let userType = "employee";
@@ -25,7 +25,8 @@ const signupEmployee = async (e) => {
   let authRes = await createUserAuth(email, password, userType);
 
   if (!authRes) {
-    alert(authRes.message);
+
+    nowuiDashboard.showNotification('top','center',authRes.message,"primary");
     return;
   }
 
@@ -43,11 +44,12 @@ const signupEmployee = async (e) => {
 
   if (!dbRes) {
     alert(dbRes.message);
+    nowuiDashboard.showNotification('top','center',dbRes.message,"primary");
     return;
   }
   emplyeeFormHTML.reset();
-
-  alert('Employee Added')
+    nowuiDashboard.showNotification('top','center',"We have sent a verification link on "+email + " Please verify your email ","primary");
+  
 };
 
 emplyeeFormHTML.addEventListener('submit', signupEmployee);
@@ -158,8 +160,9 @@ const createUserAuth = async (email, password, type) => {
     })
     .catch((error) => {
       var errorMessage = error.message;
-      console.error(error);
-      console.error(errorMessage);
+      // console.error(error);
+      // console.error(errorMessage);
+      nowuiDashboard.showNotification('top','center',errorMessage.substring(9),"primary");
       return {
         status: false,
         message: `Please Retry: ${errorMessage}`,
@@ -194,7 +197,8 @@ const login = (e) => {
 
   }).catch(error => {
     console.error(error);
-    alert(`Failed: ${error.message}`)
+   
+    nowuiDashboard.showNotification('top','center',error.message,"primary");
   })
 
 }
