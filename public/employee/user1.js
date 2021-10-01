@@ -5,6 +5,7 @@ const storage = firebase.storage();
 // ////////////////////////////////////////////
 let USER = false;
 let USER_REF = false;
+let USER_ID = false;
 
 auth.onAuthStateChanged((user) => {
   USER_ID = user.uid;
@@ -644,6 +645,7 @@ function displayVerticalDropdown() {
 let verticalsSelected = [];
 let userSelectedMainVerticals = [];
 function verticalSelected(e) {
+  console.log('hi verticalSelected');
   userSelectedMainVerticals = [];
   verticalsSelected = Array.from(e.target.selectedOptions).map(
     (x) => x.value ?? x.text
@@ -657,7 +659,7 @@ function verticalSelected(e) {
   });
 
   // getSelectedVerticals();
-  userSelectedVerticals.length = 0;
+  // userSelectedVerticals.length = 0;
   userSelectedMainVerticals.map((uv) => {
     uv.subVerticals.map((svv) => {
       if (svv?.selected) {
@@ -675,6 +677,7 @@ function verticalSelected(e) {
 const subVerticalDropHolderHTML = document.querySelector(
   "#subVerticalDropHolder"
 );
+let subVerticalsSelected = [];
 
 function displaySubVerticalDropdown() {
   let options = "";
@@ -682,9 +685,18 @@ function displaySubVerticalDropdown() {
 
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
-      options += `<option value="${ver.name}__${sv.name}">${ver.name} : ${sv.name}</option>`;
+      // subVerticalsSelected.map(selected )
+      let flag = '';
+      for(let i = 0; i < subVerticalsSelected.length; i++) {
+        if(subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
+          flag = 'selected';
+          break
+        }
+      }
+      options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
     });
   });
+
 
   subVerticalDropHolderHTML.innerHTML = `
   <label>Select Sub Vertical
@@ -707,19 +719,31 @@ function displaySubVerticalDropdown() {
     maxItemCount: 20,
     searchResultLimit: 10,
     renderChoiceLimit: 10,
+    change: e => e.map(ee => {
+      console.log(ee);
+    })
   });
+
+  console.log(subVerticalsSelected);
+  if(subVerticalsSelected.length > 0) {
+    console.log('if', subVerticalsSelected);
+    getSelectedVerticals();
+  }
 }
 
 // ///////////////////////////////////////////
-let subVerticalsSelected = [];
-let userSubVerticalsSelected = [];
-function subVerticalSelected(e) {
-  subVerticalsSelected = [];
 
-  subVerticalsSelected = Array.from(e.target.selectedOptions).map(
+let userSubVerticalsSelected = [];
+
+function subVerticalSelected(e) {
+  console.log('hey subVerticalSelected');
+  // subVerticalsSelected = [];
+  console.log(subVerticalsSelected);
+  let svs= Array.from(e.target.selectedOptions).map(
     (x) => x.value ?? x.text
   );
 
+  subVerticalsSelected.push(...svs)
   subVerticalsSelected.map((v) => {
     let vv = v.split("__")[0];
     let sv = v.split("__")[1];
@@ -736,6 +760,8 @@ function subVerticalSelected(e) {
 
     // console.log(userSelectedMainVerticals);
   });
+
+  console.log(subVerticalsSelected);
 
   if (subVerticalsSelected.length === 0) {
     userSelectedMainVerticals.map((uv) => {
@@ -755,7 +781,7 @@ function subVerticalSelected(e) {
 let userSelectedVerticals = [];
 
 function getSelectedVerticals() {
-  userSelectedVerticals = [];
+  // userSelectedVerticals = [];
   userSelectedMainVerticals.map((v) => {
     v.subVerticals.map((sv) => {
       if (sv.selected) {
@@ -781,6 +807,9 @@ function getSelectedVerticals() {
 const tablesHolderHTML = document.querySelector("#tablesHolder");
 
 function displayExpertiseTable() {
+  console.log('displayExpertiseTable');
+  console.log(userSelectedMainVerticals);
+  console.log(userSelectedVerticals);
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
   userSelectedVerticals.map((v) => {
