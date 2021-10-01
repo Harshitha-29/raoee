@@ -23,6 +23,8 @@ async function getUserDetails({ uid, userType }) {
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
     console.log(USER);
+    $('#username').text(USER.fname)
+    $('#userimg').attr('src',USER.basicInfo.imgUrl);
     displayUserDetails();
     displayCvDetails();
   } catch (error) {
@@ -96,7 +98,7 @@ const aboutMeProfileHTML = document.querySelector("#aboutMeProfile");
 const blahHTML = document.querySelector("#blah");
 
 function displayUserDetails() {
-  console.log(USER);
+  //console.log(USER);
   userBasicFormHTML["fname"].value = USER.fname;
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
@@ -614,7 +616,8 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 function displayVerticalDropdown() {
   let options = "";
   VERTICALS.map((ver) => {
-    options += `<option value="${ver.name}">${ver.name}</option>`;
+    
+    options += `<option value="${ver.name}" selected>${ver.name}</option>`;
   });
   verticalDropHolderHTML.innerHTML = `
   <label>Select Vertical
@@ -627,17 +630,26 @@ function displayVerticalDropdown() {
     name="verticals"
     onchange="verticalSelected(event)"
     required
+    selected
   >
     ${options}
   </select>
   `;
 
   new Choices("#choices-multiple-remove-button", {
+    silent: false,
+    renderChoiceLimit: -1,
+    maxItemCount: -1,
+    addItems: true,
     removeItemButton: true,
     maxItemCount: 20,
     searchResultLimit: 10,
     renderChoiceLimit: 10,
+    
+    searchPlaceholderValue: null,
   });
+  
+  $('#choices-multiple-remove-button').selectedIndex ="1";
 }
 
 // ///////////////////////////////////////////
@@ -713,7 +725,8 @@ function displaySubVerticalDropdown() {
     ${options}
   </select>
   `;
-
+  
+  // $("#choices-multiple-remove-button1").hide()
   new Choices("#choices-multiple-remove-button1", {
     removeItemButton: true,
     maxItemCount: 20,
@@ -829,7 +842,7 @@ function displayExpertiseTable() {
               style="text-align: center; font-weight: 600"
               scope="col center"
             >
-              Area of Expertise
+              Area of Expertises
               <br>
               (${sv.name})
             </th>
@@ -851,7 +864,7 @@ function displayExpertiseTable() {
               <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" >${op}</option>
             `;
         });
-
+        
         rows += `
           <tr>
             <td>${exp.category}</td>
@@ -859,6 +872,7 @@ function displayExpertiseTable() {
               <select
                 class="selectpicker"
                 name="expertise"
+                style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
               >
                 ${options}
               </select>
