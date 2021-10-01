@@ -50,6 +50,7 @@
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
     />
+
   </head>
   <style>
     .choices__inner {
@@ -58,7 +59,9 @@
       height: 10px !important;
       overflow-y: scroll;
     }
-
+    .now-ui-icons{
+    color: black !important;
+    }
     .btn-tertiary {
       color: #555;
       padding: 0;
@@ -104,10 +107,160 @@
   </style>
   <body class="user-profile">
     <div class="wrapper">
-      <div id="navigation"></div>
+      <div id="navigation">
+        <div class="sidebar" data-color="orange">
+          <!--
+                Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+            -->
+          <div class="logo">
+            <!-- <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+                  RAO
+                </a>
+                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+                  Employement Exchange
+                </a> -->
+                <a href="../examples/dashboard.html"><img
+                  style="margin-right: auto; margin-left: auto; display: block"
+                  src="./../assets/img/RAOEE.png"
+                  alt=""
+                /></a>
+          </div>
+          <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <ul class="nav">
+              <li class="">
+                <a href="./../examples/dashboard.html">
+                  <i class="now-ui-icons design_app"></i>
+                  <p>Home</p>
+                </a>
+              </li>
+              <li>
+                <a href="../examples/dashboard.html#about-us">
+                  <i class="now-ui-icons education_atom"></i>
+                  <p>About Us</p>
+                </a>
+              </li>
+              <li>
+                <a href="../examples/dashboard.html#why-us">
+                  <i class="now-ui-icons location_map-big"></i>
+                  <p>Why Us</p>
+                </a>
+              </li>
+              <!-- <li>
+                <a href="./notifications.html">
+                  <i class="now-ui-icons ui-1_bell-53"></i>
+                  <p>Notifications</p>
+                </a>
+              </li> -->
+              <li class="active">
+                <a href="../employee/user.html">
+                  <i class="now-ui-icons users_single-02"></i>
+                  <p>User Profile</p>
+                </a>
+              </li>
+              <!-- <li>
+                <a href="./tables.html">
+                  <i class="now-ui-icons design_bullet-list-67"></i>
+                  <p>Some Link</p>
+                </a>
+              </li> -->
+              <li>
+                <a href="../authentication/auth.html">
+                  <i class="now-ui-icons objects_key-25"></i>
+                  <p>Login / Register</p>
+                </a>
+              </li>
+              <li class="active-pro">
+                <a href="./upgrade.html">
+                  <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+                  <p> Login / Register</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div class="main-panel" id="main-panel">
         <!-- Navbar -->
-        <div id="topbar"></div>
+        <div id="topbar">
+          <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
+            <div class="container-fluid">
+              <div class="navbar-wrapper">
+                <div class="navbar-toggle">
+                  <button type="button" class="navbar-toggler">
+                    <span class="navbar-toggler-bar bar1"></span>
+                    <span class="navbar-toggler-bar bar2"></span>
+                    <span class="navbar-toggler-bar bar3"></span>
+                  </button>
+                </div>
+                <a class="navbar-brand" href="#pablo">Your Profile</a>
+              </div>
+           
+              <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                <form>
+                  <!-- <div class="input-group no-border">
+                    <input type="text" value="" class="form-control" placeholder="Search...">
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <i class="now-ui-icons ui-1_zoom-bold"></i>
+                      </div>
+                    </div>
+                  </div> -->
+                </form>
+                <ul class="navbar-nav" style="">
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" href="#pablo">
+                      <i class="now-ui-icons media-2_sound-wave"></i>
+                      <p>
+                        <span class="d-lg-none d-md-block">Stats</span>
+                      </p>
+                    </a>
+                  </li> -->
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    
+                      <span id="username" style="padding: 4px;" >Welcome User </span>
+                      <!-- <i class="now-ui-icons users_single-03"><span style="color:white !important;"></span></i> -->
+                      <img src="../assets/img/user.png" id="userimg" style="width: 40px;height: 40px  ; object-fit: cover;border: 1px solid black;border-radius: 100%;" alt="">
+                      <p>
+                        <span class="d-lg-none d-md-block" style="color: white !important;"></span>
+                      </p>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                      <a class="dropdown-item" href="../authentication/auth.html"> <i class="now-ui-icons objects_key-25"><span style="color:black;"></span></i>Login</a>
+                      <a class="dropdown-item" href="../employee/user.html"><i class="now-ui-icons ui-1_settings-gear-63"><span style="color:black;"></span></i>My Profile</a>
+                      <a class="dropdown-item" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:black;"></span></i>Logout</a>
+                    </div>
+                  </li>
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" href="#pablo">
+                      <i class="now-ui-icons users_single-02"></i>
+                      <p>
+                        <span class="d-lg-none d-md-block">Account</span>
+                      </p>
+                    </a>
+                  </li> -->
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" href="#pablo">
+                      <i class="now-ui-icons ui-1_bell-53"></i>
+                      <p>
+                        <span class="d-lg-none d-md-block">Account</span>
+                      </p>
+                    </a>
+                  </li> -->
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" href="#pablo">
+                      <i class="now-ui-icons business_badge"></i>
+                      <p>
+                        <span class="d-lg-none d-md-block">Account</span>
+                      </p>
+                    </a>
+                  </li> -->
+    
+                </ul>
+              </div>
+            </div>
+        </nav>
+        </div>
         <!-- End Navbar -->
         <div class="panel-header panel-header-sm"></div>
         <div class="content">
@@ -116,7 +269,7 @@
               <div class="card">
                 <div class="card-header" style="display: flex">
                   <h5 class="title">My Profile</h5>
-                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 50%;">
+                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 70%;">
                     <label class="switch">
                       <input type="checkbox" id="editBasicInfoBtn" />
                       <span class="slider round"></span>
@@ -137,7 +290,7 @@
                             name="fname"
                             type="text"
                             class="form-control"
-                            placeholder="First Name"
+                            placeholder="First Name *"
                             readonly
                           />
                         </div>
@@ -351,13 +504,14 @@
               </div>
 
            
+            </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header" style="display: flex">
                   <h5 class="title">My CV's</h5>
-                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 90%;">
+                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 80%;">
                     <label class="switch">
                       <input type="checkbox" id="editCvBtn" />
                       <span class="slider round"></span>
@@ -366,8 +520,8 @@
                   </h5>
                   
                 </div>
-                <div id="cvInfoHolder" >
-                  <div class="form-group" style="display: flex;margin-right: 65%;">
+                <div id="cvInfoHolder" style="padding:10px ;">
+                  <div class="form-group" style="display: flex;margin-right: 65%;padding: 10px;">
                     <a id="cvUrl" >
                       <label
 
@@ -638,9 +792,18 @@
   <script>
     $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
-      $("#navigation").load("./../common/commonNavigation.html");
-      $("#topbar").load("./../common/topBar.html");
-      $("#footer").load("./../common/footer.html");
+      var cnt=0;
+        let int= setInterval(function(){
+          cnt++;
+          console.log(cnt)
+          if(cnt==5){
+            
+            clearInterval(int)
+          }
+         // $("#navigation").load("./../common/commonNavigation.html");
+          //$("#topbar").load("./../common/topBar.html");
+          $("#footer").load("./../common/footer.html");
+        },300)
 
       $(".files").attr(
         "data-before",
@@ -693,4 +856,17 @@
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
 <script src="./../assets/firebase.js"></script>
 <script src="./user1.js"></script>
+
+<script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+
+<!--  Google Maps Plugin    -->
+
+<!-- Chart JS -->
+<!-- <script src="../assets/js/plugins/chartjs.min.js"></script> -->
+<!--  Notifications Plugin    -->
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><
 </html>
