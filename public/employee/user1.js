@@ -14,7 +14,6 @@ auth.onAuthStateChanged((user) => {
 // ////////////////////////////////////////////
 let retryUser = 0;
 async function getUserDetails({ uid, userType }) {
-  console.log(uid, userType);
   if (userType === "employee") {
     userType = `${userType}s`;
   }
@@ -22,11 +21,10 @@ async function getUserDetails({ uid, userType }) {
     USER_REF = await db.collection(userType).doc(uid);
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
-    console.log(USER);
-    $('#username').text(USER.fname)
-    $('#userimg').attr('src',USER.basicInfo.imgUrl);
+    // $('#username').text(USER.fname)
+    // $('#userimg').attr('src',USER.basicInfo.imgUrl);
     displayUserDetails();
-    displayCvDetails();
+    
   } catch (error) {
     console.error(error);
     if (retryUser < 2) {
@@ -45,7 +43,6 @@ const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
 const cvEditHolderHTML = document.querySelector("#cvEditHolder");
 
 const toggleCvDisplay = (e) => {
-  // console.log(e.target.checked);
   if (e?.target?.checked) {
     cvEditHolderHTML.style.display = "block";
     cvInfoHolderHTML.style.display = "none";
@@ -63,7 +60,6 @@ const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
 const updateBasicInfoBtnHTML = document.querySelector("#updateBasicInfoBtn");
 
 const toggleBasicInfoDisplay = (e) => {
-  // console.log(e.target.checked);
   if (e?.target?.checked) {
     userBasicFormHTML["fname"].readOnly = false;
     userBasicFormHTML["lname"].readOnly = false;
@@ -98,7 +94,6 @@ const aboutMeProfileHTML = document.querySelector("#aboutMeProfile");
 const blahHTML = document.querySelector("#blah");
 
 function displayUserDetails() {
-  //console.log(USER);
   userBasicFormHTML["fname"].value = USER.fname;
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
@@ -193,7 +188,6 @@ function getUserPreferences() {
   const sv = [];
   const ee = [];
   cvVerticals.map((cvv) => {
-    console.log(cvv);
     new Error("Stop");
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
     if (vIndex === -1) {
@@ -220,18 +214,13 @@ function getUserPreferences() {
         expertise: [{ category: cvv.category, value: cvv.value }],
       });
     } else {
-      console.log(false);
-
       vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-
       svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
       ee[vIndex].svers[svIndex].expertise.push({
         category: cvv.category,
         value: cvv.value,
       });
     }
-
-    // console.log(sv);
   });
 
   return { verticals: vv, subVerticals: sv, expertise: ee };
@@ -247,16 +236,13 @@ const updateCv = async (e) => {
   e.preventDefault();
 
   const { verticals, subVerticals, expertise } = getUserPreferences();
-  console.log("getUserPreferences", verticals, subVerticals, expertise);
 
   const resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
-  console.log("resStorage", resStorage);
   retryStorage = 0;
   if (!resStorage.status) {
     alert(resStorage.message);
     return;
   }
-  console.log("uploadFileToStorage");
 
   const resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
   retryURL = 0;
@@ -265,7 +251,6 @@ const updateCv = async (e) => {
     return;
   }
 
-  console.log("getUrlOfFile");
 
   let data = {
     verticals,
@@ -278,7 +263,6 @@ const updateCv = async (e) => {
     fname: USER.fname,
     lname: USER.lname,
   };
-  console.log(data);
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -342,7 +326,6 @@ let retryDeleteStorage = 0;
 const deleteStorage = async ({ ref, fileName }) => {
   try {
     await storage.ref(ref).child(fileName).delete();
-    console.log("delete img");
     return {
       status: true,
       message: `Delete Succefully.`,
@@ -368,7 +351,6 @@ let retryDeleteCvDb = 0;
 const deleteCvDb = async ({ collectionName, docId }) => {
   try {
     await db.collection(collectionName).doc(docId).delete();
-    console.log("delete doc");
     return {
       status: true,
       message: `Delete Succefully.`,
@@ -395,18 +377,14 @@ const updateCollectionsDb = async ({ collectionName }) => {
     const ref = await db.collection("miscellaneous").doc("cvCollections");
     const doc = await ref.get();
     const data = await doc.data();
-    console.log(data);
-    console.log(data.cvCollections);
     let flag = true;
     for (let i = 0; i < data.cvCollections.length; i++) {
       const coll = data.cvCollections[i];
-      console.log(coll, collectionName);
       if (coll === collectionName) {
         flag = false;
         break;
       }
     }
-    console.log(data);
 
     if (flag) {
       data.cvCollections.push(collectionName);
@@ -442,13 +420,9 @@ const uploadCVToDb = async ({ data }) => {
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-  console.log(collectionName);
 
   try {
     const ref = await db.collection(collectionName).add({ ...data });
-    console.log(ref);
-    console.log(ref.user);
-
     return {
       status: true,
       message: "Successfully added the CV record.",
@@ -481,7 +455,6 @@ const uploadToUserDb = async ({ data }) => {
       ...data,
     };
     USER.cvAdded = true;
-    console.log(USER);
     await USER_REF.update(USER);
 
     return {
@@ -507,13 +480,11 @@ const uploadToUserDb = async ({ data }) => {
 // /////////////////////////////////////////////////////////
 let retryURL = 0;
 const getUrlOfFile = async ({ ref }) => {
-  console.log("getUrlOfFile: inside", ref);
   try {
     const url = await storage
       .ref(`${ref}/${USER.uid}`)
       .child(FILE_NAME)
       .getDownloadURL();
-    console.log(url);
     return {
       status: true,
       message: "Success. Fetched the file from storage.",
@@ -539,7 +510,6 @@ const getUrlOfFile = async ({ ref }) => {
 // /////////////////////////////////////////////////////////
 let retryStorage = 0;
 const uploadFileToStorage = async ({ ref }) => {
-  console.log(ref, USER.uid);
   try {
     await storage.ref(`${ref}/${USER.uid}`).child(FILE_NAME).put(FILE);
     return {
@@ -565,46 +535,49 @@ const uploadFileToStorage = async ({ ref }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  console.log(FILE);
   FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
-  console.log(FILE_NAME);
 }
 
 cvFormHTML["cv-file"].addEventListener("change", uploadCVFile);
 
 // /////////////////////////////////////////////////////////
 
-const VERTICALS = [];
+let VERTICALS = [];
 
 db.collection("verticals").onSnapshot(async (snaps) => {
   const docs = snaps.docs;
+  let VERTICALS_DATA = []; 
   VERTICALS.length = 0;
   for (let i = 0; i < docs.length; i++) {
     const doc = docs[i];
     const data = await doc.data();
-    VERTICALS.push({
+    VERTICALS_DATA.push({
       _id: data._id,
       name: data.name,
       subVerticals: data.subVerticals,
     });
     for (let j = 0; j < data.subVerticals.length; j++) {
-      VERTICALS[i].subVerticals[j] = { name: VERTICALS[i].subVerticals[j] };
+      VERTICALS_DATA[i].subVerticals[j] = { name: VERTICALS_DATA[i].subVerticals[j] };
       try {
         const subVerRef = await db
           .collection("verticals")
           .doc(doc.id)
-          .collection(VERTICALS[i].subVerticals[j].name)
-          .doc(VERTICALS[i].subVerticals[j].name);
+          .collection(VERTICALS_DATA[i].subVerticals[j].name)
+          .doc(VERTICALS_DATA[i].subVerticals[j].name);
         const subVerDoc = await subVerRef.get();
         const subVerData = await subVerDoc.data();
-        VERTICALS[i].subVerticals[j]["expertise"] = subVerData.expertise;
+        VERTICALS_DATA[i].subVerticals[j]["expertise"] = subVerData.expertise;
       } catch (error) {
         console.error(error);
       }
     }
   }
 
+  VERTICALS = VERTICALS_DATA.map(v => v);
+
   displayVerticalDropdown();
+  storeAllNamesIds();
+  displayCvDetails();
 });
 
 // /////////////////////////////////////////////////////////
@@ -615,10 +588,26 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
   let options = "";
-  VERTICALS.map((ver) => {
-    
-    options += `<option value="${ver.name}" selected>${ver.name}</option>`;
-  });
+
+  if (USER.cvAdded) {
+    VERTICALS.map((ver) => {
+      let isVPresent = USER.cv.verticals.filter((v) => v.name === ver.name);
+      if (isVPresent.length > 0) {
+        options += `<option value="${ver.name}" selected>${ver.name}</option>`;
+      } else {
+        options += `<option value="${ver.name}">${ver.name}</option>`;
+      }
+    });
+    setTimeout(() => {
+      verticalSelected();
+      displaySubVerticalDropdown(true)
+    }, 2000);
+  } else {
+    VERTICALS.map((ver) => {
+      options += `<option value="${ver.name}">${ver.name}</option>`;
+    });
+  }
+
   verticalDropHolderHTML.innerHTML = `
   <label>Select Vertical
     <span style="color: red">*</span>
@@ -637,31 +626,40 @@ function displayVerticalDropdown() {
   `;
 
   new Choices("#choices-multiple-remove-button", {
-    silent: false,
-    renderChoiceLimit: -1,
-    maxItemCount: -1,
-    addItems: true,
     removeItemButton: true,
     maxItemCount: 20,
     searchResultLimit: 10,
     renderChoiceLimit: 10,
-    
-    searchPlaceholderValue: null,
   });
-  
-  $('#choices-multiple-remove-button').selectedIndex ="1";
+
+
+  $("#choices-multiple-remove-button").selectedIndex = "1";
 }
 
 // ///////////////////////////////////////////
 
 let verticalsSelected = [];
 let userSelectedMainVerticals = [];
+let prevVerticals = [];
+
 function verticalSelected(e) {
-  console.log('hi verticalSelected');
-  userSelectedMainVerticals = [];
-  verticalsSelected = Array.from(e.target.selectedOptions).map(
-    (x) => x.value ?? x.text
-  );
+  userSelectedMainVerticals.length = 0;
+
+  if(e) {
+    verticalsSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  } else {
+    verticalsSelected = Array.from(document.querySelector('#choices-multiple-remove-button').selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+
+  const resDeleted = deletedVertical({
+    previousVerticals: prevVerticals,
+    newVerticals: verticalsSelected,
+  });
+  prevVerticals = verticalsSelected.map((v) => v);
 
   verticalsSelected.map((ver) => {
     let indexOfVer = VERTICALS.findIndex((v) => {
@@ -671,17 +669,57 @@ function verticalSelected(e) {
   });
 
   // getSelectedVerticals();
-  // userSelectedVerticals.length = 0;
+  userSelectedVerticals.length = 0;
   userSelectedMainVerticals.map((uv) => {
-    uv.subVerticals.map((svv) => {
-      if (svv?.selected) {
-        svv.selected = false;
-      }
-    });
+    if (resDeleted && resDeleted[0] === uv.name) {
+      uv.subVerticals.map((svv) => {
+        if (svv?.selected) {
+          svv.selected = false;
+        }
+      });
+    }
   });
-
+  console.log(userSelectedMainVerticals);
   displaySubVerticalDropdown();
-  displayExpertiseTable();
+
+  if (resDeleted) {
+    subVerticalSelected();
+  }
+  getSelectedVerticals();
+}
+
+// ///////////////////////////////////////////
+let subVerticalsSelected = [];
+let userSelectedVerticals = [];
+
+function deletedVertical({ previousVerticals, newVerticals }) {
+  const oldLength = previousVerticals.length;
+  const newLength = newVerticals.length;
+
+  if (oldLength < newLength) return;
+
+  const dVer = previousVerticals.filter(
+    (element) => !newVerticals.includes(element)
+  );
+
+  subVerticalsSelected = subVerticalsSelected.filter(
+    (sv) => !sv.includes(dVer[0])
+  );
+
+  return dVer;
+}
+
+function deletedSubVertical({ previousVerticals, newVerticals }) {
+  const oldLength = previousVerticals.length;
+  const newLength = newVerticals.length;
+
+  if (oldLength < newLength) return;
+
+  const dVer = previousVerticals.filter(
+    (element) => !newVerticals.includes(element)
+  );
+
+  return dVer;
 }
 
 // ///////////////////////////////////////////
@@ -689,20 +727,30 @@ function verticalSelected(e) {
 const subVerticalDropHolderHTML = document.querySelector(
   "#subVerticalDropHolder"
 );
-let subVerticalsSelected = [];
 
-function displaySubVerticalDropdown() {
+function displaySubVerticalDropdown(initial = false) {
   let options = "";
   subVerticalDropHolderHTML.innerHTML = ``;
 
+  if(initial) {
+    if(USER.cvAdded) {
+      USER.cv.subVerticals.map(sv => {
+        const name = getNameOfId(sv.ver);
+        sv.sver.map(svv => {
+          subVerticalsSelected.push(`${name}__${svv}`)
+        })
+      })
+    }
+  }
+  // console.log(userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
       // subVerticalsSelected.map(selected )
-      let flag = '';
-      for(let i = 0; i < subVerticalsSelected.length; i++) {
-        if(subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
-          flag = 'selected';
-          break
+      let flag = "";
+      for (let i = 0; i < subVerticalsSelected.length; i++) {
+        if (subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
+          flag = "selected";
+          break;
         }
       }
       options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
@@ -725,38 +773,42 @@ function displaySubVerticalDropdown() {
     ${options}
   </select>
   `;
-  
+
   // $("#choices-multiple-remove-button1").hide()
   new Choices("#choices-multiple-remove-button1", {
     removeItemButton: true,
     maxItemCount: 20,
     searchResultLimit: 10,
     renderChoiceLimit: 10,
-    change: e => e.map(ee => {
-      console.log(ee);
-    })
   });
 
-  console.log(subVerticalsSelected);
-  if(subVerticalsSelected.length > 0) {
-    console.log('if', subVerticalsSelected);
-    getSelectedVerticals();
+  if(initial) {
+    subVerticalSelected(false, true);
   }
+
+  // console.log(subVerticalsSelected);
+  // if(subVerticalsSelected.length > 0) {
+  //   console.log('if', subVerticalsSelected);
+  //   getSelectedVerticals();
+  // }
 }
 
 // ///////////////////////////////////////////
+let previousSubVerticals = [];
 
-let userSubVerticalsSelected = [];
-
-function subVerticalSelected(e) {
-  console.log('hey subVerticalSelected');
-  // subVerticalsSelected = [];
+function subVerticalSelected(e = false, initial = false) {
+  subVerticalsSelected = [];
+  let svs;
+  if (e) {
+    svs = Array.from(e.target.selectedOptions).map((x) => x.value ?? x.text);
+  } else {
+    svs = Array.from(
+      document.querySelector("#choices-multiple-remove-button1").selectedOptions
+    ).map((x) => x.value ?? x.text);
+  }
+// add dedlet funtionailty
+  subVerticalsSelected.push(...svs);
   console.log(subVerticalsSelected);
-  let svs= Array.from(e.target.selectedOptions).map(
-    (x) => x.value ?? x.text
-  );
-
-  subVerticalsSelected.push(...svs)
   subVerticalsSelected.map((v) => {
     let vv = v.split("__")[0];
     let sv = v.split("__")[1];
@@ -774,8 +826,6 @@ function subVerticalSelected(e) {
     // console.log(userSelectedMainVerticals);
   });
 
-  console.log(subVerticalsSelected);
-
   if (subVerticalsSelected.length === 0) {
     userSelectedMainVerticals.map((uv) => {
       uv.subVerticals.map((svv) => {
@@ -787,42 +837,62 @@ function subVerticalSelected(e) {
   }
 
   getSelectedVerticals();
+  if(initial) {
+    getSelectedVerticals(true);
+  }
 }
 
 // /////////////////////////////////////////////////
 
-let userSelectedVerticals = [];
+function getSelectedVerticals(initial = false) {
+  userSelectedVerticals = [];
 
-function getSelectedVerticals() {
-  // userSelectedVerticals = [];
   userSelectedMainVerticals.map((v) => {
-    v.subVerticals.map((sv) => {
-      if (sv.selected) {
-        // if(use)
-        let index = userSelectedVerticals.findIndex((vv) => v.name === vv.name);
-        if (index > -1) {
-          userSelectedVerticals[index].subverticals.push(sv);
-        } else {
-          userSelectedVerticals.push({
-            name: v.name,
-            _id: v._id,
-            subverticals: [{ ...sv }],
-          });
-        }
+    let flag = false;
+    for (let i = 0; i < subVerticalsSelected.length; i++) {
+      if (subVerticalsSelected[i].includes(v.name)) {
+        flag = true;
       }
-    });
+    }
+
+    if (!flag) {
+      v.subVerticals.map((sv) => {
+        sv.selected = false;
+      });
+    } else {
+      v.subVerticals.map((sv) => {
+        if (sv.selected) {
+          let index = userSelectedVerticals.findIndex(
+            (vv) => v.name === vv.name
+          );
+          if (index > -1) {
+            userSelectedVerticals[index].subverticals.push(sv);
+          } else {
+            userSelectedVerticals.push({
+              name: v.name,
+              _id: v._id,
+              subverticals: [{ ...sv }],
+            });
+          }
+        }
+      });
+    }
   });
-  displayExpertiseTable();
+
+  if(initial) {
+  displayExpertiseTable(true);
+  } else {
+    displayExpertiseTable();
+
+  }
+
 }
 
 // /////////////////////////////////////////////////
 
 const tablesHolderHTML = document.querySelector("#tablesHolder");
 
-function displayExpertiseTable() {
-  console.log('displayExpertiseTable');
-  console.log(userSelectedMainVerticals);
-  console.log(userSelectedVerticals);
+function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
   userSelectedVerticals.map((v) => {
@@ -860,11 +930,60 @@ function displayExpertiseTable() {
       sv.expertise.map((exp) => {
         let options = "";
         exp.tags.map((op) => {
-          options += `
-              <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" >${op}</option>
-            `;
+          if(initial) {
+            if(USER.cvAdded) {
+              // USER.cv.
+              let flag = false;
+              for(let i = 0; i < USER.cv.expertise.length; i++) {
+                const eachSelectedVExpertise = USER.cv.expertise[i];
+                const cvv = eachSelectedVExpertise.ver;
+                if(flag) {
+                  break;
+                }
+
+                for(let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
+                  const eachSelectedVSExpertise = eachSelectedVExpertise.svers[j];
+                  const cvsv = eachSelectedVSExpertise.sver;
+                  if(flag) {
+                    break;
+                  }
+                  for(let k = 0; k < eachSelectedVSExpertise.expertise.length; k++) {
+                   const eachSelectedExpertise = eachSelectedVSExpertise.expertise[k];
+                    const cvCat = eachSelectedExpertise.category;
+                    const cvVal = eachSelectedExpertise.value;
+
+                    if(flag) {
+                      break;
+                    }
+
+                    if(cvv === v._id && sv.name === cvsv && exp.category === cvCat && op === cvVal) {
+                      flag = true;
+                      break;
+                    }
+                  }
+
+                }
+              }
+
+              if(flag) {
+                options += `
+                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" selected >${op}</option>
+              `;
+              } else {
+                options += `
+                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" >${op}</option>
+              `;
+              }
+            }
+            
+          } else {
+            options += `
+            <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" >${op}</option>
+          `;
+          }
+          
         });
-        
+
         rows += `
           <tr>
             <td>${exp.category}</td>
@@ -898,13 +1017,12 @@ const cvUrlHTML = document.querySelector("#cvUrl");
 const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
 const verticalsTablesHTML = document.querySelector("#verticalsTables");
 
-function displayCvDetails() {
+async function displayCvDetails() {
   if (USER.cvAdded) {
     cvUrlHTML.href = USER.cv.url;
     verticalsBtnsHTML.innerHTML = ``;
 
     USER.cv.verticals.map((v, i) => {
-      storeNameOfId({ name: v.name, id: v.id });
       verticalsBtnsHTML.innerHTML += `
       <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
       `;
@@ -912,7 +1030,6 @@ function displayCvDetails() {
 
     USER.cv.expertise.map(async (v) => {
       let name = await getNameOfId(v.ver);
-      console.log(name);
       let head = `
       <div id="${v.ver}" class="collapse">
         <table class="table table-bordered">
@@ -975,28 +1092,33 @@ function displayCvDetails() {
 
 // //////////////////////////////////////////
 
-const ID_NAME_VERTICALS = [];
+let ID_NAME_VERTICALS = [];
 
-function storeNameOfId({ name, id }) {
-  let flag = true;
-  for (let i = 0; i < ID_NAME_VERTICALS.length; i++) {
-    const v = ID_NAME_VERTICALS[i];
-    if (v.id === id) {
-      flag = false;
-    }
-  }
-
-  if (flag) {
-    ID_NAME_VERTICALS.push({ name, id });
-  }
+async function storeAllNamesIds() {
+  ID_NAME_VERTICALS = VERTICALS.map(v => {return{name: v.name, id: v._id}});
 }
+
+// function storeNameOfId({ name, id }) {
+//   if(ID_NAME_VERTICALS.length === 0) storeAllNamesIds(); 
+//   let flag = true;
+//   for (let i = 0; i < ID_NAME_VERTICALS.length; i++) {
+//     const v = ID_NAME_VERTICALS[i];
+//     if (v.id === id) {
+//       flag = false;
+//     }
+//   }
+
+//   if (flag) {
+//     ID_NAME_VERTICALS.push({ name, id });
+//   }
+// }
 
 // //////////////////////////////////////////
 
 function getNameOfId(id) {
-  console.log(id);
+  // if(ID_NAME_VERTICALS.length === 0) await storeAllNamesIds();
+
   let name = ID_NAME_VERTICALS.filter((v) => v.id === id);
-  console.log(name);
   name = name[0].name;
   console.log(name);
   return name;
@@ -1010,24 +1132,20 @@ let IMG_NAME = false;
 const userImageHTML = document.querySelector("#userImage");
 
 const uploadImgLocal = (e) => {
-  if(!USER.basicInfoAdded) {
-    alert('Please add all your details in order to update the profile image');
+  if (!USER.basicInfoAdded) {
+    alert("Please add all your details in order to update the profile image");
     return;
   }
   IMG = e.target.files[0];
   IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
-  console.log(IMG_NAME);
   uploadImgToDB();
 };
 
 userImageHTML.addEventListener("change", uploadImgLocal);
 // //////////////////////////////////////////
 
-// /////////////////////////////////////////////////////////
-
 let retryImgStorage = 0;
 const uploadImgToStorage = async ({ ref }) => {
-  console.log(ref, USER.uid);
   try {
     await storage.ref(`${ref}/${USER.uid}`).child(IMG_NAME).put(IMG);
     return {
@@ -1053,13 +1171,11 @@ const uploadImgToStorage = async ({ ref }) => {
 
 let retryImgURL = 0;
 const getUrlOfImg = async ({ ref }) => {
-  console.log("getUrlOfFile: inside", ref);
   try {
     const url = await storage
       .ref(`${ref}/${USER.uid}`)
       .child(IMG_NAME)
       .getDownloadURL();
-    console.log(url);
     return {
       status: true,
       message: "Success. Fetched the file from storage.",
@@ -1113,6 +1229,10 @@ async function uploadImgToDB() {
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   alert("Successfully updated");
 }
+
+// /////////////////////////////////////////////////////////
+
+function fillUpCvDetails() {}
 
 // /////////////////////////////////////////////////////////
 
