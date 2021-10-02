@@ -38,6 +38,8 @@ const signupEmployee = async (e) => {
     gender,
     userType,
     uid: authRes.data.uid,
+    basicInfoAdded: false,
+    cvAdded: false
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
@@ -91,6 +93,8 @@ const signupEmployer = async(e) => {
     answer,
     userType,
     uid: authRes.data.uid,
+    basicInfoAdded: false,
+    cvAdded: false
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
