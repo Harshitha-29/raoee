@@ -916,6 +916,9 @@ function displayExpertiseTable(initial = false) {
               <br>
               (${sv.name})
             </th>
+            <th>
+              Applicable?
+            </th>
             <th
               style="text-align: center; font-weight: 600"
               scope="col"
@@ -927,9 +930,13 @@ function displayExpertiseTable(initial = false) {
         <tbody>`;
 
       let rows = ``;
+      let i=0;
+      var Gop="";
       sv.expertise.map((exp) => {
         let options = "";
+        
         exp.tags.map((op) => {
+          Gop=op;
           if(initial) {
             if(USER.cvAdded) {
               // USER.cv.
@@ -983,21 +990,31 @@ function displayExpertiseTable(initial = false) {
           }
           
         });
-
+      
         rows += `
-          <tr>
-            <td>${exp.category}</td>
-            <td>
-              <select
-                class="selectpicker"
-                name="expertise"
-                style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
-              >
-                ${options}
-              </select>
-            </td>
-          </tr>
+        <tr>
+        <td>${exp.category}</td>
+        <td>
+          <label class="switch">
+            <input type="checkbox" id="switch+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`" onclick=enableSwitch("switch+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`","options+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`") >
+            <span class="slider round"></span>
+            <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
+          </label>
+        </td>
+        <td>
+          <select
+            class="selectpicker"
+            name="expertise"
+            disabled
+            id="options+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`"
+            style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
+          >
+            ${options}
+          </select>
+        </td>
+      </tr>
           `;
+          i++;
       });
 
       let tableBody = rows;
@@ -1011,6 +1028,7 @@ function displayExpertiseTable(initial = false) {
   });
   tablesHolderHTML.innerHTML = tables;
 }
+
 
 // //////////////////////////////////////////
 const cvUrlHTML = document.querySelector("#cvUrl");
@@ -1279,3 +1297,105 @@ function fillUpCvDetails() {}
 // cvExpertise[vIndex].subVerticals[svIndex].extertise.push({ category, value });
 
 // ////////////////////////////////////////////////////////
+
+
+var arr=[];
+function enableSwitch(swithId,optionsId){
+  // alert(id)
+  // alert(df)
+ 
+  // alert(document.getElementById(optionsId).value)  
+
+
+  if(document.getElementById(swithId).checked==true){
+    document.getElementById(optionsId).disabled=false;
+      if(!arr.includes(optionsId))
+        arr.push(optionsId)
+  }
+  //arr=["id1","id2","id3"]
+  //id2 index=1
+  else{
+    document.getElementById(optionsId).disabled=true;
+   // arr.pop(optionsId)
+   
+      const index = arr.indexOf(optionsId);
+      if (index > -1) {
+        arr.splice(index, 1);
+      }
+    
+  }
+  console.log(arr) //Array 
+  console.log(document.getElementById(arr[0]).value) // Value
+  var { verticals, subVerticals, expertise } = getUserPreferences1();
+  console.log(verticals, subVerticals, expertise)
+}
+
+function getUserPreferences1() {
+  
+
+  const cvVerticals = [];
+
+    arr.forEach((ee) => {
+      console.log("-----------------")
+      console.log(ee)
+    var e = document.getElementById(ee).value
+   
+    console.log(e)
+
+    const all = e.split("__");
+    const selectedVId = all[0];
+    const selectedVName = all[1];
+    const selectedSubV = all[2];
+    const category = all[3];
+    const value = all[4];
+
+    cvVerticals.push({
+      verName: selectedVName,
+      ver: selectedVId,
+      subVertical: selectedSubV,
+      category,
+      value,
+    });
+  });
+
+  const vv = [];
+  const sv = [];
+  const ee = [];
+  cvVerticals.map((cvv) => {
+    new Error("Stop");
+    let vIndex = vv.findIndex((v) => v.id === cvv.ver);
+    if (vIndex === -1) {
+      vv.push({ id: cvv.ver, name: cvv.verName });
+      sv.push({
+        ver: cvv.ver,
+        sver: [],
+      });
+      ee.push({
+        ver: cvv.ver,
+        svers: [],
+      });
+    }
+
+    vIndex = sv.findIndex((v) => v.ver === cvv.ver);
+    let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
+
+    if (svIndex === -1) {
+      sv[vIndex].sver.push(cvv.subVertical);
+      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
+
+      ee[vIndex].svers.push({
+        sver: cvv.subVertical,
+        expertise: [{ category: cvv.category, value: cvv.value }],
+      });
+    } else {
+      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
+      svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
+      ee[vIndex].svers[svIndex].expertise.push({
+        category: cvv.category,
+        value: cvv.value,
+      });
+    }
+  });
+
+  return { verticals: vv, subVerticals: sv, expertise: ee };
+}

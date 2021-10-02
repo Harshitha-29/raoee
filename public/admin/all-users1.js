@@ -21,7 +21,7 @@ async function extractCvs({ collectionName }) {
         await docs.map((doc) => {
           const docData = doc.data();
           DATA.push(docData);
-          console.log(DATA);
+         
           return resolve();
         });
       });
@@ -64,16 +64,17 @@ async function collectCvData() {
   //     }
   //   }
   // }
-  console.log(DATA);
+  
   displayDataTable();
 }
 
 // ////////////////////////////////////
 
 const tableBodyHTML = document.querySelector("#tableBody");
+const heading = document.querySelector("#heading");
 
 function displayDataTable() {
-  console.log(DATA);
+
   let rows = "";
 
   
@@ -122,5 +123,24 @@ function displayDataTable() {
     </tr>
     `;
   });
-  tableBodyHTML.innerHTML = rows;
+
+
+      
+      tableBodyHTML.innerHTML = rows;
+      
+      $("#footer").load("footer.html");
+
+
+      
 }
+  
+
+
+
+
+      
+    
+    
+   
+
+
