@@ -50,8 +50,18 @@ const signupEmployee = async (e) => {
     return;
   }
   emplyeeFormHTML.reset();
-    nowuiDashboard.showNotification('top','center',"We have sent a verification link on "+email + " Please verify your email ","primary");
-  
+    // nowuiDashboard.showNotification('top','center',"We have sent a verification link on "+email + " Please verify your email ","primary");
+    auth.onAuthStateChanged((user) => {
+
+      console.log(user)
+      user.sendEmailVerification().then(function() {
+
+        window.location="../employee/user.html"
+      })
+     
+    });
+    
+   
 };
 
 emplyeeFormHTML.addEventListener('submit', signupEmployee);
