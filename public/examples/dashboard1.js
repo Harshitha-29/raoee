@@ -22,7 +22,7 @@ auth.onAuthStateChanged((user) => {
 });
 ////To Send Email again/////
 function sendEmail(){
-  console.log(userDetails)
+  
    userDetails.sendEmailVerification().then(function() {
 
     nowuiDashboard.showNotification('top','center',"Email Sent Successfully","primary");
