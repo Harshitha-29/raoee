@@ -68,7 +68,7 @@ const uploadToDB = async ({ title, url }) => {
       url,
       imgName: FILE_NAME,
     });
-
+    nowuiDashboard.showNotification('top','center',"Slider is live now ","primary");
     return {
       status: true,
       message: `Uploaded Successfully`,
@@ -187,7 +187,7 @@ async function deleteImg(index) {
     await storage.ref("sliders").child(SLIDERS[index].imgName).delete();
     await db.collection("sliders").doc(SLIDERS[index].id).delete();
 
-    alert("Slider Images Deleted");
+    nowuiDashboard.showNotification('top','center',"Slideer Images Deleted","primary");
     return;
   } catch (error) {
     console.error(error);

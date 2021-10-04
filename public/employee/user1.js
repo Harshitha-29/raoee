@@ -977,12 +977,14 @@ function getSelectedVerticals(initial = false) {
 
 function sliderToggle(e) {
   const eleRowId = e.target.dataset.rowid;
-
+  console.log(eleRowId)
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
     el.disabled = false;
+    document.getElementById(eleRowId).innerHTML="Yes"
     optionSelected(false, { data: el.value, selected: true });
   } else {
+    document.getElementById(eleRowId).innerHTML="No"
     el.disabled = true;
     optionSelected(false, { data: el.value, selected: false });
   }
@@ -1092,6 +1094,7 @@ function displayExpertiseTable(initial = false) {
 
       let rows = ``;
       let i = 0;
+      let tglTxt=""
       sv.expertise.map((exp) => {
         if (exp?.selected || initial) {
           isDisabled = false;
@@ -1170,17 +1173,21 @@ function displayExpertiseTable(initial = false) {
             }
           }
         });
-
+        if(isDisabled ){
+          tglTxt = "No"
+        }else{
+          tglTxt = "Yes"
+        }
         rows += `
         <tr>
           <td>${exp.category}</td>
           <td>
             <label class="switch">
               <input type="checkbox" data-rowid="${rowId}"  ${
-          isDisabled ? "" : "checked"
+           isDisabled ? "" : "checked"
         }  onchange="sliderToggle(event)"   >
               <span class="slider round"></span>
-              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
+              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">`+tglTxt+`</span>
             </label>
           </td>
           <td>
