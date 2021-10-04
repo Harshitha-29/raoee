@@ -8,8 +8,12 @@ let USER_REF = false;
 let USER_ID = false;
 
 auth.onAuthStateChanged((user) => {
-  USER_ID = user.uid;
-  getUserDetails({ uid: user.uid, userType: user.displayName });
+  if (user) {
+    USER_ID = user.uid;
+    getUserDetails({ uid: user.uid, userType: user.displayName });
+  } else {
+    return (window.location.href = `./../authentication/auth.html`);
+  }
 });
 // ////////////////////////////////////////////
 let retryUser = 0;
@@ -21,10 +25,7 @@ async function getUserDetails({ uid, userType }) {
     USER_REF = await db.collection(userType).doc(uid);
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
-    // $('#username').text(USER.fname)
-    // $('#userimg').attr('src',USER.basicInfo.imgUrl);
     displayUserDetails();
-    
   } catch (error) {
     console.error(error);
     if (retryUser < 2) {
@@ -32,7 +33,10 @@ async function getUserDetails({ uid, userType }) {
       alert(`Retrying.  Attempt: ${retryUser}`);
       getUserDetails({ uid, userType });
     } else {
-      return (window.location.href = `./../authentication/auth.html`);
+      return {
+        status: false,
+        message: `Canoy Fetch. Reson: ${error.message}`,
+      };
     }
   }
 }
@@ -149,7 +153,19 @@ const updateBasicInfo = async (e) => {
     basicInfoAdded: true,
   };
 
+
   try {
+    if(USER.cvAdded) {
+      if(fname !== USER.fname || lname !== USER.lname || lname !== USER.lname) {
+        const cvRef = await db.collection(USER.cv.collectionName).doc(USER.cv.docId);
+        const cvDoc = await cvRef.get();
+        const cvData = await cvDoc.data();
+        cvData.fname = fname;
+        cvData.lname = lname;
+        await cvRef.update(cvData);
+      }
+    }
+
     await USER_REF.update(data);
     alert("Info updated Successfully");
 
@@ -174,21 +190,23 @@ function getUserPreferences() {
     const selectedSubV = all[2];
     const category = all[3];
     const value = all[4];
+    const rowId = all[5];
 
-    cvVerticals.push({
-      verName: selectedVName,
-      ver: selectedVId,
-      subVertical: selectedSubV,
-      category,
-      value,
-    });
+    if (document.querySelector(`input[data-rowid="${rowId}"]`).checked) {
+      cvVerticals.push({
+        verName: selectedVName,
+        ver: selectedVId,
+        subVertical: selectedSubV,
+        category,
+        value,
+      });
+    }
   });
 
   const vv = [];
   const sv = [];
   const ee = [];
   cvVerticals.map((cvv) => {
-    new Error("Stop");
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
@@ -237,32 +255,42 @@ const updateCv = async (e) => {
 
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
-  const resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
-  retryStorage = 0;
-  if (!resStorage.status) {
-    alert(resStorage.message);
-    return;
+  let resStorage, resURL;
+  let data = {};
+
+  if(FILE_NAME) {
+    resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
+    retryStorage = 0;
+    if (!resStorage.status) {
+      alert(resStorage.message);
+      return;
+    }
+  
+    resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
+    retryURL = 0;
+    if (!resURL.status) {
+      alert(resURL.message);
+      return;
+    }
+    data.url = resURL.data.url;
+    data.fileName = FILE_NAME;
+  } else {
+    if(USER.cvAdded) {
+      data.url = USER.cv.url;
+      data.fileName = USER.cv.fileName;
+    } else {
+      alert('Please upload the CV file');
+      return;
+    }
   }
 
-  const resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
-  retryURL = 0;
-  if (!resURL.status) {
-    alert(resURL.message);
-    return;
-  }
-
-
-  let data = {
-    verticals,
-    subVerticals,
-    expertise,
-    fileName: FILE_NAME,
-    url: resURL.data.url,
-    userType: USER.userType,
-    userId: USER.uid,
-    fname: USER.fname,
-    lname: USER.lname,
-  };
+    data.verticals = verticals;
+    data.subVerticals = subVerticals;
+    data.expertise = expertise;
+    data.userType = USER.userType;
+    data.userId = USER.uid;
+    data.fname = USER.fname;
+    data.lname =  USER.lname;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -317,6 +345,8 @@ const updateCv = async (e) => {
   }
 
   alert("Record Added Successfully");
+  cvEditHolderHTML.style.display = "none";
+  cvInfoHolderHTML.style.display = "block";
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -535,7 +565,9 @@ const uploadFileToStorage = async ({ ref }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
+  if(FILE) {
+    FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
+  }
 }
 
 cvFormHTML["cv-file"].addEventListener("change", uploadCVFile);
@@ -546,7 +578,7 @@ let VERTICALS = [];
 
 db.collection("verticals").onSnapshot(async (snaps) => {
   const docs = snaps.docs;
-  let VERTICALS_DATA = []; 
+  let VERTICALS_DATA = [];
   VERTICALS.length = 0;
   for (let i = 0; i < docs.length; i++) {
     const doc = docs[i];
@@ -557,7 +589,9 @@ db.collection("verticals").onSnapshot(async (snaps) => {
       subVerticals: data.subVerticals,
     });
     for (let j = 0; j < data.subVerticals.length; j++) {
-      VERTICALS_DATA[i].subVerticals[j] = { name: VERTICALS_DATA[i].subVerticals[j] };
+      VERTICALS_DATA[i].subVerticals[j] = {
+        name: VERTICALS_DATA[i].subVerticals[j],
+      };
       try {
         const subVerRef = await db
           .collection("verticals")
@@ -573,7 +607,7 @@ db.collection("verticals").onSnapshot(async (snaps) => {
     }
   }
 
-  VERTICALS = VERTICALS_DATA.map(v => v);
+  VERTICALS = VERTICALS_DATA.map((v) => v);
 
   displayVerticalDropdown();
   storeAllNamesIds();
@@ -588,7 +622,6 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
   let options = "";
-
   if (USER.cvAdded) {
     VERTICALS.map((ver) => {
       let isVPresent = USER.cv.verticals.filter((v) => v.name === ver.name);
@@ -600,7 +633,7 @@ function displayVerticalDropdown() {
     });
     setTimeout(() => {
       verticalSelected();
-      displaySubVerticalDropdown(true)
+      displaySubVerticalDropdown(true);
     }, 2000);
   } else {
     VERTICALS.map((ver) => {
@@ -632,8 +665,7 @@ function displayVerticalDropdown() {
     renderChoiceLimit: 10,
   });
 
-
-  $("#choices-multiple-remove-button").selectedIndex = "1";
+  // $("#choices-multiple-remove-button").selectedIndex = "1";
 }
 
 // ///////////////////////////////////////////
@@ -645,14 +677,14 @@ let prevVerticals = [];
 function verticalSelected(e) {
   userSelectedMainVerticals.length = 0;
 
-  if(e) {
+  if (e) {
     verticalsSelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
     );
   } else {
-    verticalsSelected = Array.from(document.querySelector('#choices-multiple-remove-button').selectedOptions).map(
-      (x) => x.value ?? x.text
-    );
+    verticalsSelected = Array.from(
+      document.querySelector("#choices-multiple-remove-button").selectedOptions
+    ).map((x) => x.value ?? x.text);
   }
 
   const resDeleted = deletedVertical({
@@ -679,7 +711,7 @@ function verticalSelected(e) {
       });
     }
   });
-  console.log(userSelectedMainVerticals);
+
   displaySubVerticalDropdown();
 
   if (resDeleted) {
@@ -732,14 +764,14 @@ function displaySubVerticalDropdown(initial = false) {
   let options = "";
   subVerticalDropHolderHTML.innerHTML = ``;
 
-  if(initial) {
-    if(USER.cvAdded) {
-      USER.cv.subVerticals.map(sv => {
+  if (initial) {
+    if (USER.cvAdded) {
+      USER.cv.subVerticals.map((sv) => {
         const name = getNameOfId(sv.ver);
-        sv.sver.map(svv => {
-          subVerticalsSelected.push(`${name}__${svv}`)
-        })
-      })
+        sv.sver.map((svv) => {
+          subVerticalsSelected.push(`${name}__${svv}`);
+        });
+      });
     }
   }
   // console.log(userSelectedMainVerticals);
@@ -756,7 +788,6 @@ function displaySubVerticalDropdown(initial = false) {
       options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
     });
   });
-
 
   subVerticalDropHolderHTML.innerHTML = `
   <label>Select Sub Vertical
@@ -782,15 +813,9 @@ function displaySubVerticalDropdown(initial = false) {
     renderChoiceLimit: 10,
   });
 
-  if(initial) {
+  if (initial) {
     subVerticalSelected(false, true);
   }
-
-  // console.log(subVerticalsSelected);
-  // if(subVerticalsSelected.length > 0) {
-  //   console.log('if', subVerticalsSelected);
-  //   getSelectedVerticals();
-  // }
 }
 
 // ///////////////////////////////////////////
@@ -806,9 +831,41 @@ function subVerticalSelected(e = false, initial = false) {
       document.querySelector("#choices-multiple-remove-button1").selectedOptions
     ).map((x) => x.value ?? x.text);
   }
-// add dedlet funtionailty
+
   subVerticalsSelected.push(...svs);
-  console.log(subVerticalsSelected);
+
+  const deleteRes = deletedSubVertical({
+    previousVerticals: previousSubVerticals,
+    newVerticals: subVerticalsSelected,
+  });
+
+  previousSubVerticals = subVerticalsSelected.map((e) => e);
+
+  if (deleteRes) {
+    deleteRes.map((dsv) => {
+      const dV = dsv.split("__")[0];
+      const dSv = dsv.split("__")[1];
+      for (let i = 0; i < userSelectedMainVerticals.length; i++) {
+        const eachSelected = userSelectedMainVerticals[i];
+
+        if (eachSelected.name === dV) {
+          for (let j = 0; j < eachSelected.subVerticals.length; j++) {
+            if (eachSelected.subVerticals[j].name === dSv) {
+              eachSelected.subVerticals[j].selected = false;
+              eachSelected.subVerticals[j].expertise.map(ex => {
+                if(ex?.value) {
+                  delete ex.value
+                  delete ex.selected
+                }
+              })
+              break;
+            }
+          }
+        }
+      }
+    });
+  }
+
   subVerticalsSelected.map((v) => {
     let vv = v.split("__")[0];
     let sv = v.split("__")[1];
@@ -822,8 +879,6 @@ function subVerticalSelected(e = false, initial = false) {
         });
       }
     });
-
-    // console.log(userSelectedMainVerticals);
   });
 
   if (subVerticalsSelected.length === 0) {
@@ -837,7 +892,7 @@ function subVerticalSelected(e = false, initial = false) {
   }
 
   getSelectedVerticals();
-  if(initial) {
+  if (initial) {
     getSelectedVerticals(true);
   }
 }
@@ -879,13 +934,84 @@ function getSelectedVerticals(initial = false) {
     }
   });
 
-  if(initial) {
-  displayExpertiseTable(true);
+  if (initial) {
+    displayExpertiseTable(true);
   } else {
     displayExpertiseTable();
+  }
+}
 
+// /////////////////////////////////////////////////
+
+function sliderToggle(e) {
+  const eleRowId = e.target.dataset.rowid;
+
+  const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
+  if (e.target.checked) {
+    el.disabled = false;
+    optionSelected(false, { data: el.value, selected: true });
+  } else {
+    el.disabled = true;
+    optionSelected(false, { data: el.value, selected: false });
+  }
+}
+
+// /////////////////////////////////////////////////
+
+function optionSelected(e = false, data = false) {
+  let v, selected;
+  if (e) {
+    console.log(e.target.value);
+    v = e.target.value;
+    selected = true;
+  } else {
+    v = data.data;
+    selected = data.selected;
   }
 
+  const vid = v.split("__")[0];
+  const vname = v.split("__")[1];
+  const svname = v.split("__")[2];
+  const cat = v.split("__")[3];
+  const val = v.split("__")[4];
+  const rowId = v.split("__")[5];
+
+  console.log(vid, svname, cat, val);
+
+  let flag = false;
+  for (let i = 0; i < userSelectedVerticals.length; i++) {
+    if (flag == true) {
+      break;
+    }
+    if (vid === userSelectedVerticals[i]._id) {
+      for (let j = 0; j < userSelectedVerticals[i].subverticals.length; j++) {
+        if (flag == true) {
+          break;
+        }
+        if (userSelectedVerticals[i].subverticals[j].name === svname) {
+          for (
+            let k = 0;
+            k < userSelectedVerticals[i].subverticals[j].expertise.length;
+            k++
+          ) {
+            if (
+              userSelectedVerticals[i].subverticals[j].expertise[k].category ===
+              cat
+            ) {
+              userSelectedVerticals[i].subverticals[j].expertise[k].value = val;
+              userSelectedVerticals[i].subverticals[j].expertise[k].selected =
+                selected;
+              console.log(
+                userSelectedVerticals[i].subverticals[j].expertise[k]
+              );
+              flag = true;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 // /////////////////////////////////////////////////
@@ -895,6 +1021,7 @@ const tablesHolderHTML = document.querySelector("#tablesHolder");
 function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
+
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -904,6 +1031,7 @@ function displayExpertiseTable(initial = false) {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
+      let isDisabled = true;
       let tableHead = `
       <table class="table table-bordered">
         <thead class="thead-dark">
@@ -930,91 +1058,110 @@ function displayExpertiseTable(initial = false) {
         <tbody>`;
 
       let rows = ``;
-      let i=0;
-      var Gop="";
+      let i = 0;
       sv.expertise.map((exp) => {
+        if (exp?.selected || initial) {
+          isDisabled = false;
+        } else {
+          isDisabled = true;
+        }
         let options = "";
-        
+        let rowId = `rowId${Math.random()}_${Math.random()}`;
         exp.tags.map((op) => {
-          Gop=op;
-          if(initial) {
-            if(USER.cvAdded) {
-              // USER.cv.
+          if (initial) {
+            if (USER.cvAdded) {
               let flag = false;
-              for(let i = 0; i < USER.cv.expertise.length; i++) {
+              for (let i = 0; i < USER.cv.expertise.length; i++) {
                 const eachSelectedVExpertise = USER.cv.expertise[i];
                 const cvv = eachSelectedVExpertise.ver;
-                if(flag) {
+                if (flag) {
                   break;
                 }
 
-                for(let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
-                  const eachSelectedVSExpertise = eachSelectedVExpertise.svers[j];
+                for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
+                  const eachSelectedVSExpertise =
+                    eachSelectedVExpertise.svers[j];
                   const cvsv = eachSelectedVSExpertise.sver;
-                  if(flag) {
+                  if (flag) {
                     break;
                   }
-                  for(let k = 0; k < eachSelectedVSExpertise.expertise.length; k++) {
-                   const eachSelectedExpertise = eachSelectedVSExpertise.expertise[k];
+                  for (
+                    let k = 0;
+                    k < eachSelectedVSExpertise.expertise.length;
+                    k++
+                  ) {
+                    const eachSelectedExpertise =
+                      eachSelectedVSExpertise.expertise[k];
                     const cvCat = eachSelectedExpertise.category;
                     const cvVal = eachSelectedExpertise.value;
 
-                    if(flag) {
+                    if (flag) {
                       break;
                     }
 
-                    if(cvv === v._id && sv.name === cvsv && exp.category === cvCat && op === cvVal) {
+                    if (
+                      cvv === v._id &&
+                      sv.name === cvsv &&
+                      exp.category === cvCat &&
+                      op === cvVal
+                    ) {
                       flag = true;
                       break;
                     }
                   }
-
                 }
               }
 
-              if(flag) {
+              if (flag) {
                 options += `
-                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" selected >${op}</option>
+                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" selected >${op}</option>
               `;
               } else {
                 options += `
-                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" >${op}</option>
+                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
               `;
               }
             }
-            
           } else {
-            options += `
-            <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}" >${op}</option>
+            if (exp.value === op) {
+              options += `
+              <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
+            `;
+            } else {
+              options += `
+            <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
           `;
+            }
           }
-          
         });
-      
+
         rows += `
         <tr>
-        <td>${exp.category}</td>
-        <td>
-          <label class="switch">
-            <input type="checkbox" id="switch+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`" onclick=enableSwitch("switch+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`","options+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`") >
-            <span class="slider round"></span>
-            <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
-          </label>
-        </td>
-        <td>
-          <select
-            class="selectpicker"
-            name="expertise"
-            disabled
-            id="options+`+v._id+`+`+i+`+`+sv.name.split(" ").join("")+`+`+exp.category.split(" ").join("")+`+`+Gop.split(" ").join("")+`"
-            style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
-          >
-            ${options}
-          </select>
-        </td>
-      </tr>
+          <td>${exp.category}</td>
+          <td>
+            <label class="switch">
+              <input type="checkbox" data-rowid="${rowId}"  ${
+          isDisabled ? "" : "checked"
+        }  onchange="sliderToggle(event)"   >
+              <span class="slider round"></span>
+              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
+            </label>
+          </td>
+          <td>
+            <select
+              onchange="optionSelected(event)"
+              data-rowid="${rowId}" 
+              class="selectpicker"
+              name="expertise"
+              ${isDisabled ? "disabled" : ""} 
+              style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
+            >
+              ${options}
+            </select>
+          </td>
+        </tr>
           `;
-          i++;
+        i++;
       });
 
       let tableBody = rows;
@@ -1028,7 +1175,6 @@ function displayExpertiseTable(initial = false) {
   });
   tablesHolderHTML.innerHTML = tables;
 }
-
 
 // //////////////////////////////////////////
 const cvUrlHTML = document.querySelector("#cvUrl");
@@ -1105,7 +1251,9 @@ async function displayCvDetails() {
       let whole = head + body + end;
       verticalsTablesHTML.innerHTML += whole;
     });
+
   }
+
 }
 
 // //////////////////////////////////////////
@@ -1113,23 +1261,10 @@ async function displayCvDetails() {
 let ID_NAME_VERTICALS = [];
 
 async function storeAllNamesIds() {
-  ID_NAME_VERTICALS = VERTICALS.map(v => {return{name: v.name, id: v._id}});
+  ID_NAME_VERTICALS = VERTICALS.map((v) => {
+    return { name: v.name, id: v._id };
+  });
 }
-
-// function storeNameOfId({ name, id }) {
-//   if(ID_NAME_VERTICALS.length === 0) storeAllNamesIds(); 
-//   let flag = true;
-//   for (let i = 0; i < ID_NAME_VERTICALS.length; i++) {
-//     const v = ID_NAME_VERTICALS[i];
-//     if (v.id === id) {
-//       flag = false;
-//     }
-//   }
-
-//   if (flag) {
-//     ID_NAME_VERTICALS.push({ name, id });
-//   }
-// }
 
 // //////////////////////////////////////////
 
@@ -1138,7 +1273,6 @@ function getNameOfId(id) {
 
   let name = ID_NAME_VERTICALS.filter((v) => v.id === id);
   name = name[0].name;
-  console.log(name);
   return name;
 }
 
@@ -1152,8 +1286,10 @@ const userImageHTML = document.querySelector("#userImage");
 const uploadImgLocal = (e) => {
   if (!USER.basicInfoAdded) {
     alert("Please add all your details in order to update the profile image");
+    blahHTML.src = `../assets/img/userProfile.png`;
     return;
   }
+  readURL(e)
   IMG = e.target.files[0];
   IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
   uploadImgToDB();
@@ -1250,7 +1386,7 @@ async function uploadImgToDB() {
 
 // /////////////////////////////////////////////////////////
 
-function fillUpCvDetails() {}
+// function fillUpCvDetails() {}
 
 // /////////////////////////////////////////////////////////
 
@@ -1298,104 +1434,88 @@ function fillUpCvDetails() {}
 
 // ////////////////////////////////////////////////////////
 
+// var arr=[];
+// function enableSwitch(swithId,optionsId){
 
-var arr=[];
-function enableSwitch(swithId,optionsId){
-  // alert(id)
-  // alert(df)
- 
-  // alert(document.getElementById(optionsId).value)  
+//   if(document.getElementById(swithId).checked==true){
+//     document.getElementById(optionsId).disabled=false;
+//       if(!arr.includes(optionsId))
+//         arr.push(optionsId)
+//   }
 
+//   else{
+//     document.getElementById(optionsId).disabled=true;
+//       const index = arr.indexOf(optionsId);
+//       if (index > -1) {
+//         arr.splice(index, 1);
+//       }
 
-  if(document.getElementById(swithId).checked==true){
-    document.getElementById(optionsId).disabled=false;
-      if(!arr.includes(optionsId))
-        arr.push(optionsId)
-  }
-  //arr=["id1","id2","id3"]
-  //id2 index=1
-  else{
-    document.getElementById(optionsId).disabled=true;
-   // arr.pop(optionsId)
-   
-      const index = arr.indexOf(optionsId);
-      if (index > -1) {
-        arr.splice(index, 1);
-      }
-    
-  }
-  console.log(arr) //Array 
-  console.log(document.getElementById(arr[0]).value) // Value
-  var { verticals, subVerticals, expertise } = getUserPreferences1();
-  console.log(verticals, subVerticals, expertise)
-}
+//   }
+//   // console.log(arr) //Array
+//   // console.log(document.getElementById(arr[0]).value) // Value
+//   var { verticals, subVerticals, expertise } = getUserPreferences1();
+//   console.log(verticals, subVerticals, expertise)
+// }
 
-function getUserPreferences1() {
-  
+// function getUserPreferences1() {
+//   const cvVerticals = [];
+//     arr.forEach((ee) => {
+//     var e = document.getElementById(ee).value
+//     // console.log(e)
+//     const all = e.split("__");
+//     const selectedVId = all[0];
+//     const selectedVName = all[1];
+//     const selectedSubV = all[2];
+//     const category = all[3];
+//     const value = all[4];
 
-  const cvVerticals = [];
+//     cvVerticals.push({
+//       verName: selectedVName,
+//       ver: selectedVId,
+//       subVertical: selectedSubV,
+//       category,
+//       value,
+//     });
+//   });
 
-    arr.forEach((ee) => {
-      console.log("-----------------")
-      console.log(ee)
-    var e = document.getElementById(ee).value
-   
-    console.log(e)
+//   const vv = [];
+//   const sv = [];
+//   const ee = [];
+//   cvVerticals.map((cvv) => {
+//     new Error("Stop");
+//     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
+//     if (vIndex === -1) {
+//       vv.push({ id: cvv.ver, name: cvv.verName });
+//       sv.push({
+//         ver: cvv.ver,
+//         sver: [],
+//       });
+//       ee.push({
+//         ver: cvv.ver,
+//         svers: [],
+//       });
+//     }
 
-    const all = e.split("__");
-    const selectedVId = all[0];
-    const selectedVName = all[1];
-    const selectedSubV = all[2];
-    const category = all[3];
-    const value = all[4];
+//     vIndex = sv.findIndex((v) => v.ver === cvv.ver);
+//     let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
 
-    cvVerticals.push({
-      verName: selectedVName,
-      ver: selectedVId,
-      subVertical: selectedSubV,
-      category,
-      value,
-    });
-  });
+//     if (svIndex === -1) {
+//       sv[vIndex].sver.push(cvv.subVertical);
+//       vIndex = ee.findIndex((v) => v.ver === cvv.ver);
 
-  const vv = [];
-  const sv = [];
-  const ee = [];
-  cvVerticals.map((cvv) => {
-    new Error("Stop");
-    let vIndex = vv.findIndex((v) => v.id === cvv.ver);
-    if (vIndex === -1) {
-      vv.push({ id: cvv.ver, name: cvv.verName });
-      sv.push({
-        ver: cvv.ver,
-        sver: [],
-      });
-      ee.push({
-        ver: cvv.ver,
-        svers: [],
-      });
-    }
+//       ee[vIndex].svers.push({
+//         sver: cvv.subVertical,
+//         expertise: [{ category: cvv.category, value: cvv.value }],
+//       });
+//     } else {
+//       vIndex = ee.findIndex((v) => v.ver === cvv.ver);
+//       svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
+//       ee[vIndex].svers[svIndex].expertise.push({
+//         category: cvv.category,
+//         value: cvv.value,
+//       });
+//     }
+//   });
 
-    vIndex = sv.findIndex((v) => v.ver === cvv.ver);
-    let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
-
-    if (svIndex === -1) {
-      sv[vIndex].sver.push(cvv.subVertical);
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-
-      ee[vIndex].svers.push({
-        sver: cvv.subVertical,
-        expertise: [{ category: cvv.category, value: cvv.value }],
-      });
-    } else {
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-      svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
-      ee[vIndex].svers[svIndex].expertise.push({
-        category: cvv.category,
-        value: cvv.value,
-      });
-    }
-  });
-
-  return { verticals: vv, subVerticals: sv, expertise: ee };
-}
+//   return { verticals: vv, subVerticals: sv, expertise: ee };
+// }
