@@ -166,12 +166,14 @@ const updateBasicInfo = async (e) => {
     lname,
     phone,
     basicInfo: {
+      ...USER.basicInfo,
       address,
       city,
       state,
       country,
       postalCode,
       aboutMe,
+      
     },
     basicInfoAdded: true,
   };
@@ -302,6 +304,18 @@ const updateCv = async (e) => {
     }
     data.url = resURL.data.url;
     data.fileName = FILE_NAME;
+
+    if (USER.cvAdded) {
+      const resDeleteStorage = await deleteStorage({
+        ref: `${USER.userType}s/${USER.uid}`,
+        fileName: USER.cv.fileName,
+      });
+      if (!resDeleteStorage.status) {
+        alert(resDB.message);
+        // return;
+      }
+    }
+
   } else {
     if (USER.cvAdded) {
       data.url = USER.cv.url;
@@ -331,8 +345,8 @@ const updateCv = async (e) => {
     verticals,
     subVerticals,
     expertise,
-    fileName: FILE_NAME,
-    url: resURL.data.url,
+    fileName: FILE_NAME ? FILE_NAME : USER.cv.fileName,
+    url: FILE_NAME ? resURL.data.url : USER.cv.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
   };
@@ -345,26 +359,15 @@ const updateCv = async (e) => {
     // return;
   }
 
-  if (USER.cvAdded) {
-    const resDeleteStorage = await deleteStorage({
-      ref: `${USER.userType}s/${USER.uid}`,
-      fileName: USER.cv.fileName,
-    });
-    if (!resDeleteStorage.status) {
-      alert(resDB.message);
-      // return;
-    }
 
-    const resDeleteCvDb = await deleteCvDb({
-      collectionName: USER.cv.collectionName,
-      docId: USER.cv.docId,
-    });
-    if (!resDeleteCvDb.status) {
-      alert(resDB.message);
-      // return;
-    }
+  const resDeleteCvDb = await deleteCvDb({
+    collectionName: USER.cv.collectionName,
+    docId: USER.cv.docId,
+  });
+  if (!resDeleteCvDb.status) {
+    alert(resDB.message);
+    // return;
   }
-
   const resUserDB = await uploadToUserDb({ data });
   retryUserDB = 0;
   if (!resUserDB.status) {
@@ -375,6 +378,7 @@ const updateCv = async (e) => {
   alert("Record Added Successfully");
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
+  editCvBtnHTML.checked = false;
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -1050,6 +1054,7 @@ function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
 
+  console.log(userSelectedVerticals);
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -1123,9 +1128,9 @@ function displayExpertiseTable(initial = false) {
                     const cvCat = eachSelectedExpertise.category;
                     const cvVal = eachSelectedExpertise.value;
 
-                    if (flag) {
-                      break;
-                    }
+                    // if (flag) {
+                    //   break;
+                    // }
 
                     if (
                       cvv === v._id &&
@@ -1133,6 +1138,9 @@ function displayExpertiseTable(initial = false) {
                       exp.category === cvCat &&
                       op === cvVal
                     ) {
+                      exp.vaue = op;
+                      exp.selected = true;
+
                       flag = true;
                       break;
                     }
