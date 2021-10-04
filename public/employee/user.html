@@ -25,10 +25,10 @@
       integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
       crossorigin="anonymous"
     />
-    <link
+    <!-- <link
       href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
       rel="stylesheet"
-    />
+    /> -->
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
@@ -53,6 +53,7 @@
 
   </head>
   <style>
+    
     .choices__inner {
       border-radius: 20px;
       background-color: transparent;
@@ -107,18 +108,12 @@
   </style>
   <body class="user-profile">
     <div class="wrapper">
+      
       <div id="navigation">
         <div class="sidebar" data-color="orange">
-          <!--
-                Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
-            -->
+
           <div class="logo">
-            <!-- <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                  RAO
-                </a>
-                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                  Employement Exchange
-                </a> -->
+        
                 <a href="../examples/dashboard.html"><img
                   style="margin-right: auto; margin-left: auto; display: block"
                   src="./../assets/img/RAOEE.png"
@@ -128,19 +123,19 @@
           <div class="sidebar-wrapper" id="sidebar-wrapper">
             <ul class="nav">
               <li class="">
-                <a href="./../examples/dashboard.html">
+                <a href="./dashboard.html">
                   <i class="now-ui-icons design_app"></i>
                   <p>Home</p>
                 </a>
               </li>
               <li>
-                <a href="../examples/dashboard.html#about-us">
+                <a href="./../dashboard.html#about-us">
                   <i class="now-ui-icons education_atom"></i>
                   <p>About Us</p>
                 </a>
               </li>
               <li>
-                <a href="../examples/dashboard.html#why-us">
+                <a href="./../dashboard.html#why-us">
                   <i class="now-ui-icons location_map-big"></i>
                   <p>Why Us</p>
                 </a>
@@ -154,21 +149,22 @@
               <li>
                 <a href="../authentication/auth.html">
                   <i class="now-ui-icons objects_key-25"></i>
-                  <p>Login / Register</p>
+                  <p>LogOut</p>
                 </a>
               </li>
-              <li class="active-pro">
+              <!-- <li class="active-pro">
                 <a href="./upgrade.html">
                   <i class="now-ui-icons arrows-1_cloud-download-93"></i>
                   <p> Login / Register</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
       </div>
       <div class="main-panel" id="main-panel">
         <!-- Navbar -->
+        <div id="popupModal"></div>
         <div id="topbar">
           <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
             <div class="container-fluid">
@@ -206,6 +202,7 @@
         <!-- End Navbar -->
         <div class="panel-header panel-header-sm"></div>
         <div class="content">
+         
           <div class="row flex-column-reverse flex-md-row">
             <div class="col-md-8">
               <div class="card">
@@ -221,6 +218,7 @@
                 </div>
 
                 <div class="card-body">
+                  
                   <form id="userBasicForm">
                     <div class="row">
                       <div class="col-md-6 pr-1">
@@ -721,6 +719,31 @@
             </div>
           </div>
         </div>
+      
+     
+        <div style="" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header ftco-degree-bg">
+                <button type="button" class="close d-flex align-items-center justify-content-center" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="ion-ios-close"></span>
+                </button>
+              </div>
+              <div class="modal-body pt-md-0 pb-md-5 text-center">
+                <h2>You've Got Mail!</h2>
+                <div class="icon d-flex align-items-center justify-content-center">
+                  <img src="../assets/img/email.svg" alt="" class="img-fluid">
+                </div>
+                <h4 class="mb-2">We sent confirmation link to:</h4>
+                <h3 id="emailID"></h3>
+      
+                <p style="font-weight: 400;"> Please confirm your email inorder to proceed<br><span style="font-weight:bolder;">(Refresh the page once verified)</span></p>
+                <p><a href="#" onclick="sendEmail()" style="color: red;">Click here</a> to resend the email</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- footer -->
         <div id="footer"></div>
       </div>
@@ -739,8 +762,9 @@
             
             clearInterval(int)
           }
+          // $("#popupModal").load("./../common/commonNavigation.html");
           $("#footer").load("./../common/footer.html");
-        },300)
+        },200)
 
       $('input[type="file"]').change(function (e) {
         var fileName = e.target.files[0].name;

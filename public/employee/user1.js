@@ -6,15 +6,38 @@ const storage = firebase.storage();
 let USER = false;
 let USER_REF = false;
 let USER_ID = false;
+let USER_RAW = false;
 
 auth.onAuthStateChanged((user) => {
   if (user) {
+    USER_RAW = user;
     USER_ID = user.uid;
     getUserDetails({ uid: user.uid, userType: user.displayName });
+    if (user.emailVerified == false) {
+      $("#exampleModalCenter").modal({
+        backdrop: "static",
+        keyboard: false,
+        show: true,
+      });
+      document.getElementById("emailID").innerHTML = user.email;
+    }
   } else {
     return (window.location.href = `./../authentication/auth.html`);
   }
 });
+
+
+function sendEmail() {
+  USER_RAW.sendEmailVerification().then(function () {
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Email Sent Successfully",
+      "primary"
+    );
+  });
+}
+
 // ////////////////////////////////////////////
 let retryUser = 0;
 async function getUserDetails({ uid, userType }) {
@@ -153,11 +176,16 @@ const updateBasicInfo = async (e) => {
     basicInfoAdded: true,
   };
 
-
   try {
-    if(USER.cvAdded) {
-      if(fname !== USER.fname || lname !== USER.lname || lname !== USER.lname) {
-        const cvRef = await db.collection(USER.cv.collectionName).doc(USER.cv.docId);
+    if (USER.cvAdded) {
+      if (
+        fname !== USER.fname ||
+        lname !== USER.lname ||
+        lname !== USER.lname
+      ) {
+        const cvRef = await db
+          .collection(USER.cv.collectionName)
+          .doc(USER.cv.docId);
         const cvDoc = await cvRef.get();
         const cvData = await cvDoc.data();
         cvData.fname = fname;
@@ -258,14 +286,14 @@ const updateCv = async (e) => {
   let resStorage, resURL;
   let data = {};
 
-  if(FILE_NAME) {
+  if (FILE_NAME) {
     resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
     retryStorage = 0;
     if (!resStorage.status) {
       alert(resStorage.message);
       return;
     }
-  
+
     resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
     retryURL = 0;
     if (!resURL.status) {
@@ -275,22 +303,22 @@ const updateCv = async (e) => {
     data.url = resURL.data.url;
     data.fileName = FILE_NAME;
   } else {
-    if(USER.cvAdded) {
+    if (USER.cvAdded) {
       data.url = USER.cv.url;
       data.fileName = USER.cv.fileName;
     } else {
-      alert('Please upload the CV file');
+      alert("Please upload the CV file");
       return;
     }
   }
 
-    data.verticals = verticals;
-    data.subVerticals = subVerticals;
-    data.expertise = expertise;
-    data.userType = USER.userType;
-    data.userId = USER.uid;
-    data.fname = USER.fname;
-    data.lname =  USER.lname;
+  data.verticals = verticals;
+  data.subVerticals = subVerticals;
+  data.expertise = expertise;
+  data.userType = USER.userType;
+  data.userId = USER.uid;
+  data.fname = USER.fname;
+  data.lname = USER.lname;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -565,7 +593,7 @@ const uploadFileToStorage = async ({ ref }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  if(FILE) {
+  if (FILE) {
     FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
   }
 }
@@ -852,12 +880,12 @@ function subVerticalSelected(e = false, initial = false) {
           for (let j = 0; j < eachSelected.subVerticals.length; j++) {
             if (eachSelected.subVerticals[j].name === dSv) {
               eachSelected.subVerticals[j].selected = false;
-              eachSelected.subVerticals[j].expertise.map(ex => {
-                if(ex?.value) {
-                  delete ex.value
-                  delete ex.selected
+              eachSelected.subVerticals[j].expertise.map((ex) => {
+                if (ex?.value) {
+                  delete ex.value;
+                  delete ex.selected;
                 }
-              })
+              });
               break;
             }
           }
@@ -1251,9 +1279,7 @@ async function displayCvDetails() {
       let whole = head + body + end;
       verticalsTablesHTML.innerHTML += whole;
     });
-
   }
-
 }
 
 // //////////////////////////////////////////
@@ -1289,7 +1315,7 @@ const uploadImgLocal = (e) => {
     blahHTML.src = `../assets/img/userProfile.png`;
     return;
   }
-  readURL(e)
+  readURL(e);
   IMG = e.target.files[0];
   IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
   uploadImgToDB();
@@ -1386,136 +1412,3 @@ async function uploadImgToDB() {
 
 // /////////////////////////////////////////////////////////
 
-// function fillUpCvDetails() {}
-
-// /////////////////////////////////////////////////////////
-
-// NOT TO BE DELETED-----
-
-// let vIndex = cvVerticals.findIndex((v) => v === selectedV);
-
-// if (vIndex === -1) {
-//   cvVerticals.push(selectedV);
-//   console.log(cvVerticals);
-//   console.log(cvSubVerticals);
-//   cvSubVerticals.push({
-//     ver: selectedV,
-//     subVerticals: [],
-//   });
-//   console.log(cvSubVerticals);
-// }
-
-// console.log(cvSubVerticals);
-// vIndex = cvSubVerticals.findIndex((v) => v.ver === selectedV);
-// console.log(vIndex);
-// let svIndex = cvSubVerticals[vIndex].subVerticals.findIndex((sv) => {
-//   console.log(sv);
-//   console.log(selectedSubV);
-//   return sv === selectedSubV;
-// });
-// console.log(svIndex);
-// if (svIndex === -1) {
-//   cvSubVerticals[vIndex].subVerticals.push(selectedSubV);
-//   console.log(cvSubVerticals);
-//   cvExpertise.push({
-//     ver: selectedV,
-//     subVerticals: [{ subVertical: selectedSubV, extertise: [] }],
-//   });
-// }
-
-// vIndex = cvExpertise.findIndex((v) => v.ver === selectedV);
-// svIndex = cvExpertise[vIndex].subVerticals.findIndex(
-//   (sv) => sv.subVertical === selectedSubV
-// );
-// console.log(cvExpertise);
-// console.log(cvExpertise[vIndex].subVerticals);
-// console.log(cvExpertise[vIndex].subVerticals[svIndex]);
-// cvExpertise[vIndex].subVerticals[svIndex].extertise.push({ category, value });
-
-// ////////////////////////////////////////////////////////
-
-// var arr=[];
-// function enableSwitch(swithId,optionsId){
-
-//   if(document.getElementById(swithId).checked==true){
-//     document.getElementById(optionsId).disabled=false;
-//       if(!arr.includes(optionsId))
-//         arr.push(optionsId)
-//   }
-
-//   else{
-//     document.getElementById(optionsId).disabled=true;
-//       const index = arr.indexOf(optionsId);
-//       if (index > -1) {
-//         arr.splice(index, 1);
-//       }
-
-//   }
-//   // console.log(arr) //Array
-//   // console.log(document.getElementById(arr[0]).value) // Value
-//   var { verticals, subVerticals, expertise } = getUserPreferences1();
-//   console.log(verticals, subVerticals, expertise)
-// }
-
-// function getUserPreferences1() {
-//   const cvVerticals = [];
-//     arr.forEach((ee) => {
-//     var e = document.getElementById(ee).value
-//     // console.log(e)
-//     const all = e.split("__");
-//     const selectedVId = all[0];
-//     const selectedVName = all[1];
-//     const selectedSubV = all[2];
-//     const category = all[3];
-//     const value = all[4];
-
-//     cvVerticals.push({
-//       verName: selectedVName,
-//       ver: selectedVId,
-//       subVertical: selectedSubV,
-//       category,
-//       value,
-//     });
-//   });
-
-//   const vv = [];
-//   const sv = [];
-//   const ee = [];
-//   cvVerticals.map((cvv) => {
-//     new Error("Stop");
-//     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
-//     if (vIndex === -1) {
-//       vv.push({ id: cvv.ver, name: cvv.verName });
-//       sv.push({
-//         ver: cvv.ver,
-//         sver: [],
-//       });
-//       ee.push({
-//         ver: cvv.ver,
-//         svers: [],
-//       });
-//     }
-
-//     vIndex = sv.findIndex((v) => v.ver === cvv.ver);
-//     let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
-
-//     if (svIndex === -1) {
-//       sv[vIndex].sver.push(cvv.subVertical);
-//       vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-
-//       ee[vIndex].svers.push({
-//         sver: cvv.subVertical,
-//         expertise: [{ category: cvv.category, value: cvv.value }],
-//       });
-//     } else {
-//       vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-//       svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
-//       ee[vIndex].svers[svIndex].expertise.push({
-//         category: cvv.category,
-//         value: cvv.value,
-//       });
-//     }
-//   });
-
-//   return { verticals: vv, subVerticals: sv, expertise: ee };
-// }

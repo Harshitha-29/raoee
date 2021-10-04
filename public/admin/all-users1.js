@@ -129,8 +129,7 @@ function displayDataTable() {
       tableBodyHTML.innerHTML = rows;
       
       $("#footer").load("footer.html");
-
-
+  
       
 }
   

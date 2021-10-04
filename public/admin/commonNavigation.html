@@ -75,19 +75,19 @@
         </li>
         <li class="" id="slider">
           <a href="./sliders.html" >
-            <i class="now-ui-icons design_app"></i>
+            <i class="now-ui-icons design_image"></i>
             <p>Sliders</p>
           </a>
         </li>
         <li class="" id="aboutwhy">
           <a href="./about-why.html" >
-            <i class="now-ui-icons design_app"></i>
+            <i class="now-ui-icons business_globe"></i>
             <p>About/Why Us</p>
           </a>
         </li>
         <li id="vertical">
           <a href="./vertical.html">
-            <i class="now-ui-icons education_atom"></i>
+            <i class="now-ui-icons design_vector"></i>
             <p>Add Verticals</p>
           </a>
         </li>
@@ -97,28 +97,28 @@
             <p>Add Expertise</p>
           </a>
         </li>
-        <li>
-          <a href="./notifications.html">
-            <i class="now-ui-icons ui-1_bell-53"></i>
-            <p>Notifications</p>
+        <li id="allusers">
+          <a href="./all-users.html" >
+            <i class="now-ui-icons business_badge"></i>
+            <p>Employee Details</p>
           </a>
         </li>
-        <li class="ace">
-          <a href="./user.html">
-            <i class="now-ui-icons users_single-02"></i>
-            <p>User Profile</p>
+        <li class="" id="testi" >
+          <a href="./testinom.html">
+            <i class="now-ui-icons files_single-copy-04"></i>
+            <p>Add Testimonails</p>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a href="./tables.html">
             <i class="now-ui-icons design_bullet-list-67"></i>
             <p>Some Link</p>
           </a>
-        </li>
+        </li> -->
         <li>
           <a href="./auth.html">
-            <i class="now-ui-icons text_caps-small"></i>
-            <p>Login / Register</p>
+            <i class="now-ui-icons users_circle-08"></i>
+            <p>Add Admins</p>
           </a>
         </li>
         <!-- <li class="active-pro">
@@ -156,6 +156,21 @@
       $("#expertise").addClass("active")
       $("#about-why").removeClass("active")
       $('#vertical').removeClass('active')
+    }else if(window.location.href.includes("all-users.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').removeClass('active')
+      $("#allusers").addClass("active")
+    }
+    else if(window.location.href.includes("testinom.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').removeClass('active')
+      $("#testi").addClass("active")
     }
   </script>
 </body>

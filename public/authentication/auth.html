@@ -65,6 +65,7 @@
   </style>
   <body class="user-profile">
     <div class="wrapper">
+      <div id="popupModal"></div>
       <div id="navigation">
         <div class="sidebar" data-color="orange">
           <!--
@@ -590,6 +591,7 @@
       // Javascript method's body can be found in assets/js/demos.js
    //   $("#navigation").load("../common/commonNavigation.html");
      // $("#topbar").load("../common/topBar.html");
+      $("#popupModal").load("./../common/commonNavigation.html");
       $("#footer").load("../common/footer.html");
     });
 
@@ -619,5 +621,5 @@
   <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><
 </html>
 <script>
-  $('#exampleModalCenter').modal({backdrop: 'static', keyboard: false,show:false})  
+  // $('#exampleModalCenter').modal({backdrop: 'static', keyboard: false,show:false})  
 </script>
