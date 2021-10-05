@@ -166,12 +166,14 @@ const updateBasicInfo = async (e) => {
     lname,
     phone,
     basicInfo: {
+      ...USER.basicInfo,
       address,
       city,
       state,
       country,
       postalCode,
       aboutMe,
+      
     },
     basicInfoAdded: true,
   };
@@ -196,7 +198,6 @@ const updateBasicInfo = async (e) => {
 
     await USER_REF.update(data);
     alert("Info updated Successfully");
-
     getUserDetails({ uid: USER_ID, userType: USER.userType });
   } catch (error) {
     console.error(errpr);
@@ -302,6 +303,18 @@ const updateCv = async (e) => {
     }
     data.url = resURL.data.url;
     data.fileName = FILE_NAME;
+
+    if (USER.cvAdded) {
+      const resDeleteStorage = await deleteStorage({
+        ref: `${USER.userType}s/${USER.uid}`,
+        fileName: USER.cv.fileName,
+      });
+      if (!resDeleteStorage.status) {
+        alert(resDB.message);
+        // return;
+      }
+    }
+
   } else {
     if (USER.cvAdded) {
       data.url = USER.cv.url;
@@ -331,8 +344,8 @@ const updateCv = async (e) => {
     verticals,
     subVerticals,
     expertise,
-    fileName: FILE_NAME,
-    url: resURL.data.url,
+    fileName: FILE_NAME ? FILE_NAME : USER.cv.fileName,
+    url: FILE_NAME ? resURL.data.url : USER.cv.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
   };
@@ -345,26 +358,15 @@ const updateCv = async (e) => {
     // return;
   }
 
-  if (USER.cvAdded) {
-    const resDeleteStorage = await deleteStorage({
-      ref: `${USER.userType}s/${USER.uid}`,
-      fileName: USER.cv.fileName,
-    });
-    if (!resDeleteStorage.status) {
-      alert(resDB.message);
-      // return;
-    }
 
-    const resDeleteCvDb = await deleteCvDb({
-      collectionName: USER.cv.collectionName,
-      docId: USER.cv.docId,
-    });
-    if (!resDeleteCvDb.status) {
-      alert(resDB.message);
-      // return;
-    }
+  const resDeleteCvDb = await deleteCvDb({
+    collectionName: USER.cv.collectionName,
+    docId: USER.cv.docId,
+  });
+  if (!resDeleteCvDb.status) {
+    alert(resDB.message);
+    // return;
   }
-
   const resUserDB = await uploadToUserDb({ data });
   retryUserDB = 0;
   if (!resUserDB.status) {
@@ -375,6 +377,8 @@ const updateCv = async (e) => {
   alert("Record Added Successfully");
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
+  editCvBtnHTML.checked = false;
+  getUserDetails({ uid: USER_ID, userType: USER.userType });
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -1052,6 +1056,7 @@ function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
 
+  console.log(userSelectedVerticals);
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -1126,9 +1131,9 @@ function displayExpertiseTable(initial = false) {
                     const cvCat = eachSelectedExpertise.category;
                     const cvVal = eachSelectedExpertise.value;
 
-                    if (flag) {
-                      break;
-                    }
+                    // if (flag) {
+                    //   break;
+                    // }
 
                     if (
                       cvv === v._id &&
@@ -1136,6 +1141,9 @@ function displayExpertiseTable(initial = false) {
                       exp.category === cvCat &&
                       op === cvVal
                     ) {
+                      exp.vaue = op;
+                      exp.selected = true;
+
                       flag = true;
                       break;
                     }
@@ -1215,6 +1223,7 @@ function displayExpertiseTable(initial = false) {
 const cvUrlHTML = document.querySelector("#cvUrl");
 const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
 const verticalsTablesHTML = document.querySelector("#verticalsTables");
+const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
 
 async function displayCvDetails() {
   if (USER.cvAdded) {
@@ -1286,6 +1295,19 @@ async function displayCvDetails() {
       let whole = head + body + end;
       verticalsTablesHTML.innerHTML += whole;
     });
+
+    editCvUrlHolderHTML.innerHTML = `
+    <a target="_blank" href="${USER.cv.url}" >
+      <label
+        class="btn btn-tertiary js-labelFile"
+        style="background-color: transparent"
+      >
+        <i class="icon fa fa-eye"></i>
+        <span class="js-fileName"
+          >View Your CSV</span
+        >
+      </label>
+    </a>`;
   }
 }
 
@@ -1418,4 +1440,19 @@ async function uploadImgToDB() {
 }
 
 // /////////////////////////////////////////////////////////
+let retryLogout = 0;
 
+function logoutUser() {
+  auth.signOut().then(() => {
+    // Sign-out successful.
+    window.location.href="./dashboard.html"
+  }).catch((error) => {
+    console.error(error);
+    if(retryLogout < 2) {
+      retryLogout++;
+      logoutUser();
+    } else {
+      alert(`unable to logout at moment. Reason: ${error.message}`)
+    }
+  });
+}

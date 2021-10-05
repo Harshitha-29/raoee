@@ -53,15 +53,15 @@ const signupEmployee = async (e) => {
   }
   emplyeeFormHTML.reset();
     // nowuiDashboard.showNotification('top','center',"We have sent a verification link on "+email + " Please verify your email ","primary");
-    auth.onAuthStateChanged((user) => {
+    // auth.onAuthStateChanged((user) => {
 
-      console.log(user)
-      user.sendEmailVerification().then(function() {
+    //   console.log(user)
+    //   user.sendEmailVerification().then(function() {
 
-        window.location="../employee/user.html"
-      })
+        window.location="../employee/dashboard.html"
+    //   })
      
-    });
+    // });
     
    
 };
@@ -193,7 +193,6 @@ const createUserAuth = async (email, password, type) => {
     });
 };
 
-// createUserAuth('a@gmail.com', 'qqqqqq', 'employee')
 
 // //////////////////////////////////////////
 
@@ -207,10 +206,7 @@ const login = (e) => {
   const email = signinFormHTML['email'].value;
   const password = signinFormHTML['password'].value;
 
-  console.log(email, password);
   auth.signInWithEmailAndPassword(email, password).then(user => {
-    // console.log(user);
-    // console.log(user.user);
 
     let userType = user.user.displayName;
     console.log(userType);

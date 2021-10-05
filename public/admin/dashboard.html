@@ -76,40 +76,8 @@
                 data-slide-to="2"
               ></li>
             </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item">
-                <img
-                  class="d-block center-image"
-                  src="http://www.luximprint.com/wp-content/uploads/2017/11/Luximprint_Optics-Design-Hub_CAD_rail-signalling-banner.jpg"
-                  alt="First slide"
-                />
-                <div class="carousel-caption d-none d-md-block">
-                  <h5 class="slider-txt">Dynamic Text</h5>
-                  <p class="slidersm-txt">Here</p>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="carousel-caption d-none d-md-block">
-                  <h5 class="slider-txt">Dynamic Text</h5>
-                  <p class="slidersm-txt">Here</p>
-                </div>
-                <img
-                  class="d-block center-image"
-                  src="https://www.aet.srl/wp-content/uploads/2019/10/98677161_s.jpg"
-                  alt="Third slide"
-                />
-              </div>
-              <div class="carousel-item active">
-                <img
-                  class="d-block center-image"
-                  src="https://cdn.dnaindia.com/sites/default/files/styles/full/public/2018/12/12/764107-signalling-system-istock.jpg"
-                  alt="Second slide"
-                />
-                <div class="carousel-caption d-none d-md-block">
-                  <h5 class="slider-txt">Dynamic Text</h5>
-                  <p class="slidersm-txt">Here</p>
-                </div>
-              </div>
+            <div class="carousel-inner" id="slidersData">
+             
             </div>
             <a
               class="carousel-control-prev"
@@ -145,7 +113,7 @@
                 <div class="col-md-5 col-sm-6 col-xs-12">
                   <div class="aboutus">
                     <h2 class="aboutus-title">About Us</h2>
-                    <p class="aboutus-text">
+                    <p class="aboutus-text" id="aboutTxt">
                       REE is to help rail companies in UK, AUSTRALIA, CANADA,
                       SAUDI ARABIA etc.to get best rail talent from INDIA. REE
                       is to help rail talent from INDIA to get jobs in
@@ -159,39 +127,7 @@
                 </div>
                 <div class="col-md-7 col-sm-6 col-xs-12">
                   <div class="aboutus-banner">
-                    <img src="../assets/img/about.png" alt="" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card aboutus-section" style="padding: 30px !important">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-7 col-sm-6 col-xs-12">
-                  <div class="aboutus-banner">
-                    <img src="../assets/img/create.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="col-md-5 col-sm-6 col-xs-12">
-                  <div class="aboutus">
-                    <h2 class="aboutus-title">Create Your RAOEE Account Now</h2>
-                    <div style="margin-top: 25%">
-                      <a
-                        href="#"
-                        class="btn btn-success center"
-                        style="background-color: #05426b; width: 80%"
-                        >Login</a
-                      >
-                      <br />
-                      <a
-                        href="#"
-                        class="btn btn-success center"
-                        style="background-color: #05426b; width: 80%"
-                        >Create A New Account</a
-                      >
-                    </div>
+                    <img id="aboutImg" src="../assets/img/about.png" alt="" />
                   </div>
                 </div>
               </div>
@@ -204,7 +140,7 @@
                 <div class="col-md-5 col-sm-6 col-xs-12">
                   <div class="aboutus">
                     <h2 class="aboutus-title">Why Us</h2>
-                    <p class="aboutus-text">
+                    <p class="aboutus-text" id="whyTxt">
                       Rao Employment Exchange provides the best resumes relevant
                       for the employer in railway Industries & relevant jobs to
                       jobseekers in Overseas. We help rail industries find out
@@ -217,7 +153,43 @@
                 </div>
                 <div class="col-md-7 col-sm-6 col-xs-12">
                   <div class="aboutus-banner">
-                    <img src="../assets/img/why.png" alt="" />
+                    <img id="whyImg" src="../assets/img/why.png" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card aboutus-section ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="aboutus ">
+                    <h2 class="aboutus-title">TESTIMONAILS  </h2>
+                    <div class="items " id="all-testimonials" >
+
+                      <!-- <div class="card testimonails ">
+                        <div class="card-body">
+                          <h4 class="card-title"><img src="https://img.icons8.com/ultraviolet/40/000000/quote-left.png"></h4>
+                          <div class="template-demo">
+                              <p>Online reviews can make or break a customer's decision to make a purchase. Read about these customer review sites where your customers'</p>
+                          </div>
+                          <hr>
+                          <div class="row">
+                            <div class="col-sm-4"> <img class="profile-pic" src="https://img.icons8.com/bubbles/100/000000/edit-user.png"> </div>
+                              <div class="col-sm-8">
+                                <div class="profile">
+                                  <h4 class="cust-name">Delbert Simonas</h4>
+                                    <p class="cust-profession">Store Owner</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                       -->
+                      
+                    </div>
                   </div>
                 </div>
               </div>
@@ -577,5 +549,12 @@
         demo.initDashboardPageCharts();
       });
     </script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+    <script src="./../assets/firebase.js"></script>
+    <script src="./../common/dashboard1.js"></script>
   </body>
 </html>

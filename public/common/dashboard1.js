@@ -5,14 +5,15 @@ const storage = firebase.storage();
 // ////////////////////////////////////////////
 
 let USER = false;
-let USER_REF = false;
 let USER_ID = false;
-var userDetails;
+let USER_RAW = false;
+let USER_TYPE = false;
+
 auth.onAuthStateChanged((user) => {
   USER_ID = user.uid;
-  userDetails = user;
+  USER_RAW = user;
+  USER_TYPE = user.displayName;
 
-  console.log(user);
   if (user.emailVerified == false) {
     $("#exampleModalCenter").modal({
       backdrop: "static",
@@ -22,9 +23,20 @@ auth.onAuthStateChanged((user) => {
     document.getElementById("emailID").innerHTML = user.email;
   }
 });
+
+// //////////////////////////////////
+
+function getUserInfo() {
+  db.collection(`${USER_TYPE}s`).doc(USER_ID).get().then(doc => {
+    USER = doc.data();
+  })
+}
+
+// //////////////////////////////////
+
 ////To Send Email again/////
 function sendEmail() {
-  userDetails.sendEmailVerification().then(function () {
+  USER_RAW.sendEmailVerification().then(function () {
     nowuiDashboard.showNotification(
       "top",
       "center",
@@ -33,6 +45,8 @@ function sendEmail() {
     );
   });
 }
+
+// ///////////////////////////////
 
 db.collection("sliders").onSnapshot((snaps) => {
   const docs = snaps.docs;
@@ -90,19 +104,81 @@ db.collection("sliders").onSnapshot((snaps) => {
   });
 });
 
-db.collection("miscellaneous").onSnapshot((snaps) => {
+
+// //////////////////////////////
+
+db.collection("miscellaneous")
+  .doc("aboutUs")
+  .get()
+  .then((doc) => {
+    const data = doc.data();
+    document.getElementById("aboutTxt").innerHTML = data.aboutUs;
+    document.getElementById("aboutImg").src = data.url;
+  });
+
+// //////////////////////////////
+
+db.collection("miscellaneous")
+  .doc("whyUs")
+  .get()
+  .then((doc) => {
+    const data = doc.data();
+    document.getElementById("whyTxt").innerHTML = data.whyUs;
+    document.getElementById("whyImg").src = data.url;
+  });
+
+// /////////////////////////////
+
+const allTestimonialsHTML = document.querySelector('#all-testimonials');
+
+db.collection('testimonials').onSnapshot(snaps => {
   const docs = snaps.docs;
 
-  docs.map((doc, index) => {
-    let docData = doc.data();
-    console.log(docData)
-    if (docData.aboutUs) {
-      document.getElementById("aboutTxt").innerHTML = docData.aboutUs;
-      document.getElementById("aboutImg").src = docData.url;
-    }
-    if (docData.whyUs) {
-      document.getElementById("whyTxt").innerHTML = docData.whyUs;
-      document.getElementById("whyImg").src = docData.url;
+  let testimonials = "";
+  docs.map(doc => {
+    const docData = doc.data();
+    testimonials += `
+    <div class="card testimonails ">
+      <div class="card-body">
+        <h4 class="card-title"><img src="https://img.icons8.com/ultraviolet/40/000000/quote-left.png"></h4>
+        <div class="template-demo">
+            <p>${docData.message}</p>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm-4"> <img class="profile-pic" src="https://img.icons8.com/bubbles/100/000000/edit-user.png"> </div>
+            <div class="col-sm-8">
+              <div class="profile">
+                <h4 class="cust-name">${docData.name}</h4>
+                  <p class="cust-profession">${docData.designation}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+
+  })
+  allTestimonialsHTML.innerHTML = testimonials;
+})
+
+// /////////////////////////////
+
+let retryLogout = 0;
+
+function logoutUser() {
+  auth.signOut().then(() => {
+    // Sign-out successful.
+    window.location.href="./dashboard.html"
+  }).catch((error) => {
+    console.error(error);
+    if(retryLogout < 2) {
+      retryLogout++;
+      logoutUser();
+    } else {
+      alert(`unable to logout at moment. Reason: ${error.message}`)
     }
   });
-});
+}
