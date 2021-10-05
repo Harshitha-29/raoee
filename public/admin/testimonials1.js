@@ -4,6 +4,7 @@ const editorHTML = document.querySelector("#editor");
 let EDITOR;
 
 const USER = undefined;
+checkIfAdmin();
 
 ClassicEditor.create(editorHTML)
   .then((editor) => {

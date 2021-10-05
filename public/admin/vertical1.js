@@ -1,6 +1,7 @@
 const db = firebase.firestore();
 
 const USER = undefined;
+checkIfAdmin();
 
 const VERTICALS = [];
 const allVerticalsHTML = document.querySelector("#allVerticals");
