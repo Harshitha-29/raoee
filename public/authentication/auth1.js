@@ -38,7 +38,8 @@ const signupEmployee = async (e) => {
     userType,
     uid: authRes.data.uid,
     basicInfoAdded: false,
-    cvAdded: false
+    cvAdded: false,
+    createdAt: new Date()
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
@@ -102,7 +103,8 @@ const signupEmployer = async(e) => {
     userType,
     uid: authRes.data.uid,
     basicInfoAdded: false,
-    cvAdded: false
+    cvAdded: false,
+    createdAt: new Date()
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
@@ -172,8 +174,6 @@ const createUserAuth = async (email, password, type) => {
     })
     .catch((error) => {
       var errorMessage = error.message;
-      // console.error(error);
-      // console.error(errorMessage);
       nowuiDashboard.showNotification('top','center',errorMessage.substring(9),"primary");
       return {
         status: false,
@@ -202,6 +202,9 @@ const login = (e) => {
     if(userType === 'employee') {
       window.location.href = `./../employee/user.html`;
     }
+    if(userType === 'admin') {
+      window.location.href = `./../admin/dashboard.html`;
+    }
 
   }).catch(error => {
     console.error(error);
@@ -212,3 +215,38 @@ const login = (e) => {
 
 signinFormHTML.addEventListener('submit', login);
 
+// //////////////////////////
+
+// const registerAdmin = async() => {
+  
+//   const email = `admin@admin.com`;
+//   const password = `admin@raoee`
+//   let userType = "admin";
+//   const fname = `admin`;
+//   const lname = `raoee`;
+
+//   let authRes = await createUserAuth(email, password, userType);
+
+//   if (!authRes) {
+//     alert(authRes.message);
+//     return;
+//   }
+
+//   const data = {
+//     fname,
+//     lname,
+//     email,
+//     userType,
+//     uid: authRes.data.uid,
+//     basicInfoAdded: false,
+//     createdAt: new Date()
+//   };
+
+//   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
+
+//   if (!dbRes) {
+//     alert(dbRes.message);
+//     return;
+//   }
+//   alert('Admin Added')
+// };

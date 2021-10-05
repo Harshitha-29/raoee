@@ -1096,14 +1096,16 @@ function displayExpertiseTable(initial = false) {
       let i = 0;
       let tglTxt=""
       sv.expertise.map((exp) => {
-        if (exp?.selected || initial) {
-          isDisabled = false;
-        } else {
-          isDisabled = true;
-        }
+        
         let options = "";
         let rowId = `rowId${Math.random()}_${Math.random()}`;
+        isDisabled = true;
         exp.tags.map((op) => {
+          if (exp?.selected ) {
+            isDisabled = false;
+          } else {
+            isDisabled = true;
+          }
           if (initial) {
             if (USER.cvAdded) {
               let flag = false;
@@ -1141,9 +1143,9 @@ function displayExpertiseTable(initial = false) {
                       exp.category === cvCat &&
                       op === cvVal
                     ) {
-                      exp.vaue = op;
+                      exp.value = op;
                       exp.selected = true;
-
+                      isDisabled = false
                       flag = true;
                       break;
                     }
@@ -1163,6 +1165,7 @@ function displayExpertiseTable(initial = false) {
             }
           } else {
             if (exp.value === op) {
+             console.log('hey', exp.value, op);
               options += `
               <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
             `;
@@ -1172,6 +1175,7 @@ function displayExpertiseTable(initial = false) {
           `;
             }
           }
+
         });
         if(isDisabled ){
           tglTxt = "No"
@@ -1182,13 +1186,13 @@ function displayExpertiseTable(initial = false) {
         <tr>
           <td>${exp.category}</td>
           <td>
-            <label class="switch">
-              <input type="checkbox" data-rowid="${rowId}"  ${
-           isDisabled ? "" : "checked"
-        }  onchange="sliderToggle(event)"   >
-              <span class="slider round"></span>
-              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">`+tglTxt+`</span>
-            </label>
+          <label class="switch">
+          <input type="checkbox" data-rowid="${rowId}"  ${
+       isDisabled ? "" : "checked"
+    }  onchange="sliderToggle(event)"   >
+          <span class="slider round"></span>
+          <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">`+tglTxt+`</span>
+        </label>
           </td>
           <td>
             <select
