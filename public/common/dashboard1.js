@@ -138,6 +138,7 @@ db.collection('testimonials').onSnapshot(snaps => {
   docs.map(doc => {
     const docData = doc.data();
     testimonials += `
+    
     <div class="card testimonails ">
       <div class="card-body">
         <h4 class="card-title"><img src="https://img.icons8.com/ultraviolet/40/000000/quote-left.png"></h4>
@@ -151,7 +152,7 @@ db.collection('testimonials').onSnapshot(snaps => {
               <div class="profile">
                 <h4 class="cust-name">${docData.name}</h4>
                   <p class="cust-profession">${docData.designation}</p>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -162,6 +163,42 @@ db.collection('testimonials').onSnapshot(snaps => {
 
   })
   allTestimonialsHTML.innerHTML = testimonials;
+  $('.items').slick({
+    dots: true,
+    infinite: true,
+    speed: 800,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    responsive: [
+    {
+    breakpoint: 1024,
+    settings: {
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    infinite: true,
+    dots: true
+    }
+    },
+    {
+    breakpoint: 600,
+    settings: {
+    slidesToShow: 2,
+    slidesToScroll: 2
+    }
+    },
+    {
+    breakpoint: 480,
+    settings: {
+    slidesToShow: 1,
+    slidesToScroll: 1
+    }
+    }
+
+    ]
+  });
+  
 })
 
 // /////////////////////////////
