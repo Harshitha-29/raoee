@@ -13,7 +13,8 @@ auth.onAuthStateChanged((user) => {
   USER_ID = user.uid;
   USER_RAW = user;
   USER_TYPE = user.displayName;
-
+ 
+  document.getElementById("login-register-section").style.display="none"
   if (user.emailVerified == false) {
     $("#exampleModalCenter").modal({
       backdrop: "static",
@@ -21,6 +22,7 @@ auth.onAuthStateChanged((user) => {
       show: true,
     });
     document.getElementById("emailID").innerHTML = user.email;
+  
   }
 });
 
@@ -208,6 +210,7 @@ let retryLogout = 0;
 function logoutUser() {
   auth.signOut().then(() => {
     // Sign-out successful.
+    
     window.location.href="./dashboard.html"
   }).catch((error) => {
     console.error(error);
