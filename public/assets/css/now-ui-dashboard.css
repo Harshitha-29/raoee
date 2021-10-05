@@ -2538,9 +2538,9 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
   background-color: #FFB236 !important;
 }
 
-.bg-white {
+/* .bg-white {
   background-color: #FFFFFF !important;
-}
+} */
 
 .page-header {
   min-height: 100vh;
@@ -4200,8 +4200,8 @@ Created using IcoMoon - icomoon.io
   padding-bottom: 45px;
   background: #141E30;
   /* fallback for old browsers */
-  background: -webkit-gradient(linear, left top, right top, from(#0c2646), color-stop(60%, #204065), to(#2a5788));
-  background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
+  background: -webkit-gradient(linear, left top, right top, from(#0c2646), color-stop(60%, #204065), to(#2a5788)) !important;
+  background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%) !important;
   position: relative;
   overflow: hidden;
 }
@@ -5451,6 +5451,12 @@ Created using IcoMoon - icomoon.io
 @media screen and (max-width: 768px) {
   .panel-header-lg {
     height: 280px;
+  }
+  .btnRegister{
+    float:none!important;
+    margin-left: auto;
+    margin-right: auto;
+    display:block;
   }
   .center-image{
     height: auto;

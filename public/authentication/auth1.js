@@ -12,6 +12,8 @@ const signupEmployee = async (e) => {
   const cpassword = emplyeeFormHTML["cpassword"].value;
 
   if (password !== cpassword) {
+    document.getElementById("showMessage2").innerHTML=""
+    
     nowuiDashboard.showNotification('top','center',"Password Mis-Matched","primary");
     return;
   }
@@ -23,9 +25,9 @@ const signupEmployee = async (e) => {
   const gender = emplyeeFormHTML["gender"].value;
 
   let authRes = await createUserAuth(email, password, userType);
-
+  document.getElementById("showMessage2").innerHTML="Creating new account ! Please Wait ....."
   if (!authRes) {
-
+    document.getElementById("showMessage2").innerHTML=""
     nowuiDashboard.showNotification('top','center',authRes.message,"primary");
     return;
   }
@@ -45,7 +47,7 @@ const signupEmployee = async (e) => {
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
 
   if (!dbRes) {
-    
+    document.getElementById("showMessage2").innerHTML=""
     nowuiDashboard.showNotification('top','center',dbRes.message,"primary");
     return;
   }
@@ -176,11 +178,18 @@ const createUserAuth = async (email, password, type) => {
       var errorMessage = error.message;
       // console.error(error);
       // console.error(errorMessage);
+     
+ 
       nowuiDashboard.showNotification('top','center',errorMessage.substring(9),"primary");
+      setTimeout(function(){
+        
+        document.getElementById("showMessage2").innerHTML=" "
+      },1000) 
       return {
         status: false,
         message: `Please Retry: ${errorMessage}`,
       };
+     
     });
 };
 
@@ -194,7 +203,7 @@ const signinFormHTML = document.querySelector('#signinForm');
 
 const login = (e) => {
   e.preventDefault();
-
+  document.getElementById("showMessage").innerHTML = "Verifying Details ... "
   const email = signinFormHTML['email'].value;
   const password = signinFormHTML['password'].value;
 
@@ -211,7 +220,8 @@ const login = (e) => {
 
   }).catch(error => {
     console.error(error);
-   
+    document.getElementById("showMessage").innerHTML = " "
+    
     nowuiDashboard.showNotification('top','center',error.message,"primary");
   })
 

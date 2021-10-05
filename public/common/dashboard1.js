@@ -102,7 +102,7 @@ db.collection("miscellaneous").onSnapshot((snaps) => {
     }
     if (docData.whyUs) {
       document.getElementById("whyTxt").innerHTML = docData.whyUs;
-      document.getElementById("whyImg").src = docData.url;~~
+      document.getElementById("whyImg").src = docData.url;
     }
   });
 });
