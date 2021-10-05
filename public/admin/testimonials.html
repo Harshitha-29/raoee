@@ -115,15 +115,13 @@
                 </div>
 
                 <div class="card-body">
-                  <form id="aboutUsForm">
+                  <form id="form">
                     <div class="row">
                       <div class="col-md-7 pr-1">
                         <div class="forms-group" id="subVerticalsHolder22">
                           <label
-                            >Message
-                            <span style="color: red">*</span></label
+                            >Message <span style="color: red">*</span></label
                           >
-
                           <div>
                             <textarea
                               type="text"
@@ -144,63 +142,58 @@
                         <div class="row py-4">
                           <div class="col-lg-12 mx-auto">
                             <div class="form-group">
-                                <label
-                                  > Name of attestant
-                                  <span style="color: red">*</span></label
-                                >
-                                <input
-                                  name="name"
-                                  type="text"
-                                  class="form-control"
-                                  required
-                              
-                                />
+                              <label>
+                                Name of attestant
+                                <span style="color: red">*</span></label
+                              >
+                              <input
+                                name="name"
+                                type="text"
+                                class="form-control"
+                                required
+                              />
                             </div>
                             <div class="form-group">
-                                <label
-                                  > Designation of attestant
-                                  <span style="color: red">*</span></label
-                                >
-                                <input
-                                  name="name"
-                                  type="text"
-                                  class="form-control"
-                                  required
-                                  placeholder="Ex : Director , L2M"
-                                />
+                              <label>
+                                Designation of attestant
+                                <span style="color: red">*</span></label
+                              >
+                              <input
+                                name="designation"
+                                type="text"
+                                class="form-control"
+                                required
+                                placeholder="Ex : Director , L2M"
+                              />
                             </div>
-                            <br>
+                            <br />
                             <button
-                                    type="submit"
-                                    id="updateBtn"
-                                    style="
-                                        background-color: rgb(146, 44, 141);
-                                        color: white;
-                                    "
-                                    type="button"
-                                    class="btn btn-elegant center"
-                                    >
-                                    <i
-                                        class="now-ui-icons arrows-1_minimal-right"
-                                        aria-hidden="true"
-                                    ></i
-                                    >Push Testimonails
-                        </button>
+                              type="submit"
+                              id="updateBtn"
+                              style="
+                                background-color: rgb(146, 44, 141);
+                                color: white;
+                              "
+                              type="button"
+                              class="btn btn-elegant center"
+                            >
+                              <i
+                                class="now-ui-icons arrows-1_minimal-right"
+                                aria-hidden="true"
+                              ></i
+                              >Push Testimonails
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
                     <br />
                     <div class="row">
-                      <div class="col-md-12">
-                        
-                      </div>
+                      <div class="col-md-12"></div>
                     </div>
                   </form>
                 </div>
               </div>
-
-              
             </div>
           </div>
         </div>
@@ -219,62 +212,6 @@
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
     });
-    function readURLAbout(aboutFile) {
-      if (aboutFile.files && aboutFile.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-          $("#imgResAbout").attr("src", e.target.result);
-        };
-        reader.readAsDataURL(aboutFile.files[0]);
-        $("#aboutFileRemove").show();
-      }
-    }
-    function readURLWhy(whyFile) {
-      if (whyFile.files && whyFile.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-          $("#imgResWhy").attr("src", e.target.result);
-        };
-        reader.readAsDataURL(whyFile.files[0]);
-        $("#whyFileRemove").show();
-      }
-    }
-
-    $("#whyFile").on("change", function () {
-      console.log('change');
-      readURLWhy(whyFile);
-    });
-
-    $("#aboutFile").on("change", function () {
-      readURLAbout(aboutFile);
-    });
-
-    var whyFile = document.getElementById("whyFile");
-    var infoArea = document.getElementById("upload-label");
-    var aboutFile = document.getElementById("aboutFile");
-
-    whyFile.addEventListener("change", showFileNameW);
-    aboutFile.addEventListener("change", showFileNameA);
-    function showFileNameA(event) {
-      var input = event.srcElement;
-      var fileName = input.files[0].name;
-      infoArea.textContent = "File name: " + fileName;
-    }
-    function showFileNameW(event) {
-      var input = event.srcElement;
-      var fileName = input.files[0].name;
-      infoArea.textContent = "File name: " + fileName;
-    }
-    function removeImageAbout() {
-      $("#imgResAbout").attr("src", "");
-      $("#aboutFileRemove").hide();
-    }
-    function removeImageWhy() {
-      $("#imgResWhy").attr("src", "");
-      $("#whyFileRemove").hide();
-    }
   </script>
 
   <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
@@ -284,5 +221,5 @@
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
   <script src="./../assets/firebase.js"></script>
-  <script src="./about-why1.js"></script>
+  <script src="./testimonials1.js"></script>
 </html>

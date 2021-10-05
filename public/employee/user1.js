@@ -198,7 +198,6 @@ const updateBasicInfo = async (e) => {
 
     await USER_REF.update(data);
     alert("Info updated Successfully");
-
     getUserDetails({ uid: USER_ID, userType: USER.userType });
   } catch (error) {
     console.error(errpr);
@@ -379,6 +378,7 @@ const updateCv = async (e) => {
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
+  getUserDetails({ uid: USER_ID, userType: USER.userType });
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -1223,6 +1223,7 @@ function displayExpertiseTable(initial = false) {
 const cvUrlHTML = document.querySelector("#cvUrl");
 const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
 const verticalsTablesHTML = document.querySelector("#verticalsTables");
+const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
 
 async function displayCvDetails() {
   if (USER.cvAdded) {
@@ -1294,6 +1295,19 @@ async function displayCvDetails() {
       let whole = head + body + end;
       verticalsTablesHTML.innerHTML += whole;
     });
+
+    editCvUrlHolderHTML.innerHTML = `
+    <a target="_blank" href="${USER.cv.url}" >
+      <label
+        class="btn btn-tertiary js-labelFile"
+        style="background-color: transparent"
+      >
+        <i class="icon fa fa-eye"></i>
+        <span class="js-fileName"
+          >View Your CSV</span
+        >
+      </label>
+    </a>`;
   }
 }
 
@@ -1426,4 +1440,19 @@ async function uploadImgToDB() {
 }
 
 // /////////////////////////////////////////////////////////
+let retryLogout = 0;
 
+function logoutUser() {
+  auth.signOut().then(() => {
+    // Sign-out successful.
+    window.location.href="./dashboard.html"
+  }).catch((error) => {
+    console.error(error);
+    if(retryLogout < 2) {
+      retryLogout++;
+      logoutUser();
+    } else {
+      alert(`unable to logout at moment. Reason: ${error.message}`)
+    }
+  });
+}

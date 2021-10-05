@@ -25,7 +25,6 @@ const signupEmployee = async (e) => {
   let authRes = await createUserAuth(email, password, userType);
 
   if (!authRes) {
-
     nowuiDashboard.showNotification('top','center',authRes.message,"primary");
     return;
   }
@@ -45,21 +44,20 @@ const signupEmployee = async (e) => {
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
 
   if (!dbRes) {
-    
     nowuiDashboard.showNotification('top','center',dbRes.message,"primary");
     return;
   }
   emplyeeFormHTML.reset();
     // nowuiDashboard.showNotification('top','center',"We have sent a verification link on "+email + " Please verify your email ","primary");
-    auth.onAuthStateChanged((user) => {
+    // auth.onAuthStateChanged((user) => {
 
-      console.log(user)
-      user.sendEmailVerification().then(function() {
+    //   console.log(user)
+    //   user.sendEmailVerification().then(function() {
 
-        window.location="../employee/user.html"
-      })
+        window.location="../employee/dashboard.html"
+    //   })
      
-    });
+    // });
     
    
 };
@@ -184,7 +182,6 @@ const createUserAuth = async (email, password, type) => {
     });
 };
 
-// createUserAuth('a@gmail.com', 'qqqqqq', 'employee')
 
 // //////////////////////////////////////////
 
@@ -198,10 +195,7 @@ const login = (e) => {
   const email = signinFormHTML['email'].value;
   const password = signinFormHTML['password'].value;
 
-  console.log(email, password);
   auth.signInWithEmailAndPassword(email, password).then(user => {
-    // console.log(user);
-    // console.log(user.user);
 
     let userType = user.user.displayName;
     console.log(userType);
@@ -211,7 +205,6 @@ const login = (e) => {
 
   }).catch(error => {
     console.error(error);
-   
     nowuiDashboard.showNotification('top','center',error.message,"primary");
   })
 

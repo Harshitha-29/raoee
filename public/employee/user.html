@@ -147,7 +147,7 @@
                 </a>
               </li>
               <li>
-                <a href="../authentication/auth.html">
+                <a href="#" onclick="logoutUser()" >
                   <i class="now-ui-icons objects_key-25"></i>
                   <p>LogOut</p>
                 </a>
@@ -189,9 +189,8 @@
                       </p>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                      <a class="dropdown-item" href="../authentication/auth.html"> <i class="now-ui-icons objects_key-25"><span style="color:black;"></span></i>Login</a>
-                      <a class="dropdown-item" href="../employee/user.html"><i class="now-ui-icons ui-1_settings-gear-63"><span style="color:black;"></span></i>My Profile</a>
-                      <a class="dropdown-item" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:red;"></span></i>Logout</a>
+                      <a class="dropdown-item" href="#"><i class="now-ui-icons ui-1_settings-gear-63"><span style="color:black;"></span></i>My Profile</a>
+                      <a class="dropdown-item" onclick="logoutUser()" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:red;"></span></i>Logout</a>
                     </div>
                   </li>
                 </ul>
@@ -461,7 +460,7 @@
                 </div>
                 <div id="cvInfoHolder" style="padding:10px ;">
                   <div class="form-group" style="display: flex;margin-right: 65%;padding: 10px;">
-                    <a id="cvUrl" >
+                    <a id="cvUrl"  target="_blank">
                       <label
 
                       class="btn btn-tertiary js-labelFile"
@@ -677,21 +676,17 @@
                             >
                           </label>
                           
-                          <div class="form-group" style="margin:auto;">
-                            <a id="cvUrl2" >
+                          <div class="form-group" style="margin:auto;" id="editCvUrlHolder" >
+                            <a id="" >
                               <label
-        
-                              class="btn btn-tertiary js-labelFile"
-                              style="background-color: transparent"
-                            >
-                              <i class="icon fa fa-eye"></i>
-        
-                              <span class="js-fileName"
-                                >View Your CSV</span
+                                class="btn btn-tertiary js-labelFile"
+                                style="background-color: transparent"
                               >
-  
-                            </label>
-                            
+                                <i class="icon fa fa-eye"></i>
+                                <span class="js-fileName"
+                                  >View Your CSV</span
+                                >
+                              </label>
                             </a>
                           </div>
                         </div>
