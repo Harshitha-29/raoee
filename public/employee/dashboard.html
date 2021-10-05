@@ -76,9 +76,113 @@
       
         color: black;
     }
+    .loader {
+      
+      height: 20px;
+      width: 250px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+}
+.loader--dot {
+  animation-name: loader;
+  animation-timing-function: ease-in-out;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: black;
+  position: absolute;
+  border: 2px solid white;
+}
+.loader--dot:first-child {
+  background-color: #8cc759;
+  animation-delay: 0.5s;
+}
+.loader--dot:nth-child(2) {
+  background-color: #8c6daf;
+  animation-delay: 0.4s;
+}
+.loader--dot:nth-child(3) {
+  background-color: #ef5d74;
+  animation-delay: 0.3s;
+}
+.loader--dot:nth-child(4) {
+  background-color: #f9a74b;
+  animation-delay: 0.2s;
+}
+.loader--dot:nth-child(5) {
+  background-color: #60beeb;
+  animation-delay: 0.1s;
+}
+.loader--dot:nth-child(6) {
+  background-color: #fbef5a;
+  animation-delay: 0s;
+}
+.loader--text {
+  position: absolute;
+  top: 200%;
+  left: 0;
+  right: 0;
+  width: 4rem;
+  margin: auto;
+}
+.loader--text:after {
+  content: "Loading";
+  font-weight: bold;
+  animation-name: loading-text;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes loader {
+  15% {
+    transform: translateX(0);
+  }
+  45% {
+    transform: translateX(230px);
+  }
+  65% {
+    transform: translateX(230px);
+  }
+  95% {
+    transform: translateX(0);
+  }
+}
+@keyframes loading-text {
+  0% {
+    content: "Loading";
+  }
+  25% {
+    content: "Loading.";
+  }
+  50% {
+    content: "Loading..";
+  }
+  75% {
+    content: "Loading...";
+  }
+}
   </style>
+
   <body class="" onload="essentials()">
-    <div class="wrapper">
+    <div class='container2' id="loader" style="opacity: 2;width: 100%;height: 100%;background-color: red;"  >
+        <div class='loader' style="z-index: 999999;position: fixed;left:10%">
+          <div class='loader--dot'></div>
+          <div class='loader--dot'></div>
+          <div class='loader--dot'></div>
+          <div class='loader--dot'></div>
+          <div class='loader--dot'></div>
+          <div class='loader--dot'></div>
+          <div class='loader--text'></div>
+        </div>
+      </div>
+    <div class="wrapper" >
+      
       <div id="popupModal"></div>
       <div id="navigation">
         <div class="sidebar" data-color="orange">
@@ -132,7 +236,9 @@
           </div>
         </div>
       </div>
+   
       <div class="main-panel" id="main-panel">
+       
         <!-- Navbar -->
         <div id="topbar">
           <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
@@ -267,6 +373,7 @@
         </div>
         <br />
         <div class="content">
+          
           <div class="card aboutus-section" id="about-us" style="background-color: #f7f7f7;">
             <div class="container">
               <div class="row">
@@ -307,14 +414,14 @@
                     <h2 class="aboutus-title">Create Your RAOEE Account Now</h2>
                     <div style="margin-top: 25%">
                       <a
-                        href="#"
+                        href="../authentication/auth.html"
                         class="btn btn-success center"
                         style="background-color: #05426b; width: 80%"
                         >Login</a
                       >
                       <br />
                       <a
-                        href="#"
+                        href="../authentication/auth.html"
                         class="btn btn-success center"
                         style="background-color: #05426b; width: 80%"
                         >Create A New Account</a
@@ -356,8 +463,8 @@
               <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                   <div class="aboutus ">
-                    <h2 class="aboutus-title">TESTIMONAILS  </h2>
-                    <div class="items ">
+                    <h2 class="aboutus-title" >TESTIMONAILS  </h2>
+                    <div class="items " id="all-testimonials">
 
                       <div class="card testimonails ">
                         <div class="card-body">
@@ -372,7 +479,7 @@
                                 <div class="profile">
                                   <h4 class="cust-name">Delbert Simonas</h4>
                                     <p class="cust-profession">Store Owner</p>
-                                  </div>
+                                 
                                 </div>
                               </div>
                             </div>
@@ -770,6 +877,13 @@
     <script>
       function essentials() {}
       $(document).ready(function () {
+        
+        document.body.style.opacity = 0.2;
+        setTimeout(function(){
+          document.getElementById("loader").style.display="none"
+          document.body.style.opacity = 1.2;
+        },2500)
+    
         // Javascript method's body can be found in assets/js/demos.js
         var cnt=0;
         let int= setInterval(function(){
@@ -783,41 +897,6 @@
      
     
         //demo.initDashboardPageCharts();
-        $('.items').slick({
-          dots: true,
-          infinite: true,
-          speed: 800,
-          autoplay: true,
-          autoplaySpeed: 2000,
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          responsive: [
-          {
-          breakpoint: 1024,
-          settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true
-          }
-          },
-          {
-          breakpoint: 600,
-          settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2
-          }
-          },
-          {
-          breakpoint: 480,
-          settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-          }
-          }
-
-          ]
-        });
       });
     </script>
 
