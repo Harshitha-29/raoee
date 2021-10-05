@@ -1,5 +1,7 @@
 const db = firebase.firestore();
 
+const USER = undefined;
+
 const VERTICALS = [];
 const verticalsDropdownHTML = document.querySelector("#verticalsDropdown");
 // const subVerticalsDropdownHTML = document.querySelector(

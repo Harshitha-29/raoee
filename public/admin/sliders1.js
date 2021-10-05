@@ -2,6 +2,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
+const USER = undefined;
 let FILE = null;
 let FILE_NAME = null;
 

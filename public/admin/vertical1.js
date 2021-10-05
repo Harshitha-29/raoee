@@ -1,5 +1,7 @@
 const db = firebase.firestore();
 
+const USER = undefined;
+
 const VERTICALS = [];
 const allVerticalsHTML = document.querySelector("#allVerticals");
 const allSubVerticalsHTML = document.querySelector("#allSubVerticals");

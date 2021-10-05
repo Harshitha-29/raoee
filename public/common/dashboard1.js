@@ -10,26 +10,86 @@ let USER_RAW = false;
 let USER_TYPE = false;
 
 auth.onAuthStateChanged((user) => {
-  USER_ID = user.uid;
-  USER_RAW = user;
-  USER_TYPE = user.displayName;
-
-  if (user.emailVerified == false) {
-    $("#exampleModalCenter").modal({
-      backdrop: "static",
-      keyboard: false,
-      show: true,
-    });
-    document.getElementById("emailID").innerHTML = user.email;
+  if(user) {
+    console.log(user);
+    USER_ID = user.uid;
+    USER_RAW = user;
+    USER_TYPE = user.displayName;
+  
+    if (user.emailVerified == false) {
+      $("#exampleModalCenter").modal({
+        backdrop: "static",
+        keyboard: false,
+        show: true,
+      });
+      document.getElementById("emailID").innerHTML = user.email;
+    }
+    getUserInfo()
+  } else {
+    displayAuthSigns()
   }
+
 });
 
 // //////////////////////////////////
 
-function getUserInfo() {
-  db.collection(`${USER_TYPE}s`).doc(USER_ID).get().then(doc => {
+const topbarUsernameHTML = document.querySelector('#topbar-username');
+const topbarImgHTML = document.querySelector('#topbar-img');
+const toolbarOpsHTML = document.querySelector('#toolbarOps');
+const navLoginHTML = document.querySelector('#nav-login');
+const loginRegisterSectionHTML = document.querySelector('#login-register-section');
+
+function displayAuthSigns() {
+  let toolbarOps;
+  if(!USER) {
+    loginRegisterSectionHTML.style.display = 'block';
+    toolbarOps = `
+    <a class="dropdown-item" href="./authentication/auth.html"> <i class="now-ui-icons objects_key-25"><span style="color:black;"></span></i>Login</a>
+    `;
+    navLoginHTML.innerHTML = `<li>
+    <a href="./authentication/auth.html">
+      <i class="now-ui-icons objects_key-25"></i>
+      <p>Login / Register</p>
+    </a>
+  </li>`;
+  } else {
+    console.log(USER_TYPE);
+    toolbarOps = `
+    <a class="dropdown-item" href="./${USER_TYPE}/user.html"><i class="now-ui-icons ui-1_settings-gear-63"><span style="color:black;"></span></i>My Profile</a>
+    <a onclick="logoutUser()" class="dropdown-item" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:black;"></span></i>Logout</a>
+    `;
+    topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
+    if(USER.basicInfoAdded) {
+      topbarImgHTML.src = USER.basicInfo.imgUrl;
+    }
+
+    navLoginHTML.innerHTML = `
+    <li class="ace">
+      <a href="./${USER_TYPE}/user.html">
+        <i class="now-ui-icons users_single-02"></i>
+        <p>User Profile</p>
+      </a>
+    </li>
+    <li>
+      <a href="#" onclick="logoutUser()" >
+        <i class="now-ui-icons objects_key-25"></i>
+        <p>LogOut</p>
+      </a>
+    </li>
+    `;
+  }
+  toolbarOpsHTML.innerHTML = toolbarOps;
+}
+
+// //////////////////////////////////
+
+async function getUserInfo() {
+
+  await db.collection(`${USER_TYPE}s`).doc(USER_ID).get().then(doc => {
     USER = doc.data();
   })
+  console.log(USER);
+  displayAuthSigns();
 }
 
 // //////////////////////////////////
@@ -54,7 +114,6 @@ db.collection("sliders").onSnapshot((snaps) => {
   document.getElementById("slidersData").innerHTML = "";
   docs.map((doc, index) => {
     let docData = doc.data();
-    console.log(docData.url);
     title = "";
     if (docData.title) {
       title = docData.title;

@@ -3,6 +3,8 @@ const db = firebase.firestore();
 const editorHTML = document.querySelector("#editor");
 let EDITOR;
 
+const USER = undefined;
+
 ClassicEditor.create(editorHTML)
   .then((editor) => {
     EDITOR = editor;

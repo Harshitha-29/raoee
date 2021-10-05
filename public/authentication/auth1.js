@@ -199,12 +199,13 @@ const login = (e) => {
 
     let userType = user.user.displayName;
     console.log(userType);
-    if(userType === 'employee') {
-      window.location.href = `./../employee/user.html`;
-    }
+    // if(userType === 'employee') {
+    //   window.location.href = `./../employee/user.html`;
+    // }
     if(userType === 'admin') {
       window.location.href = `./../admin/dashboard.html`;
     }
+    window.location.href = `./../dashboard.html`;
 
   }).catch(error => {
     console.error(error);

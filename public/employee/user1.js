@@ -8,11 +8,10 @@ let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
 
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async(user) => {
   if (user) {
     USER_RAW = user;
     USER_ID = user.uid;
-    getUserDetails({ uid: user.uid, userType: user.displayName });
     if (user.emailVerified == false) {
       $("#exampleModalCenter").modal({
         backdrop: "static",
@@ -21,11 +20,22 @@ auth.onAuthStateChanged((user) => {
       });
       document.getElementById("emailID").innerHTML = user.email;
     }
+    getUserDetails({ uid: user.uid, userType: user.displayName });
   } else {
+    console.log('HEY');
     return (window.location.href = `./../authentication/auth.html`);
   }
 });
 
+const topbarUsernameHTML = document.querySelector('#topbar-username');
+const topbarImgHTML = document.querySelector('#topbar-img');
+
+function displayAuthSigns() {
+  topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
+  if(USER.basicInfoAdded) {
+    topbarImgHTML.src = USER.basicInfo.imgUrl;
+  }
+}
 
 function sendEmail() {
   USER_RAW.sendEmailVerification().then(function () {
@@ -41,6 +51,7 @@ function sendEmail() {
 // ////////////////////////////////////////////
 let retryUser = 0;
 async function getUserDetails({ uid, userType }) {
+  console.log('hi');
   if (userType === "employee") {
     userType = `${userType}s`;
   }
@@ -48,7 +59,9 @@ async function getUserDetails({ uid, userType }) {
     USER_REF = await db.collection(userType).doc(uid);
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
+    console.log(USER);
     displayUserDetails();
+    displayAuthSigns()
   } catch (error) {
     console.error(error);
     if (retryUser < 2) {
@@ -1449,7 +1462,7 @@ let retryLogout = 0;
 function logoutUser() {
   auth.signOut().then(() => {
     // Sign-out successful.
-    window.location.href="./dashboard.html"
+    window.location.href="./../dashboard.html"
   }).catch((error) => {
     console.error(error);
     if(retryLogout < 2) {

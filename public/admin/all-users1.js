@@ -1,4 +1,6 @@
 const db = firebase.firestore();
+
+const USER = undefined;
 // //////////////////////////////
 
 let cvCollections = [];
