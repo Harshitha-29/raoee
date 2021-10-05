@@ -197,7 +197,8 @@ const updateBasicInfo = async (e) => {
     }
 
     await USER_REF.update(data);
-    alert("Info updated Successfully");
+    
+    nowuiDashboard.showNotification('top','center',"Data updated Successfully","primary");
     getUserDetails({ uid: USER_ID, userType: USER.userType });
   } catch (error) {
     console.error(errpr);
@@ -320,7 +321,9 @@ const updateCv = async (e) => {
       data.url = USER.cv.url;
       data.fileName = USER.cv.fileName;
     } else {
-      alert("Please upload the CV file");
+    
+      nowuiDashboard.showNotification('top','center',"Please Update the CV File ","primary");
+      
       return;
     }
   }
@@ -358,15 +361,17 @@ const updateCv = async (e) => {
     // return;
   }
 
-
-  const resDeleteCvDb = await deleteCvDb({
-    collectionName: USER.cv.collectionName,
-    docId: USER.cv.docId,
-  });
-  if (!resDeleteCvDb.status) {
-    alert(resDB.message);
-    // return;
+  if(USER.cvAdded){
+    const resDeleteCvDb = await deleteCvDb({
+      collectionName: USER.cv.collectionName,
+      docId: USER.cv.docId,
+    });
+    if (!resDeleteCvDb.status) {
+      alert(resDB.message);
+      // return;
+    }
   }
+  
   const resUserDB = await uploadToUserDb({ data });
   retryUserDB = 0;
   if (!resUserDB.status) {
@@ -374,11 +379,17 @@ const updateCv = async (e) => {
     return;
   }
 
-  alert("Record Added Successfully");
+
+  nowuiDashboard.showNotification('top','center',"Record Added Successfully","primary");
+  
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
+  
   getUserDetails({ uid: USER_ID, userType: USER.userType });
+  setTimeout(function(){
+    location.reload();
+  },2000)
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -1340,7 +1351,7 @@ const userImageHTML = document.querySelector("#userImage");
 
 const uploadImgLocal = (e) => {
   if (!USER.basicInfoAdded) {
-    alert("Please add all your details in order to update the profile image");
+    nowuiDashboard.showNotification('top','center',"Please add all your details in order to update the profile image","primary");
     blahHTML.src = `../assets/img/userProfile.png`;
     return;
   }
@@ -1422,12 +1433,14 @@ async function uploadImgToDB() {
   const resStorage = await uploadImgToStorage({ ref: `${USER.userType}s` });
 
   if (!resStorage.status) {
-    alert(resStorage.message);
+    
+    nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
     return;
   }
   const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
   if (!resUrl.status) {
-    alert(resUrl.message);
+   
+    nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
     return;
   }
 
@@ -1436,7 +1449,8 @@ async function uploadImgToDB() {
 
   await USER_REF.update(data);
   getUserDetails({ uid: USER_ID, userType: USER.userType });
-  alert("Successfully updated");
+  
+  nowuiDashboard.showNotification('top','center',"Data Updated Successfully","primary");
 }
 
 // /////////////////////////////////////////////////////////
