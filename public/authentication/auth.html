@@ -311,7 +311,7 @@
                         <p id="showMessage" style="color: green;font-weight: 600;"></p>
                    
                       </div>
-                      <p style="margin-left: 10%;font-weight: 600;">Already have an account? <a href="" onclick="showSignup()" style="color: brown;">Click Here</a></p>
+                      <p style="margin-left: 10%;font-weight: 600;">Dont have an account yet? <a href="" onclick="showSignup()" style="color: brown;">Click Here</a></p>
                     </form>
                
                   </div>
@@ -399,6 +399,7 @@
                         </div>
                         <p id="showMessage2" style="color: green;font-weight: 600;"></p>
                       </div>
+                      <p style="margin-left: 10%;font-weight: 600;">Already have an account ? <a href="#?" onclick="showlogin()" style="color: brown;">Click Here</a></p>
                     </form>
                   </div>
                   <div
@@ -556,7 +557,10 @@
     });
 
     function showlogin() {
+     
+      document.getElementById("home").style.display = "none";
       document.getElementById("myTab").style.display = "none";
+      document.getElementById("login").style.display = "block";
     }
     function showSignup(){
       document.getElementById("login").style.display = "none";
