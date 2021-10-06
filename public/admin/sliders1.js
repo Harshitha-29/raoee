@@ -3,6 +3,8 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
 const USER = undefined;
+checkIfAdmin();
+
 let FILE = null;
 let FILE_NAME = null;
 

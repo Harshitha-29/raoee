@@ -205,7 +205,6 @@ const login = (e) => {
   const password = signinFormHTML['password'].value;
 
   auth.signInWithEmailAndPassword(email, password).then(user => {
-
     let userType = user.user.displayName;
     console.log(userType);
     // if(userType === 'employee') {
@@ -213,8 +212,9 @@ const login = (e) => {
     // }
     if(userType === 'admin') {
       window.location.href = `./../admin/dashboard.html`;
+    }else {
+      window.location.href = `./../dashboard.html`;
     }
-    window.location.href = `./../dashboard.html`;
 
   }).catch(error => {
     console.error(error);
@@ -229,10 +229,24 @@ signinFormHTML.addEventListener('submit', login);
 
 // //////////////////////////
 
+auth.onAuthStateChanged(async(user) => {
+  if (user) {
+    console.log(user.displayName);
+    if(user.displayName === 'admin') {
+      console.log('hey');
+      window.location.href = `./../admin/dashboard.html`;
+    }else {
+      window.location.href = `./../dashboard.html`;
+    }    
+  } 
+});
+
+// //////////////////////////
+
 // const registerAdmin = async() => {
   
-//   const email = `admin@admin.com`;
-//   const password = `admin@raoee`
+//   const email = `raoeeproject@gmail.com`;
+//   const password = `raoee@project`
 //   let userType = "admin";
 //   const fname = `admin`;
 //   const lname = `raoee`;
@@ -262,3 +276,4 @@ signinFormHTML.addEventListener('submit', login);
 //   }
 //   alert('Admin Added')
 // };
+// registerAdmin()

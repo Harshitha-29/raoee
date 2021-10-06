@@ -1,6 +1,7 @@
 const db = firebase.firestore();
 
 const USER = undefined;
+checkIfAdmin()
 // //////////////////////////////
 
 let cvCollections = [];
