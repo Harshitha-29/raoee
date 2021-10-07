@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="../assets/img/apple-icon.png"
+    />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>RAOEE</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <!-- <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    /> -->
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+      integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
+    />
+
+  </head>
+  <style>
+    
+    .choices__inner {
+      border-radius: 20px;
+      background-color: transparent;
+      height: 10px !important;
+      overflow-y: scroll;
+    }
+    .now-ui-icons{
+    color: black !important;
+    }
+    .btn-tertiary {
+      color: #555;
+      padding: 0;
+      line-height: 40px;
+      width: 300px;
+      margin: auto;
+      display: block;
+      border: 2px solid #555;
+    }
+    .btn-tertiary:hover,
+    .btn-tertiary:focus {
+      color: #888888;
+      border-color: #888888;
+    }
+
+    /* input file style */
+    .input-file {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    .input-file + .js-labelFile {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+    .input-file + .js-labelFile .icon:before {
+      content: "";
+    }
+    .input-file + .js-labelFile.has-file .icon:before {
+      content: "";
+      color: #5aac7b;
+    }
+
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+      width: 100% !important;
+    }
+  </style>
+  <body class="user-profile">
+    <div class="wrapper">
+      
+      <div id="navigation"></div>
+      <div class="main-panel" id="main-panel">
+        <!-- Navbar -->
+        <div id="topbar"></div>
+        <div id="popupModal"></div>
+        
+        <!-- End Navbar -->
+        <div class="panel-header panel-header-sm"></div>
+        <div class="content">
+         
+          <div class="row flex-column-reverse flex-md-row">
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">My Profile</h5>
+                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 70%;">
+                    <label class="switch">
+                      <input type="checkbox" id="editBasicInfoBtn"  />
+                      <span class="slider round"></span>
+                      <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;"> Edit</span>
+                    </label>
+                  </h5>
+                </div>
+
+                <div class="card-body">
+                  
+                  <form id="userBasicForm">
+                    <div class="row">
+                      <div class="col-md-6 pr-1">
+                        <div class="form-group">
+                          <label
+                            >First Name <span style="color: red">*</span></label
+                          >
+                          <input
+                            name="fname"
+                            type="text"
+                            class="form-control"
+                            placeholder="First Name *"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6 pl-1">
+                        <div class="form-group">
+                          <label>Last Name</label>
+                          <input
+                            name="lname"
+                            type="text"
+                            class="form-control"
+                            placeholder="Last Name *"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 pr-1">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1"
+                            >Email address
+                            <span style="color: red">*</span></label
+                          >
+                          <input
+                            name="email"
+                            type="email"
+                            class="form-control"
+                            placeholder="Email"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6 pl-1">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1"
+                            >Phone Number
+                            <span style="color: red">*</span></label
+                          >
+                          <input
+                            name="phone"
+                            type="number"
+                            class="form-control"
+                            placeholder="Phone"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Address</label>
+                          <input
+                            name="address"
+                            type="text"
+                            class="form-control"
+                            placeholder="Home Address"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3 pr-1">
+                        <div class="form-group">
+                          <label>City</label>
+                          <input
+                            name="city"
+                            type="text"
+                            class="form-control"
+                            placeholder="City"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3 px-1">
+                        <div class="form-group">
+                          <label>State</label>
+                          <input
+                            name="state"
+                            type="text"
+                            class="form-control"
+                            placeholder="State"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3 pl-1">
+                        <div class="form-group">
+                          <label>Country</label>
+                          <input
+                            name="country"
+                            type="text"
+                            class="form-control"
+                            placeholder="Country"
+                            value="India"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3 pl-1">
+                        <div class="form-group">
+                          <label>Postal Code</label>
+                          <input
+                            type="number"
+                            name="postal-code"
+                            class="form-control"
+                            placeholder="ZIP Code"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button
+                      id="updateBasicInfoBtn"
+                      style="background-color: rgb(31, 126, 189);color:#ffffff; display: none; "
+                      type="submit"
+                      class=" center btn btn-elegant display-small"
+                      >
+                      <i
+                        class="
+                          now-ui-icons
+                          arrows-1_cloud-upload-94
+                          pr-2
+                        "
+                        aria-hidden="true"
+                      ></i
+                      >Update Basic Profile
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+           
+            </div>
+
+            <div class="col-md-4">
+              <div class="card card-user">
+                <div class="image">
+                  <img
+                    src="https://www.desktopbackground.org/download/1024x768/2014/06/28/784958_nature-trains-railroad-tracks-railway-wallpapers_1920x1200_h.jpg"
+                    alt="User"
+                    id="profileImg"
+                  />
+                </div>
+
+                <div class="card-body">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="userImage"
+                    hidden
+                  />
+                  <div class="author">
+                    <a href="#popup2" class="lightbox">
+                      <img
+                        id="blah"
+                        class="avatar border-gray"
+                        src="../assets/img/userProfile.png"
+                        alt="..."
+                        style="object-fit: cover"
+                      />
+                      <label for="userImage">
+                        <i
+                          class="fa fa-pencil-alt"
+                          style="
+                            padding: 10px;
+                            position: absolute !important;
+                            cursor: pointer;
+                            color: #05426b;
+                          "
+                        ></i>
+                      </label>
+                      <div id="fullNameProfile">
+
+                        <!-- <h5 class="title" style="color: black"></h5> -->
+                      </div>
+                    </a>
+                  </div>
+
+                  <p id="aboutMeProfile" class="description text-center">
+                   
+                  </p>
+                  
+                </div>
+                
+                
+              </div>
+
+           
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">My CV's</h5>
+                  <h5 class="title responsiveEdit" style="float: right ; margin-left: 80%;">
+                    <label class="switch">
+                      <input type="checkbox" id="editCvBtn" />
+                      <span class="slider round"></span>
+                      <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;"> Edit</span>
+                    </label>
+                  </h5>
+                  
+                </div>
+                <div id="cvInfoHolder" style="padding:10px ;">
+                  <div class="form-group" style="display: flex;margin-right: 65%;padding: 10px;">
+                    <a id="cvUrl"  target="_blank">
+                      <label
+
+                      class="btn btn-tertiary js-labelFile"
+                      style="background-color: transparent"
+                    >
+                      <i class="icon fa fa-eye"></i>
+
+                      <span class="js-fileName"
+                        >View Your CSV</span
+                      >
+                    </label>
+                    </a>
+                    
+                    
+                  </div>
+                  <div class="card-body" id="acd">
+                    <h6 style="font-weight: 400">
+                      Selected Verticals (Click To Expand)
+                    </h6>
+                    <div id="verticalsBtns">
+
+                      <!-- <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#signalling">Signalling ></button> -->
+                      <!-- <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);"data-parent="#acd" data-toggle="collapse" href="#telecom">Telecom ></button> -->
+                    </div>
+                    <div id="verticalsTables" >
+                    <!-- <div id="sig" class="collapse">
+                      <table class="table table-bordered">
+                        <thead class="thead-dark">
+                          <tr style="text-align: center">
+                            <th
+                              style="text-align: center; font-weight: 600"
+                              scope="col"
+                            >
+                              Sub-Vertical
+                            </th>
+                            <th
+                              style="text-align: center; font-weight: 600"
+                              scope="col"
+                            >
+                              Expertise
+                            </th>
+                            <th
+                              style="text-align: center; font-weight: 600"
+                              scope="col"
+                            >
+                              Experience
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                            Designing
+                            </td>
+                            <td>
+                              Signal Experience
+                            </td>
+                            <td>
+                              Fresher
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                            Testing
+                            </td>
+                            <td>
+                              Signal Experience
+                            </td>
+                            <td>
+                              Trined
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div> -->
+                  </div>
+                  </div>
+                </div>
+
+                <div class="card-body" id="cvEditHolder" style="display: none;">
+                  <form id="cvForm">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <div id="verticalDropHolder">
+                          <!-- <label
+                            >Select Vertical
+                            <span style="color: red">*</span></label
+                          >
+                          <select
+                            id="choices-multiple-remove-button"
+                            class="form-control"
+                            multiple
+                            name="vertical"
+                            style="overflow-y: scroll !important"
+                          >
+                          </select> -->
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <div id="subVerticalDropHolder">
+
+                            <!-- <label
+                              >Vertical Sub-Cat
+                              <span style="color: red">*</span></label
+                            >
+                            <select
+                              disabled
+                              id="choices-multiple-remove-button"
+                              class="form-control"
+                              multiple
+                              name="domain"
+                              style="overflow-y: scroll !important"
+                            >
+  
+                            </select> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="tablesHolder">
+                      <!-- <h6 style="font-weight: 600">
+                        Select Expertise (
+                        <b style="color: red">Vertical Selected : Signalling</b> )
+                      </h6>
+                      <label>Tick the box if applicable</label>
+                      <table class="table table-bordered">
+                        <thead class="thead-dark">
+                          <tr style="text-align: center">
+                            <th
+                              style="text-align: center; font-weight: 600"
+                              scope="col center"
+                            >
+                              Area of Expertise
+                              <br>
+                              (design sdfe sgev asegs)
+                            </th>
+                            <th
+                              style="text-align: center; font-weight: 600"
+                              scope="col"
+                            >
+                              Applicable ?
+                            </th>
+                            <th
+                              style="text-align: center; font-weight: 600"
+                              scope="col"
+                            >
+                              Your Profession / Experience
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Signal Experience</td>
+                            <td>
+                              <label class="switch">
+                                <input type="checkbox" />
+                                <span class="slider round"></span>
+                              </label>
+                              <span
+                                style="color: rgb(180, 179, 76); font-weight: 699"
+                              >
+                                No</span
+                              >
+                            </td>
+                            <td>
+                              <select
+                                class="selectpicker"
+                                style="overflow-y: scroll; cursor: no-drop"
+                                disabled
+                              >
+                                <option>Fresher</option>
+                                <option>Fresher & Trained</option>
+                                <option>Less Than 2 Years</option>
+                                <option>Between 2 - 5 Years</option>
+                                <option>Between 5 - 10 Years</option>
+                                <option disabled="disabled">
+                                  More Than 10 Years
+                                </option>
+                              </select>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table> -->
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12 col-lg-10 col-12">
+                        <label>Uplaod CV</label>
+
+                        <div class="form-group" style="display: flex">
+                        
+                       
+                          <input
+                            type="file"
+                            name="cv-file"
+                            id="cv-file"
+                            class="input-file"
+                          />
+
+                          <label
+                            for="cv-file"
+                            class="btn btn-tertiary js-labelFile"
+                            style="background-color: transparent"
+                          >
+                            <i class="icon fa fa-check"></i>
+
+                            <span class="js-fileName"
+                              >Upload New CV(DOC , PDF or PPT)</span
+                            >
+                          </label>
+                          
+                          <div class="form-group" style="margin:auto;" id="editCvUrlHolder" >
+                            <!-- <a id="" >
+                              <label
+                                class="btn btn-tertiary js-labelFile"
+                                style="background-color: transparent"
+                              >
+                                <i class="icon fa fa-eye"></i>
+                                <span class="js-fileName"
+                                  >View Your CSV</span
+                                >
+                              </label>
+                            </a> -->
+                          </div>
+                        </div>
+                      
+                      </div>
+                    </div>
+                    
+                    <hr\>
+                    <hr\>
+                    <div style="width: 100%; display: flex; justify-content: space-around;">
+                      <!-- <button
+                        id="uploadBtn"
+                        style="background-color: red; "
+                        type="button"
+                        class="btn btn-elegant"
+                      >
+                        <i
+                          class="
+                            now-ui-icons
+                            arrows-1_cloud-upload-94
+                            pr-2
+                          "
+                          aria-hidden="true"
+                        ></i
+                        >Cancel
+                      </button> -->
+                      <button
+                        id="uploadBtn"
+                        style="background-color: green; "
+                        type="submit"
+                        class="btn btn-elegant"
+                      >
+                        <i
+                          class="
+                            now-ui-icons
+                            arrows-1_cloud-upload-94
+                            pr-2
+                          "
+                          aria-hidden="true"
+                        ></i
+                        >Save Changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+   
+        <!-- footer -->
+        <div id="footer"></div>
+      </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+  </body>
+  <script>
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            // Javascript method's body can be found in assets/js/demos.js
+            
+            $("#navigation").load("commonNavigation.html");
+            $("#topbar").load("topBar.html");
+            // $("#footer").load("footer.html");
+            });
+        
+      var cnt=0;
+        let int= setInterval(function(){
+          cnt++;
+       
+          if(cnt==5){
+            
+            clearInterval(int)
+          }
+          // $("#popupModal").load("./../common/commonNavigation.html");
+          $("#footer").load("./../common/footer.html");
+        },200)
+
+      $('input[type="file"]').change(function (e) {
+        var fileName = e.target.files[0].name;
+        $(".files").attr("data-before", fileName);
+      });
+    });
+      $(".input-file").each(function () {
+        var $input = $(this),
+          $label = $input.next(".js-labelFile"),
+          labelVal = $label.html();
+
+        $input.on("change", function (element) {
+          var fileName = "";
+          if (element.target.value) {
+            $("#uploadBtn").show();
+            $("#removeBtn").show();
+          }
+          if (element.target.value)
+            fileName = element.target.value.split("\\").pop();
+          fileName
+            ? $label.addClass("has-file").find(".js-fileName").html(fileName)
+            : $label.removeClass("has-file").html(labelVal);
+        });
+      });
+
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $("#blah").attr("src", e.target.result);
+        };
+        selectedFile = input.files[0];
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+
+<script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+
+<script src="./../assets/js/multiselect-dropdown.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+<script src="./../assets/firebase.js"></script>
+<script src="./createCV1.js"></script>
+
+</html>
