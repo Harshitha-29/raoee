@@ -239,6 +239,7 @@
             </div>
           </div>
         </div>
+        
         <!-- footer -->
         <div id="footer"></div>
       </div>
@@ -263,6 +264,10 @@
       $("#topbar").load("topBar.html");
      // $("#footer").load("footer.html");
     });
+    function openProfile(id){
+        window.localStorage.setItem("user",id)
+        window.open("userProfile.html","_blank")
+    }
    
   </script>
   <script src="./../assets/js/tag-input.js"></script>
