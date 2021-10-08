@@ -50,14 +50,13 @@
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"
-    />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
   </head>
   <style>
     .choices__inner {
@@ -66,50 +65,118 @@
       height: 10px !important;
       overflow-y: scroll;
     }
-    .ck.ck-editor__editable_inline > :last-child {
-      height: 18em;
+
+    .btn-tertiary {
+      color: #555;
+      padding: 0;
+      line-height: 40px;
+      width: 300px;
+      margin: auto;
+      display: block;
+      border: 2px solid #555;
+    }
+    .btn-tertiary:hover,
+    .btn-tertiary:focus {
+      color: #888888;
+      border-color: #888888;
     }
 
-    #upload {
+    /* input file style */
+    .input-file {
+      width: 0.1px;
+      height: 0.1px;
       opacity: 0;
-    }
-
-    #upload-label {
+      overflow: hidden;
       position: absolute;
-      top: 50%;
-      left: 1rem;
-      transform: translateY(-50%);
+      z-index: -1;
+    }
+    .input-file + .js-labelFile {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+    .input-file + .js-labelFile .icon:before {
+      content: "";
+    }
+    .input-file + .js-labelFile.has-file .icon:before {
+      content: "";
+      color: #5aac7b;
     }
 
-    .image-area {
-      border: 2px dashed black;
-      padding: 1rem;
-      position: relative;
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+      width: 100% !important;
     }
 
-    .image-area::before {
-      content: "Uploaded image result";
-      color: black;
-      font-weight: bold;
-      text-transform: uppercase;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 0.8rem;
-      z-index: 1;
+    .bootstrap-tagsinput {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+      display: inline-block;
+      padding: 4px 6px;
+      color: #555;
+      vertical-align: middle;
+      border-radius: 4px;
+      max-width: 100%;
+      line-height: 22px;
+      width: 100%;
+      cursor: text;
     }
+    .bootstrap-tagsinput input {
+      border: 1px solid black;
+      box-shadow: none;
+      outline: none;
+      background-color: transparent;
+      padding: 10px 6px;
+      margin: 0;
 
-    .image-area img {
-      z-index: 2;
-      position: relative;
+      width: 100%;
+      max-width: inherit;
+    }
+    .bootstrap-tagsinput.form-control input::-moz-placeholder {
+      color: #777;
+      opacity: 1;
+    }
+    .bootstrap-tagsinput.form-control input:-ms-input-placeholder {
+      color: #777;
+    }
+    .bootstrap-tagsinput.form-control input::-webkit-input-placeholder {
+      color: #777;
+    }
+    .bootstrap-tagsinput input:focus {
+      border: none;
+      box-shadow: none;
+    }
+    .bootstrap-tagsinput .tag {
+      margin-right: 2px;
+      color: white;
+      background-color: rgb(146, 44, 141);
+      padding: 10px;
+    }
+    .bootstrap-tagsinput .tag [data-role="remove"] {
+      margin-left: 8px;
+      cursor: pointer;
+    }
+    .bootstrap-tagsinput .tag [data-role="remove"]:after {
+      content: "x";
+      padding: 0px 2px;
+    }
+    .bootstrap-tagsinput .tag [data-role="remove"]:hover {
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
+      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    }
+    .bootstrap-select > .btn {
+      width: 100%;
+      padding-right: 25px;
     }
   </style>
-
   <body class="user-profile">
     <div class="wrapper">
       <div id="navigation"></div>
-      <div id="bootstraplinks"></div>
       <div class="main-panel" id="main-panel">
         <!-- Navbar -->
         <div id="topbar"></div>
@@ -120,153 +187,85 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header" style="display: flex">
-                  <h5 class="title">All Registered Employees</h5>
+                  <h5 class="title">All Employee Details</h5>
                 </div>
 
                 <div class="card-body">
                   <form id="expertiseForm">
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="container">
-                          <div id="toolbar">
-                            <select class="form-control">
-                              <option value="">Export Basic</option>
-                              <option value="all">Export All</option>
-                              <option value="selected">Export Selected</option>
-                            </select>
-                          </div>
-
-                          <table
-                            id="table"
-                            class="table-bordered"
-                            data-toggle="table"
-                            data-filter-control="true"
-                            data-show-export="true"
-                            data-click-to-select="true"
-                            data-search="true"
-                            data-toolbar="#toolbar"
-                          >
-                            <thead class="" id="heading">
-                              <tr>
-                                <th
-                                  data-field="state"
-                                  data-checkbox="true"
-                                ></th>
-                                <th
-                                  data-field="prenom"
-                                  data-filter-control="input"
-                                  data-sortable="true"
-                                >
-                                  Name
-                                </th>
-                                <th
-                                  data-field="vertical"
-                                  data-filter-control="select"
-                                  data-sortable="true"
-                                >
-                                  Vertical
-                                </th>
-                                <th
-                                  data-field="sub-vertical"
-                                  data-filter-control="select"
-                                  data-sortable="true"
-                                >
-                                  Sub-Vertical
-                                </th>
-                                <th
-                                  data-field="expertise"
-                                  data-filter-control="select"
-                                  data-sortable="true"
-                                >
-                                  Expertise
-                                </th>
-                                <th
-                                  data-field="Experience"
-                                  data-filter-control="select"
-                                  data-sortable="true"
-                                >
-                                  Experience
-                                </th>
-                                <th data-field="note" data-sortable="true">
-                                  Action
-                                </th>
-                              </tr>
+                     
+                        <table id="myTable"
+                            
+                         class="table table-striped table-bordered" style="width:100%">
+                            <div id="toolbar" style="float: right;padding:10px">
+                                 <div class="col-md-4 text-right"> <button id="exporttable" class="btn btn-primary" style="background-color: brown;">Export CSV</button> </div>
+                            </div>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Vertical</th>
+                                    <th>Sub-Vertical</th>
+                                    <th>Expertise</th>
+                                    <th>Experience</th>
+                                    <th>Action</th>
+                                </tr>
                             </thead>
-
                             <tbody id="tableBody" >
-                              </tbody>
-                              <!-- <tr>
-                                <td class="bs-checkbox">
-                                  <input
-                                    data-index="0"
-                                    name="btSelectItem"
-                                    type="checkbox"
-                                  />
-                                </td>
-                                <td>Reetik</td>
-                                <td>Signalling</td>
-                                <td>Desgin</td>
-                                <td>Sign Tech</td>
-                                <td>Fresher</td>
-                              </tr>
+                                
                             </tbody>
-                          </table>
-                        </div>
+                            <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Vertical</th>
+                                    <th>Sub-Vertical</th>
+                                    <th>Expertise</th>
+                                    <th>Experience</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
                       </div>
+                    
+                    
                     </div>
+                    
                     <br />
+                    
                   </form>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        Button trigger modal-->
-
-<!--Modal: modalCookie-->
         <!-- footer -->
-        </table>
-                        </div>
         <div id="footer"></div>
       </div>
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
-  </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+  
+
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/jquery.table2excel.min.js"></script>
+  </body>
   <script>
     $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
+     
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
-
+     // $("#footer").load("footer.html");
     });
- 
-    //exporte les données sélectionnées
-
-    //   var $table = $("#table");
-    // $(function () {
-    //   $("#toolbar")
-    //     .find("select")
-    //     .change(function () {
-    //       $table.bootstrapTable("refreshOptions", {
-    //         exportDataType: $(this).val(),
-    //       });
-    //     });
-    // });
-
-    // var trBoldBlue = $("table");
-
-    // $(trBoldBlue).on("click", "tr", function () {
-    //   $(this).toggleClass("bold-blue");
-    // });
- 
- 
+   
   </script>
-
-  <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
-  <script src="./../assets/js/multiselect-dropdown.js"></script>
+  <script src="./../assets/js/tag-input.js"></script>
 
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
@@ -274,4 +273,5 @@
   <script src="./../assets/firebase.js"></script>
   <script src="./common/auth.js"></script>
   <script src="./all-users1.js"></script>
+
 </html>
