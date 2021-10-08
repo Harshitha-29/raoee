@@ -12,6 +12,8 @@ let USER_TYPE = false;
 auth.onAuthStateChanged((user) => {
   if(user) {
     console.log(user);
+    console.log(user.uid);
+    console.log(user.displayName);
     USER_ID = user.uid;
     USER_RAW = user;
     USER_TYPE = user.displayName;

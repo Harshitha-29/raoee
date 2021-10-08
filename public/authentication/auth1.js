@@ -3,18 +3,25 @@ const db = firebase.firestore();
 
 const emplyeeFormHTML = document.querySelector("#employeeForm");
 const employerFormHTML = document.querySelector("#employerForm");
+let AUTH_FLAG = true;
 
 // //////////////////////////////////////////
 
 const signupEmployee = async (e) => {
   e.preventDefault();
+  AUTH_FLAG = false;
   const password = emplyeeFormHTML["password"].value;
   const cpassword = emplyeeFormHTML["cpassword"].value;
 
   if (password !== cpassword) {
-    document.getElementById("showMessage2").innerHTML=""
-    
-    nowuiDashboard.showNotification('top','center',"Password Mis-Matched","primary");
+    document.getElementById("showMessage2").innerHTML = "";
+
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Password Mis-Matched",
+      "primary"
+    );
     return;
   }
   let userType = "employee";
@@ -24,11 +31,18 @@ const signupEmployee = async (e) => {
   const phone = emplyeeFormHTML["phone"].value;
   const gender = emplyeeFormHTML["gender"].value;
 
+  document.getElementById("showMessage2").innerHTML =
+    "Creating new account ! Please Wait .....";
   let authRes = await createUserAuth(email, password, userType);
-  document.getElementById("showMessage2").innerHTML="Creating new account ! Please Wait ....."
-  if (!authRes) {
-    document.getElementById("showMessage2").innerHTML=""
-    nowuiDashboard.showNotification('top','center',authRes.message,"primary");
+
+  if (!authRes.status) {
+    document.getElementById("showMessage2").innerHTML = "";
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      authRes.message,
+      "primary"
+    );
     return;
   }
 
@@ -42,42 +56,39 @@ const signupEmployee = async (e) => {
     uid: authRes.data.uid,
     basicInfoAdded: false,
     cvAdded: false,
-    createdAt: new Date()
+    createdAt: new Date(),
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
 
   if (!dbRes) {
-    document.getElementById("showMessage2").innerHTML=""
-    nowuiDashboard.showNotification('top','center',dbRes.message,"primary");
+    document.getElementById("showMessage2").innerHTML = "";
+    nowuiDashboard.showNotification("top", "center", dbRes.message, "primary");
     return;
   }
   emplyeeFormHTML.reset();
-    // nowuiDashboard.showNotification('top','center',"We have sent a verification link on "+email + " Please verify your email ","primary");
-    // auth.onAuthStateChanged((user) => {
-
-    //   console.log(user)
-    //   user.sendEmailVerification().then(function() {
-
-        window.location="../employee/dashboard.html"
-    //   })
-     
-    // });
-    
-   
+  AUTH_FLAG = true;
+  window.location = "./../dashboard.html";
 };
 
-emplyeeFormHTML.addEventListener('submit', signupEmployee);
+emplyeeFormHTML.addEventListener("submit", signupEmployee);
 
 // //////////////////////////////////////////
 
-const signupEmployer = async(e) => {
+const signupEmployer = async (e) => {
   e.preventDefault();
+  AUTH_FLAG = false;
+
   const password = employerFormHTML["password"].value;
   const cpassword = employerFormHTML["cpassword"].value;
 
   if (password !== cpassword) {
-    nowuiDashboard.showNotification('top','center',"Password Missed Match","primary");
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Password Missed Match",
+      "primary"
+    );
     return;
   }
   let userType = "employer";
@@ -108,7 +119,7 @@ const signupEmployer = async(e) => {
     uid: authRes.data.uid,
     basicInfoAdded: false,
     cvAdded: false,
-    createdAt: new Date()
+    createdAt: new Date(),
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
@@ -118,10 +129,13 @@ const signupEmployer = async(e) => {
     return;
   }
   employerFormHTML.reset();
-  alert('Employer Added')
+  alert("Employer Added");
+  AUTH_FLAG = true;
+  window.location = "./../dashboard.html";
+
 };
 
-employerFormHTML.addEventListener('submit', signupEmployer);
+employerFormHTML.addEventListener("submit", signupEmployer);
 
 // //////////////////////////////////////////
 
@@ -158,16 +172,18 @@ const createUserAuth = async (email, password, type) => {
       var user = userCredential.user;
       console.log(user);
       console.log(type);
-      user.providerData[0].userType = type;
+      // user.providerData[0].userType = type;
       return user;
     })
     .then(async (user) => {
+      console.log(type);
       await user.updateProfile({
         displayName: type,
       });
       return user;
     })
     .then((user) => {
+      console.log(user);
       return {
         status: true,
         message: "user auth created",
@@ -178,73 +194,94 @@ const createUserAuth = async (email, password, type) => {
     })
     .catch((error) => {
       var errorMessage = error.message;
-      nowuiDashboard.showNotification('top','center',errorMessage.substring(9),"primary");
-      setTimeout(function(){
-        
-        document.getElementById("showMessage2").innerHTML=" "
-      },1000) 
+      nowuiDashboard.showNotification(
+        "top",
+        "center",
+        errorMessage.substring(9),
+        "primary"
+      );
+      setTimeout(function () {
+        document.getElementById("showMessage2").innerHTML = " ";
+      }, 1000);
       return {
         status: false,
         message: `Please Retry: ${errorMessage}`,
       };
-     
     });
 };
-
 
 // //////////////////////////////////////////
 
 // login
 
-const signinFormHTML = document.querySelector('#signinForm');
+const signinFormHTML = document.querySelector("#signinForm");
 
 const login = (e) => {
   e.preventDefault();
-  document.getElementById("showMessage").innerHTML = "Verifying Details ... "
-  const email = signinFormHTML['email'].value;
-  const password = signinFormHTML['password'].value;
+  document.getElementById("showMessage").innerHTML = "Verifying Details ... ";
+  const email = signinFormHTML["email"].value;
+  const password = signinFormHTML["password"].value;
 
-  auth.signInWithEmailAndPassword(email, password).then(user => {
-    let userType = user.user.displayName;
-    console.log(userType);
-    // if(userType === 'employee') {
-    //   window.location.href = `./../employee/user.html`;
-    // }
-    if(userType === 'admin') {
-      window.location.href = `./../admin/dashboard.html`;
-    }else {
-      window.location.href = `./../dashboard.html`;
-    }
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      let userType = user.user.displayName;
+      console.log(userType);
+      // if(userType === 'employee') {
+      //   window.location.href = `./../employee/user.html`;
+      // }
+      if (userType === "admin") {
+        window.location.href = `./../admin/dashboard.html`;
+      } else {
+        window.location.href = `./../dashboard.html`;
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      document.getElementById("showMessage").innerHTML = " ";
 
-  }).catch(error => {
-    console.error(error);
-    document.getElementById("showMessage").innerHTML = " "
-    
-    nowuiDashboard.showNotification('top','center',error.message,"primary");
-  })
+      nowuiDashboard.showNotification(
+        "top",
+        "center",
+        error.message,
+        "primary"
+      );
+    });
+};
 
-}
-
-signinFormHTML.addEventListener('submit', login);
+signinFormHTML.addEventListener("submit", login);
 
 // //////////////////////////
 
-auth.onAuthStateChanged(async(user) => {
-  if (user) {
+auth.onAuthStateChanged(async (user) => {
+  if (user && AUTH_FLAG) {
     console.log(user.displayName);
-    if(user.displayName === 'admin') {
-      console.log('hey');
+    if (user.displayName === "admin") {
       window.location.href = `./../admin/dashboard.html`;
-    }else {
+    } else {
       window.location.href = `./../dashboard.html`;
-    }    
-  } 
+    }
+  }
 });
 
 // //////////////////////////
 
+function AllowOnlyNumbers(e) {
+  e = e ? e : window.event;
+  var clipboardData = e.clipboardData ? e.clipboardData : window.clipboardData;
+  var key = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+  var str =
+    e.type && e.type == "paste"
+      ? clipboardData.getData("Text")
+      : String.fromCharCode(key);
+
+  return /^\d+$/.test(str);
+}
+
+// //////////////////////////
+
 // const registerAdmin = async() => {
-  
+
 //   const email = `raoeeproject@gmail.com`;
 //   const password = `raoee@project`
 //   let userType = "admin";
