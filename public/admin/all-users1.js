@@ -21,7 +21,6 @@ async function extractCvs({ collectionName }) {
     try {
       return await db.collection(collectionName).onSnapshot(async (snaps) => {
         const docs = await snaps.docs;
-
         return await docs.map((doc) => {
           const docData = doc.data();
           DATA.push(docData);
@@ -42,17 +41,13 @@ const DATA = [];
 let reTry = 0;
 async function collectCvData() {
   
-  // await cvCollections.map(async(collectionName) => {
   let promises = [];
   for (let collectionName of cvCollections) {
-    
     promises.push(extractCvs({ collectionName }));
-    
   }
   console.log(DATA)
   await Promise.all(promises);
   console.log(DATA)
-
   
   displayDataTable();
 }
@@ -63,7 +58,6 @@ const tableBodyHTML = document.querySelector("#tableBody");
 const heading = document.querySelector("#heading");
 
 function displayDataTable() {
-  alert(88)
   let rows = "";
   let i=0;
   console.log(DATA)
