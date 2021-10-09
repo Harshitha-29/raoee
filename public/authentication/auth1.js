@@ -59,7 +59,7 @@ const signupEmployee = async (e) => {
     //   console.log(user)
     //   user.sendEmailVerification().then(function() {
 
-        window.location="../employee/dashboard.html"
+        window.location="../employee/index.html"
     //   })
      
     // });
@@ -197,6 +197,27 @@ const createUserAuth = async (email, password, type) => {
 // login
 
 const signinFormHTML = document.querySelector('#signinForm');
+const forgotFormHTML = document.querySelector('#forgotForm');
+
+const forgot = (e)=>{
+  e.preventDefault();
+  const email = forgotFormHTML['email'].value;
+
+	auth.sendPasswordResetEmail(email).then(function() {
+		// Email sent.
+		document.getElementById("showMessage3").innerHTML="Reset Link Sent Successfully ✔"
+		setTimeout(function(){
+			document.getElementById("showMessage3").innerHTML=""
+		},3000)
+	
+		}).catch(function(error) {
+			document.getElementById("showMessage3").innerHTML="Email id is not registered ❌"
+			setTimeout(function(){
+				document.getElementById("showMessage3").innerHTML=""
+			},3000)
+		});
+}
+forgotFormHTML.addEventListener('submit', forgot);
 
 const login = (e) => {
   e.preventDefault();
@@ -211,9 +232,9 @@ const login = (e) => {
     //   window.location.href = `./../employee/user.html`;
     // }
     if(userType === 'admin') {
-      window.location.href = `./../admin/dashboard.html`;
+      window.location.href = `./../admin/index.html`;
     }else {
-      window.location.href = `./../dashboard.html`;
+      window.location.href = `./../index.html`;
     }
 
   }).catch(error => {
@@ -234,9 +255,9 @@ auth.onAuthStateChanged(async(user) => {
     console.log(user.displayName);
     if(user.displayName === 'admin') {
       console.log('hey');
-      window.location.href = `./../admin/dashboard.html`;
+      window.location.href = `./../admin/index.html`;
     }else {
-      window.location.href = `./../dashboard.html`;
+      window.location.href = `./../index.html`;
     }    
   } 
 });

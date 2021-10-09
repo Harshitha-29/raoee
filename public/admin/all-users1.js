@@ -1,7 +1,7 @@
 const db = firebase.firestore();
-
+window.localStorage.removeItem("user")
 const USER = undefined;
-checkIfAdmin()
+
 // //////////////////////////////
 
 let cvCollections = [];
@@ -21,10 +21,11 @@ async function extractCvs({ collectionName }) {
     try {
       return await db.collection(collectionName).onSnapshot(async (snaps) => {
         const docs = await snaps.docs;
-        await docs.map((doc) => {
+
+        return await docs.map((doc) => {
           const docData = doc.data();
           DATA.push(docData);
-         
+          console.log(DATA)
           return resolve();
         });
       });
@@ -40,33 +41,18 @@ async function extractCvs({ collectionName }) {
 const DATA = [];
 let reTry = 0;
 async function collectCvData() {
+  
   // await cvCollections.map(async(collectionName) => {
   let promises = [];
   for (let collectionName of cvCollections) {
+    
     promises.push(extractCvs({ collectionName }));
+    
   }
+  console.log(DATA)
   await Promise.all(promises);
+  console.log(DATA)
 
-  // for (let i = 0; i < cvCollections.length; i++) {
-  //   let collectionName = cvCollections[i];
-  //   console.log(collectionName);
-  //   try {
-  //     console.log(1);
-  //     await extractCvs({collectionName})
-
-  //   } catch (error) {
-  //     console.error(error);
-  //     if (reTry < 2) {
-  //       reTry++;
-  //       alert(`Retrying Attempt: ${reTry} Reason: ${error.message}`);
-  //     } else {
-  //       return {
-  //         status: false,
-  //         message: `Unable to fetch data. Reason: ${error.message}`,
-  //       };
-  //     }
-  //   }
-  // }
   
   displayDataTable();
 }
@@ -77,10 +63,10 @@ const tableBodyHTML = document.querySelector("#tableBody");
 const heading = document.querySelector("#heading");
 
 function displayDataTable() {
-
+  alert(88)
   let rows = "";
   let i=0;
-  
+  console.log(DATA)
   DATA.map((d) => {
     let allVerticals = "";
     d.verticals.map(v => {
@@ -109,7 +95,8 @@ function displayDataTable() {
         })
       })
     })
-   
+    console.log(DATA)
+    
     rows += `
     <tr>
       
@@ -125,7 +112,7 @@ function displayDataTable() {
       </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="`+d.url+`" target="_blank">View CV</a>
-            <a class="dropdown-item" href="#myModal`+d.fname+`+`+i+`" data-toggle="modal">View Profile</a>
+            <a class="dropdown-item" href="#!" onclick=openProfile("`+d.userId+`")>View Profile</a>
             
         </div>
         <div class="modal fade" id="myModal`+d.fname+`+`+i+`" tabindex="-1" role="dialog" aria-hidden="true">
@@ -156,12 +143,13 @@ function displayDataTable() {
 
     `;
     i++;
+    
   });
 
 
       
       tableBodyHTML.innerHTML = rows;
-     
+      
         $('#myTable').DataTable();
         $("#exporttable").click(function(e){
           var table = $("#myTable");
@@ -181,6 +169,7 @@ function displayDataTable() {
   
       // $("#footer").load("footer.html");
   
+      
       
 }
   
