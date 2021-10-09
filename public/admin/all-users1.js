@@ -79,7 +79,7 @@ const heading = document.querySelector("#heading");
 function displayDataTable() {
 
   let rows = "";
-
+  let i=0;
   
   DATA.map((d) => {
     let allVerticals = "";
@@ -109,29 +109,77 @@ function displayDataTable() {
         })
       })
     })
+   
     rows += `
     <tr>
-      <td class="bs-checkbox">
-        <input
-          data-index="0"
-          name="btSelectItem"
-          type="checkbox"
-        />
-      </td>
+      
       <td>${d.fname} ${d.lname}</td>
       <td>${allVerticals}</td>
       <td>${allSubVerticals}</td>
       <td>${allCategories}</td>
       <td>${allValues}</td>
+      <td>
+      <div class="dropdown">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Actions
+      </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="`+d.url+`" target="_blank">View CV</a>
+            <a class="dropdown-item" href="#myModal`+d.fname+`+`+i+`" data-toggle="modal">View Profile</a>
+            
+        </div>
+        <div class="modal fade" id="myModal`+d.fname+`+`+i+`" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-full" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4" id="result">
+                    <p>The grid inside the modal is responsive too..</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3"> Content </div>
+                    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+      </div>
+      </div>
+      </td>
     </tr>
+
     `;
+    i++;
   });
 
 
       
       tableBodyHTML.innerHTML = rows;
-      
-      $("#footer").load("footer.html");
+     
+        $('#myTable').DataTable();
+        $("#exporttable").click(function(e){
+          var table = $("#myTable");
+          if(table && table.length){
+          $(table).table2excel({
+          exclude: ".noExl",
+          name: "Excel Document Name",
+          filename: "LLLBBBootstrap" + new Date().toISOString().replace(/[\-\:\.]/g, "") + ".xls",
+          fileext: ".xls",
+          exclude_img: true,
+          exclude_links: true,
+          exclude_inputs: true,
+          preserveColors: false
+          });
+          }
+          });
+  
+      // $("#footer").load("footer.html");
   
       
 }

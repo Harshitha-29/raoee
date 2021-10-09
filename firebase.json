@@ -13,8 +13,8 @@
     ],
     "rewrites": [
       {
-        "source": "examples/dashboard.html",
-        "destination": "examples/dashboard.html"
+        "source": "employee/dashboard.html",
+        "destination": "employee/dashboard.html"
       }
     ]
   },
