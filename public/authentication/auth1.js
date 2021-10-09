@@ -197,6 +197,27 @@ const createUserAuth = async (email, password, type) => {
 // login
 
 const signinFormHTML = document.querySelector('#signinForm');
+const forgotFormHTML = document.querySelector('#forgotForm');
+
+const forgot = (e)=>{
+  e.preventDefault();
+  const email = forgotFormHTML['email'].value;
+
+	auth.sendPasswordResetEmail(email).then(function() {
+		// Email sent.
+		document.getElementById("showMessage3").innerHTML="Reset Link Sent Successfully ✔"
+		setTimeout(function(){
+			document.getElementById("showMessage3").innerHTML=""
+		},3000)
+	
+		}).catch(function(error) {
+			document.getElementById("showMessage3").innerHTML="Email id is not registered ❌"
+			setTimeout(function(){
+				document.getElementById("showMessage3").innerHTML=""
+			},3000)
+		});
+}
+forgotFormHTML.addEventListener('submit', forgot);
 
 const login = (e) => {
   e.preventDefault();
