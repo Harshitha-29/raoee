@@ -1476,7 +1476,7 @@ let retryLogout = 0;
 function logoutUser() {
   auth.signOut().then(() => {
     // Sign-out successful.
-    window.location.href="./../dashboard.html"
+    window.location.href="./../index.html"
   }).catch((error) => {
     console.error(error);
     if(retryLogout < 2) {

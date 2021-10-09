@@ -34,6 +34,7 @@
     <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
    
   <style>
     .choices__inner {
@@ -97,7 +98,7 @@
                 <div class="card-header" style="display: flex">
                   <h5 class="title">Add Slider Images</h5>
                 </div>
-
+               
                 <div class="card-body">
                   <form id="sliderForm">
                     <div class="row">
@@ -276,13 +277,16 @@
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
   <script>
     $(document).ready(function () {
       // Javascript method's body can be found in assets/js/demos.js
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
-      $("#footer").load("footer.html");
+      // $("#footer").load("footer.html");
       
     });
     function readURL(input) {
@@ -304,15 +308,15 @@
         });
       });
 
-      var input = document.getElementById("upload");
+      var inputs = document.getElementById("upload");
       var infoArea = document.getElementById("upload-label");
 
-      input.addEventListener("change", showFileName);
-      function showFileName(event) {
-        var input = event.srcElement;
-        var fileName = input.files[0].name;
-        infoArea.textContent = "File name: " + fileName;
-      }
+      // inputs.addEventListener("change", showFileName);
+      // function showFileName(event) {
+      //   var input = event.srcElement;
+      //   var fileName = input.files[0].name;
+      //   infoArea.textContent = "File name: " + fileName;
+      // }
     function removeImage() {
       $("#imageResult").attr("src", "");
       $("#removeBtn").hide();

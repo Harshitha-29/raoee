@@ -38,25 +38,14 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
       integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU"
       crossorigin="anonymous"
     />
-    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-
-    <!--  Google Maps Plugin    -->
-
-    <!-- Chart JS -->
-    <!-- <script src="../assets/js/plugins/chartjs.min.js"></script> -->
-    <!--  Notifications Plugin    -->
-    <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  
   </head>
   <style>
     .now-ui-icons{
@@ -78,7 +67,7 @@
                 <a href="http://www.creative-tim.com" class="simple-text logo-normal">
                   Employement Exchange
                 </a> -->
-            <a href="./../dashboard.html"><img
+            <a href="./../index.html"><img
               style="margin-right: auto; margin-left: auto; display: block"
               src="./../assets/img/RAOEE.png"
               alt=""
@@ -87,19 +76,19 @@
           <div class="sidebar-wrapper" id="sidebar-wrapper">
             <ul class="nav">
               <li class="">
-                <a href="./../dashboard.html">
+                <a href="./../index.html">
                   <i class="now-ui-icons design_app"></i>
                   <p>Home</p>
                 </a>
               </li>
               <li>
-                <a href="./../dashboard.html#about-us">
+                <a href="./../index.html#about-us">
                   <i class="now-ui-icons education_atom"></i>
                   <p>About Us</p>
                 </a>
               </li>
               <li>
-                <a href="./../dashboard.html#why-us">
+                <a href="./../index.html#why-us">
                   <i class="now-ui-icons location_map-big"></i>
                   <p>Why Us</p>
                 </a>
@@ -274,6 +263,7 @@
                   </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
+                  <!-- Login  -->
                   <div
                     class="tab-pane fade show"
                     id="login"
@@ -286,6 +276,7 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <input
+                              required
                               name="email"
                               type="email"
                               class="form-control"
@@ -295,6 +286,7 @@
                           </div>
                           <div class="form-group">
                             <input
+                              required
                               name="password"
                               type="password"
                               class="form-control"
@@ -302,6 +294,7 @@
                               required
                             />
                           </div>
+                          <p style="font-weight: 500;">Forgot Password? <a href="#!" onclick="showFp()" style="color: brown;">Click Here</a></p>
                         </div>
                         <div class="col-md-6">
                           <input
@@ -309,15 +302,20 @@
                             class="btnRegister"
                             value="Login"
                           />
+
                         </div>
+                        
                         <p id="showMessage" style="color: green;font-weight: 600;"></p>
                    
                       </div>
                       <p style="margin-left: 10%;font-weight: 600;">Dont have an account yet? <a href="" onclick="showSignup()" style="color: brown;">Click Here</a></p>
+                      
                     </form>
                
                   </div>
+                  <!-- Login tab Ends -->
 
+                  <!-- Register as employee -->
                   <div
                     class="tab-pane fade show active"
                     id="home"
@@ -330,6 +328,7 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <input
+                              required
                               type="text"
                               class="form-control"
                               placeholder="First Name *"
@@ -339,6 +338,7 @@
                           </div>
                           <div class="form-group">
                             <input
+                              required
                               type="email"
                               class="form-control"
                               placeholder="Your Email *"
@@ -348,6 +348,7 @@
                           </div>
                           <div class="form-group">
                             <input
+                              required
                               type="password"
                               class="form-control"
                               placeholder="Password *"
@@ -369,6 +370,7 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <input
+                              required
                               type="text"
                               class="form-control"
                               placeholder="Last Name *"
@@ -379,6 +381,7 @@
 
                           <div class="form-group">
                             <input
+                              required
                               type="text"
                               minlength="10"
                               maxlength="10"
@@ -391,6 +394,7 @@
                           </div>
                           <div class="form-group">
                             <input
+                              required
                               type="password"
                               class="form-control"
                               placeholder="Confirm Password *"
@@ -400,6 +404,7 @@
                           </div>
 
                           <input
+                            required
                             type="submit"
                             class="btnRegister"
                             value="Register"
@@ -411,6 +416,9 @@
                       <p style="margin-left: 10%;font-weight: 600;">Already have an account ? <a href="#?" onclick="showlogin()" style="color: brown;">Click Here</a></p>
                     </form>
                   </div>
+                  <!-- Register as employee Tab ends -->
+
+                  <!-- Register as Hirer -->
                   <div
                     class="tab-pane fade show"
                     id="profile"
@@ -423,6 +431,7 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <input
+                              required
                               type="text"
                               disabled
                               class="form-control"
@@ -522,6 +531,48 @@
                       </div>
                     </form>
                   </div>
+                  <!-- Register as Hirer Tab ends -->
+
+                  <!-- Forgot password   -->
+                  <div
+                     class="tab-pane fade show"
+                     id="reset-pass"
+                     role="tabpanel"
+                     aria-labelledby="login-tab"
+                   >
+                     <h3 class="register-heading">Reset Your Password</h3>
+                     <form id="forgotForm">
+                       <div class="row register-form">
+                         <div class="col-md-6">
+                           <div class="form-group">
+                             <input
+                              required
+                               name="email"
+                               type="email"
+                               class="form-control"
+                               placeholder="Registered Email Address *"
+                             />
+                           </div>
+                         </div>
+                         <div class="col-md-6">
+                           <input
+                             type="submit"
+                             style="margin-top: 0%!important;"
+                             class="btnRegister"
+                             value="Reset"
+                           />
+ 
+                         </div>
+                         
+                         <p id="showMessage3" style="color: green;font-weight: 600;"></p>
+                    
+                       </div>
+                       <p style="margin-left: 10%;font-weight: 600;">Back To Login <a href="#!" onclick="showlogin()" style="color: brown;">Click Here</a></p>
+                       
+                     </form>
+                
+                  </div>
+                   <!-- Forgot password tab Ends -->
 
                   <!-- <div
                     class="row mb-4 px-9 adjust-small"
@@ -561,6 +612,7 @@
                     ><br />
                   </div> -->
                 </div>
+                
               </div>
             </div>
           </div>
@@ -570,42 +622,61 @@
       </div>
     </div>
     <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery.min.js"></script>
-  </body>
-  <script>
-    $(document).ready(function () {
-      // Javascript method's body can be found in assets/js/demos.js
-   //   $("#navigation").load("../common/commonNavigation.html");
-     // $("#topbar").load("../common/topBar.html");
-      $("#popupModal").load("./../common/commonNavigation.html");
-      $("#footer").load("../common/footer.html");
-    });
 
-    function showlogin() {
-     
-      document.getElementById("home").style.display = "none";
-      document.getElementById("myTab").style.display = "none";
-      document.getElementById("login").style.display = "block";
-    }
-    function showSignup(){
-      document.getElementById("login").style.display = "none";
-      document.getElementById("myTab").style.display = "block";
-    }
-  </script>
-  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  </body>
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <!-- <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script> -->
+  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
 
 
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="./../assets/js/now-ui-dashboard.min.js" type="text/javascript"></script><
+  
 
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
+  <!--  Google Maps Plugin    -->
+
+  <!-- Chart JS -->
+  <!-- <script src="../assets/js/plugins/chartjs.min.js"></script> -->
+  <!--  Notifications Plugin    -->
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/firebase.js"></script>
   <script src="./auth1.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+   //   $("#navigation").load("../common/commonNavigation.html");
+     // $("#topbar").load("../common/topBar.html");
+      // $("#popupModal").load("./../common/commonNavigation.html");
+      $("#footer").load("../common/footer.html");
+    });
 
+    function showlogin() {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("myTab").style.display = "none";
+      document.getElementById("login").style.display = "block";
+      document.getElementById("reset-pass").style.display = "none";
+    }
+    function showSignup(){
+      document.getElementById("login").style.display = "none";
+      document.getElementById("myTab").style.display = "block";
+      document.getElementById("reset-pass").style.display = "none";
+    }
+    function showFp(){
+      document.getElementById("login").style.display = "none";
+      document.getElementById("myTab").style.display = "none";
+      document.getElementById("reset-pass").style.display = "block";
+    }
+  </script>
   </html>

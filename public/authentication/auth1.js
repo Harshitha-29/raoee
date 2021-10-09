@@ -132,7 +132,6 @@ const signupEmployer = async (e) => {
   alert("Employer Added");
   AUTH_FLAG = true;
   window.location = "./../dashboard.html";
-
 };
 
 employerFormHTML.addEventListener("submit", signupEmployer);
@@ -215,12 +214,50 @@ const createUserAuth = async (email, password, type) => {
 // login
 
 const signinFormHTML = document.querySelector("#signinForm");
+const forgotFormHTML = document.querySelector("#forgotForm");
+
+const forgot = (e) => {
+  e.preventDefault();
+  const email = forgotFormHTML["email"].value;
+
+  auth
+    .sendPasswordResetEmail(email)
+    .then(function () {
+      // Email sent.
+      document.getElementById("showMessage3").innerHTML =
+        "Reset Link Sent Successfully ✔";
+      setTimeout(function () {
+        document.getElementById("showMessage3").innerHTML = "";
+      }, 3000);
+    })
+    .catch(function (error) {
+      document.getElementById("showMessage3").innerHTML =
+        "Email id is not registered ❌";
+      setTimeout(function () {
+        document.getElementById("showMessage3").innerHTML = "";
+      }, 3000);
+    });
+};
+
+forgotFormHTML.addEventListener("submit", forgot);
 
 const login = (e) => {
   e.preventDefault();
   document.getElementById("showMessage").innerHTML = "Verifying Details ... ";
   const email = signinFormHTML["email"].value;
   const password = signinFormHTML["password"].value;
+
+  // auth.signInWithEmailAndPassword(email, password).then(user => {
+  //   let userType = user.user.displayName;
+  //   console.log(userType);
+  //   // if(userType === 'employee') {
+  //   //   window.location.href = `./../employee/user.html`;
+  //   // }
+  //   if(userType === 'admin') {
+  //     window.location.href = `./../admin/index.html`;
+  //   }else {
+  //     window.location.href = `./../index.html`;
+  //   }
 
   auth
     .signInWithEmailAndPassword(email, password)
@@ -257,9 +294,9 @@ auth.onAuthStateChanged(async (user) => {
   if (user && AUTH_FLAG) {
     console.log(user.displayName);
     if (user.displayName === "admin") {
-      window.location.href = `./../admin/dashboard.html`;
+      window.location.href = `./../admin/index.html`;
     } else {
-      window.location.href = `./../dashboard.html`;
+      window.location.href = `./../index.html`;
     }
   }
 });

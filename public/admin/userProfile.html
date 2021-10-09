@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="../assets/img/apple-icon.png"
+    />
+    <link id="favicon" rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>RAOEE</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+      integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
+    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+  <style>
+    .choices__inner {
+      border-radius: 20px;
+      background-color: transparent;
+      height: 10px !important;
+      overflow-y: scroll;
+    }
+    .ck.ck-editor__editable_inline > :last-child {
+      height: 18em;
+    }
+
+    #upload {
+      opacity: 0;
+    }
+
+    #upload-label {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+    }
+
+    .image-area {
+      border: 2px dashed black;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .image-area::before {
+      content: "Uploaded image result";
+      color: black;
+      font-weight: bold;
+      text-transform: uppercase;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.8rem;
+      z-index: 1;
+    }
+
+    .image-area img {
+      z-index: 2;
+      position: relative;
+    }
+  </style>
+
+  <body class="user-profile">
+    <div class="wrapper">
+      <div id="navigation"></div>
+      <div class="main-panel" id="main-panel">
+        <!-- Navbar -->
+        <div id="topbar"></div>
+        <!-- End Navbar -->
+        <div class="panel-header panel-header-sm"></div>
+        <div class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">Employee Profile</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="container rounded bg-white mt-5 mb-5">
+                        <div class="row">
+                            <div class="col-md-3 border-right">
+                                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" height="150px" style="object-fit: cover;" id="eimg" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span id="ename2" class="font-weight-bold">Loading..</span><span id="eemail" class="text-black-50">Loading..</span><span> </span></div>
+                            </div>
+                            <div class="col-md-5 border-right">
+                                <div class="p-3 py-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4 class="text-right">Profile of <span id="ename"></span></h4>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6"><label class="labels">Name</label><input disabled type="text" id="fname" class="form-control" placeholder="first name" value=""></div>
+                                        <div class="col-md-6"><label class="labels">Surname</label><input disabled type="text" id="lname" class="form-control" value="" placeholder="surname"></div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12"><label class="labels">Mobile Number</label><input disabled type="text" id="phno" class="form-control" placeholder="enter phone number" value=""></div>
+                                        <div class="col-md-12"><label class="labels">Address Line 1</label><input disabled type="text" class="form-control" id="addr" placeholder="" value=""></div>
+                                        <div class="col-md-12"><label class="labels">City</label><input disabled type="text" class="form-control" id="city" placeholder="" value=""></div>
+                                        <div class="col-md-12"><label class="labels">Postcode</label><input disabled type="text" class="form-control" id="post" placeholder="enter postcode" value=""></div>
+
+                                        <div class="col-md-12"><label class="labels">Email ID</label><input disabled type="text" class="form-control" id="eemail2" placeholder="enter email id" value=""></div>
+                
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-6"><label class="labels">Country</label><input disabled type="text" id="country" class="form-control" placeholder="country" value=""></div>
+                                        <div class="col-md-6"><label class="labels">State/Region</label><input disabled type="text" id="state" class="form-control" value="" placeholder="state"></div>
+                                    </div>
+                                    <div class="mt-5 text-center"><button class="btn  profile-button" onclick=showCv() style="color:white;background-color: rgb(146, 44, 141);" type="button">View Resume/CV</button></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 py-2">
+                                    <div class="d-flex justify-content-between align-items-center experience" ><span>Selected Verticals</span></div><br>
+                                        <div id="selectedVerticals">
+                                            
+                                        </div>
+                                </div>
+                                <div class="p-3 py-2">
+                                    <div class="d-flex justify-content-between align-items-center experience"><span>Selected Sub-Verticals</span></div><br>
+                                    <div id="selectedSubVerticals">
+                                            
+                                    </div>
+                                </div>
+
+                                <div class="p-3 py-2">
+                                    <div class="d-flex justify-content-between align-items-center experience"><span>Selected Expertise</span></div><br>
+                                    <span class="border px-3 p-1 add-experience">&nbsp;Design</span>
+                                    <span class="border px-3 p-1 add-experience">&nbsp;Installation</span>
+                                </div>
+                                <div class="p-3 py-2">
+                                    <div class="d-flex justify-content-between align-items-center experience"><span>Experience</span></div><br>
+                                    <span class="border px-3 p-1 add-experience">&nbsp;Fresher</span>
+                                    <span class="border px-3 p-1 add-experience">&nbsp;Trained</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- footer -->
+        <div id="footer"></div>
+      </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+  </body>
+  <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+  <script src="./../assets/firebase.js"></script>
+  <script>
+    const db = firebase.firestore();
+    $(document).ready(async function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      $("#navigation").load("commonNavigation.html");
+      $("#topbar").load("topBar.html");
+      $("#footer").load("footer.html");
+
+      let userType="employee"
+        let uid = window.localStorage.getItem("user")
+        if (userType === "employee") {
+        userType = `${userType}s`;
+        }
+        USER_REF = await db.collection(userType).doc(uid);
+        const refDoc = await USER_REF.get();
+        USER = await refDoc.data();
+        console.log(USER);
+        document.title = USER.fname
+        $("#favicon").attr("href",USER.basicInfo.imgUrl);
+        $("#ename").text(USER.fname)
+        $("#ename2").text(USER.fname)
+        $("#eemail").text(USER.email)
+        $("#eemail2").attr('value',USER.email)
+        $('#eimg').attr('src',USER.basicInfo.imgUrl)
+        $("#fname").attr('value',USER.fname)
+        $("#lname").attr('value',USER.lname)
+        $("#phno").attr('value',USER.phone)
+        $("#addr").attr('value',USER.basicInfo.address)
+        $("#city").attr('value',USER.basicInfo.city)
+        $("#post").attr('value',USER.basicInfo.postalCode)
+        $("#country").attr('value',USER.basicInfo.country)
+        $("#state").attr('value',USER.basicInfo.state)
+        console.log(USER.cv.verticals)
+        for(let i  in USER.cv.verticals ){
+            console.log(USER.cv.verticals[i].name)
+            document.getElementById("selectedVerticals").innerHTML+=`
+            <span class="border px-3 p-1 " style="background-color:beige" add-experience">&nbsp;`+USER.cv.verticals[i].name+`</span>
+                                   
+            `
+        }
+        for(let i  in USER.cv.subVerticals ){
+       
+            document.getElementById("selectedSubVerticals").innerHTML+=`
+            <span class="border px-3 p-1 add-experience" style="background-color:ivory">&nbsp;`+USER.cv.subVerticals[i].ver+`/`+USER.cv.subVerticals[i].sver+`</span>
+                                   
+            `
+        }
+        
+    });
+    function showCv(){
+       window.open(USER.cv.url,"_blank")
+    }
+
+
+  </script>
+
+
+ 
+  
+</html>

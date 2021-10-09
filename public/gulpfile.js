@@ -27,7 +27,7 @@
 // });
 
 // gulp.task('open', function() {
-//   gulp.src('examples/dashboard.html')
+//   gulp.src('examples/index.html')
 //     .pipe(open());
 // });
 

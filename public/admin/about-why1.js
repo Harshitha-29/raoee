@@ -1,7 +1,7 @@
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-checkIfAdmin()
+
 
 let ABOUT_EDITOR;
 let WHY_EDITOR;
