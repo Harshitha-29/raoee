@@ -21,7 +21,8 @@ async function extractCvs({ collectionName }) {
     try {
       return await db.collection(collectionName).onSnapshot(async (snaps) => {
         const docs = await snaps.docs;
-        await docs.map((doc) => {
+
+        return await docs.map((doc) => {
           const docData = doc.data();
           DATA.push(docData);
           console.log(DATA)
@@ -40,36 +41,18 @@ async function extractCvs({ collectionName }) {
 const DATA = [];
 let reTry = 0;
 async function collectCvData() {
+  
   // await cvCollections.map(async(collectionName) => {
   let promises = [];
   for (let collectionName of cvCollections) {
     
     promises.push(extractCvs({ collectionName }));
-   
+    
   }
- 
+  console.log(DATA)
   await Promise.all(promises);
- 
-  // for (let i = 0; i < cvCollections.length; i++) {
-  //   let collectionName = cvCollections[i];
-  //   console.log(collectionName);
-  //   try {
-  //     console.log(1);
-  //     await extractCvs({collectionName})
+  console.log(DATA)
 
-  //   } catch (error) {
-  //     console.error(error);
-  //     if (reTry < 2) {
-  //       reTry++;
-  //       alert(`Retrying Attempt: ${reTry} Reason: ${error.message}`);
-  //     } else {
-  //       return {
-  //         status: false,
-  //         message: `Unable to fetch data. Reason: ${error.message}`,
-  //       };
-  //     }
-  //   }
-  // }
   
   displayDataTable();
 }
