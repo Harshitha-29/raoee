@@ -59,7 +59,7 @@ const signupEmployee = async (e) => {
     //   console.log(user)
     //   user.sendEmailVerification().then(function() {
 
-        window.location="../employee/dashboard.html"
+        window.location="../employee/index.html"
     //   })
      
     // });
@@ -232,9 +232,9 @@ const login = (e) => {
     //   window.location.href = `./../employee/user.html`;
     // }
     if(userType === 'admin') {
-      window.location.href = `./../admin/dashboard.html`;
+      window.location.href = `./../admin/index.html`;
     }else {
-      window.location.href = `./../dashboard.html`;
+      window.location.href = `./../index.html`;
     }
 
   }).catch(error => {
@@ -255,9 +255,9 @@ auth.onAuthStateChanged(async(user) => {
     console.log(user.displayName);
     if(user.displayName === 'admin') {
       console.log('hey');
-      window.location.href = `./../admin/dashboard.html`;
+      window.location.href = `./../admin/index.html`;
     }else {
-      window.location.href = `./../dashboard.html`;
+      window.location.href = `./../index.html`;
     }    
   } 
 });
