@@ -350,7 +350,7 @@ const updateCv = async (e) => {
   data.userId = USER.uid;
   data.fname = USER.fname;
   data.lname = USER.lname;
-
+  console.log(USER);
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
   if (!resDB.status) {
@@ -508,7 +508,7 @@ const uploadCVToDb = async ({ data }) => {
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-
+  console.log(data);
   try {
     const ref = await db.collection(collectionName).add({ ...data });
     return {

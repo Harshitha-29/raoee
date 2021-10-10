@@ -86,6 +86,7 @@ const updateBasicInfo = async () => {
     phone,
     email,
     userType,
+    uid: USER_CREATED_ID,
     basicInfo: {
       address,
       city,
