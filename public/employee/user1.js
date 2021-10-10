@@ -214,7 +214,7 @@ const updateBasicInfo = async (e) => {
     nowuiDashboard.showNotification('top','center',"Data updated Successfully","primary");
     getUserDetails({ uid: USER_ID, userType: USER.userType });
   } catch (error) {
-    console.error(errpr);
+    console.error(error);
     alert(`Try again. Reason: ${error.message}`);
   }
 };

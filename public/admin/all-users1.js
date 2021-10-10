@@ -1,5 +1,5 @@
 const db = firebase.firestore();
-window.localStorage.removeItem("user")
+window.localStorage.removeItem("user");
 const USER = undefined;
 
 // //////////////////////////////
@@ -17,22 +17,22 @@ db.collection("miscellaneous")
 // ////////////////////////////////////
 
 async function extractCvs({ collectionName }) {
-  return new Promise(async(resolve, reject) => {
-    try {
-      return await db.collection(collectionName).onSnapshot(async (snaps) => {
+  return new Promise(async (resolve, reject) => {
+    return await db
+      .collection(collectionName)
+      .get()
+      .then(async (snaps) => {
         const docs = await snaps.docs;
+        if (docs.length === 0) {
+          return resolve();
+        }
 
         return await docs.map((doc) => {
           const docData = doc.data();
           DATA.push(docData);
-          console.log(DATA)
           return resolve();
         });
       });
-    } catch (error) {
-      console.error(error);
-      return reject();
-    }
   });
 }
 
@@ -41,20 +41,17 @@ async function extractCvs({ collectionName }) {
 const DATA = [];
 let reTry = 0;
 async function collectCvData() {
-  
-  // await cvCollections.map(async(collectionName) => {
   let promises = [];
   for (let collectionName of cvCollections) {
-    
     promises.push(extractCvs({ collectionName }));
-    
   }
-  console.log(DATA)
-  await Promise.all(promises);
-  console.log(DATA)
-
-  
-  displayDataTable();
+  Promise.all(promises)
+    .then(() => {
+      displayDataTable();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
 }
 
 // ////////////////////////////////////
@@ -63,43 +60,39 @@ const tableBodyHTML = document.querySelector("#tableBody");
 const heading = document.querySelector("#heading");
 
 function displayDataTable() {
-  alert(88)
   let rows = "";
-  let i=0;
-  console.log(DATA)
+  let i = 0;
   DATA.map((d) => {
     let allVerticals = "";
-    d.verticals.map(v => {
-      allVerticals += `, ${v.name}`
-    })
+    d.verticals.map((v) => {
+      allVerticals += `, ${v.name}`;
+    });
     allVerticals = allVerticals.substring(2);
 
     let allSubVerticals = "";
-    d.subVerticals.map(v => {
+    d.subVerticals.map((v) => {
       // v.sver.map(sv => {
       //   allSubVerticals += `, ${sv}`
       // })
-      allSubVerticals += v.sver.join(', ')
-    })
-  
+      allSubVerticals += v.sver.join(", ");
+    });
+
     // allSubVerticals = allSubVerticals.substring(1, allSubVerticals.length)
-  
+
     let allCategories = "";
     let allValues = "";
-  
-    d.expertise.map(v => {
-      v.svers.map(sv => {
-        sv.expertise.map(e => {
-          allCategories += `${e.category}, `
+
+    d.expertise.map((v) => {
+      v.svers.map((sv) => {
+        sv.expertise.map((e) => {
+          allCategories += `${e.category}, `;
           allValues += `${e.value}, `;
-        })
-      })
-    })
-    console.log(DATA)
-    
-    rows += `
-    <tr>
-      
+        });
+      });
+    });
+
+    rows +=
+    `<tr>
       <td>${d.fname} ${d.lname}</td>
       <td>${allVerticals}</td>
       <td>${allSubVerticals}</td>
@@ -111,11 +104,19 @@ function displayDataTable() {
           Actions
       </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="`+d.url+`" target="_blank">View CV</a>
-            <a class="dropdown-item" href="#!" onclick=openProfile("`+d.userId+`")>View Profile</a>
+            <a class="dropdown-item" href="` +
+      d.url +
+      `" target="_blank">View CV</a>
+            <a class="dropdown-item" href="#!" onclick=openProfile("` +
+      d.userId +
+      `")>View Profile</a>
             
         </div>
-        <div class="modal fade" id="myModal`+d.fname+`+`+i+`" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="myModal` +
+      d.fname +
+      `+` +
+      i +
+      `" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-full" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -139,47 +140,31 @@ function displayDataTable() {
       </div>
       </div>
       </td>
-    </tr>
-
-    `;
+    </tr>`;
     i++;
-    
   });
 
+  tableBodyHTML.innerHTML = rows;
 
-      
-      tableBodyHTML.innerHTML = rows;
-      
-        $('#myTable').DataTable();
-        $("#exporttable").click(function(e){
-          var table = $("#myTable");
-          if(table && table.length){
-          $(table).table2excel({
-          exclude: ".noExl",
-          name: "Excel Document Name",
-          filename: "LLLBBBootstrap" + new Date().toISOString().replace(/[\-\:\.]/g, "") + ".xls",
-          fileext: ".xls",
-          exclude_img: true,
-          exclude_links: true,
-          exclude_inputs: true,
-          preserveColors: false
-          });
-          }
-          });
-  
-      // $("#footer").load("footer.html");
-  
-      
-      
+  $("#myTable").DataTable();
+  $("#exporttable").click(function (e) {
+    var table = $("#myTable");
+    if (table && table.length) {
+      $(table).table2excel({
+        exclude: ".noExl",
+        name: "Excel Document Name",
+        filename:
+          "all-users" +
+          new Date().toISOString().replace(/[\-\:\.]/g, "") +
+          ".xls",
+        fileext: ".xls",
+        exclude_img: true,
+        exclude_links: true,
+        exclude_inputs: true,
+        preserveColors: false,
+      });
+    }
+  });
+
+  // $("#footer").load("footer.html");
 }
-  
-
-
-
-
-      
-    
-    
-   
-
-

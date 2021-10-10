@@ -281,6 +281,7 @@
                               type="email"
                               class="form-control"
                               placeholder="Your Email *"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -290,6 +291,7 @@
                               type="password"
                               class="form-control"
                               placeholder="Password *"
+                              required
                             />
                           </div>
                           <p style="font-weight: 500;">Forgot Password? <a href="#!" onclick="showFp()" style="color: brown;">Click Here</a></p>
@@ -331,6 +333,7 @@
                               class="form-control"
                               placeholder="First Name *"
                               name="fname"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -340,6 +343,7 @@
                               class="form-control"
                               placeholder="Your Email *"
                               name="email"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -349,10 +353,11 @@
                               class="form-control"
                               placeholder="Password *"
                               name="password"
+                              required
                             />
                           </div>
                           <div class="form-group">
-                            <select name="gender" class="form-control" required>
+                            <select required name="gender" class="form-control">
                               <option class="hidden" selected disabled>
                                 Gender
                               </option>
@@ -370,6 +375,7 @@
                               class="form-control"
                               placeholder="Last Name *"
                               name="lname"
+                              required
                             />
                           </div>
 
@@ -382,6 +388,8 @@
                               class="form-control"
                               placeholder="Your Phone *"
                               name="phone"
+                              required
+                              onkeypress="return AllowOnlyNumbers(event);"
                             />
                           </div>
                           <div class="form-group">
@@ -391,6 +399,7 @@
                               class="form-control"
                               placeholder="Confirm Password *"
                               name="cpassword"
+                              required
                             />
                           </div>
 
@@ -428,6 +437,7 @@
                               class="form-control"
                               placeholder="First Name *"
                               name="fname"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -437,6 +447,7 @@
                               class="form-control"
                               placeholder="Last Name *"
                               name="lname"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -446,6 +457,7 @@
                               class="form-control"
                               placeholder="Email *"
                               name="email"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -457,6 +469,8 @@
                               class="form-control"
                               placeholder="Phone *"
                               name="phone"
+                              required
+                              pattern="[0-9]"
                             />
                           </div>
                         </div>
@@ -468,6 +482,7 @@
                               class="form-control"
                               placeholder="Password *"
                               name="password"
+                              required
                             />
                           </div>
                           <div class="form-group">
@@ -477,12 +492,13 @@
                               class="form-control"
                               placeholder="Confirm Password *"
                               name="cpassword"
+                              required
                             />
                           </div>
                           <div class="form-group">
                             <select name="question" class="form-control" disabled>
                               <option class="hidden" selected disabled>
-                                Please select your Sequrity Question
+                                Please select your Security Question
                               </option>
                               <option value="birthday">
                                 What is your Birthdate?
@@ -502,6 +518,7 @@
                               class="form-control"
                               placeholder="`Answer *"
                               name="answer"
+                              required
                             />
                           </div>
                           <input
