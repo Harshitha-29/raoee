@@ -297,7 +297,7 @@ let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
-
+  document.getElementById("progressBar2").style.display="block"
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -395,8 +395,8 @@ const updateCv = async (e) => {
   }
 
 
-  nowuiDashboard.showNotification('top','center',"Record Added Successfully","primary");
-  
+  nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
+  document.getElementById("progressBar2").style.display="none"
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
@@ -1441,7 +1441,7 @@ const getUrlOfImg = async ({ ref }) => {
 
 async function uploadImgToDB() {
   const data = USER;
-
+  document.getElementById("progressBar").style.display="block"
   if (USER.basicInfo.imgUrl) {
     const resDelete = await deleteStorage({
       ref: `${USER.userType}s/${USER_ID}`,
@@ -1469,7 +1469,8 @@ async function uploadImgToDB() {
   await USER_REF.update(data);
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   
-  nowuiDashboard.showNotification('top','center',"Data Updated Successfully","primary");
+  nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
+  document.getElementById("progressBar").style.display="none"
 }
 
 // /////////////////////////////////////////////////////////
