@@ -289,20 +289,22 @@
                             </div>
                             <div class="col-md-5">
                               <div class="treeview js-treeview">
-                                <ul>
-                                  <li>
+                                <ul id="tree">
+                                  <!-- <li>
+
                                     <div class="treeview__level" data-level="A">
                                       <span class="level-title">Signalling</span>
                                      
                                     </div>
-                                    <ul>
+
+                                    <ul id="sig">
                               
                                       <li>
                                         <div class="treeview__level" data-level="B">
                                           <span class="level-title">Design</span>
                                          
                                         </div>
-                                        <ul>
+                                        <ul id="sig_exp">
                               
                                           <li>
                                             <div class="treeview__level" data-level="C">
@@ -335,6 +337,7 @@
                                             <ul>
                                             </ul>
                                           </li>
+
                                           <li>
                                             <div class="treeview__level" data-level="C">
                                               <span class="level-title">Anot Skills</span>
@@ -412,10 +415,11 @@
                                          
                                         </ul>
                                       </li>
-                                    </ul>
-                                  </li>
 
-                                  <li>
+                                    </ul>
+                                  </li> -->
+
+                                  <!-- <li>
                                     <div class="treeview__level" data-level="A">
                                       <span class="level-title">Telecom</span>
                                      
@@ -538,7 +542,7 @@
                                         </ul>
                                       </li>
                                     </ul>
-                                  </li>
+                                  </li> -->
                                 </ul>
 
                                 
@@ -645,13 +649,84 @@
             <span class="border px-3 p-1 " style="background-color:beige" add-experience">&nbsp;`+USER.cv.verticals[i].name+`</span>
                                    
             `
+            document.getElementById("tree").innerHTML+=`
+            
+            <li>
+
+                <div class="treeview__level" data-level="A">
+                  <span class="level-title">`+USER.cv.verticals[i].name+`</span>
+                
+                </div>
+
+                <ul id="`+USER.cv.verticals[i].id+`">
+
+                  
+
+                 
+
+                </ul>
+            </li>                
+            `
+            for(let j in USER.cv.subVerticals ){
+              console.log(i)
+              console.log(USER.cv.subVerticals[i].sver)
+              for(let m in USER.cv.subVerticals[i].sver)
+              if(USER.cv.subVerticals[i].sver){
+                document.getElementById(USER.cv.verticals[i].id).innerHTML+=`
+              <li>
+                    <div class="treeview__level" data-level="B">
+                      <span class="level-title">`+USER.cv.subVerticals[i].sver[m]+`</span>
+                    
+                    </div>
+                    <ul id="`+USER.cv.verticals[i].id+`+`+USER.cv.subVerticals[i].ver+`">
+
+                    </ul>
+              </li>
+              `
+              }
+              for(let k  in USER.cv.expertise ){
+              
+                if(USER.cv.expertise[i].svers[j].expertise[k]){
+                  for(let n in  USER.cv.expertise[i].svers[j].expertise[k]){
+                    console.log(USER.cv.expertise[i].svers[j].expertise[k])
+                    console.log(USER.cv.expertise[i].svers[j].expertise[k][n])
+                    document.getElementById(USER.cv.verticals[i].id+"+"+USER.cv.subVerticals[i].ver).innerHTML+=`
+                      <li>
+                            <div class="treeview__level" data-level="C">
+                              <span class="level-title">`+USER.cv.expertise[i].svers[j].expertise[k][n]+`</span>
+                              <div class="treeview__level-btns">
+                                <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
+                                <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
+                                <div class="btn btn-default btn-sm level-same"><span>Fresher</span></div>
+                                <div class="btn btn-default btn-sm level-sub"><span>Trained</span></div>
+
+                                <div class="btn btn-default btn-sm level-sub"><span>Fresher & Trained</span></div>
+                                
+                              </div>
+                            </div>
+                            
+                          </li>
+
+                          
+
+                     
+                  `
+                  }
+
+                 
+                }
+            }
+              
+            }
+            
         }
         for(let i  in USER.cv.subVerticals ){
-       
+          console.log(USER.cv.subVerticals[i])
             document.getElementById("selectedSubVerticals").innerHTML+=`
             <span class="border px-3 p-1 add-experience" style="background-color:ivory">&nbsp;`+USER.cv.subVerticals[i].ver+`/`+USER.cv.subVerticals[i].sver+`</span>
                                    
             `
+           
         }
         
     });
