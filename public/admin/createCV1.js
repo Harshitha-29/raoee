@@ -196,6 +196,8 @@ function getUserPreferences() {
         value,
       });
     }
+
+    console.log(cvVerticals);
   });
 
   const vv = [];
@@ -251,6 +253,7 @@ const updateCv = async (e) => {
   const userType = 'employee';
 
   const { verticals, subVerticals, expertise } = getUserPreferences();
+
 
   let resStorage, resURL;
   let data = {};
@@ -319,6 +322,9 @@ const updateCv = async (e) => {
     "Record Added Successfully",
     "primary"
   );
+  employeeFormHTML.reset();
+  FILE_NAME = false;
+  FILE = false;
 
   // setTimeout(function () {
   //   location.reload();
