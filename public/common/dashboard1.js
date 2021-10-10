@@ -62,7 +62,9 @@ function displayAuthSigns() {
     `;
     topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
     if(USER.basicInfoAdded) {
-      topbarImgHTML.src = USER.basicInfo.imgUrl;
+      if(USER.basicInfo.url) {
+        topbarImgHTML.src = USER.basicInfo.imgUrl;
+      }
     }
 
     navLoginHTML.innerHTML = `
