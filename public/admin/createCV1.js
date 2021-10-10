@@ -2,231 +2,183 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
-// ////////////////////////////////////////////
-let USER = false;
-let USER_REF = false;
-let USER_ID = false;
-let USER_RAW = false;
+let RAW_USER = false;
+let USER_CREATED_REF;
+let USER_CREATED_ID;
+let FORM_DATA = false;
 
-auth.onAuthStateChanged(async(user) => {
-  if (user) {
-    USER_RAW = user;
-    USER_ID = user.uid;
-    if (user.emailVerified == false) {
-      $("#exampleModalCenter").modal({
-        backdrop: "static",
-        keyboard: false,
-        show: true,
-      });
-      document.getElementById("emailID").innerHTML = user.email;
+// /////////////////////////////////////////////////////////
+
+async function onStateChange() {
+  return await auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log(user);
+      if (user.displayName === "admin") {
+        RAW_USER = user;
+        console.log(RAW_USER);
+      }
     }
-    getUserDetails({ uid: user.uid, userType: user.displayName });
-  } else {
-    console.log('HEY');
-    return (window.location.href = `./../authentication/auth.html`);
-  }
-});
-
-const topbarUsernameHTML = document.querySelector('#topbar-username');
-const topbarImgHTML = document.querySelector('#topbar-img');
-
-function displayAuthSigns() {
-  topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
-  if(USER.basicInfoAdded) {
-    topbarImgHTML.src = USER.basicInfo.imgUrl;
-  }
-}
-
-function sendEmail() {
-  USER_RAW.sendEmailVerification().then(function () {
-    nowuiDashboard.showNotification(
-      "top",
-      "center",
-      "Email Sent Successfully",
-      "primary"
-    );
   });
 }
 
-// ////////////////////////////////////////////
-let retryUser = 0;
-async function getUserDetails({ uid, userType }) {
-  console.log('hi');
-  if (userType === "employee") {
-    userType = `${userType}s`;
-  }
-  try {
-    USER_REF = await db.collection(userType).doc(uid);
-    const refDoc = await USER_REF.get();
-    USER = await refDoc.data();
-    console.log(USER);
-    displayUserDetails();
-    displayAuthSigns()
-  } catch (error) {
-    console.error(error);
-    if (retryUser < 2) {
-      retryUser++;
-      alert(`Retrying.  Attempt: ${retryUser}`);
-      getUserDetails({ uid, userType });
-    } else {
-      return {
-        status: false,
-        message: `Canoy Fetch. Reson: ${error.message}`,
-      };
-    }
-  }
-}
+const pwd = window.localStorage.getItem("key_id");
 
-// /////////////////////////////////////////////
-const editCvBtnHTML = document.querySelector("#editCvBtn");
-const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
-const cvEditHolderHTML = document.querySelector("#cvEditHolder");
-
-const toggleCvDisplay = (e) => {
-  if (e?.target?.checked) {
-    cvEditHolderHTML.style.display = "block";
-    cvInfoHolderHTML.style.display = "none";
-  } else {
-    cvEditHolderHTML.style.display = "none";
-    cvInfoHolderHTML.style.display = "block";
-  }
-};
-
-editCvBtnHTML.addEventListener("change", toggleCvDisplay);
-
-// ////////////////////////////////////////
-const userBasicFormHTML = document.querySelector("#userBasicForm");
-const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
-const updateBasicInfoBtnHTML = document.querySelector("#updateBasicInfoBtn");
-
-const toggleBasicInfoDisplay = (e) => {
-  if (e?.target?.checked) {
-    userBasicFormHTML["fname"].readOnly = false;
-    userBasicFormHTML["lname"].readOnly = false;
-    userBasicFormHTML["phone"].readOnly = false;
-    userBasicFormHTML["address"].readOnly = false;
-    userBasicFormHTML["city"].readOnly = false;
-    userBasicFormHTML["state"].readOnly = false;
-    userBasicFormHTML["country"].readOnly = false;
-    userBasicFormHTML["postal-code"].readOnly = false;
-    userBasicFormHTML["about-me"].readOnly = false;
-    updateBasicInfoBtnHTML.style.display = "block";
-  } else {
-    userBasicFormHTML["fname"].readOnly = true;
-    userBasicFormHTML["lname"].readOnly = true;
-    userBasicFormHTML["phone"].readOnly = true;
-    userBasicFormHTML["address"].readOnly = true;
-    userBasicFormHTML["city"].readOnly = true;
-    userBasicFormHTML["state"].readOnly = true;
-    userBasicFormHTML["country"].readOnly = true;
-    userBasicFormHTML["postal-code"].readOnly = true;
-    userBasicFormHTML["about-me"].readOnly = true;
-    updateBasicInfoBtnHTML.style.display = "none";
-  }
-};
-
-editBasicInfoBtnHTML.addEventListener("change", toggleBasicInfoDisplay);
-
-// ////////////////////////////////////////
-
-const fullNameProfileHTML = document.querySelector("#fullNameProfile");
-const aboutMeProfileHTML = document.querySelector("#aboutMeProfile");
-const blahHTML = document.querySelector("#blah");
-
-function displayUserDetails() {
-  userBasicFormHTML["fname"].value = USER.fname;
-  userBasicFormHTML["lname"].value = USER.lname;
-  userBasicFormHTML["email"].value = USER.email;
-  userBasicFormHTML["phone"].value = USER.phone;
-  fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
-  if (USER.basicInfoAdded) {
-    aboutMeProfileHTML.innerText = USER.basicInfo.aboutMe;
-    userBasicFormHTML["address"].value = USER.basicInfo.address;
-    userBasicFormHTML["city"].value = USER.basicInfo.city;
-    userBasicFormHTML["state"].value = USER.basicInfo.state;
-    userBasicFormHTML["country"].value = USER.basicInfo.country;
-    userBasicFormHTML["postal-code"].value = USER.basicInfo.postalCode;
-    userBasicFormHTML["about-me"].value = USER.basicInfo.aboutMe;
-    blahHTML.src = USER?.basicInfo?.imgUrl || `../assets/img/userProfile.png`;
-  }
-
-  if (!USER.cvAdded) {
-    editCvBtnHTML.checked = true;
-    cvEditHolderHTML.style.display = "block";
-    cvInfoHolderHTML.style.display = "none";
-    editCvBtnHTML.disabled = true;
-  }
+if (!pwd) {
+  alert("Please login again to add emploee");
+  window.location.href = `./../authentication/auth.html`;
 }
 
 // /////////////////////////////////////////////////////////
 
-const updateBasicInfo = async (e) => {
-  e.preventDefault();
-  const fname = userBasicFormHTML["fname"].value;
-  const lname = userBasicFormHTML["lname"].value;
-  const phone = userBasicFormHTML["phone"].value;
+const employeeFormHTML = document.querySelector("#employeeForm");
 
-  const address = userBasicFormHTML["address"].value;
-  const city = userBasicFormHTML["city"].value;
-  const state = userBasicFormHTML["state"].value;
-  const country = userBasicFormHTML["country"].value;
-  const postalCode = userBasicFormHTML["postal-code"].value;
-  const aboutMe = userBasicFormHTML["about-me"].value;
+const updateBasicInfo = async () => {
 
-  const data = {
-    ...USER,
+  const email = employeeFormHTML["email"].value;
+
+  const userType = "employee";
+  let createRes;
+  console.log(RAW_USER);
+
+  if (!RAW_USER.email) {
+    await onStateChange();
+  }
+
+  if (email) {
+    createRes = await createUserAuth(email, "raoeeEmployee", userType);
+    if (!createRes.status) {
+      alert(42, createRes.message);
+      return;
+    }
+  }
+  console.log("user created");
+
+  USER_CREATED_ID = createRes.data.uid;
+  USER_CREATED_REF = await db
+    .collection(`${userType}s`)
+    .doc(createRes.data.uid);
+
+  console.log(RAW_USER);
+
+  const signinAdminRes = await signinAdmin({
+    email: RAW_USER.email,
+    password: pwd,
+  });
+  if (!signinAdminRes.status) {
+    alert(signinAdminRes.message);
+    return;
+  }
+  console.log("admin logged in");
+
+  const fname = employeeFormHTML["fname"].value || "";
+  const lname = employeeFormHTML["lname"].value || "";
+  const phone = employeeFormHTML["phone"].value || "";
+
+  const address = employeeFormHTML["address"].value || "";
+  const city = employeeFormHTML["city"].value || "";
+  const state = employeeFormHTML["state"].value || "";
+  const country = employeeFormHTML["country"].value || "";
+  const postalCode = employeeFormHTML["postal-code"].value || "";
+
+  FORM_DATA = {
     fname,
     lname,
     phone,
+    email,
+    userType,
     basicInfo: {
-      ...USER.basicInfo,
       address,
       city,
       state,
       country,
       postalCode,
-      aboutMe,
-      
+      aboutMe: "",
     },
-    basicInfoAdded: true,
   };
 
-  try {
-    if (USER.cvAdded) {
-      if (
-        fname !== USER.fname ||
-        lname !== USER.lname ||
-        lname !== USER.lname
-      ) {
-        const cvRef = await db
-          .collection(USER.cv.collectionName)
-          .doc(USER.cv.docId);
-        const cvDoc = await cvRef.get();
-        const cvData = await cvDoc.data();
-        cvData.fname = fname;
-        cvData.lname = lname;
-        await cvRef.update(cvData);
-      }
-    }
-
-    await USER_REF.update(data);
-    
-    nowuiDashboard.showNotification('top','center',"Data updated Successfully","primary");
-    getUserDetails({ uid: USER_ID, userType: USER.userType });
-  } catch (error) {
-    console.error(errpr);
-    alert(`Try again. Reason: ${error.message}`);
+  if (address && city && state && country && postalCode) {
+    FORM_DATA.basicInfoAdded = true;
+  } else {
+    FORM_DATA.basicInfoAdded = false;
   }
+
 };
 
-userBasicFormHTML.addEventListener("submit", updateBasicInfo);
+// /////////////////////////////////////////////////////////
+
+async function createUserAuth(email, password, type) {
+  console.log(email, password, type);
+  const SHA256 = new Hashes.SHA256();
+  password = SHA256.hex(password);
+  return await auth.createUserWithEmailAndPassword(email, password)
+    .then(async (userCredential) => {
+      console.log(userCredential);
+      let user = userCredential.user;
+      await user.updateProfile({
+        displayName: type,
+      });
+      return {
+        status: true,
+        message: "user auth created",
+        data: {
+          uid: user.uid,
+        },
+      };
+    })
+    .catch((error) => {
+      console.error(error);
+      var errorMessage = error.message;
+      nowuiDashboard.showNotification(
+        "top",
+        "center",
+        errorMessage.substring(9),
+        "primary"
+      );
+      return {
+        status: false,
+        message: `Please Retry: ${errorMessage}`,
+      };
+    });
+}
+
+// /////////////////////////////////////////////////////////
+
+async function signinAdmin({ email, password }) {
+  console.log(email, password);
+  return await auth
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      return {
+        status: true,
+      };
+    })
+    .catch((error) => {
+      console.error(error);
+      document.getElementById("showMessage").innerHTML = " ";
+      return {
+        status: false,
+        message: "Something went wrong",
+      };
+    });
+}
+
+// /////////////////////////////////////////////////////////
+
+async function getCreatedUser({ collectionName, uid }) {
+  try {
+    USER_CREATED_REF = await db.collection(collectionName).doc(uid);
+    await USER_CREATED_REF.get();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // /////////////////////////////////////////////////////////
 
 function getUserPreferences() {
   const cvVerticals = [];
 
-  cvFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
+  employeeFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
     const all = e.value.split("__");
     const selectedVId = all[0];
     const selectedVName = all[1];
@@ -289,12 +241,14 @@ function getUserPreferences() {
 
 // /////////////////////////////////////////////////////////
 
-const cvFormHTML = document.querySelector("#cvForm");
+// const employeeFormHTML = document.querySelector("#cvForm");
 let FILE = false;
 let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
+  await updateBasicInfo();
+  const userType = 'employee';
 
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
@@ -302,52 +256,30 @@ const updateCv = async (e) => {
   let data = {};
 
   if (FILE_NAME) {
-    resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
+    resStorage = await uploadFileToStorage({ ref: `${userType}s/${USER_CREATED_ID}`, fileName: FILE_NAME, file: FILE });
     retryStorage = 0;
     if (!resStorage.status) {
       alert(resStorage.message);
       return;
     }
 
-    resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
+    resURL = await getUrlOfFile({ ref: `${userType}s/${USER_CREATED_ID}`, fileName: FILE_NAME});
     retryURL = 0;
     if (!resURL.status) {
       alert(resURL.message);
       return;
     }
     data.url = resURL.data.url;
-    data.fileName = FILE_NAME;
-
-    if (USER.cvAdded) {
-      const resDeleteStorage = await deleteStorage({
-        ref: `${USER.userType}s/${USER.uid}`,
-        fileName: USER.cv.fileName,
-      });
-      if (!resDeleteStorage.status) {
-        alert(resDB.message);
-        // return;
-      }
-    }
-
-  } else {
-    if (USER.cvAdded) {
-      data.url = USER.cv.url;
-      data.fileName = USER.cv.fileName;
-    } else {
-    
-      nowuiDashboard.showNotification('top','center',"Please Update the CV File ","primary");
-      
-      return;
-    }
+    data.fileName = FILE_NAME; 
   }
-
+  
   data.verticals = verticals;
   data.subVerticals = subVerticals;
   data.expertise = expertise;
-  data.userType = USER.userType;
-  data.userId = USER.uid;
-  data.fname = USER.fname;
-  data.lname = USER.lname;
+  data.userType = userType;
+  data.userId = USER_CREATED_ID;
+  data.fname = employeeFormHTML["fname"].value || "";
+  data.lname = employeeFormHTML["lname"].value || "";
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -360,8 +292,8 @@ const updateCv = async (e) => {
     verticals,
     subVerticals,
     expertise,
-    fileName: FILE_NAME ? FILE_NAME : USER.cv.fileName,
-    url: FILE_NAME ? resURL.data.url : USER.cv.url,
+    fileName: FILE_NAME ,
+    url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
   };
@@ -369,92 +301,31 @@ const updateCv = async (e) => {
   const resUpdateCvDb = await updateCollectionsDb({
     collectionName: resDB.data.collectionName,
   });
+
   if (!resUpdateCvDb.status) {
     alert(resDB.message);
-    // return;
   }
 
-  if(USER.cvAdded){
-    const resDeleteCvDb = await deleteCvDb({
-      collectionName: USER.cv.collectionName,
-      docId: USER.cv.docId,
-    });
-    if (!resDeleteCvDb.status) {
-      alert(resDB.message);
-      // return;
-    }
+  FORM_DATA.cv = {
+    ...data
   }
-  
-  const resUserDB = await uploadToUserDb({ data });
-  retryUserDB = 0;
-  if (!resUserDB.status) {
-    alert(resUserDB.message);
-    return;
-  }
+  FORM_DATA.cvAdded = true;
 
+  await USER_CREATED_REF.set(FORM_DATA);
 
-  nowuiDashboard.showNotification('top','center',"Record Added Successfully","primary");
-  
-  cvEditHolderHTML.style.display = "none";
-  cvInfoHolderHTML.style.display = "block";
-  editCvBtnHTML.checked = false;
-  
-  getUserDetails({ uid: USER_ID, userType: USER.userType });
-  setTimeout(function(){
-    location.reload();
-  },2000)
+  nowuiDashboard.showNotification(
+    "top",
+    "center",
+    "Record Added Successfully",
+    "primary"
+  );
+
+  // setTimeout(function () {
+  //   location.reload();
+  // }, 2000);
 };
 
-cvFormHTML.addEventListener("submit", updateCv);
-
-// /////////////////////////////////////////////////////////
-let retryDeleteStorage = 0;
-const deleteStorage = async ({ ref, fileName }) => {
-  try {
-    await storage.ref(ref).child(fileName).delete();
-    return {
-      status: true,
-      message: `Delete Succefully.`,
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryDeleteStorage < 2) {
-      retryDeleteStorage++;
-      alert(`Retrying Attempt: ${retryDeleteStorage} Reason: ${error.message}`);
-      deleteStorage({ ref, fileName });
-    } else {
-      return {
-        status: false,
-        message: `Failed to delete. Reason: ${error.message}`,
-      };
-    }
-  }
-};
-
-// /////////////////////////////////////////////////////////
-
-let retryDeleteCvDb = 0;
-const deleteCvDb = async ({ collectionName, docId }) => {
-  try {
-    await db.collection(collectionName).doc(docId).delete();
-    return {
-      status: true,
-      message: `Delete Succefully.`,
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryDeleteCvDb < 2) {
-      retryDeleteCvDb++;
-      alert(`Retrying Attempt: ${retryDeleteCvDb} Reason: ${error.message}`);
-      deleteStorage({ ref, fileName });
-    } else {
-      return {
-        status: false,
-        message: `Failed to delete. Reason: ${error.message}`,
-      };
-    }
-  }
-};
+employeeFormHTML.addEventListener("submit", updateCv);
 
 // /////////////////////////////////////////////////////////
 let retryUpdateCollectionsDb = 0;
@@ -534,43 +405,10 @@ const uploadCVToDb = async ({ data }) => {
 
 // /////////////////////////////////////////////////////////
 
-let retryUserDB = 0;
-const uploadToUserDb = async ({ data }) => {
-  try {
-    USER.cv = {
-      ...data,
-    };
-    USER.cvAdded = true;
-    await USER_REF.update(USER);
-
-    return {
-      status: true,
-      message: "Successfully added the record.",
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryUserDB < 2) {
-      retryUserDB++;
-      alert(`Retry. Attempt: ${retryUserDB} Reason: ${error.message} `);
-      uploadToUserDb({ data });
-    } else {
-      USER.cvAdded = false;
-      return {
-        status: false,
-        message: `Failed to add the record. Reason: ${error.message}`,
-      };
-    }
-  }
-};
-
-// /////////////////////////////////////////////////////////
 let retryURL = 0;
-const getUrlOfFile = async ({ ref }) => {
+const getUrlOfFile = async ({ ref, fileName }) => {
   try {
-    const url = await storage
-      .ref(`${ref}/${USER.uid}`)
-      .child(FILE_NAME)
-      .getDownloadURL();
+    const url = await storage.ref(ref).child(fileName).getDownloadURL();
     return {
       status: true,
       message: "Success. Fetched the file from storage.",
@@ -583,7 +421,7 @@ const getUrlOfFile = async ({ ref }) => {
     if (retryURL < 2) {
       retryURL++;
       alert(`Retry. Attempt: ${retryURL} Reason: ${error.message} `);
-      getUrlOfFile({ ref });
+      getUrlOfFile({ ref, fileName });
     } else {
       return {
         status: false,
@@ -595,9 +433,9 @@ const getUrlOfFile = async ({ ref }) => {
 
 // /////////////////////////////////////////////////////////
 let retryStorage = 0;
-const uploadFileToStorage = async ({ ref }) => {
+const uploadFileToStorage = async ({ ref, fileName, file }) => {
   try {
-    await storage.ref(`${ref}/${USER.uid}`).child(FILE_NAME).put(FILE);
+    await storage.ref(ref).child(fileName).put(file);
     return {
       status: true,
       message: "Uplading to file to storage success",
@@ -607,7 +445,7 @@ const uploadFileToStorage = async ({ ref }) => {
     if (retryStorage < 2) {
       retryStorage++;
       alert(`Retry. Attempt: ${retryStorage} Reason: ${error.message} `);
-      uploadFileToStorage({ ref });
+      uploadFileToStorage({ ref, fileName, file });
     } else {
       return {
         status: false,
@@ -626,7 +464,7 @@ function uploadCVFile(e) {
   }
 }
 
-cvFormHTML["cv-file"].addEventListener("change", uploadCVFile);
+employeeFormHTML["cv-file"].addEventListener("change", uploadCVFile);
 
 // /////////////////////////////////////////////////////////
 
@@ -667,7 +505,6 @@ db.collection("verticals").onSnapshot(async (snaps) => {
 
   displayVerticalDropdown();
   storeAllNamesIds();
-  displayCvDetails();
 });
 
 // /////////////////////////////////////////////////////////
@@ -678,24 +515,10 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
   let options = "";
-  if (USER.cvAdded) {
-    VERTICALS.map((ver) => {
-      let isVPresent = USER.cv.verticals.filter((v) => v.name === ver.name);
-      if (isVPresent.length > 0) {
-        options += `<option value="${ver.name}" selected>${ver.name}</option>`;
-      } else {
-        options += `<option value="${ver.name}">${ver.name}</option>`;
-      }
-    });
-    setTimeout(() => {
-      verticalSelected();
-      displaySubVerticalDropdown(true);
-    }, 2000);
-  } else {
-    VERTICALS.map((ver) => {
-      options += `<option value="${ver.name}">${ver.name}</option>`;
-    });
-  }
+
+  VERTICALS.map((ver) => {
+    options += `<option value="${ver.name}">${ver.name}</option>`;
+  });
 
   verticalDropHolderHTML.innerHTML = `
   <label>Select Vertical
@@ -816,20 +639,10 @@ const subVerticalDropHolderHTML = document.querySelector(
   "#subVerticalDropHolder"
 );
 
-function displaySubVerticalDropdown(initial = false) {
+function displaySubVerticalDropdown() {
   let options = "";
   subVerticalDropHolderHTML.innerHTML = ``;
 
-  if (initial) {
-    if (USER.cvAdded) {
-      USER.cv.subVerticals.map((sv) => {
-        const name = getNameOfId(sv.ver);
-        sv.sver.map((svv) => {
-          subVerticalsSelected.push(`${name}__${svv}`);
-        });
-      });
-    }
-  }
   // console.log(userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
@@ -869,9 +682,6 @@ function displaySubVerticalDropdown(initial = false) {
     renderChoiceLimit: 10,
   });
 
-  if (initial) {
-    subVerticalSelected(false, true);
-  }
 }
 
 // ///////////////////////////////////////////
@@ -1118,78 +928,19 @@ function displayExpertiseTable(initial = false) {
 
       let rows = ``;
       let i = 0;
-      let tglTxt=""
+      let tglTxt = "";
       sv.expertise.map((exp) => {
-        
         let options = "";
         let rowId = `rowId${Math.random()}_${Math.random()}`;
         isDisabled = true;
         exp.tags.map((op) => {
-          if (exp?.selected ) {
+          if (exp?.selected) {
             isDisabled = false;
           } else {
             isDisabled = true;
           }
-          if (initial) {
-            if (USER.cvAdded) {
-              let flag = false;
-              for (let i = 0; i < USER.cv.expertise.length; i++) {
-                const eachSelectedVExpertise = USER.cv.expertise[i];
-                const cvv = eachSelectedVExpertise.ver;
-                if (flag) {
-                  break;
-                }
-
-                for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
-                  const eachSelectedVSExpertise =
-                    eachSelectedVExpertise.svers[j];
-                  const cvsv = eachSelectedVSExpertise.sver;
-                  if (flag) {
-                    break;
-                  }
-                  for (
-                    let k = 0;
-                    k < eachSelectedVSExpertise.expertise.length;
-                    k++
-                  ) {
-                    const eachSelectedExpertise =
-                      eachSelectedVSExpertise.expertise[k];
-                    const cvCat = eachSelectedExpertise.category;
-                    const cvVal = eachSelectedExpertise.value;
-
-                    // if (flag) {
-                    //   break;
-                    // }
-
-                    if (
-                      cvv === v._id &&
-                      sv.name === cvsv &&
-                      exp.category === cvCat &&
-                      op === cvVal
-                    ) {
-                      exp.value = op;
-                      exp.selected = true;
-                      isDisabled = false
-                      flag = true;
-                      break;
-                    }
-                  }
-                }
-              }
-
-              if (flag) {
-                options += `
-                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" selected >${op}</option>
-              `;
-              } else {
-                options += `
-                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
-              `;
-              }
-            }
-          } else {
+       
             if (exp.value === op) {
-             console.log('hey', exp.value, op);
               options += `
               <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
             `;
@@ -1198,24 +949,26 @@ function displayExpertiseTable(initial = false) {
             <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
           `;
             }
-          }
-
+          
         });
-        if(isDisabled ){
-          tglTxt = "No"
-        }else{
-          tglTxt = "Yes"
+        if (isDisabled) {
+          tglTxt = "No";
+        } else {
+          tglTxt = "Yes";
         }
-        rows += `
+        rows +=
+          `
         <tr>
           <td>${exp.category}</td>
           <td>
           <label class="switch">
           <input type="checkbox" data-rowid="${rowId}"  ${
-       isDisabled ? "" : "checked"
-    }  onchange="sliderToggle(event)"   >
+            isDisabled ? "" : "checked"
+          }  onchange="sliderToggle(event)"   >
           <span class="slider round"></span>
-          <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">`+tglTxt+`</span>
+          <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">` +
+          tglTxt +
+          `</span>
         </label>
           </td>
           <td>
@@ -1248,98 +1001,6 @@ function displayExpertiseTable(initial = false) {
 }
 
 // //////////////////////////////////////////
-const cvUrlHTML = document.querySelector("#cvUrl");
-const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
-const verticalsTablesHTML = document.querySelector("#verticalsTables");
-const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
-
-async function displayCvDetails() {
-  if (USER.cvAdded) {
-    cvUrlHTML.href = USER.cv.url;
-    verticalsBtnsHTML.innerHTML = ``;
-
-    USER.cv.verticals.map((v, i) => {
-      verticalsBtnsHTML.innerHTML += `
-      <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
-      `;
-    });
-
-    USER.cv.expertise.map(async (v) => {
-      let name = await getNameOfId(v.ver);
-      let head = `
-      <div id="${v.ver}" class="collapse">
-        <table class="table table-bordered">
-          <thead class="thead-dark">
-            <tr style="text-align: center">
-              <th
-                style="text-align: center; font-weight: 600"
-                scope="col"
-              >
-                Sub-Vertical [${name}]
-              </th>
-              <th
-                style="text-align: center; font-weight: 600"
-                scope="col"
-              >
-                Expertise
-              </th>
-              <th
-                style="text-align: center; font-weight: 600"
-                scope="col"
-              >
-                Experience
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      let body = ``;
-      let rows = "";
-      v.svers.map((sv) => {
-        sv.expertise.map((e) => {
-          rows += `
-          <tr>
-            <td>
-            ${sv.sver}
-            </td>
-            <td>
-              ${e.category}
-            </td>
-            <td>
-              ${e.value}
-            </td>
-          </tr>
-          `;
-        });
-        body = rows;
-      });
-
-      let end = `
-        </table>
-      </div>
-      `;
-
-      let whole = head + body + end;
-      verticalsTablesHTML.innerHTML += whole;
-    });
-
-    editCvUrlHolderHTML.innerHTML = `
-    <a target="_blank" href="${USER.cv.url}" >
-      <label
-        class="btn btn-tertiary js-labelFile"
-        style="background-color: transparent"
-      >
-        <i class="icon fa fa-eye"></i>
-        <span class="js-fileName"
-          >View Your CSV</span
-        >
-      </label>
-    </a>`;
-  }
-}
-
-// //////////////////////////////////////////
 
 let ID_NAME_VERTICALS = [];
 
@@ -1361,129 +1022,23 @@ function getNameOfId(id) {
 
 // //////////////////////////////////////////
 
-let IMG = false;
-let IMG_NAME = false;
-
-const userImageHTML = document.querySelector("#userImage");
-
-const uploadImgLocal = (e) => {
-  if (!USER.basicInfoAdded) {
-    nowuiDashboard.showNotification('top','center',"Please add all your details in order to update the profile image","primary");
-    blahHTML.src = `../assets/img/userProfile.png`;
-    return;
-  }
-  readURL(e);
-  IMG = e.target.files[0];
-  IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
-  uploadImgToDB();
-};
-
-userImageHTML.addEventListener("change", uploadImgLocal);
-// //////////////////////////////////////////
-
-let retryImgStorage = 0;
-const uploadImgToStorage = async ({ ref }) => {
-  try {
-    await storage.ref(`${ref}/${USER.uid}`).child(IMG_NAME).put(IMG);
-    return {
-      status: true,
-      message: "Uplading to file to storage success",
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryImgStorage < 2) {
-      retryImgStorage++;
-      alert(`Retry. Attempt: ${retryImgStorage} Reason: ${error.message} `);
-      uploadImgToStorage({ ref });
-    } else {
-      return {
-        status: false,
-        message: `Failed to upload file to stoarge. Reason: ${error.message}`,
-      };
-    }
-  }
-};
-
-// /////////////////////////////////////////////////////////
-
-let retryImgURL = 0;
-const getUrlOfImg = async ({ ref }) => {
-  try {
-    const url = await storage
-      .ref(`${ref}/${USER.uid}`)
-      .child(IMG_NAME)
-      .getDownloadURL();
-    return {
-      status: true,
-      message: "Success. Fetched the file from storage.",
-      data: {
-        url,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryImgURL < 2) {
-      retryImgURL++;
-      alert(`Retry. Attempt: ${retryImgURL} Reason: ${error.message} `);
-      getUrlOfImg({ ref });
-    } else {
-      return {
-        status: false,
-        message: `Failed to fetch the file from stoarge. Reason: ${error.message}`,
-      };
-    }
-  }
-};
-
-// /////////////////////////////////////////////////////////
-
-async function uploadImgToDB() {
-  const data = USER;
-
-  if (USER.basicInfo.imgUrl) {
-    const resDelete = await deleteStorage({
-      ref: `${USER.userType}s/${USER_ID}`,
-      fileName: USER.basicInfo.imgName,
-    });
-  }
-
-  const resStorage = await uploadImgToStorage({ ref: `${USER.userType}s` });
-
-  if (!resStorage.status) {
-    
-    nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
-    return;
-  }
-  const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
-  if (!resUrl.status) {
-   
-    nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
-    return;
-  }
-
-  data.basicInfo.imgName = IMG_NAME;
-  data.basicInfo.imgUrl = resUrl.data.url;
-
-  await USER_REF.update(data);
-  getUserDetails({ uid: USER_ID, userType: USER.userType });
-  
-  nowuiDashboard.showNotification('top','center',"Data Updated Successfully","primary");
-}
-
 // /////////////////////////////////////////////////////////
 let retryLogout = 0;
 
 function logoutUser() {
-  auth.signOut().then(() => {
-    // Sign-out successful.
-    window.location.href="./../index.html"
-  }).catch((error) => {
-    console.error(error);
-    if(retryLogout < 2) {
-      retryLogout++;
-      logoutUser();
-    } else {
-      alert(`unable to logout at moment. Reason: ${error.message}`)
-    }
-  });
+  auth
+    .signOut()
+    .then(() => {
+      // Sign-out successful.
+      window.location.href = "./../index.html";
+    })
+    .catch((error) => {
+      console.error(error);
+      if (retryLogout < 2) {
+        retryLogout++;
+        logoutUser();
+      } else {
+        alert(`unable to logout at moment. Reason: ${error.message}`);
+      }
+    });
 }

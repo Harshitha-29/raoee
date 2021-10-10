@@ -165,18 +165,13 @@ const createUserDB = async (collection, uid, data) => {
 // //////////////////////////////////////////
 
 const createUserAuth = async (email, password, type) => {
+  const SHA256 =  new Hashes.SHA256;
+  password = SHA256.hex(password);
   return await auth
     .createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      var user = userCredential.user;
-      console.log(user);
-      console.log(type);
-      // user.providerData[0].userType = type;
-      return user;
-    })
-    .then(async (user) => {
-      console.log(type);
-      await user.updateProfile({
+      let user = userCredential.user;
+      user.updateProfile({
         displayName: type,
       });
       return user;
@@ -245,32 +240,18 @@ const login = (e) => {
   e.preventDefault();
   document.getElementById("showMessage").innerHTML = "Verifying Details ... ";
   const email = signinFormHTML["email"].value;
-  const password = signinFormHTML["password"].value;
-
-  // auth.signInWithEmailAndPassword(email, password).then(user => {
-  //   let userType = user.user.displayName;
-  //   console.log(userType);
-  //   // if(userType === 'employee') {
-  //   //   window.location.href = `./../employee/user.html`;
-  //   // }
-  //   if(userType === 'admin') {
-  //     window.location.href = `./../admin/index.html`;
-  //   }else {
-  //     window.location.href = `./../index.html`;
-  //   }
-
+  let password = signinFormHTML["password"].value;
+  const SHA256 =  new Hashes.SHA256;
+  password = SHA256.hex(password);
   auth
     .signInWithEmailAndPassword(email, password)
     .then((user) => {
       let userType = user.user.displayName;
-      console.log(userType);
-      // if(userType === 'employee') {
-      //   window.location.href = `./../employee/user.html`;
-      // }
       if (userType === "admin") {
-        window.location.href = `./../admin/dashboard.html`;
+        window.localStorage.setItem('key_id', password);
+        window.location.href = `./../admin/index.html`;
       } else {
-        window.location.href = `./../dashboard.html`;
+        window.location.href = `./../index.html`;
       }
     })
     .catch((error) => {
@@ -318,9 +299,9 @@ function AllowOnlyNumbers(e) {
 // //////////////////////////
 
 // const registerAdmin = async() => {
-
+//   AUTH_FLAG = false;
 //   const email = `raoeeproject@gmail.com`;
-//   const password = `raoee@project`
+//   let password = `raoee@project`;
 //   let userType = "admin";
 //   const fname = `admin`;
 //   const lname = `raoee`;
