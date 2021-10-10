@@ -681,7 +681,7 @@
                       <span class="level-title">`+USER.cv.subVerticals[j].sver[m]+`</span>
                     
                     </div>
-                    <ul id="`+USER.cv.verticals[j].id+`+`+USER.cv.subVerticals[j].ver+`">
+                    <ul id="`+USER.cv.verticals[j].id+`+`+USER.cv.subVerticals[j].sver[m]+`">
 
                     </ul>
               </li>
@@ -696,7 +696,7 @@
               console.log(USER.cv.expertise[k].svers[m].expertise)
               for(let n in USER.cv.expertise[k].svers[m].expertise ){
                   console.log(USER.cv.expertise[k].svers[m].expertise[n].category)
-                  document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].ver).innerHTML+=`
+                  document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]).innerHTML+=`
                   <li>
                       <div class="treeview__level" data-level="C">
                         <span class="level-title">`+USER.cv.expertise[k].svers[m].expertise[n].category+`</span>
