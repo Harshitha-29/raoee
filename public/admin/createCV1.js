@@ -47,7 +47,7 @@ const updateBasicInfo = async () => {
   if (email) {
     createRes = await createUserAuth(email, "raoeeEmployee", userType);
     if (!createRes.status) {
-      alert(42, createRes.message);
+      alert(createRes.message);
       return;
     }
   }
@@ -108,6 +108,7 @@ const updateBasicInfo = async () => {
 // /////////////////////////////////////////////////////////
 
 async function createUserAuth(email, password, type) {
+  document.getElementById("progressBar").style.display="block"
   console.log(email, password, type);
   const SHA256 = new Hashes.SHA256();
   password = SHA256.hex(password);
@@ -120,7 +121,7 @@ async function createUserAuth(email, password, type) {
       });
       return {
         status: true,
-        message: "user auth created",
+        message: "user auth created ",
         data: {
           uid: user.uid,
         },
@@ -137,7 +138,7 @@ async function createUserAuth(email, password, type) {
       );
       return {
         status: false,
-        message: `Please Retry: ${errorMessage}`,
+        message: `Please Retry : ${errorMessage}`,
       };
     });
 }
@@ -158,7 +159,7 @@ async function signinAdmin({ email, password }) {
       document.getElementById("showMessage").innerHTML = " ";
       return {
         status: false,
-        message: "Something went wrong",
+        message: " Something went wrong ",
       };
     });
 }
@@ -289,6 +290,7 @@ const updateCv = async (e) => {
   retryDB = 0;
   if (!resDB.status) {
     alert(resDB.message);
+    document.getElementById("progressBar").style.display="none"
     return;
   }
 
@@ -330,6 +332,7 @@ const updateCv = async (e) => {
   // setTimeout(function () {
   //   location.reload();
   // }, 2000);
+  document.getElementById("progressBar").style.display="none"
 };
 
 employeeFormHTML.addEventListener("submit", updateCv);
@@ -380,6 +383,7 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
+  document.getElementById("progressBar").style.display="block"
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
@@ -395,12 +399,14 @@ const uploadCVToDb = async ({ data }) => {
         docId: ref.id,
       },
     };
+    
   } catch (error) {
     console.error(error);
     if (retryDB < 2) {
       retryDB++;
       alert(`Retry. Attempt: ${retryDB} Reason: ${error.message} `);
       uploadCVToDb({ data });
+      document.getElementById("progressBar").style.display="none"
     } else {
       return {
         status: false,
