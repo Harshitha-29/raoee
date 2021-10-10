@@ -1,5 +1,5 @@
 const db = firebase.firestore();
-window.localStorage.removeItem("user");
+//window.localStorage.removeItem("user");
 const USER = undefined;
 
 // //////////////////////////////
