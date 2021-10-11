@@ -41,10 +41,7 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
     />
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
-    ></script>
+ 
   </head>
 
   <body class="" onload="essentials()">
@@ -539,11 +536,14 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
-
+    <script
+    type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
+  ></script>
     <script>
       function essentials() {}
       $(document).ready(function () {
-        window.location="sliders.html"
+              
         // Javascript method's body can be found in assets/js/demos.js
         $("#navigation").load("commonNavigation.html");
         $("#topbar").load("topBar.html");

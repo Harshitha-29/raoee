@@ -211,7 +211,7 @@ db.collection('testimonials').onSnapshot(snaps => {
 
 // /////////////////////////////
 
-let retryLogout = 0;
+let retryLogout2 = 0;
 
 function logoutUser() {
   auth.signOut().then(() => {
@@ -220,8 +220,8 @@ function logoutUser() {
     window.location.href="./index.html"
   }).catch((error) => {
     console.error(error);
-    if(retryLogout < 2) {
-      retryLogout++;
+    if(retryLogout2 < 2) {
+      retryLogout2++;
       logoutUser();
     } else {
       alert(`unable to logout at moment. Reason: ${error.message}`)

@@ -7688,7 +7688,7 @@ input[type="button"].btn-block {
   left: 0px;
 }
 .treeview__level .level-remove {
-  display: none;
+  display: block;
 }
 .treeview__level.selected {
   background-color: #f9f9fb;
@@ -7698,10 +7698,10 @@ input[type="button"].btn-block {
   display: inline-block;
 }
 .treeview__level.selected .level-add {
-  display: none;
+  display: block;
 }
 .treeview__level.selected .level-same, .treeview__level.selected .level-sub {
-  display: none;
+  display: block;
 }
 .treeview .level-title {
   cursor: pointer;
@@ -7723,7 +7723,7 @@ input[type="button"].btn-block {
 
 .treeview__level2 .level-same, .treeview__level2 .level-sub {
   position: absolute;
-  display: none;
+  display: block;
   transition: opacity 250ms cubic-bezier(0.7, 0, 0.3, 1);
 }
 .treeview__level2 .level-same.in, .treeview__level2 .level-sub.in {
@@ -7735,7 +7735,7 @@ input[type="button"].btn-block {
 }
 .treeview__level2 .level-same {
   top: 0;
-  left: 45px;
+  left: 0px;
 }
 .treeview__level2 .level-sub {
   top: 42px;
@@ -7755,5 +7755,5 @@ input[type="button"].btn-block {
   display: none;
 }
 .treeview__level2.selected .level-same, .treeview__level2.selected .level-sub {
-  display: none;
+  display: block;
 }
