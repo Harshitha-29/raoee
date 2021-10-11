@@ -68,7 +68,15 @@ const signupEmployee = async (e) => {
   }
   emplyeeFormHTML.reset();
   AUTH_FLAG = true;
-  window.location = "./../dashboard.html";
+  auth.onAuthStateChanged(async (user) => {
+    console.log(user)
+    user.sendEmailVerification().then(function () {
+      window.location = "./../index.html";
+    })
+  
+  });
+ 
+
 };
 
 emplyeeFormHTML.addEventListener("submit", signupEmployee);
@@ -131,7 +139,7 @@ const signupEmployer = async (e) => {
   employerFormHTML.reset();
   alert("Employer Added");
   AUTH_FLAG = true;
-  window.location = "./../dashboard.html";
+  window.location = "./../index.html";
 };
 
 employerFormHTML.addEventListener("submit", signupEmployer);

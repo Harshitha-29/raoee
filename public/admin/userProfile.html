@@ -97,147 +97,7 @@
       z-index: 2;
       position: relative;
     }
-    .treeview .btn-default {
-  border-color: #e3e5ef;
-}
-.treeview .btn-default:hover {
-  background-color: #f7faea;
-  color: #bada55;
-}
-.treeview ul {
-  list-style: none;
-  padding-left: 12px;
-}
-.treeview ul li {
-  padding: 30px 0px 0px 25px;
-  position: relative;
-}
-.treeview ul li:before {
-  content: "";
-  position: absolute;
-  top: -26px;
-  left: -31px;
-  border-left: 2px dashed #a2a5b5;
-  width: 1px;
-  height: 100%;
-}
-.treeview ul li:after {
-  content: "";
-  position: absolute;
-  border-top: 2px dashed #a2a5b5;
-  top: 70px;
-  left: -30px;
-  width: 65px;
-}
-.treeview ul li:last-child:before {
-  top: -22px;
-  height: 90px;
-}
-.treeview > ul > li:after, .treeview > ul > li:last-child:before {
-  content: unset;
-}
-.treeview > ul > li:before {
-  top: 90px;
-  left: 36px;
-}
-.treeview > ul > li:not(:last-child) > ul > li:before {
-  content: unset;
-}
-.treeview > ul > li > .treeview__level:before {
-  height: 60px;
-  width: 60px;
-  top: -9.5px;
-  background-color: #54a6d9;
-  border: 7.5px solid #d5e9f6;
-  font-size: 12px;
-}
-.treeview > ul > li > ul {
-  padding-left: 24px;
-}
-.treeview__level {
-  padding: 3px;
-  padding-left: 42.5px;
-  display: inline-block;
-  border-radius: 5px;
-  font-weight: 700;
-  border: 1px solid #e3e5ef;
-  position: relative;
-  z-index: 1;
-}
-.treeview__level:before {
-  content: attr(data-level);
-  position: absolute;
-  left: -27.5px;
-  top: -6.5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 45px;
-  width: 45px;
-  border-radius: 20%;
-  border: 7.5px solid #eef6d5;
-  background-color: #bada55;
-  color: #fff;
-  font-size: 12px;
-}
-.treeview__level-btns {
-  margin-left: 15px;
-  display: inline-block;
-  position: relative;
-}
-.treeview__level .level-same, .treeview__level .level-sub {
-  position: absolute;
-  display: none;
-  transition: opacity 250ms cubic-bezier(0.7, 0, 0.3, 1);
-}
-.treeview__level .level-same.in, .treeview__level .level-sub.in {
-  display: block;
-}
-.treeview__level .level-same.in .btn-default, .treeview__level .level-sub.in .btn-default {
-  background-color: #faeaea;
-  color: #da5555;
-}
-.treeview__level .level-same {
-  top: 0;
-  left: 45px;
-}
-.treeview__level .level-sub {
-  top: 42px;
-  left: 0px;
-}
-.treeview__level .level-remove {
-  display: none;
-}
-.treeview__level.selected {
-  background-color: #f9f9fb;
-  box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.1);
-}
-.treeview__level.selected .level-remove {
-  display: inline-block;
-}
-.treeview__level.selected .level-add {
-  display: none;
-}
-.treeview__level.selected .level-same, .treeview__level.selected .level-sub {
-  display: none;
-}
-.treeview .level-title {
-  cursor: pointer;
-  user-select: none;
-}
-.treeview .level-title:hover {
-  text-decoration: underline;
-}
-.treeview--mapview ul {
-  justify-content: center;
-  display: flex;
-}
-.treeview--mapview ul li:before {
-  content: unset;
-}
-.treeview--mapview ul li:after {
-  content: unset;
-}
+
   </style>
 
   <body class="user-profile">
@@ -547,9 +407,9 @@
 
                                 
                               </div>
-                              </div>
+                            </div>
                               
-                              <template id="levelMarkup">
+                              <!-- <template id="levelMarkup">
                                 <li>
                                   <div class="treeview__level" data-level="A">
                                     <span class="level-title">Level A</span>
@@ -563,30 +423,10 @@
                                   <ul>
                                   </ul>
                                 </li>
-                              </template>
-                                <div class="p-3 py-2">
-                                    <div class="d-flex justify-content-between align-items-center experience" ><span>Selected Verticals</span></div><br>
-                                        <div id="selectedVerticals">
-                                            
-                                        </div>
-                                </div>
-                                <div class="p-3 py-2">
-                                    <div class="d-flex justify-content-between align-items-center experience"><span>Selected Sub-Verticals</span></div><br>
-                                    <div id="selectedSubVerticals">
-                                            
-                                    </div>
-                                </div>
+                              </template> -->
+                                
 
-                                <div class="p-3 py-2">
-                                    <div class="d-flex justify-content-between align-items-center experience"><span>Selected Expertise</span></div><br>
-                                    <span class="border px-3 p-1 add-experience">&nbsp;Design</span>
-                                    <span class="border px-3 p-1 add-experience">&nbsp;Installation</span>
-                                </div>
-                                <div class="p-3 py-2">
-                                    <div class="d-flex justify-content-between align-items-center experience"><span>Experience</span></div><br>
-                                    <span class="border px-3 p-1 add-experience">&nbsp;Fresher</span>
-                                    <span class="border px-3 p-1 add-experience">&nbsp;Trained</span>
-                                </div>
+                            
                             </div>
                         </div>
                     </div>
@@ -645,43 +485,28 @@
         
         for(let i  in USER.cv.verticals ){
             
-            document.getElementById("selectedVerticals").innerHTML+=`
-            <span class="border px-3 p-1 " style="background-color:beige" add-experience">&nbsp;`+USER.cv.verticals[i].name+`</span>
-                                   
-            `
             document.getElementById("tree").innerHTML+=`
-            
             <li>
-
-                <div class="treeview__level" data-level="A">
-                  <span class="level-title">`+USER.cv.verticals[i].name+`</span>
-                
-                </div>
-
-                <ul id="`+USER.cv.verticals[i].id+`">
-
-                  
-
-                 
-
-                </ul>
-            </li>                
-            `
-          
-            
-        }
-        for(let j in USER.cv.subVerticals ){
+              <div class="treeview__level" data-level="V">
+                <span class="level-title">`+USER.cv.verticals[i].name+`</span>
               
+              </div>
+              <ul id="`+USER.cv.verticals[i].id+`">
+            </ul>
+          </li>                
+          `
+        }
+
+        for(let j in USER.cv.subVerticals ){ 
           for(let m in USER.cv.subVerticals[j].sver)
             if(USER.cv.subVerticals[j].sver){
-   
-                document.getElementById(USER.cv.verticals[j].id).innerHTML+=`
-              <li>
-                    <div class="treeview__level" data-level="B">
+              document.getElementById(USER.cv.verticals[j].id).innerHTML+=`
+              <li >
+                    <div class="treeview__level" data-level="SV" >
                       <span class="level-title">`+USER.cv.subVerticals[j].sver[m]+`</span>
                     
                     </div>
-                    <ul id="`+USER.cv.verticals[j].id+`+`+USER.cv.subVerticals[j].ver+`">
+                    <ul id="`+USER.cv.verticals[j].id+`+`+USER.cv.subVerticals[j].sver[m]+`">
 
                     </ul>
               </li>
@@ -689,43 +514,46 @@
             }    
         }
         for(let k in USER.cv.expertise ){
-       
+          for(let m in USER.cv.expertise[k].svers){
             
-            // console.log(USER.cv.expertise[k])
-            for(let m in USER.cv.expertise[k].svers){
-              console.log(USER.cv.expertise[k].svers[m].expertise)
-              for(let n in USER.cv.expertise[k].svers[m].expertise ){
-                  console.log(USER.cv.expertise[k].svers[m].expertise[n].category)
-                  document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].ver).innerHTML+=`
-                  <li>
-                      <div class="treeview__level" data-level="C">
-                        <span class="level-title">`+USER.cv.expertise[k].svers[m].expertise[n].category+`</span>
-                        <div class="treeview__level-btns">
-                          <div class="btn btn-default btn-sm level-add"><span class="fa fa-plus"></span></div>
-                          <div class="btn btn-default btn-sm level-remove"><span class="fa fa-trash text-danger"></span></div>
-                          <div class="btn btn-default btn-sm level-same"><span>Fresher</span></div>
-                          <div class="btn btn-default btn-sm level-sub"><span>Trained</span></div>
-
-                          <div class="btn btn-default btn-sm level-sub"><span>Fresher & Trained</span></div>
-                          
-                        </div>
-                      </div>
+            for(let n in USER.cv.expertise[k].svers[m].expertise ){
+             
+              document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]).innerHTML+=`
+              <li >
+                <div class="treeview__level2" data-level="EXP" >
+                  <span class="level-title">`+USER.cv.expertise[k].svers[m].expertise[n].category+`</span>
+                  <div class="treeview__level-btns">
+                    <div class="btn btn-default btn-sm level-add"><span class=""></span></div>
+                    <div class="btn btn-default btn-sm level-remove"><span class="fr"></span></div>
+                   
+                    <div id="`+USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.expertise[k].svers[m].expertise[n].category+`">
+                     
                       
-                    </li>
-                  `
+                    </div>
+                  </div>
+                </div> 
+              </li>
+              `
+            }
+          }
+        }    
+        for(let k in USER.cv.expertise ){
+          for(let m in USER.cv.expertise[k].svers){
+            // console.log(USER.cv.expertise[k].svers[m].expertise)
+            for(let n in USER.cv.expertise[k].svers[m].expertise ){
+             
+              for(let i in USER.cv.expertise[k].svers[m].expertise[n] ){
+               if(i=="value"){
+                console.log(USER.cv.expertise[k].svers[m].expertise[n][i])
+                document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.expertise[k].svers[m].expertise[n].category).innerHTML+=`
+                <div class="btn btn-default btn-sm level-same"><span>`+USER.cv.expertise[k].svers[m].expertise[n][i]+`</span></div>
+                `
+               }
+              
               }
             }
-        }
-
-        for(let i  in USER.cv.subVerticals ){
-         
-            document.getElementById("selectedSubVerticals").innerHTML+=`
-            <span class="border px-3 p-1 add-experience" style="background-color:ivory">&nbsp;`+USER.cv.subVerticals[i].ver+`/`+USER.cv.subVerticals[i].sver+`</span>
-                                   
-            `
-           
-        }
-        
+          }
+        }    
     });
     function showCv(){
        window.open(USER.cv.url,"_blank")

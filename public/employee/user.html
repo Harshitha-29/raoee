@@ -105,6 +105,7 @@
     .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
       width: 100% !important;
     }
+    
   </style>
   <body class="user-profile">
     <div class="wrapper">
@@ -397,7 +398,7 @@
                     id="profileImg"
                   />
                 </div>
-
+              
                 <div class="card-body">
                   <input
                     type="file"
@@ -431,7 +432,9 @@
                       </div>
                     </a>
                   </div>
-
+                  <div class="container">
+                    <div id="progressBar" style="display:none" class="Loading"></div>
+                  </div>
                   <p id="aboutMeProfile" class="description text-center">
                    
                   </p>
@@ -476,6 +479,7 @@
                     
                     
                   </div>
+                  
                   <div class="card-body" id="acd">
                     <h6 style="font-weight: 400">
                       Selected Verticals (Click To Expand)
@@ -696,6 +700,9 @@
                     
                     <hr\>
                     <hr\>
+                    <div class="container">
+                      <div id="progressBar2" style="display:none" class="Loading"></div>
+                    </div>
                     <div style="width: 100%; display: flex; justify-content: space-around;">
                       <!-- <button
                         id="uploadBtn"
@@ -713,6 +720,7 @@
                         ></i
                         >Cancel
                       </button> -->
+                   
                       <button
                         id="uploadBtn"
                         style="background-color: green; "
