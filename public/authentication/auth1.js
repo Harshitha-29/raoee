@@ -173,8 +173,6 @@ const createUserDB = async (collection, uid, data) => {
 // //////////////////////////////////////////
 
 const createUserAuth = async (email, password, type) => {
-  const SHA256 =  new Hashes.SHA256;
-  password = SHA256.hex(password);
   return await auth
     .createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -249,8 +247,6 @@ const login = (e) => {
   document.getElementById("showMessage").innerHTML = "Verifying Details ... ";
   const email = signinFormHTML["email"].value;
   let password = signinFormHTML["password"].value;
-  const SHA256 =  new Hashes.SHA256;
-  password = SHA256.hex(password);
   auth
     .signInWithEmailAndPassword(email, password)
     .then((user) => {

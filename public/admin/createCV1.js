@@ -109,9 +109,7 @@ const updateBasicInfo = async () => {
 
 async function createUserAuth(email, password, type) {
   document.getElementById("progressBar").style.display="block"
-  console.log(email, password, type);
-  const SHA256 = new Hashes.SHA256();
-  password = SHA256.hex(password);
+
   return await auth.createUserWithEmailAndPassword(email, password)
     .then(async (userCredential) => {
       console.log(userCredential);
