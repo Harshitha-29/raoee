@@ -51,6 +51,7 @@
       href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
     />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   </head>
   <style>
     
@@ -241,6 +242,32 @@
                             class="form-control"
                             placeholder="ZIP Code"
                           />
+                        </div>
+                      </div>
+                      <hr/>
+                      <div class="col-md-4 pr-1">
+                        <div class="form-group">
+                          <label>Prefered Country to work</label>
+                          <div style=''>
+                            <script type= "text/javascript" src = "countries.js"></script>
+                             <select style="padding: 7px;" id="country" name ="country"></select> 
+                            
+                          </div>
+                        </div>
+                      </div>
+                     
+                      <div class="col-md-5 px-1" id="stateOpt" style="display: none;margin-left: 10%;">
+                        <div class="form-group">
+                          <label>Prefered State to work</label>
+                          <div style='text-align:center;'>
+                            <script type= "text/javascript" src = "countries.js"></script>
+                              <div id="sts">
+                               
+                              </div>
+              
+                                
+                              </select> 
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -447,7 +474,8 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   </body>
   <script>
     $(document).ready(function () {
@@ -508,6 +536,11 @@
       }
     }
   </script>
+  <script language="javascript">
+    populateCountries("country", "state"); // first parameter is id of country drop-down and second parameter is id of state drop-down
+    
+  </script>
+  
 <script src="../assets/js/plugins/bootstrap-notify.js"></script>
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
@@ -522,6 +555,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script src="./../assets/firebase.js"></script>
 <script src="./common/auth.js"></script>
 <script src="./createCV1.js"></script>

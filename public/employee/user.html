@@ -344,6 +344,31 @@
                           />
                         </div>
                       </div>
+                      <div class="col-md-5 pr-1">
+                        <div class="form-group">
+                          <label>Prefered Country to work</label>
+                          <div style=''>
+                            <script type= "text/javascript" src = "countries.js"></script>
+                             <select style="padding: 7px;width: 85%;border-radius: 100px;" id="country" name ="country"></select> 
+                            
+                          </div>
+                        </div>
+                      </div>
+                     
+                      <div class="col-md-5 pl-1" id="stateOpt" style="display: none;margin-left: 10%;">
+                        <div class="form-group">
+                          <label>Prefered State to work</label>
+                          <div style='text-align:center;'>
+                            <script type= "text/javascript" src = "countries.js"></script>
+                              <div id="sts">
+                               
+                              </div>
+              
+                                
+                              </select> 
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-md-12">
@@ -826,6 +851,10 @@
         reader.readAsDataURL(input.files[0]);
       }
     }
+  </script>
+   <script language="javascript">
+    populateCountries("country", "state"); // first parameter is id of country drop-down and second parameter is id of state drop-down
+    
   </script>
 <script src="../assets/js/plugins/bootstrap-notify.js"></script>
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
