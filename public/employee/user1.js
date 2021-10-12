@@ -1327,6 +1327,7 @@ async function displayCvDetails() {
     });
 
     editCvUrlHolderHTML.innerHTML = `
+    
     <a target="_blank" href="${USER.cv.url}" >
       <label
         class="btn btn-tertiary js-labelFile"
@@ -1337,7 +1338,10 @@ async function displayCvDetails() {
           >View Your CSV</span
         >
       </label>
-    </a>`;
+    </a>
+    
+    `
+    ;
   }
 }
 

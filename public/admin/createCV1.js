@@ -686,6 +686,13 @@ function displaySubVerticalDropdown() {
   `;
 
   // $("#choices-multiple-remove-button1").hide()
+  new Choices("#choices-multiple-remove-button1", {
+    removeItemButton: true,
+    maxItemCount: 20,
+    searchResultLimit: 10,
+    renderChoiceLimit: 10,
+  });
+
  
 
 }

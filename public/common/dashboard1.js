@@ -11,9 +11,7 @@ let USER_TYPE = false;
 
 auth.onAuthStateChanged((user) => {
   if(user) {
-    console.log(user);
-    console.log(user.uid);
-    console.log(user.displayName);
+   
     USER_ID = user.uid;
     USER_RAW = user;
     USER_TYPE = user.displayName;
@@ -55,7 +53,7 @@ function displayAuthSigns() {
     </a>
   </li>`;
   } else {
-    console.log(USER_TYPE);
+    
     toolbarOps = `
     <a class="dropdown-item" href="./${USER_TYPE}/user.html"><i class="now-ui-icons ui-1_settings-gear-63"><span style="color:black;"></span></i>My Profile</a>
     <a onclick="logoutUser()" class="dropdown-item" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:black;"></span></i>Logout</a>
@@ -92,7 +90,7 @@ async function getUserInfo() {
   await db.collection(`${USER_TYPE}s`).doc(USER_ID).get().then(doc => {
     USER = doc.data();
   })
-  console.log(USER);
+ 
   displayAuthSigns();
 }
 
@@ -122,7 +120,7 @@ db.collection("sliders").onSnapshot((snaps) => {
     if (docData.title) {
       title = docData.title;
     }
-    //     console.log(docData +" "+)
+    
     if (index == 0) {
       document.getElementById("slidersData").innerHTML +=
         `
