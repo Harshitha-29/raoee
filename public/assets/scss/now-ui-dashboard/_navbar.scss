@@ -22,7 +22,7 @@
     &.bg-white{
       .input-group .form-control,
       .input-group.no-border .form-control{
-        color: $default-color;
+        
 
         @include placeholder(){
           color: $default-color;
@@ -226,7 +226,7 @@
 
     &.bg-white:not(.navbar-transparent){
         a:not(.dropdown-item):not(.btn){
-            color: $default-color;
+         
 
             &.disabled{
                 opacity: .5;
@@ -235,7 +235,7 @@
         }
 
         .button-bar{
-            background: $default-color;
+           
         }
 
         .nav-item.active .nav-link:not(.btn),
