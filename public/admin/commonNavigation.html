@@ -115,6 +115,12 @@
             <p>Add Testimonails</p>
           </a>
         </li>
+        <li class="" id="site-control" >
+          <a href="./siteControl.html">
+            <i class="now-ui-icons ui-2_settings-90"></i>
+            <p>Site Control</p>
+          </a>
+        </li>
         <li>
           <a href="#" onclick="logoutUser()" >
             <i class="now-ui-icons objects_key-25"></i>
@@ -191,6 +197,14 @@
       $("#about-why").removeClass("active")
       $('#vertical').removeClass('active')
       $("#uploadCv").addClass("active")
+    }
+    else if(window.location.href.includes("siteControl.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').removeClass('active')
+      $("#site-control").addClass("active")
     }
   </script>
 </body>

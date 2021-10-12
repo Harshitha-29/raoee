@@ -869,7 +869,7 @@
                 </button>
               </div>
               <div class="modal-body pt-md-0 pb-md-5 text-center" style="background-color: #f7f7f7;">
-                <h2 style="color: black;">Site Is Under Maintenance!</h2>
+                <h2 style="color: black; " id="statusMessage">Oops!</h2>
                 <div class="ic">
                   <img src="https://www.pngitem.com/pimgs/m/561-5616998_free-website-is-under-maintenance-template-hd-png.png" alt="" class="d">
                 </div>
@@ -917,11 +917,7 @@
           $("#footer").load("././common/footer.html");
         },300)
      
-        $("#modalProgress").modal({
-        backdrop: "static",
-        keyboard: false,
-        show: false,
-      });
+       
         //demo.initDashboardPageCharts();
       });
     </script>

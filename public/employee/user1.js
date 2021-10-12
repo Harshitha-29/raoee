@@ -316,7 +316,8 @@ const updateCv = async (e) => {
   console.log(workCountry, statesSelected);
 
   if(workCountry === -1 || statesSelected.length === 0) {
-    alert('enter the preffered country and state where user emplyee wants to work');
+    document.getElementById("progressBar2").style.display="none"
+    nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
     return;
   }
 
@@ -427,7 +428,7 @@ const updateCv = async (e) => {
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
-  
+  nowuiDashboard.showNotification('top','center',"Data updated successfully","primary");
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   setTimeout(function(){
     location.reload();
@@ -1366,29 +1367,22 @@ async function displayCvDetails() {
     // //
     let options = "";
 
-    USER.cv.workStates.map((s) => {
-      options += `<option value="${s}" selected>${s}</option>`;
-    });
-
-    stsHTML.innerHTML = `
-    <select
-      id="state"
-      class="form-control"
-      multiple
-      name="verticals"
-      onchange="verticalSelected(event)"
-      required
-      selected
-    >
-      ${options}
-    </select>
-    `;
-    new Choices("#state", {
-      removeItemButton: true,
-      maxItemCount: 20,
-      searchResultLimit: 10,
-      renderChoiceLimit: 10,
-    });
+   
+    // setTimeout(function(){
+    //   alert(8)
+    //   state.innerHTML += `
+    
+    //   ${options}
+    
+    // `;
+    // },800)
+    
+    // new Choices("#state", {
+    //   removeItemButton: true,
+    //   maxItemCount: 20,
+    //   searchResultLimit: 10,
+    //   renderChoiceLimit: 10,
+    // });
 
 
     let states ="<ul>";
@@ -1400,9 +1394,28 @@ async function displayCvDetails() {
 
 
     cvFormHTML['country'].value = USER.cv.workCountry;
-    document.getElementById("stateOpt").style.display = "block";
 
+   
+    document.getElementById("sts").innerHTML = `
+			<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+      USER.cv.workStates.map((s) => {
+        
+       document.getElementById("state").innerHTML += `<option value="${s}" selected>${s}</option>`;
+      });
+      populateStates("country","state")
+      setTimeout(function () {
+
+        
+        new Choices("#state", {
+          removeItemButton: true,
+          maxItemCount: 100,
+          searchResultLimit: 100,
+          renderChoiceLimit: 100,
+        });
+        document.getElementById("stateOpt").style.display = "block";
+      }, 500);
     editCvUrlHolderHTML.innerHTML = `
+    
     <a target="_blank" href="${USER.cv.url}" >
       <label
         class="btn btn-tertiary js-labelFile"
@@ -1413,7 +1426,10 @@ async function displayCvDetails() {
           >View Your CSV</span
         >
       </label>
-    </a>`;
+    </a>
+    
+    `
+    ;
   }
 }
 

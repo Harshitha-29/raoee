@@ -467,8 +467,10 @@
         USER_REF = await db.collection(userType).doc(uid);
         const refDoc = await USER_REF.get();
         USER = await refDoc.data();
-        console.log(USER);
+       
         document.title = USER.fname
+        if(USER.basicInfoAdded==true){
+       
         $("#favicon").attr("href",USER.basicInfo.imgUrl);
         $("#ename").text(USER.fname)
         $("#ename2").text(USER.fname)
@@ -483,6 +485,8 @@
         $("#post").attr('value',USER.basicInfo.postalCode)
         $("#country").attr('value',USER.basicInfo.country)
         $("#state").attr('value',USER.basicInfo.state)
+        }
+     
         
         for(let i  in USER.cv.verticals ){
             
