@@ -262,16 +262,21 @@
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
 
-<script src="./../assets/js/multiselect-dropdown.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.8/hashes.min.js" integrity="sha512-1HyPmPHvi5wFUctYkBhwOYgXmMdbPrDaXKBrbGRI3o1CQkTKazG/RKqR8QwVIjTDOQ3uAOPOFkEbzi99Td6yiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <script src="./../assets/firebase.js"></script>
 <script src="./common/auth.js"></script>
+<script>
+  const USER = undefined;
+  checkIfAdmin();
+</script>
+
 
 <script>
   var db = firebase.firestore();
