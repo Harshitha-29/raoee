@@ -217,7 +217,11 @@ function logoutUser() {
   auth.signOut().then(() => {
     // Sign-out successful.
     
+<<<<<<< HEAD:public/admin/dashboard1.js
     window.location.href="./adminDash.html"
+=======
+    window.location.href="./../index.html"
+>>>>>>> 6178e1b28503db5ed18a5c0bc38e5a5a76e28632:public/admin/index1.js
   }).catch((error) => {
     console.error(error);
     if(retryLogout2 < 2) {
