@@ -283,3 +283,24 @@ function logoutUser() {
     }
   });
 }
+
+db.collection("site-control").doc("status")
+.onSnapshot((doc) => {
+    // var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+  
+    if(doc.data().status == true ){
+      $("#modalProgress").modal({
+        backdrop: "static",
+        keyboard: false,
+        show: false,
+      });
+    }else{
+ 
+      $("#modalProgress").modal({
+        backdrop: "static",
+        keyboard: false,
+        show: true,
+      });
+      document.getElementById("statusMessage").innerText=doc.data().message
+    }
+});

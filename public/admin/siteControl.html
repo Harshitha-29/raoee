@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="../assets/img/apple-icon.png"
+    />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>RAOEE</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <!-- <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    /> -->
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+      integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
+    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+  </head>
+  <style>
+    
+    .choices__inner {
+      border-radius: 20px;
+      background-color: transparent;
+      height: 10px !important;
+      overflow-y: scroll;
+    }
+    .now-ui-icons{
+    color: black !important;
+    }
+    .btn-tertiary {
+      color: #555;
+      padding: 0;
+      line-height: 40px;
+      width: 300px;
+      margin: auto;
+      display: block;
+      border: 2px solid #555;
+    }
+    .btn-tertiary:hover,
+    .btn-tertiary:focus {
+      color: #888888;
+      border-color: #888888;
+    }
+
+    /* input file style */
+    .input-file {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    .input-file + .js-labelFile {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+    .input-file + .js-labelFile .icon:before {
+      content: "";
+    }
+    .input-file + .js-labelFile.has-file .icon:before {
+      content: "";
+      color: #5aac7b;
+    }
+
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+      width: 100% !important;
+    }
+  </style>
+  <body class="user-profile">
+    <div class="wrapper">
+      
+      <div id="navigation"></div>
+      <div class="main-panel" id="main-panel">
+        <!-- Navbar -->
+        <div id="topbar"></div>
+      
+        <!-- End Navbar -->
+        <div class="panel-header panel-header-sm"></div>
+        <div class="content">
+         
+          <div class="row flex-column-reverse flex-md-row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">Control Your Site</h5>
+                </div>
+
+                <div class="card-body">
+                  
+                    <div class="row">
+                      <div class="col-md-6 pr-1" >
+                        <br>
+                        <div class="form-group" style="">
+                          <label>Site Status</label>
+                         
+                          <label class="switch">
+                            <input type="checkbox" id="sliderBtn" />
+                            <span class="slider round"></span>
+                            <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px; " id="toggleTxt"> Active</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-6 pl-1">
+                        <div class="form-group">
+                          <label
+                            >Site Down Message <span style="color: red">*</span></label
+                          >
+                          <input
+                            required
+                            name="fname"
+                            type="text"
+                            class="form-control"
+                            placeholder="Ex: Under Maintenance "
+                            disabled
+                            id="message"
+                          />
+                        </div>
+                      </div>
+                      <br>
+                  
+                    </div>
+
+                    <button
+                      id="uploadBtn"
+                      style="background-color: green; "
+                      type="submit"
+                      class="btn btn-elegant"
+                      onclick="updateStatus()"
+                    >
+                      <i
+                        class="
+                          now-ui-icons
+                          arrows-1_cloud-upload-94
+                          pr-2
+                        "
+                        aria-hidden="true"
+                      ></i
+                      >Update Site Status
+                    </button>
+                    
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+   
+        <!-- footer -->
+        <div id="footer"></div>
+      </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+  </body>
+  <script>
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            // Javascript method's body can be found in assets/js/demos.js
+            
+            $("#navigation").load("commonNavigation.html");
+            $("#topbar").load("topBar.html");
+            // $("#footer").load("footer.html");
+            });
+        
+      var cnt=0;
+        let int= setInterval(function(){
+          cnt++;
+       
+          if(cnt==5){
+            
+            clearInterval(int)
+          }
+          // $("#popupModal").load("./../common/commonNavigation.html");
+          $("#footer").load("./../common/footer.html");
+        },200)
+
+     
+    });
+    
+    sliderBtn.addEventListener("change",function(){
+      let state = document.getElementById("sliderBtn")
+      
+      if(state.checked){
+        document.getElementById("message").disabled=true;
+        document.getElementById("toggleTxt").innerHTML="Active"
+        
+      }else{
+        document.getElementById("message").disabled=false;
+        document.getElementById("toggleTxt").innerHTML="Inactive"
+      }
+    })
+    function updateStatus(){
+      let ans = confirm("Are you sure to update the status")
+      if(ans){
+        let state = document.getElementById("sliderBtn")
+        if(state.checked){
+          
+          db.collection("site-control").doc("status").update({status: true,message : ""});
+          nowuiDashboard.showNotification('top','center',"Site Is Live now ","primary");
+          
+        } else{
+          let msg =document.getElementById("message").value;
+         
+          db.collection("site-control").doc("status").update({status: false , message : msg});
+          nowuiDashboard.showNotification('top','center',"Site has been turned down ","primary");
+        }
+      }
+    }
+
+  </script>
+
+  
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+
+<script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+
+<script src="./../assets/js/multiselect-dropdown.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.8/hashes.min.js" integrity="sha512-1HyPmPHvi5wFUctYkBhwOYgXmMdbPrDaXKBrbGRI3o1CQkTKazG/RKqR8QwVIjTDOQ3uAOPOFkEbzi99Td6yiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script src="./../assets/firebase.js"></script>
+<script src="./common/auth.js"></script>
+
+<script>
+  var db = firebase.firestore();
+    db.collection("site-control").doc("status")
+    .onSnapshot((doc) => {
+        // var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+        console.log( " data: ", doc.data());
+        if(doc.data().status == true ){
+          document.getElementById("sliderBtn").checked=true;
+          document.getElementById("message").disabled=true;
+        }else{
+     
+          document.getElementById("message").disabled=false;
+          
+          document.getElementById("message").value=doc.data().message;
+        }
+    });
+</script>
+
+</html>
