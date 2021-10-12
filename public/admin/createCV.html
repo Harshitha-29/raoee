@@ -136,7 +136,7 @@
                             >First Name <span style="color: red">*</span></label
                           >
                           <input
-                            required
+                  
                             name="fname"
                             type="text"
                             class="form-control"
@@ -148,7 +148,7 @@
                         <div class="form-group">
                           <label>Last Name</label>
                           <input
-                            required
+                  
                             name="lname"
                             type="text"
                             class="form-control"
@@ -165,7 +165,7 @@
                             <span style="color: red">*</span></label
                           >
                           <input
-                            required
+                  
                             name="email"
                             type="email"
                             class="form-control"
@@ -180,7 +180,7 @@
                             <span style="color: red">*</span></label
                           >
                           <input
-                            required
+                  
                             name="phone"
                             type="number"
                             class="form-control"
@@ -194,7 +194,7 @@
                         <div class="form-group">
                           <label>Address</label>
                           <input
-                            required
+                  
                             name="address"
                             type="text"
                             class="form-control"
@@ -208,7 +208,7 @@
                         <div class="form-group">
                           <label>City</label>
                           <input
-                            required
+                  
                             name="city"
                             type="text"
                             class="form-control"
@@ -220,8 +220,8 @@
                         <div class="form-group">
                           <label>State</label>
                           <input
-                            required
-                            name="state"
+                  
+                            name="home-state"
                             type="text"
                             class="form-control"
                             placeholder="State"
@@ -232,8 +232,8 @@
                         <div class="form-group">
                           <label>Country</label>
                           <input
-                            required
-                            name="country"
+                  
+                            name="home-country"
                             type="text"
                             class="form-control"
                             placeholder="Country"
@@ -245,38 +245,12 @@
                         <div class="form-group">
                           <label>Postal Code</label>
                           <input
-                            required
+                  
                             type="number"
                             name="postal-code"
                             class="form-control"
                             placeholder="ZIP Code"
                           />
-                        </div>
-                      </div>
-                      <hr/>
-                      <div class="col-md-4 pr-1">
-                        <div class="form-group">
-                          <label>Prefered Country to work</label>
-                          <div style=''>
-                            <script type= "text/javascript" src = "countries.js"></script>
-                             <select style="padding: 7px;" id="country" name ="country"></select> 
-                            
-                          </div>
-                        </div>
-                      </div>
-                     
-                      <div class="col-md-5 px-1" id="stateOpt" style="display: none;margin-left: 10%;">
-                        <div class="form-group">
-                          <label>Prefered State to work</label>
-                          <div style='text-align:center;'>
-                            <script type= "text/javascript" src = "countries.js"></script>
-                              <div id="sts">
-                               
-                              </div>
-              
-                                
-                              </select> 
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -285,8 +259,32 @@
                       <div class="card-header" style="display: flex">
                         <h5 class="title">Add CV's</h5>
                       </div>
+
                       
                       <div class="card-body" id="cvEditHolder">
+                        <div class="row">
+                          <div class="col-md-4 pr-1">
+                            <div class="form-group">
+                              <label>Prefered Country to work</label>
+                              <div >
+     
+                                 <select required style="padding: 7px;" id="country" name ="country"></select> 
+                              </div>
+                            </div>
+                          </div>
+                         
+                          <div class="col-md-5 px-1" id="stateOpt" style="display: none;margin-left: 10%;">
+                            <div class="form-group">
+                              <label>Prefered State to work</label>
+                              <div style='text-align:center;'>
+                                  <div id="sts">
+                                  </select>
+                                  </div>
+                 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
        
                           <div class="row">
                             <div class="col-md-12">
@@ -367,7 +365,7 @@
                                   <td>
                                     <label class="switch">
                                       <input
-                                        required type="checkbox" />
+                               type="checkbox" />
                                       <span class="slider round"></span>
                                     </label>
                                     <span
@@ -401,12 +399,12 @@
                               <label>Uplaod CV</label>
                               <div class="form-group" style="display: flex">
                                 <input
-                                  required
+                        
                                   type="file"
                                   name="cv-file"
                                   id="cv-file"
                                   class="input-file"
-                                  required
+                        
                                 />
       
                                 <label
@@ -447,9 +445,7 @@
                               ></i
                               >Cancel
                             </button> -->
-                            
                           </div>
-            
                       </div>
                     </div>
                     <div class="container">
@@ -485,26 +481,21 @@
     </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
-
+    <script type= "text/javascript" src = "./../assets/js/countries.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   </body>
   <script>
     $(document).ready(function () {
-
         $(document).ready(function () {
-            // Javascript method's body can be found in assets/js/demos.js
-            
             $("#navigation").load("commonNavigation.html");
             $("#topbar").load("topBar.html");
             // $("#footer").load("footer.html");
             });
         
       var cnt=0;
-        let int= setInterval(function(){
+        let int= setInterval(function() {
           cnt++;
-       
           if(cnt==5){
-            
             clearInterval(int)
           }
           // $("#popupModal").load("./../common/commonNavigation.html");
@@ -561,13 +552,14 @@
 <script src="../assets/js/core/bootstrap.min.js"></script>
 
 <script src="./../assets/js/multiselect-dropdown.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jshashes/1.0.8/hashes.min.js" integrity="sha512-1HyPmPHvi5wFUctYkBhwOYgXmMdbPrDaXKBrbGRI3o1CQkTKazG/RKqR8QwVIjTDOQ3uAOPOFkEbzi99Td6yiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script src="./../assets/firebase.js"></script>
 <script src="./common/auth.js"></script>
 <script src="./createCV1.js"></script>

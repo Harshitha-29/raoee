@@ -108,8 +108,8 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["phone"].readOnly = false;
     userBasicFormHTML["address"].readOnly = false;
     userBasicFormHTML["city"].readOnly = false;
-    userBasicFormHTML["state"].readOnly = false;
-    userBasicFormHTML["country"].readOnly = false;
+    userBasicFormHTML["home-state"].readOnly = false;
+    userBasicFormHTML["home-country"].readOnly = false;
     userBasicFormHTML["postal-code"].readOnly = false;
     userBasicFormHTML["about-me"].readOnly = false;
     updateBasicInfoBtnHTML.style.display = "block";
@@ -119,8 +119,8 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["phone"].readOnly = true;
     userBasicFormHTML["address"].readOnly = true;
     userBasicFormHTML["city"].readOnly = true;
-    userBasicFormHTML["state"].readOnly = true;
-    userBasicFormHTML["country"].readOnly = true;
+    userBasicFormHTML["home-state"].readOnly = true;
+    userBasicFormHTML["home-country"].readOnly = true;
     userBasicFormHTML["postal-code"].readOnly = true;
     userBasicFormHTML["about-me"].readOnly = true;
     updateBasicInfoBtnHTML.style.display = "none";
@@ -145,8 +145,8 @@ function displayUserDetails() {
     aboutMeProfileHTML.innerText = USER.basicInfo.aboutMe;
     userBasicFormHTML["address"].value = USER.basicInfo.address;
     userBasicFormHTML["city"].value = USER.basicInfo.city;
-    userBasicFormHTML["state"].value = USER.basicInfo.state;
-    userBasicFormHTML["country"].value = USER.basicInfo.country;
+    userBasicFormHTML["home-state"].value = USER.basicInfo.state;
+    userBasicFormHTML["home-country"].value = USER.basicInfo.country;
     userBasicFormHTML["postal-code"].value = USER.basicInfo.postalCode;
     userBasicFormHTML["about-me"].value = USER.basicInfo.aboutMe;
     blahHTML.src = USER?.basicInfo?.imgUrl || `../assets/img/userProfile.png`;
@@ -170,8 +170,8 @@ const updateBasicInfo = async (e) => {
 
   const address = userBasicFormHTML["address"].value;
   const city = userBasicFormHTML["city"].value;
-  const state = userBasicFormHTML["state"].value;
-  const country = userBasicFormHTML["country"].value;
+  const state = userBasicFormHTML["home-state"].value;
+  const country = userBasicFormHTML["home-country"].value;
   const postalCode = userBasicFormHTML["postal-code"].value;
   const aboutMe = userBasicFormHTML["about-me"].value;
 
@@ -291,13 +291,35 @@ function getUserPreferences() {
 
 // /////////////////////////////////////////////////////////
 
+let statesSelected = [];
+
+function selectedState(e) {
+  if (e) {
+    statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
+
+
+// /////////////////////////////////////////////////////////
+
 const cvFormHTML = document.querySelector("#cvForm");
 let FILE = false;
 let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
-  document.getElementById("progressBar2").style.display="block"
+  document.getElementById("progressBar2").style.display="block";
+
+  const workCountry = cvFormHTML['country'].value;
+  console.log(workCountry, statesSelected);
+
+  if(workCountry === -1 || statesSelected.length === 0) {
+    alert('enter the preffered country and state where user emplyee wants to work');
+    return;
+  }
+
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -350,6 +372,9 @@ const updateCv = async (e) => {
   data.userId = USER.uid;
   data.fname = USER.fname;
   data.lname = USER.lname;
+  data.workCountry = workCountry;
+  data.workStates = statesSelected;
+
   console.log(USER);
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -366,6 +391,8 @@ const updateCv = async (e) => {
     url: FILE_NAME ? resURL.data.url : USER.cv.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
+    workCountry,
+    workStates: statesSelected
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -395,7 +422,7 @@ const updateCv = async (e) => {
   }
 
 
-  nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
+  // nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
   document.getElementById("progressBar2").style.display="none"
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
@@ -1254,6 +1281,9 @@ const cvUrlHTML = document.querySelector("#cvUrl");
 const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
 const verticalsTablesHTML = document.querySelector("#verticalsTables");
 const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
+const workCountryHTML = document.querySelector('#work-country');
+const workStatesHTML = document.querySelector('#work-states');
+const stsHTML = document.querySelector('#sts');
 
 async function displayCvDetails() {
   if (USER.cvAdded) {
@@ -1325,6 +1355,49 @@ async function displayCvDetails() {
       let whole = head + body + end;
       verticalsTablesHTML.innerHTML += whole;
     });
+
+    workCountryHTML.innerText = USER.cv.workCountry;
+
+    // //
+    let options = "";
+
+    USER.cv.workStates.map((s) => {
+      options += `<option value="${s}" selected>${s}</option>`;
+    });
+
+    stsHTML.innerHTML = `
+    <select
+      id="state"
+      class="form-control"
+      multiple
+      name="verticals"
+      onchange="verticalSelected(event)"
+      required
+      selected
+    >
+      ${options}
+    </select>
+    `;
+    new Choices("#state", {
+      removeItemButton: true,
+      maxItemCount: 20,
+      searchResultLimit: 10,
+      renderChoiceLimit: 10,
+    });
+
+
+    let states ="<ul>";
+    USER.cv.workStates.map(s => {
+      states += `<li>${s}</li>`
+    })
+    states += `</ul>`;
+    workStatesHTML.innerHTML = states;
+
+
+
+
+    cvFormHTML['country'].value = USER.cv.workCountry;
+    document.getElementById("stateOpt").style.display = "block";
 
     editCvUrlHolderHTML.innerHTML = `
     

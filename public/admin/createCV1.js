@@ -76,8 +76,8 @@ const updateBasicInfo = async () => {
 
   const address = employeeFormHTML["address"].value || "";
   const city = employeeFormHTML["city"].value || "";
-  const state = employeeFormHTML["state"].value || "";
-  const country = employeeFormHTML["country"].value || "";
+  const state = employeeFormHTML["home-state"].value || "";
+  const country = employeeFormHTML["home-country"].value || "";
   const postalCode = employeeFormHTML["postal-code"].value || "";
 
   FORM_DATA = {
@@ -242,6 +242,17 @@ function getUserPreferences() {
 }
 
 // /////////////////////////////////////////////////////////
+let statesSelected = [];
+
+function selectedState(e) {
+  if (e) {
+    statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
+
+// /////////////////////////////////////////////////////////
 
 // const employeeFormHTML = document.querySelector("#cvForm");
 let FILE = false;
@@ -249,9 +260,16 @@ let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
-  await updateBasicInfo();
+  // await updateBasicInfo();
   const userType = 'employee';
 
+  const workCountry = employeeFormHTML['country'].value;
+  console.log(workCountry, statesSelected);
+
+  if(workCountry === -1 || statesSelected.length === 0) {
+    alert('enter the preffered country and state where user emplyee wants to work');
+    return;
+  }
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
 
@@ -283,6 +301,8 @@ const updateCv = async (e) => {
   data.userId = USER_CREATED_ID;
   data.fname = employeeFormHTML["fname"].value || "";
   data.lname = employeeFormHTML["lname"].value || "";
+  data.workCountry = workCountry;
+  data.workStates = statesSelected;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -300,6 +320,8 @@ const updateCv = async (e) => {
     url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
+    workCountry,
+    workStates
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -327,9 +349,6 @@ const updateCv = async (e) => {
   FILE_NAME = false;
   FILE = false;
 
-  // setTimeout(function () {
-  //   location.reload();
-  // }, 2000);
   document.getElementById("progressBar").style.display="none"
 };
 
@@ -693,8 +712,6 @@ function displaySubVerticalDropdown() {
     renderChoiceLimit: 10,
   });
 
- 
-
 }
 
 // ///////////////////////////////////////////
@@ -1033,25 +1050,24 @@ function getNameOfId(id) {
   return name;
 }
 
-// //////////////////////////////////////////
 
 // /////////////////////////////////////////////////////////
-let retryLogout = 0;
+// let retryLogout = 0;
 
-function logoutUser() {
-  auth
-    .signOut()
-    .then(() => {
-      // Sign-out successful.
-      window.location.href = "./../adminDash.html";
-    })
-    .catch((error) => {
-      console.error(error);
-      if (retryLogout < 2) {
-        retryLogout++;
-        logoutUser();
-      } else {
-        alert(`unable to logout at moment. Reason: ${error.message}`);
-      }
-    });
-}
+// function logoutUser() {
+//   auth
+//     .signOut()
+//     .then(() => {
+//       // Sign-out successful.
+//       window.location.href = "./../adminDash.html";
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//       if (retryLogout < 2) {
+//         retryLogout++;
+//         logoutUser();
+//       } else {
+//         alert(`unable to logout at moment. Reason: ${error.message}`);
+//       }
+//     });
+// }
