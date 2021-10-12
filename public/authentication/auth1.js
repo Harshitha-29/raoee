@@ -253,8 +253,9 @@ const login = (e) => {
       let userType = user.user.displayName;
       if (userType === "admin") {
         window.localStorage.setItem('key_id', password);
-        window.location.href = `./../admin/index.html`;
+        window.location.href = `./../admin/adminDash.html`;
       } else {
+        console.log("NA")
         window.location.href = `./../index.html`;
       }
     })

@@ -68,7 +68,7 @@
     <div class="sidebar-wrapper" id="sidebar-wrapper">
       <ul class="nav">
         <li class="active" id="dash">
-          <a href="./index.html">
+          <a href="./adminDash.html">
             <i class="now-ui-icons design_app"></i>
             <p>Dashboard</p>
           </a>
@@ -97,7 +97,7 @@
             <p>Add Expertise</p>
           </a>
         </li>
-        <li id="expertise"> 
+        <li id="uploadCv"> 
           <a href="./createCV.html">
             <i class="now-ui-icons location_map-big"></i>
             <p>Upload CV's</p>
@@ -183,6 +183,14 @@
       $("#about-why").removeClass("active")
       $('#vertical').removeClass('active')
       $("#testi").addClass("active")
+    }
+    else if(window.location.href.includes("createCV.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').removeClass('active')
+      $("#uploadCv").addClass("active")
     }
   </script>
 </body>

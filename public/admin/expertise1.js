@@ -74,7 +74,7 @@ const expertiseForm = async (e) => {
   const vertical = expertiseFormHTML["vertical"].value;
   const expertiseCategory = expertiseFormHTML["expertiseCategory"].value;
   const expertisesTags = expertiseFormHTML["expertisesTags"].value;
-
+  console.log(expertisesTags)
   const expertiseTagList = expertisesTags.split(",").map((str) => str);
   try {
     for (let i = 0; i < subVerticalsSelected.length; i++) {
@@ -85,12 +85,15 @@ const expertiseForm = async (e) => {
         .doc(subVerticalsSelected[i]);
       const refDoc = await ref.get();
       const refData = await refDoc.data();
+      console.log("....")
+      console.log(expertiseTagList)
+      console.log(expertiseCategory)
       refData.expertise.push({
         tags: [...expertiseTagList],
         category: expertiseCategory,
       });
       await ref.update(refData);
-      expertiseFormHTML.reset();
+      // expertiseFormHTML.reset();
       alert("Expertises Saved");
     }
   } catch (error) {

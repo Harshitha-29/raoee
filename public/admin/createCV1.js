@@ -686,12 +686,7 @@ function displaySubVerticalDropdown() {
   `;
 
   // $("#choices-multiple-remove-button1").hide()
-  new Choices("#choices-multiple-remove-button1", {
-    removeItemButton: true,
-    maxItemCount: 20,
-    searchResultLimit: 10,
-    renderChoiceLimit: 10,
-  });
+ 
 
 }
 
@@ -1041,7 +1036,7 @@ function logoutUser() {
     .signOut()
     .then(() => {
       // Sign-out successful.
-      window.location.href = "./../index.html";
+      window.location.href = "./../adminDash.html";
     })
     .catch((error) => {
       console.error(error);
