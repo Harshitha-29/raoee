@@ -311,7 +311,7 @@
                         <div class="form-group">
                           <label>State</label>
                           <input
-                            name="state"
+                            name="home-state"
                             type="text"
                             class="form-control"
                             placeholder="State"
@@ -323,7 +323,7 @@
                         <div class="form-group">
                           <label>Country</label>
                           <input
-                            name="country"
+                            name="home-country"
                             type="text"
                             class="form-control"
                             placeholder="Country"
@@ -344,31 +344,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-md-5 pr-1">
-                        <div class="form-group">
-                          <label>Prefered Country to work</label>
-                          <div style=''>
-                            <script type= "text/javascript" src = "countries.js"></script>
-                             <select style="padding: 7px;width: 85%;border-radius: 100px;" id="country" name ="country"></select> 
-                            
-                          </div>
-                        </div>
-                      </div>
-                     
-                      <div class="col-md-5 pl-1" id="stateOpt" style="display: none;margin-left: 10%;">
-                        <div class="form-group">
-                          <label>Prefered State to work</label>
-                          <div style='text-align:center;'>
-                            <script type= "text/javascript" src = "countries.js"></script>
-                              <div id="sts">
-                               
-                              </div>
-              
-                                
-                              </select> 
-                          </div>
-                        </div>
-                      </div>
+                      
                     </div>
                     <div class="row">
                       <div class="col-md-12">
@@ -486,23 +462,38 @@
                   </h5>
                   
                 </div>
+                
+
                 <div id="cvInfoHolder" style="padding:10px ;">
+                  <div class="row">
+                    <div class="col-md-5 pr-1">
+                        <label>Prefered Country to work</label>
+                        <div id="work-country" >
+                           <!-- India -->
+                        </div>
+                    </div>
+                    <div class="col-md-5 pr-1">
+                      <label>Prefered States  to work</label>
+                      <div id="work-states" >
+                        <!-- <ul>
+                          <li>Up</li>
+                        </ul> -->
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="form-group" style="display: flex;margin-right: 65%;padding: 10px;">
                     <a id="cvUrl"  target="_blank">
                       <label
-
                       class="btn btn-tertiary js-labelFile"
                       style="background-color: transparent"
                     >
                       <i class="icon fa fa-eye"></i>
-
                       <span class="js-fileName"
                         >View Your CSV</span
                       >
                     </label>
                     </a>
-                    
-                    
                   </div>
                   
                   <div class="card-body" id="acd">
@@ -567,10 +558,35 @@
                     </div> -->
                   </div>
                   </div>
-                </div>
+                 </div>
+          
 
                 <div class="card-body" id="cvEditHolder" style="display: none;">
                   <form id="cvForm">
+                    <div class="row">
+                      <div class="col-md-4 pr-1">
+                        <div class="form-group">
+                          <label>Prefered Country to work</label>
+                          <div >
+ 
+                             <select required style="padding: 7px;" id="country" name ="country"></select> 
+                          </div>
+                        </div>
+                      </div>
+                     
+                      <div class="col-md-5 px-1" id="stateOpt" style="display: none;margin-left: 10%;">
+                        <div class="form-group">
+                          <label>Prefered State to work</label>
+                          <div style='text-align:center;'>
+                              <div id="sts">
+                              </select>
+                              </div>
+             
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
@@ -683,6 +699,7 @@
                       <div class="col-md-12 col-lg-10 col-12">
                         <label>Uplaod CV</label>
 
+                        
                         <div class="form-group" style="display: flex">
                         
                        
@@ -801,6 +818,8 @@
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+<script src="./../assets/js/countries.js"></script>
+
   </body>
   <script>
     $(document).ready(function () {
@@ -863,6 +882,7 @@
 <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
 <script src="../assets/js/core/popper.min.js"></script>
 <script src="../assets/js/core/bootstrap.min.js"></script>
+
 
 <script src="./../assets/js/multiselect-dropdown.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
