@@ -650,6 +650,11 @@ const uploadFileToStorage = async ({ ref }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
+  const res = checkFileType({file: FILE, fileTypes: ['pdf', 'ppt', 'docx', 'png', 'pptx', 'doc']})
+  if(!res.status) {
+    alert(res.message);
+    return;
+  }
   if (FILE) {
     FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
   }
@@ -1394,8 +1399,6 @@ async function displayCvDetails() {
     workStatesHTML.innerHTML = states;
 
 
-
-
     cvFormHTML['country'].value = USER.cv.workCountry;
     document.getElementById("stateOpt").style.display = "block";
 
@@ -1562,4 +1565,32 @@ function logoutUser() {
       alert(`unable to logout at moment. Reason: ${error.message}`)
     }
   });
+}
+
+// ////////////////////
+
+function checkFileType({file, fileTypes}) {
+  console.log(file);
+  let fExt = file.name.split('.');
+  fExt = fExt[fExt.length -1]
+
+  const fileIndex = fileTypes.findIndex(type => type === fExt);
+  console.log(fileIndex);
+  if(fileIndex === -1) {
+    return {
+      status: false,
+      message: 'wrong file extension uploaded'
+    }
+  }
+
+  if(file.size > 3000000) {
+    return {
+      status: false,
+      message: 'too large file'
+    }
+  }
+
+  return {
+    status: true
+  }
 }

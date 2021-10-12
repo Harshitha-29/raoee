@@ -211,20 +211,20 @@ db.collection('testimonials').onSnapshot(snaps => {
 
 // /////////////////////////////
 
-let retryLogout2 = 0;
+// let retryLogout2 = 0;
 
-function logoutUser() {
-  auth.signOut().then(() => {
-    // Sign-out successful.
+// function logoutUser() {
+//   auth.signOut().then(() => {
+//     // Sign-out successful.
     
-    window.location.href="./adminDash.html"
-  }).catch((error) => {
-    console.error(error);
-    if(retryLogout2 < 2) {
-      retryLogout2++;
-      logoutUser();
-    } else {
-      alert(`unable to logout at moment. Reason: ${error.message}`)
-    }
-  });
-}
+//     window.location.href="./adminDash.html"
+//   }).catch((error) => {
+//     console.error(error);
+//     if(retryLogout2 < 2) {
+//       retryLogout2++;
+//       logoutUser();
+//     } else {
+//       alert(`unable to logout at moment. Reason: ${error.message}`)
+//     }
+//   });
+// }

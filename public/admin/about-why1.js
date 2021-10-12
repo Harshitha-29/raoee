@@ -6,6 +6,7 @@ const storage = firebase.storage();
 let ABOUT_EDITOR;
 let WHY_EDITOR;
 const USER = undefined;
+checkIfAdmin();
 
 const aboutUsEditorHTML = document.querySelector("#editor"); 
 const whyUsEditorHTML = document.querySelector("#editor2"); 

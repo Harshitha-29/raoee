@@ -7,6 +7,9 @@ let USER_CREATED_REF;
 let USER_CREATED_ID;
 let FORM_DATA = false;
 
+const USER = undefined;
+checkIfAdmin();
+
 // /////////////////////////////////////////////////////////
 
 async function onStateChange() {
@@ -489,6 +492,12 @@ const uploadFileToStorage = async ({ ref, fileName, file }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
+  const res = checkFileType({file: FILE, fileTypes:  ['pdf', 'ppt', 'docx', 'png', 'pptx', 'doc']})
+  if(!res.status) {
+    alert(res.message);
+    return;
+  }
+
   if (FILE) {
     FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
   }
@@ -1050,6 +1059,34 @@ function getNameOfId(id) {
   return name;
 }
 
+
+// /////////////////////////////////////////////////////////
+
+function checkFileType({file, fileTypes}) {
+  console.log(file);
+  let fExt = file.name.split('.');
+  fExt = fExt[fExt.length -1]
+
+  const fileIndex = fileTypes.findIndex(type => type === fExt);
+  console.log(fileIndex);
+  if(fileIndex === -1) {
+    return {
+      status: false,
+      message: 'wrong file extension uploaded'
+    }
+  }
+
+  if(file.size > 3000000) {
+    return {
+      status: false,
+      message: 'too large file'
+    }
+  }
+
+  return {
+    status: true
+  }
+}
 
 // /////////////////////////////////////////////////////////
 // let retryLogout = 0;
