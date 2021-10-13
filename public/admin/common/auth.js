@@ -8,8 +8,14 @@ function checkIfAdmin() {
       const auth = firebase.auth();
 
       auth.onAuthStateChanged((user) => {
-        if (user) {
-          if (user.displayName !== "admin") {
+        // if(window.localStorage.getItem("key_id")){
+        //   alert(88)
+        //   return;
+        // }
+        if (user ) {
+          if (user.displayName !== "admin" ) {
+            alert("Came")
+            
             window.location.href = `./../authentication/auth.html`;
           }
         } else {
