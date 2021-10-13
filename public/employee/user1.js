@@ -81,6 +81,7 @@ async function getUserDetails({ uid, userType }) {
 
 // /////////////////////////////////////////////
 const editCvBtnHTML = document.querySelector("#editCvBtn");
+const editCvBtnHTML2 = document.querySelector("#editCvBtn2");
 const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
 const cvEditHolderHTML = document.querySelector("#cvEditHolder");
 
@@ -93,9 +94,20 @@ const toggleCvDisplay = (e) => {
     cvInfoHolderHTML.style.display = "block";
   }
 };
+const toggleUploadCvDisplay = (e) => {
+  if (e?.target?.checked) {
+    document.getElementById("cv-file").style.display="block"
+    document.getElementById("uploadNewCv").style.display="block"
+    document.getElementById("editCvUrlHolder").style.display="none"
+  } else {
+    document.getElementById("cv-file").style.display="none"
+    document.getElementById("uploadNewCv").style.display="none"
+    document.getElementById("editCvUrlHolder").style.display="block"
+  }
+};
 
 editCvBtnHTML.addEventListener("change", toggleCvDisplay);
-
+editCvBtnHTML2.addEventListener("change", toggleUploadCvDisplay);
 // ////////////////////////////////////////
 const userBasicFormHTML = document.querySelector("#userBasicForm");
 const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
@@ -714,6 +726,9 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 function displayVerticalDropdown() {
   let options = "";
   if (USER.cvAdded) {
+    document.getElementById("editResumeBtn").style.display="block"
+    document.getElementById("cv-file").style.display="none"
+    document.getElementById("uploadNewCv").style.display="none"
     VERTICALS.map((ver) => {
       let isVPresent = USER.cv.verticals.filter((v) => v.name === ver.name);
       if (isVPresent.length > 0) {
@@ -727,6 +742,8 @@ function displayVerticalDropdown() {
       displaySubVerticalDropdown(true);
     }, 2000);
   } else {
+    
+    document.getElementById("editResumeBtn").style.display="none"
     VERTICALS.map((ver) => {
       options += `<option value="${ver.name}">${ver.name}</option>`;
     });
