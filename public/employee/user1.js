@@ -22,7 +22,7 @@ auth.onAuthStateChanged(async(user) => {
     }
     getUserDetails({ uid: user.uid, userType: user.displayName });
   } else {
-    console.log('HEY');
+
     return (window.location.href = `./../authentication/auth.html`);
   }
 });
@@ -53,7 +53,7 @@ function sendEmail() {
 // ////////////////////////////////////////////
 let retryUser = 0;
 async function getUserDetails({ uid, userType }) {
-  console.log('hi');
+
   if (userType === "employee") {
     userType = `${userType}s`;
   }
@@ -61,7 +61,7 @@ async function getUserDetails({ uid, userType }) {
     USER_REF = await db.collection(userType).doc(uid);
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
-    console.log(USER);
+  
     displayUserDetails();
     displayAuthSigns()
   } catch (error) {
@@ -313,7 +313,7 @@ const updateCv = async (e) => {
   document.getElementById("progressBar2").style.display="block";
 
   const workCountry = cvFormHTML['country'].value;
-  console.log(workCountry, statesSelected);
+  
 
   if(workCountry === -1 || statesSelected.length === 0) {
     document.getElementById("progressBar2").style.display="none"
@@ -376,7 +376,7 @@ const updateCv = async (e) => {
   data.workCountry = workCountry;
   data.workStates = statesSelected;
 
-  console.log(USER);
+ 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
   if (!resDB.status) {
@@ -536,7 +536,7 @@ const uploadCVToDb = async ({ data }) => {
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-  console.log(data);
+
   try {
     const ref = await db.collection(collectionName).add({ ...data });
     return {
@@ -1036,7 +1036,7 @@ function getSelectedVerticals(initial = false) {
 
 function sliderToggle(e) {
   const eleRowId = e.target.dataset.rowid;
-  console.log(eleRowId)
+  
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
     el.disabled = false;
@@ -1054,7 +1054,7 @@ function sliderToggle(e) {
 function optionSelected(e = false, data = false) {
   let v, selected;
   if (e) {
-    console.log(e.target.value);
+
     v = e.target.value;
     selected = true;
   } else {
@@ -1069,7 +1069,7 @@ function optionSelected(e = false, data = false) {
   const val = v.split("__")[4];
   const rowId = v.split("__")[5];
 
-  console.log(vid, svname, cat, val);
+
 
   let flag = false;
   for (let i = 0; i < userSelectedVerticals.length; i++) {
@@ -1094,9 +1094,7 @@ function optionSelected(e = false, data = false) {
               userSelectedVerticals[i].subverticals[j].expertise[k].value = val;
               userSelectedVerticals[i].subverticals[j].expertise[k].selected =
                 selected;
-              console.log(
-                userSelectedVerticals[i].subverticals[j].expertise[k]
-              );
+              
               flag = true;
               break;
             }
@@ -1115,7 +1113,7 @@ function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
 
-  console.log(userSelectedVerticals);
+  
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -1224,7 +1222,7 @@ function displayExpertiseTable(initial = false) {
             }
           } else {
             if (exp.value === op) {
-             console.log('hey', exp.value, op);
+          
               options += `
               <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
             `;
@@ -1586,12 +1584,12 @@ function logoutUser() {
 // ////////////////////
 
 function checkFileType({file, fileTypes}) {
-  console.log(file);
+
   let fExt = file.name.split('.');
   fExt = fExt[fExt.length -1]
 
   const fileIndex = fileTypes.findIndex(type => type === fExt);
-  console.log(fileIndex);
+
   if(fileIndex === -1) {
     return {
       status: false,
