@@ -697,7 +697,7 @@ function populateStates(countryElementId, stateElementId) {
   stateElement.selectedIndex = 0;
 
   var state_arr = s_a[selectedCountryIndex].split("|");
-  console.log(state_arr)
+  
   for (var i = 0; i < state_arr.length; i++) {
    
       stateElement.options[stateElement.length] = new Option(
@@ -707,7 +707,7 @@ function populateStates(countryElementId, stateElementId) {
     );
 
   }
-  console.log(stateElement)
+  
 }
 
 function populateCountries(countryElementId, stateElementId) {

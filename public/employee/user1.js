@@ -7,7 +7,7 @@ let USER = false;
 let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
-
+var oldStateArr=[];
 auth.onAuthStateChanged(async(user) => {
   if (user) {
     USER_RAW = user;
@@ -21,6 +21,7 @@ auth.onAuthStateChanged(async(user) => {
       document.getElementById("emailID").innerHTML = user.email;
     }
     getUserDetails({ uid: user.uid, userType: user.displayName });
+   
   } else {
 
     return (window.location.href = `./../authentication/auth.html`);
@@ -33,7 +34,7 @@ const topbarImgHTML = document.querySelector('#topbar-img');
 function displayAuthSigns() {
   topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
   if(USER.basicInfoAdded) {
-    if(USER.basicInfo.url) { 
+    if(USER.basicInfo.imgUrl) { 
       topbarImgHTML.src = USER.basicInfo.imgUrl;
     }
   }
@@ -326,13 +327,19 @@ const updateCv = async (e) => {
 
   const workCountry = cvFormHTML['country'].value;
   
-
-  if(workCountry === -1 || statesSelected.length === 0) {
-    document.getElementById("progressBar2").style.display="none"
-    nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-    return;
-  }
-
+  
+    if(workCountry === -1 || statesSelected.length === 0 ) {
+      if(oldStateArr.length==0){
+        document.getElementById("progressBar2").style.display="none"
+        nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+        return;
+      }else{
+      
+        statesSelected = oldStateArr.map(s=>s);
+      }
+    }
+  
+  console.log(statesSelected)
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -1399,7 +1406,7 @@ async function displayCvDetails() {
     //   renderChoiceLimit: 10,
     // });
 
-
+  
     let states ="<ul>";
     USER.cv.workStates.map(s => {
       states += `<li>${s}</li>`
@@ -1416,7 +1423,9 @@ async function displayCvDetails() {
       USER.cv.workStates.map((s) => {
         
        document.getElementById("state").innerHTML += `<option value="${s}" selected>${s}</option>`;
+       oldStateArr.push(s)
       });
+      console.log(oldStateArr)
       populateStates("country","state")
       setTimeout(function () {
 

@@ -60,7 +60,10 @@ function displayAuthSigns() {
     `;
     topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
     if(USER.basicInfoAdded) {
-      if(USER.basicInfo.url) {
+ 
+      if(USER.basicInfo.imgUrl) {
+     
+      
         topbarImgHTML.src = USER.basicInfo.imgUrl;
       }
     }
