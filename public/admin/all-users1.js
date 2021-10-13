@@ -30,7 +30,7 @@ async function extractCvs({ collectionName }) {
 
         return await docs.map((doc) => {
           const docData = doc.data();
-          DATA.push(docData);
+          DATA.push({...docData, docId: doc.id});
           return resolve();
         });
       });
@@ -63,7 +63,8 @@ const heading = document.querySelector("#heading");
 function displayDataTable() {
   let rows = "";
   let i = 0;
-  DATA.map((d) => {
+  DATA.map((d, index) => {
+    console.log(d);
     let allVerticals = "";
     d.verticals.map((v) => {
       allVerticals += `, ${v.name}`;
@@ -111,8 +112,8 @@ function displayDataTable() {
             <a class="dropdown-item" href="#!" onclick=openProfile("` +
       d.userId +
       `")>View Profile</a>
-          <a class="dropdown-item" href="#!" >Edit Profile</a>
-          <a class="dropdown-item" href="#!" >Delete Profile</a>
+          <a class="dropdown-item" href="./edit-employee-profile?id=${123}" >Edit Profile</a>
+          <a class="dropdown-item" href="#!" onclick="deleteProfile(${index})" >Delete Profile</a>
         </div>
         
       </div>
