@@ -7,7 +7,7 @@ let USER = false;
 let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
-
+var oldStateArr=[];
 auth.onAuthStateChanged(async(user) => {
   if (user) {
     USER_RAW = user;
@@ -21,8 +21,9 @@ auth.onAuthStateChanged(async(user) => {
       document.getElementById("emailID").innerHTML = user.email;
     }
     getUserDetails({ uid: user.uid, userType: user.displayName });
+   
   } else {
-    console.log('HEY');
+
     return (window.location.href = `./../authentication/auth.html`);
   }
 });
@@ -33,7 +34,7 @@ const topbarImgHTML = document.querySelector('#topbar-img');
 function displayAuthSigns() {
   topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
   if(USER.basicInfoAdded) {
-    if(USER.basicInfo.url) { 
+    if(USER.basicInfo.imgUrl) { 
       topbarImgHTML.src = USER.basicInfo.imgUrl;
     }
   }
@@ -53,7 +54,7 @@ function sendEmail() {
 // ////////////////////////////////////////////
 let retryUser = 0;
 async function getUserDetails({ uid, userType }) {
-  console.log('hi');
+
   if (userType === "employee") {
     userType = `${userType}s`;
   }
@@ -61,7 +62,7 @@ async function getUserDetails({ uid, userType }) {
     USER_REF = await db.collection(userType).doc(uid);
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
-    console.log(USER);
+  
     displayUserDetails();
     displayAuthSigns()
   } catch (error) {
@@ -81,6 +82,7 @@ async function getUserDetails({ uid, userType }) {
 
 // /////////////////////////////////////////////
 const editCvBtnHTML = document.querySelector("#editCvBtn");
+const editCvBtnHTML2 = document.querySelector("#editCvBtn2");
 const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
 const cvEditHolderHTML = document.querySelector("#cvEditHolder");
 
@@ -93,9 +95,20 @@ const toggleCvDisplay = (e) => {
     cvInfoHolderHTML.style.display = "block";
   }
 };
+const toggleUploadCvDisplay = (e) => {
+  if (e?.target?.checked) {
+    document.getElementById("cv-file").style.display="block"
+    document.getElementById("uploadNewCv").style.display="block"
+    document.getElementById("editCvUrlHolder").style.display="none"
+  } else {
+    document.getElementById("cv-file").style.display="none"
+    document.getElementById("uploadNewCv").style.display="none"
+    document.getElementById("editCvUrlHolder").style.display="block"
+  }
+};
 
 editCvBtnHTML.addEventListener("change", toggleCvDisplay);
-
+editCvBtnHTML2.addEventListener("change", toggleUploadCvDisplay);
 // ////////////////////////////////////////
 const userBasicFormHTML = document.querySelector("#userBasicForm");
 const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
@@ -313,14 +326,20 @@ const updateCv = async (e) => {
   document.getElementById("progressBar2").style.display="block";
 
   const workCountry = cvFormHTML['country'].value;
-  console.log(workCountry, statesSelected);
-
-  if(workCountry === -1 || statesSelected.length === 0) {
-    document.getElementById("progressBar2").style.display="none"
-    nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-    return;
-  }
-
+  
+  
+    if(workCountry === -1 || statesSelected.length === 0 ) {
+      if(oldStateArr.length==0){
+        document.getElementById("progressBar2").style.display="none"
+        nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+        return;
+      }else{
+      
+        statesSelected = oldStateArr.map(s=>s);
+      }
+    }
+  
+  console.log(statesSelected)
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -376,7 +395,7 @@ const updateCv = async (e) => {
   data.workCountry = workCountry;
   data.workStates = statesSelected;
 
-  console.log(USER);
+ 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
   if (!resDB.status) {
@@ -536,7 +555,7 @@ const uploadCVToDb = async ({ data }) => {
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-  console.log(data);
+
   try {
     const ref = await db.collection(collectionName).add({ ...data });
     return {
@@ -714,6 +733,9 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 function displayVerticalDropdown() {
   let options = "";
   if (USER.cvAdded) {
+    document.getElementById("editResumeBtn").style.display="block"
+    document.getElementById("cv-file").style.display="none"
+    document.getElementById("uploadNewCv").style.display="none"
     VERTICALS.map((ver) => {
       let isVPresent = USER.cv.verticals.filter((v) => v.name === ver.name);
       if (isVPresent.length > 0) {
@@ -727,6 +749,8 @@ function displayVerticalDropdown() {
       displaySubVerticalDropdown(true);
     }, 2000);
   } else {
+    
+    document.getElementById("editResumeBtn").style.display="none"
     VERTICALS.map((ver) => {
       options += `<option value="${ver.name}">${ver.name}</option>`;
     });
@@ -1036,7 +1060,7 @@ function getSelectedVerticals(initial = false) {
 
 function sliderToggle(e) {
   const eleRowId = e.target.dataset.rowid;
-  console.log(eleRowId)
+  
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
     el.disabled = false;
@@ -1054,7 +1078,7 @@ function sliderToggle(e) {
 function optionSelected(e = false, data = false) {
   let v, selected;
   if (e) {
-    console.log(e.target.value);
+
     v = e.target.value;
     selected = true;
   } else {
@@ -1069,7 +1093,7 @@ function optionSelected(e = false, data = false) {
   const val = v.split("__")[4];
   const rowId = v.split("__")[5];
 
-  console.log(vid, svname, cat, val);
+
 
   let flag = false;
   for (let i = 0; i < userSelectedVerticals.length; i++) {
@@ -1094,9 +1118,7 @@ function optionSelected(e = false, data = false) {
               userSelectedVerticals[i].subverticals[j].expertise[k].value = val;
               userSelectedVerticals[i].subverticals[j].expertise[k].selected =
                 selected;
-              console.log(
-                userSelectedVerticals[i].subverticals[j].expertise[k]
-              );
+              
               flag = true;
               break;
             }
@@ -1115,7 +1137,7 @@ function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
 
-  console.log(userSelectedVerticals);
+  
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -1224,7 +1246,7 @@ function displayExpertiseTable(initial = false) {
             }
           } else {
             if (exp.value === op) {
-             console.log('hey', exp.value, op);
+          
               options += `
               <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
             `;
@@ -1384,7 +1406,7 @@ async function displayCvDetails() {
     //   renderChoiceLimit: 10,
     // });
 
-
+  
     let states ="<ul>";
     USER.cv.workStates.map(s => {
       states += `<li>${s}</li>`
@@ -1401,7 +1423,9 @@ async function displayCvDetails() {
       USER.cv.workStates.map((s) => {
         
        document.getElementById("state").innerHTML += `<option value="${s}" selected>${s}</option>`;
+       oldStateArr.push(s)
       });
+      console.log(oldStateArr)
       populateStates("country","state")
       setTimeout(function () {
 
@@ -1586,12 +1610,12 @@ function logoutUser() {
 // ////////////////////
 
 function checkFileType({file, fileTypes}) {
-  console.log(file);
+
   let fExt = file.name.split('.');
   fExt = fExt[fExt.length -1]
 
   const fileIndex = fileTypes.findIndex(type => type === fExt);
-  console.log(fileIndex);
+
   if(fileIndex === -1) {
     return {
       status: false,

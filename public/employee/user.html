@@ -466,15 +466,15 @@
 
                 <div id="cvInfoHolder" style="padding:10px ;">
                   <div class="row">
-                    <div class="col-md-5 pr-1">
-                        <label>Prefered Country to work</label>
-                        <div id="work-country" >
+                    <div class="col-md-5 pr-1" style="margin-left: 1%;">
+                        <label style="font-weight: 700;color: brown;">Prefered Country to work</label>
+                        <div id="work-country" style="padding: 4px;;font-weight: 700;">
                            <!-- India -->
                         </div>
                     </div>
-                    <div class="col-md-5 pr-1">
-                      <label>Prefered States  to work</label>
-                      <div id="work-states" >
+                    <div class="col-md-5 pl-1">
+                      <label style="color: brown;font-weight: 700;">Prefered States  to work</label>
+                      <div id="work-states"style="padding: 4px;;font-weight: 700;" >
                         <!-- <ul>
                           <li>Up</li>
                         </ul> -->
@@ -569,12 +569,12 @@
                           <label>Prefered Country to work</label>
                           <div >
  
-                             <select required style="padding: 7px;" id="country" name ="country"></select> 
+                             <select required style="padding: 7px;width: 85%;"  id="country" name ="country"></select> 
                           </div>
                         </div>
                       </div>
                      
-                      <div class="col-md-5 px-1" id="stateOpt" style="display: none;margin-left: 10%;">
+                      <div class="col-md-5 px-1" id="stateOpt" style="display: none;">
                         <div class="form-group">
                           <label>Prefered State to work</label>
                           <div style='text-align:center;'>
@@ -697,9 +697,14 @@
                     </div>
                     <div class="row">
                       <div class="col-md-12 col-lg-10 col-12">
-                        <label>Uplaod CV</label>
-
-                        
+                        <label>Edit CV </label>
+                        <label class="switch" id="editResumeBtn">
+                          <input type="checkbox" id="editCvBtn2" />
+                          <span class="slider round"></span>
+                         
+                        </label>
+                        <br>
+                        <br>
                         <div class="form-group" style="display: flex">
                         
                        
@@ -714,6 +719,7 @@
                             for="cv-file"
                             class="btn btn-tertiary js-labelFile"
                             style="background-color: transparent"
+                            id="uploadNewCv"
                           >
                             <i class="icon fa fa-check"></i>
 
@@ -721,6 +727,7 @@
                               >Upload New CV(DOC , PDF or PPT)</span
                             >
                           </label>
+                         
                           <!-- <h5 class="title responsiveEdit" style="float: right ; margin-left: 70%;">
                             <label class="switch">
                               <input type="checkbox" id="editBasicInfoBtn" />
@@ -742,6 +749,7 @@
                             </a> -->
                           </div>
                         </div>
+                        
                       
                       </div>
                     </div>

@@ -7757,3 +7757,9 @@ input[type="button"].btn-block {
 .treeview__level2.selected .level-same, .treeview__level2.selected .level-sub {
   display: block;
 }
+
+.choices__list--multiple .choices__item {
+ 
+  background-color: steelblue !important;
+  
+}
