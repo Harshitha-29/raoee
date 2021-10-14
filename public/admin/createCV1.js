@@ -122,13 +122,13 @@ async function createUserAuth(email, password, type) {
  
    return await auth.createUserWithEmailAndPassword(email, password)
     .then(async (userCredential) => {
+     
+      console.log(userCredential);
+
       let user = userCredential.user;
       await user.updateProfile({
         displayName: type,
       });
-    })
-    .then((user) => {
-      console.log(user);
       return {
         status: true,
         message: "user auth created ",
@@ -139,7 +139,13 @@ async function createUserAuth(email, password, type) {
     })
     .catch((error) => {
       console.error(error);
-      let errorMessage = error.message;
+      var errorMessage = error.message;
+      // nowuiDashboard.showNotification(
+      //   "top",
+      //   "center",
+      //   errorMessage.substring(9),
+      //   "primary"
+      // );
       return {
         status: false,
         message: `Please Retry : ${errorMessage}`,
@@ -272,46 +278,37 @@ const updateCv = async (e) => {
   }
   const userType = 'employee';
 
-  const workCountry = employeeFormHTML["country"].value;
+  const workCountry = employeeFormHTML['country'].value;
   console.log(workCountry, statesSelected);
 
-  if (workCountry === -1 || statesSelected.length === 0) {
-    alert(
-      "enter the preffered country and state where user emplyee wants to work"
-    );
+  if(workCountry === -1 || statesSelected.length === 0) {
+    alert('enter the preffered country and state where user emplyee wants to work');
     return;
   }
   const { verticals, subVerticals, expertise } = getUserPreferences();
+
 
   let resStorage, resURL;
   let data = {};
 
   if (FILE_NAME) {
-    resStorage = await uploadFileToStorage({
-      ref: `${userType}s/${USER_CREATED_ID}`,
-      fileName: FILE_NAME,
-      file: FILE,
-    });
+    resStorage = await uploadFileToStorage({ ref: `${userType}s/${USER_CREATED_ID}`, fileName: FILE_NAME, file: FILE });
     retryStorage = 0;
     if (!resStorage.status) {
       alert(resStorage.message);
       return;
     }
 
-    resURL = await getUrlOfFile({
-      ref: `${userType}s/${USER_CREATED_ID}`,
-      fileName: FILE_NAME,
-    });
+    resURL = await getUrlOfFile({ ref: `${userType}s/${USER_CREATED_ID}`, fileName: FILE_NAME});
     retryURL = 0;
     if (!resURL.status) {
       alert(resURL.message);
       return;
     }
     data.url = resURL.data.url;
-    data.fileName = FILE_NAME;
+    data.fileName = FILE_NAME; 
   }
-  console.log(USER_CREATED_ID);
-
+  
   data.verticals = verticals;
   data.subVerticals = subVerticals;
   data.expertise = expertise;
@@ -326,7 +323,7 @@ const updateCv = async (e) => {
   retryDB = 0;
   if (!resDB.status) {
     alert(resDB.message);
-    document.getElementById("progressBar").style.display = "none";
+    document.getElementById("progressBar").style.display="none"
     return;
   }
 
@@ -334,7 +331,7 @@ const updateCv = async (e) => {
     verticals,
     subVerticals,
     expertise,
-    fileName: FILE_NAME,
+    fileName: FILE_NAME ,
     url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
@@ -351,8 +348,8 @@ const updateCv = async (e) => {
   }
 
   FORM_DATA.cv = {
-    ...data,
-  };
+    ...data
+  }
   FORM_DATA.cvAdded = true;
 
   await USER_CREATED_REF.set(FORM_DATA);
@@ -367,7 +364,7 @@ const updateCv = async (e) => {
   // FILE_NAME = false;
   // FILE = false;
 
-  document.getElementById("progressBar").style.display = "none";
+  document.getElementById("progressBar").style.display="none"
 };
 
 employeeFormHTML.addEventListener("submit", updateCv);
@@ -418,8 +415,7 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
-  console.log(data);
-  document.getElementById("progressBar").style.display = "block";
+  document.getElementById("progressBar").style.display="block"
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
@@ -435,13 +431,14 @@ const uploadCVToDb = async ({ data }) => {
         docId: ref.id,
       },
     };
+    
   } catch (error) {
     console.error(error);
     if (retryDB < 2) {
       retryDB++;
       alert(`Retry. Attempt: ${retryDB} Reason: ${error.message} `);
       uploadCVToDb({ data });
-      document.getElementById("progressBar").style.display = "none";
+      document.getElementById("progressBar").style.display="none"
     } else {
       return {
         status: false,
@@ -507,11 +504,8 @@ const uploadFileToStorage = async ({ ref, fileName, file }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  const res = checkFileType({
-    file: FILE,
-    fileTypes: ["pdf", "ppt", "docx", "png", "pptx", "doc"],
-  });
-  if (!res.status) {
+  const res = checkFileType({file: FILE, fileTypes:  ['pdf', 'ppt', 'docx', 'png', 'pptx', 'doc']})
+  if(!res.status) {
     alert(res.message);
     return;
   }
@@ -738,6 +732,7 @@ function displaySubVerticalDropdown() {
     searchResultLimit: 10,
     renderChoiceLimit: 10,
   });
+
 }
 
 // ///////////////////////////////////////////
@@ -867,14 +862,14 @@ function getSelectedVerticals(initial = false) {
 
 function sliderToggle(e) {
   const eleRowId = e.target.dataset.rowid;
-  console.log(eleRowId);
+  console.log(eleRowId)
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
     el.disabled = false;
-    document.getElementById(eleRowId).innerHTML = "Yes";
+    document.getElementById(eleRowId).innerHTML="Yes"
     optionSelected(false, { data: el.value, selected: true });
   } else {
-    document.getElementById(eleRowId).innerHTML = "No";
+    document.getElementById(eleRowId).innerHTML="No"
     el.disabled = true;
     optionSelected(false, { data: el.value, selected: false });
   }
@@ -995,16 +990,17 @@ function displayExpertiseTable(initial = false) {
           } else {
             isDisabled = true;
           }
-
-          if (exp.value === op) {
-            options += `
+       
+            if (exp.value === op) {
+              options += `
               <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
             `;
-          } else {
-            options += `
+            } else {
+              options += `
             <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
           `;
-          }
+            }
+          
         });
         if (isDisabled) {
           tglTxt = "No";
@@ -1075,32 +1071,33 @@ function getNameOfId(id) {
   return name;
 }
 
+
 // /////////////////////////////////////////////////////////
 
-function checkFileType({ file, fileTypes }) {
+function checkFileType({file, fileTypes}) {
   console.log(file);
-  let fExt = file.name.split(".");
-  fExt = fExt[fExt.length - 1];
+  let fExt = file.name.split('.');
+  fExt = fExt[fExt.length -1]
 
-  const fileIndex = fileTypes.findIndex((type) => type === fExt);
+  const fileIndex = fileTypes.findIndex(type => type === fExt);
   console.log(fileIndex);
-  if (fileIndex === -1) {
+  if(fileIndex === -1) {
     return {
       status: false,
-      message: "wrong file extension uploaded",
-    };
+      message: 'wrong file extension uploaded'
+    }
   }
 
-  if (file.size > 3000000) {
+  if(file.size > 5000000) {
     return {
       status: false,
-      message: "too large file",
-    };
+      message: 'too large file'
+    }
   }
 
   return {
-    status: true,
-  };
+    status: true
+  }
 }
 
 // /////////////////////////////////////////////////////////

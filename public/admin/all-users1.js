@@ -30,7 +30,7 @@ async function extractCvs({ collectionName }) {
 
         return await docs.map((doc) => {
           const docData = doc.data();
-          DATA.push({...docData, docId: doc.id});
+          DATA.push({...docData, docId: doc.id, collectionName: collectionName});
           return resolve();
         });
       });
@@ -112,7 +112,7 @@ function displayDataTable() {
             <a class="dropdown-item" href="#!" onclick=openProfile("` +
       d.userId +
       `")>View Profile</a>
-          <a class="dropdown-item" href="./edit-employee-profile?id=${123}" >Edit Profile</a>
+          <a class="dropdown-item" href="./edit-employee-profile.html?id=${d.docId}&&col=${d.collectionName}" >Edit Profile</a>
           <a class="dropdown-item" href="#!" onclick="deleteProfile(${index})" >Delete Profile</a>
         </div>
         
