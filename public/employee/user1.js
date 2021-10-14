@@ -339,7 +339,7 @@ const updateCv = async (e) => {
       }
     }
   
-  console.log(statesSelected)
+
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -1416,19 +1416,22 @@ async function displayCvDetails() {
 
 
     cvFormHTML['country'].value = USER.cv.workCountry;
-
+    let optionsState = ""
    
     document.getElementById("sts").innerHTML = `
 			<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
       USER.cv.workStates.map((s) => {
         
-       document.getElementById("state").innerHTML += `<option value="${s}" selected>${s}</option>`;
-       oldStateArr.push(s)
+        optionsState += `<option value="${s}" selected>${s}</option>`;
+        oldStateArr.push(s)
       });
-      console.log(oldStateArr)
+      
       populateStates("country","state")
       setTimeout(function () {
-
+       
+        document.getElementById("state").innerHTML += `
+        `+optionsState+`
+        `
         
         new Choices("#state", {
           removeItemButton: true,
@@ -1436,7 +1439,9 @@ async function displayCvDetails() {
           searchResultLimit: 100,
           renderChoiceLimit: 100,
         });
+        
         document.getElementById("stateOpt").style.display = "block";
+        
       }, 500);
     editCvUrlHolderHTML.innerHTML = `
     

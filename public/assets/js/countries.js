@@ -734,6 +734,7 @@ function populateCountries(countryElementId, stateElementId) {
 
       setTimeout(function () {
         populateStates(countryElementId, stateElementId);
+        
         new Choices("#state", {
           removeItemButton: true,
           maxItemCount: 100,

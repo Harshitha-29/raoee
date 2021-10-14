@@ -14,7 +14,7 @@ function checkIfAdmin() {
         // }
         if (user ) {
           if (user.displayName !== "admin" ) {
-            alert("Came")
+           
             
             window.location.href = `./../authentication/auth.html`;
           }
