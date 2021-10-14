@@ -8,7 +8,8 @@ let USER_CREATED_ID;
 let FORM_DATA = false;
 
 const USER = undefined;
-checkIfAdmin();
+
+//checkIfAdmin();
 
 // /////////////////////////////////////////////////////////
 
@@ -18,6 +19,7 @@ async function onStateChange() {
       console.log(user);
       if (user.displayName === "admin") {
         RAW_USER = user;
+        console.log("----------")
         console.log(RAW_USER);
       }
     }
@@ -37,7 +39,6 @@ const employeeFormHTML = document.querySelector("#employeeForm");
 
 const updateBasicInfo = async () => {
   const email = employeeFormHTML["email"].value;
-
   const userType = "employee";
   let createRes;
   console.log(RAW_USER);
@@ -48,9 +49,12 @@ const updateBasicInfo = async () => {
 
   if (email) {
     createRes = await createUserAuth(email, "raoeeEmployee", userType);
+    console.log(createRes)
     if (!createRes.status) {
       alert(createRes.message);
-      return;
+      return{
+        status :false
+      }
     }
   }
   console.log("user created");
@@ -68,7 +72,9 @@ const updateBasicInfo = async () => {
   });
   if (!signinAdminRes.status) {
     alert(signinAdminRes.message);
-    return;
+    return{
+      status :false
+    }
   }
   console.log("admin logged in");
 
@@ -104,21 +110,20 @@ const updateBasicInfo = async () => {
   } else {
     FORM_DATA.basicInfoAdded = false;
   }
+  return{
+    status :true
+  }
 };
 
 // /////////////////////////////////////////////////////////
 
 async function createUserAuth(email, password, type) {
-  document.getElementById("progressBar").style.display = "block";
-  console.log(email, password, type);
-  return await auth
-    .createUserWithEmailAndPassword(email, password)
-    .then(async(userCredential) => {
-      console.log(userCredential);
-      let user = await userCredential.user;
-      console.log(user);
-      console.log(user.updateProfile);
-      return user.updateProfile({
+  document.getElementById("progressBar").style.display="block"
+ 
+   return await auth.createUserWithEmailAndPassword(email, password)
+    .then(async (userCredential) => {
+      let user = userCredential.user;
+      await user.updateProfile({
         displayName: type,
       });
     })
@@ -134,13 +139,7 @@ async function createUserAuth(email, password, type) {
     })
     .catch((error) => {
       console.error(error);
-      var errorMessage = error.message;
-      nowuiDashboard.showNotification(
-        "top",
-        "center",
-        errorMessage.substring(9),
-        "primary"
-      );
+      let errorMessage = error.message;
       return {
         status: false,
         message: `Please Retry : ${errorMessage}`,
@@ -249,15 +248,15 @@ function getUserPreferences() {
 }
 
 // /////////////////////////////////////////////////////////
-// let statesSelected = [];
+let statesSelected = [];
 
-// function selectedState(e) {
-//   if (e) {
-//     statesSelected = Array.from(e.target.selectedOptions).map(
-//       (x) => x.value ?? x.text
-//     );
-//   }
-// }
+function selectedState(e) {
+  if (e) {
+    statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
 
 // /////////////////////////////////////////////////////////
 
@@ -267,18 +266,21 @@ let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
-  await updateBasicInfo();
-  const userType = "employee";
+  let funRes = await updateBasicInfo();
+  if(!funRes.status){
+    return;
+  }
+  const userType = 'employee';
 
-  // const workCountry = employeeFormHTML["country"].value;
-  // console.log(workCountry, statesSelected);
+  const workCountry = employeeFormHTML["country"].value;
+  console.log(workCountry, statesSelected);
 
-  // if (workCountry === -1 || statesSelected.length === 0) {
-  //   alert(
-  //     "enter the preffered country and state where user emplyee wants to work"
-  //   );
-  //   return;
-  // }
+  if (workCountry === -1 || statesSelected.length === 0) {
+    alert(
+      "enter the preffered country and state where user emplyee wants to work"
+    );
+    return;
+  }
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -317,8 +319,8 @@ const updateCv = async (e) => {
   data.userId = USER_CREATED_ID;
   data.fname = employeeFormHTML["fname"].value || "";
   data.lname = employeeFormHTML["lname"].value || "";
-  // data.workCountry = workCountry;
-  // data.workStates = statesSelected;
+  data.workCountry = workCountry;
+  data.workStates = statesSelected;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -336,8 +338,8 @@ const updateCv = async (e) => {
     url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
-    // workCountry,
-    // workStates,
+    workCountry,
+    workStates : statesSelected,
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -361,9 +363,9 @@ const updateCv = async (e) => {
     "Record Added Successfully",
     "primary"
   );
-  employeeFormHTML.reset();
-  FILE_NAME = false;
-  FILE = false;
+   employeeFormHTML.reset();
+  // FILE_NAME = false;
+  // FILE = false;
 
   document.getElementById("progressBar").style.display = "none";
 };
