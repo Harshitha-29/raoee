@@ -66,6 +66,13 @@
       />
     </div>
     <div class="sidebar-wrapper" id="sidebar-wrapper">
+      <div id="backdrop2">
+        <div class="text-center loading">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+      </div>
       <ul class="nav">
         <li class="active" id="dash">
           <a href="./adminDash.html">
@@ -148,8 +155,22 @@
       </ul>
     </div>
   </div>
-  
+  <div id="backdrop">
+    <div class="text-center loading">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+  </div>
   <script>
+    $(document).ready(function () {
+        setTimeout(function(){
+          document.getElementById("backdrop").style.display="none"
+          document.getElementById("backdrop2").style.display="none"
+        },2000)
+        // Javascript method's body can be found in assets/js/demos.js
+      
+      });
     if(window.location.href.includes("about-why.html")){
       $("#dash").removeClass("active")
       $("#vertical").removeClass("active")
@@ -206,5 +227,6 @@
       $('#vertical').removeClass('active')
       $("#site-control").addClass("active")
     }
+
   </script>
 </body>

@@ -53,7 +53,10 @@ function displayAuthSigns() {
     </a>
   </li>`;
   } else {
-    
+    if(USER_TYPE ==  "admin"){
+      window.location = "./admin/adminDash.html"
+    }
+
     toolbarOps = `
     <a class="dropdown-item" href="./${USER_TYPE}/user.html"><i class="now-ui-icons ui-1_settings-gear-63"><span style="color:black;"></span></i>My Profile</a>
     <a onclick="logoutUser()" class="dropdown-item" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:black;"></span></i>Logout</a>

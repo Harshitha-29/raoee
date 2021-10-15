@@ -5,11 +5,14 @@ checkIfAdmin();
 
 const VERTICALS = [];
 const verticalsDropdownHTML = document.querySelector("#verticalsDropdown");
+var subVerId=""
 // const subVerticalsDropdownHTML = document.querySelector(
 //   "#subVerticalsDropdown"
 // );
 const subVerticalsHolderHTML = document.querySelector("#subVerticalsHolder");
-
+document.getElementById("expertiseDropdown").disabled = true
+document.getElementById("editExpertise").disabled = true
+document.getElementById("exp").disabled = true
 // ///////////////////////////////////////
 
 db.collection("verticals").onSnapshot((snaps) => {
@@ -32,6 +35,7 @@ db.collection("verticals").onSnapshot((snaps) => {
   }
 
   let subOptions = "";
+  console.log(VERTICALS);
   // subVerticalsDropdownHTML.innerHTML = "";
   VERTICALS[0].subVerticals.map((subVer) => {
     // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
@@ -46,20 +50,23 @@ db.collection("verticals").onSnapshot((snaps) => {
       id="choices-multiple-remove-button"
       class="form-control"
       multiple
+      name="subVertical"
       required >
       ${subOptions}
     </select>
     `;
 
-    new Choices(
-      "#choices-multiple-remove-button",
-      {
-        removeItemButton: true,
-        maxItemCount: 10,
-        searchResultLimit: 10,
-        renderChoiceLimit: 10,
-      }
-    );
+  new Choices("#choices-multiple-remove-button", {
+    removeItemButton: true,
+    maxItemCount: 10,
+    searchResultLimit: 10,
+    renderChoiceLimit: 10,
+  });
+  document.getElementById("choices-multiple-remove-button").addEventListener("change", (e) => {
+    changeExpertise2(e);
+     
+   });
+ 
   // console.log(subVerticalsDropdownHTML);
 });
 
@@ -72,10 +79,11 @@ const expertiseForm = async (e) => {
   e.preventDefault();
 
   const vertical = expertiseFormHTML["vertical"].value;
-  const expertiseCategory = expertiseFormHTML["expertiseCategory"].value;
+  var expertiseCategorySelected = expertiseFormHTML["expertiseCategory"].value;
   const expertisesTags = expertiseFormHTML["expertisesTags"].value;
-  console.log(expertisesTags)
+
   const expertiseTagList = expertisesTags.split(",").map((str) => str);
+
   try {
     for (let i = 0; i < subVerticalsSelected.length; i++) {
       const ref = await db
@@ -83,18 +91,101 @@ const expertiseForm = async (e) => {
         .doc(vertical)
         .collection(subVerticalsSelected[i])
         .doc(subVerticalsSelected[i]);
-      const refDoc = await ref.get();
-      const refData = await refDoc.data();
-      console.log("....")
-      console.log(expertiseTagList)
-      console.log(expertiseCategory)
-      refData.expertise.push({
-        tags: [...expertiseTagList],
-        category: expertiseCategory,
-      });
-      await ref.update(refData);
-      // expertiseFormHTML.reset();
-      alert("Expertises Saved");
+      
+      let ver = document.getElementById("verticalsDropdown").value;
+      let subVer = document.getElementById(
+        subVerId
+      ).value;
+      console.log(subVer)
+      if(!subVer){
+        alert(8)
+      }
+      let docRef = db.collection("verticals").doc(ver);
+
+      let fetchedArr = [];
+      let updatedTagsArr = [];
+      let subDocRef = docRef.collection(subVer).doc(subVer);
+
+      expertiseCategory = document.getElementById("expertiseDropdown").value;
+
+      subDocRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("Document data:", doc.data());
+            for (let i in doc.data().expertise) {
+              fetchedArr.push(doc.data().expertise[i]);
+              if (
+                doc.data().expertise[i].category ==
+                document.getElementById("expertiseDropdown").value
+              ) {
+                // alert(doc.data().expertise[i].category)
+                for (let j in doc.data().expertise[i].tags) {
+                  updatedTagsArr.push(doc.data().expertise[i].tags[j]);
+                  $('#tags').tagsinput('add', doc.data().expertise[i].tags[j]);
+                }
+                for (let j in expertiseTagList) {
+                  updatedTagsArr.push(expertiseTagList[j]);
+                
+                }
+              }
+            }
+           
+            if (document.getElementById("editExpertise").checked == true) {
+            
+              let updatedObject = {};
+              for (let i in fetchedArr) {
+                if (
+                  fetchedArr[i].category ==
+                  document.getElementById("expertiseDropdown").value
+                ) {
+                  updatedObject["category"] = fetchedArr[i].category;
+                  updatedObject["tags"] = expertiseTagList;
+
+                  delete fetchedArr[i];
+
+                  fetchedArr.splice(i, 1, updatedObject);
+                }
+              }
+              let finalUpdatedObj = {};
+              finalUpdatedObj["expertise"] = fetchedArr;
+              finalUpdatedObj["name"] = subVer;
+              subDocRef.update(finalUpdatedObj);
+              nowuiDashboard.showNotification(
+                "top",
+                "center",
+                "Expertise Updated Succesfully",
+                "primary"
+              );
+              $('#tags').tagsinput('removeAll');
+
+            } else {
+              let newExpertiseObj = {};
+              let finalUpdatedObj = {};
+              newExpertiseObj["category"] = expertiseCategorySelected;
+              newExpertiseObj["tags"] = expertiseTagList;
+              fetchedArr.push(newExpertiseObj);
+              console.log(newExpertiseObj);
+              console.log(fetchedArr);
+              finalUpdatedObj["expertise"] = fetchedArr;
+              finalUpdatedObj["name"] = subVer;
+              subDocRef.update(finalUpdatedObj);
+              nowuiDashboard.showNotification(
+                "top",
+                "center",
+                "Expertise Added Succesfully",
+                "primary"
+              );
+              $('#tags').tagsinput('removeAll');
+            }
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
     }
   } catch (error) {
     console.error(error);
@@ -113,18 +204,57 @@ expertiseFormHTML.addEventListener("change", (e) => {
     (x) => x.value ?? x.text
   );
 });
+///////////////// Trigger Expertise Func////////
+function triggerExpertise(subVer2) {
+  subVerId = subVer2;
+  let ver = document.getElementById("verticalsDropdown").value;
+  let subVer = document.getElementById(subVer2).value;
+  let docRef = db.collection("verticals").doc(ver);
+  docRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log("Error getting document:", error);
+    });
 
+  document.getElementById("expertiseDropdown").innerHTML = "";
+  let subDocRef = docRef.collection(subVer).doc(subVer);
+  subDocRef.get().then((doc) => {
+    if (doc.exists) {
+      console.log("Document data:", doc.data());
+      for (let i in doc.data().expertise) {
+        console.log(doc.data().expertise[i].category);
+        document.getElementById("expertiseDropdown").innerHTML +=
+          `
+                <option>` +
+          doc.data().expertise[i].category +
+          `</option>
+            `;
+      }
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  });
+}
+///////////////////////////////////////////////
 // /////////////////////////////////////////////
 
 const changeSubVertical = (e) => {
- 
-       
-    
-   
+  
   e.preventDefault();
   console.log(e.target.value);
   console.log(VERTICALS);
-  const verticalIndex = VERTICALS.findIndex(ver => ver.name === e.target.value)
+  const verticalIndex = VERTICALS.findIndex(
+    (ver) => ver.name === e.target.value
+  );
   console.log(verticalIndex);
   let subOptions = "";
   // subVerticalsDropdownHTML.innerHTML = "";
@@ -138,24 +268,132 @@ const changeSubVertical = (e) => {
       <span style="color: red">*</span>
     </label>
     <select
-      id="choices-multiple-remove-button"
+      id="choices"
       class="form-control"
       multiple
       required >
       ${subOptions}
     </select>
     `;
-    new Choices(
-      "#choices-multiple-remove-button",
-      {
-        removeItemButton: true,
-        maxItemCount: 10,
-        searchResultLimit: 10,
-        renderChoiceLimit: 10,
-      }
-    );
+  new Choices("#choices", {
+    removeItemButton: true,
+    maxItemCount: 10,
+    searchResultLimit: 10,
+    renderChoiceLimit: 10,
+  });
+  document.getElementById("choices").addEventListener("change", (e) => {
+   changeExpertise(e);
+    
+  });
 };
 
-
-
 expertiseFormHTML["vertical"].addEventListener("change", changeSubVertical);
+
+function changeExpertise(e){
+  
+  if( document.getElementById("choices").length>1){
+    document.getElementById("editExpertise").disabled = true
+    document.getElementById("expertiseDropdown").disabled = true
+    document.getElementById("editExpertise").checked = false
+     $('#tags').tagsinput('removeAll');
+  }else{
+    document.getElementById("editExpertise").disabled = false
+ 
+  }
+  if(document.getElementById("choices").length == 0 ){
+    
+    document.getElementById("exp").disabled = true 
+    document.getElementById("exp") .value = ""
+    document.getElementById("editExpertise").disabled = true
+    document.getElementById("expertiseDropdown").disabled = true
+    document.getElementById("editExpertise").checked = false
+     $('#tags').tagsinput('removeAll');
+  }else{
+    document.getElementById("exp").disabled = false  
+  }
+  subid="choices"
+  triggerExpertise(subid);
+  
+
+  subVerticalsSelected = Array.from(e.target.selectedOptions).map(
+    (x) => x.value ?? x.text
+  );
+}
+function changeExpertise2(e){
+  
+  if( document.getElementById("choices-multiple-remove-button").length>1){
+    document.getElementById("editExpertise").disabled = true
+    document.getElementById("expertiseDropdown").disabled = true
+    document.getElementById("editExpertise").checked = false
+     $('#tags').tagsinput('removeAll');
+  }else{
+    document.getElementById("editExpertise").disabled = false
+ 
+  }
+  if(document.getElementById("choices-multiple-remove-button").length == 0 ){
+    
+    document.getElementById("exp").disabled = true 
+    document.getElementById("exp") .value = ""
+    document.getElementById("editExpertise").disabled = true
+    document.getElementById("expertiseDropdown").disabled = true
+    document.getElementById("editExpertise").checked = false
+     $('#tags').tagsinput('removeAll');
+  }else{
+    document.getElementById("exp").disabled = false  
+  }
+  subid="choices-multiple-remove-button"
+  triggerExpertise(subid);
+
+  subVerticalsSelected = Array.from(e.target.selectedOptions).map(
+    (x) => x.value ?? x.text
+  );
+}
+function toggleEditExpertise(e){
+  if (e?.target?.checked) {
+    document.getElementById("exp").disabled = true
+    document.getElementById("expertiseDropdown").disabled = false
+    getSetTagsFromDb();
+
+
+  } else {
+    document.getElementById("expertiseDropdown").disabled = true
+    document.getElementById("exp").disabled = false
+    $('#tags').tagsinput('removeAll');
+  }
+}
+function getSetTagsFromDb(){
+ 
+  let ver = document.getElementById("verticalsDropdown").value;
+      let subVer = document.getElementById(
+        subVerId
+      ).value;
+      let docRef = db.collection("verticals").doc(ver);
+
+      let fetchedArr = [];
+      let updatedTagsArr = [];
+      let subDocRef = docRef.collection(subVer).doc(subVer);
+      $('#tags').tagsinput('removeAll');
+      subDocRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("Document data:", doc.data());
+            for (let i in doc.data().expertise) {
+              fetchedArr.push(doc.data().expertise[i]);
+              if (
+                doc.data().expertise[i].category ==
+                document.getElementById("expertiseDropdown").value
+              ) {
+                // alert(doc.data().expertise[i].category)
+                for (let j in doc.data().expertise[i].tags) {
+                
+                  $('#tags').tagsinput('add', doc.data().expertise[i].tags[j]);
+                }
+               
+              }
+            }
+          }
+        });
+}
+document.getElementById("editExpertise").addEventListener("change", toggleEditExpertise);
+document.getElementById("expertiseDropdown").addEventListener("change", getSetTagsFromDb);
