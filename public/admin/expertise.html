@@ -38,6 +38,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-combobox/1.1.8/css/bootstrap-combobox.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
     <link
       rel="stylesheet"
@@ -50,7 +54,12 @@
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
     />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
   </head>
   <style>
     .choices__inner {
@@ -167,6 +176,43 @@
       width: 100%;
       padding-right: 25px;
     }
+    ul,
+    #myUL {
+      list-style-type: none;
+    }
+
+    #myUL {
+      margin: 0;
+      padding: 0;
+    }
+
+    .caret {
+      cursor: pointer;
+      -webkit-user-select: none; /* Safari 3.1+ */
+      -moz-user-select: none; /* Firefox 2+ */
+      -ms-user-select: none; /* IE 10+ */
+      user-select: none;
+    }
+
+    .caret::before {
+      content: "\25B6";
+      color: black;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .caret-down::before {
+      -ms-transform: rotate(90deg);
+      -webkit-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+
+    .nested {
+    }
+
+    .active {
+      display: block;
+    }
   </style>
   <body class="user-profile">
     <div class="wrapper">
@@ -187,100 +233,157 @@
                 <div class="card-body">
                   <form id="expertiseForm">
                     <div class="row">
-                      <div class="col-md-8 pr-1">
-                        <div class="form-group">
-                          <label
-                            >Select Vertical
-                            <span style="color: red">*</span></label
-                          >
-                          <select
-                            style="
-                              overflow-y: scroll;
-                              width: 100%;
-                              padding: 10px;
-                            "
-                            id="verticalsDropdown"
-                            name="vertical"
-                          >
-                            <!-- <option>Signalling</option>
-                            <option>Telecom</option> -->
-                          </select>
+                      <div class="col-lg-6">
+                        <div class="row">
+                          <div class="col-md-12 pr-1">
+                            <div class="form-group">
+                              <label
+                                >Select Vertical
+                                <span style="color: red">*</span></label
+                              >
+                              <select
+                                style="
+                                  overflow-y: scroll;
+                                  width: 100%;
+                                  padding: 10px;
+                                "
+                                id="verticalsDropdown"
+                                name="vertical"
+                              >
+                                <!-- <option>Signalling</option>
+                                <option>Telecom</option> -->
+                              </select>
+                            </div>
+                          </div>
+                          <hr />
+                          <div class="col-md-12 pr-1">
+                            <div class="form-group" id="subVerticalsHolder">
+                              <!-- <label
+                                >Select Sub-Vertical
+                                <span style="color: red">*</span></label
+                              > -->
+                              <!-- <select
+                              
+                                multiple
+                                required
+                                style="overflow-y: scroll"
+                              >
+                                <option>Designing</option>
+                                <option>Installation</option>
+                              </select> -->
+                              <div>
+                                <!-- <select name="field1" id="subVerticalsDropdown" multiple >
+                                <option value="1">Audi</option>
+                                <option selected value="2">BMW</option>
+                                <option selected value="3">Mercedes</option>
+                                <option value="4">Volvo</option>
+                                <option value="5">Lexus</option>
+                                <option value="6">Tesla</option>
+                              </select>  -->
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12 pr-1">
+                            <div class="form-group" id="subVerticalsHolder22">
+                              <div class="row">
+                                <div class="col-lg-4">
+                                  <label
+                                    >Enter New Area of Expertise
+                                    <span style="color: red">*</span></label
+                                  >
+                                  <div>
+                                    <input
+                                      name="expertiseCategory"
+                                      type="text"
+                                      placeholder="Enter Area of Expertise"
+                                      style="width: 100%; padding: 10px"
+                                      id="exp"
+                                    />
+                                  </div>
+                                 
+                                </div>
+                                <div class="col-lg-2">
+                                  <p>or</p>
+                                  <label class="switch">
+                                    <input type="checkbox" id="editExpertise"  />
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                                <div class="col-lg-4">
+                                  <label
+                                    >Select From Previous Added
+                         
+                                  
+                                  <select
+                                    style="
+                                      overflow-y: scroll;
+                                      width: 100%;
+                                      padding: 10px;
+                                    "
+                                    id="expertiseDropdown"
+                                    name="expertise"
+                                  ></select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Enter Profession/Experience Level</label>
+                              <br />
+                              <input
+                                name="expertisesTags"
+                                type="text"
+                                class="form-control"
+                                data-role="tagsinput"
+                                style="width: 100% !important"
+                                placeholder="Add tags Ex : Fresher , Less than 2 years"
+                                id="tags"
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <hr />
-                      <div class="col-md-8 pr-1">
-                        <div class="form-group" id="subVerticalsHolder">
-                          <!-- <label
-                            >Select Sub-Vertical
-                            <span style="color: red">*</span></label
-                          > -->
-                          <!-- <select
-                          
-                            multiple
-                            required
-                            style="overflow-y: scroll"
-                          >
-                            <option>Designing</option>
-                            <option>Installation</option>
-                          </select> -->
-                          <div>
-                            <!-- <select name="field1" id="subVerticalsDropdown" multiple >
-                            <option value="1">Audi</option>
-                            <option selected value="2">BMW</option>
-                            <option selected value="3">Mercedes</option>
-                            <option value="4">Volvo</option>
-                            <option value="5">Lexus</option>
-                            <option value="6">Tesla</option>
-                          </select>  -->
+                        <br />
+                        <div class="row">
+                          <div class="col-md-8">
+                            <button
+                              id="expertisesFormBtn"
+                              style="
+                                background-color: rgb(146, 44, 141);
+                                color: white;
+                              "
+                              type="button"
+                              class="btn btn-elegant center"
+                            >
+                              Add Expertise
+                            </button>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-8 pr-1">
-                        <div class="form-group" id="subVerticalsHolder22">
-                          <label
-                            >Enter Area of Expertise
-                            <span style="color: red">*</span></label
-                          >
-                          <div>
-                            <input
-                              name="expertiseCategory"
-                              type="text"
-                              placeholder="Enter Area of Expertise"
-                              style="width: 100%; padding: 10px"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-8">
-                        <div class="form-group">
-                          <label>Enter Profession/Experience Level</label>
-                          <br />
-                          <input
-                            name="expertisesTags"
-                            type="text"
-                            class="form-control"
-                            data-role="tagsinput"
-                            style="width: 100% !important"
-                            placeholder="Add tags Ex : Fresher , Less than 2 years"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                      <div class="col-md-8">
-                        <button
-                          id="expertisesFormBtn"
-                          style="
-                            background-color: rgb(146, 44, 141);
-                            color: white;
-                          "
-                          type="button"
-                          class="btn btn-elegant center"
-                        >
-                          Add Expertise
-                        </button>
-                      </div>
+                      <!-- <div class="col-lg-6">
+                        <ul id="myUL">
+                          <li><span class="cart">Beverages</span>
+                            <ul class="nested">
+                              <li>Water</li>
+                              <li>Coffee</li>
+                              <li><span class="cart">Tea</span>
+                                <ul class="nested">
+                                  <li>Black Tea</li>
+                                  <li>White Tea</li>
+                                  <li><span class="caet">Green Tea</span>
+                                    <ul class="nested">
+                                      <li>Sencha</li>
+                                      <li>Gyokuro</li>
+                                      <li>Matcha</li>
+                                      <li>Pi Lo Chun</li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>  
+                            </ul>
+                          </li>
+                        </ul>
+                      </div> -->
                     </div>
                   </form>
                 </div>
@@ -303,6 +406,10 @@
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
     });
+   
+     
+    
+ 
   </script>
   <script src="./../assets/js/tag-input.js"></script>
 
@@ -310,6 +417,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
   <script src="./../assets/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-combobox/1.1.8/js/bootstrap-combobox.min.js"></script>
   <script src="./common/auth.js"></script>
   <script src="./expertise1.js"></script>
 </html>
