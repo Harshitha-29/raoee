@@ -5462,6 +5462,9 @@ Created using IcoMoon - icomoon.io
     height: auto;
     object-fit: cover;
   }
+  #backdrop2{
+    background-color: rgb(0,0,0,0.0) !important;
+  }
   .nav-tabs {
     display: inline-block;
     width: 100%;
@@ -7762,4 +7765,34 @@ input[type="button"].btn-block {
  
   background-color: steelblue !important;
   
+}
+.text-center {
+  width: 100%;
+  position: relative;
+  height: 100%;
+}
+
+.spinner-border {
+  display: block;
+  position: fixed;
+  top: calc(50% - (58px / 2));  
+  right: calc(50% - (58px / 2));
+  color: brown;
+}
+
+#backdrop {
+position:fixed;
+top:0;
+width: 100vw;
+height: 100vh;
+z-index: 999;
+background-color: rgb(0,0,0,0.7);
+}
+#backdrop2 {
+position:fixed;
+top:0;
+width: 100vw;
+height: 100vh;
+z-index: 999;
+background-color: rgba(15, 9, 9, 0.7);
 }
