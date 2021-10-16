@@ -220,7 +220,7 @@ const forgotFormHTML = document.querySelector("#forgotForm");
 const forgot = (e) => {
   e.preventDefault();
   const email = forgotFormHTML["email"].value;
-
+  
   auth
     .sendPasswordResetEmail(email)
     .then(function () {
@@ -232,8 +232,9 @@ const forgot = (e) => {
       }, 3000);
     })
     .catch(function (error) {
+      console.log(error)
       document.getElementById("showMessage3").innerHTML =
-        "Email id is not registered ❌";
+        "Email id is not registered or too many password reset attempts . Please try after sometime❌";
       setTimeout(function () {
         document.getElementById("showMessage3").innerHTML = "";
       }, 3000);
