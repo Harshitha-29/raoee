@@ -7,7 +7,15 @@
   z-index: 1029;
 }
 </style><body>
-    <nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute">
+  
+    <nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute" id="navig">
+      <div id="backdrop2">
+        <div class="text-center loading">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+      </div>
         <div class="contid">
           <div class="navbar-wrapper">
             <div class="navbar-toggle">
@@ -82,4 +90,19 @@
           </div>
         </div>
     </nav>
+    
 </body>
+
+<script>
+   $(document).ready(function () {
+   
+        setTimeout(function(){
+          $("#navig").removeClass("bg-white")
+          document.getElementById("backdrop").style.display="none"
+          document.getElementById("backdrop2").style.display="none"
+        },2000)
+        // Javascript method's body can be found in assets/js/demos.js
+      
+      });
+ 
+</script>
