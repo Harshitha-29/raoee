@@ -9,8 +9,17 @@ let USER_ID = false;
 
 var oldStateArr=[];
 
+// //////////////////////////////////////////////
 
-
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+USER_ID = params['id'];
+let userType = params['utype'];
+if(!USER_ID || !userType) {
+  history.back();
+} else {
+  getUserDetails({uid:USER_ID, userType: userType})
+}
 
 // ////////////////////////////////////////////
 let retryUser = 0;
@@ -25,7 +34,6 @@ async function getUserDetails({ uid, userType }) {
     USER = await refDoc.data();
   
     displayUserDetails();
-    displayAuthSigns()
   } catch (error) {
     console.error(error);
     if (retryUser < 2) {

@@ -112,7 +112,7 @@ function displayDataTable() {
             <a class="dropdown-item" href="#!" onclick=openProfile("` +
       d.userId +
       `")>View Profile</a>
-          <a class="dropdown-item" href="./edit-employee-profile.html?id=${d.docId}&&col=${d.collectionName}" >Edit Profile</a>
+          <a class="dropdown-item" href="./edit-employee-profile.html?id=${d.userId}&&utype=${d.userType}" >Edit Profile</a>
           <a class="dropdown-item" href="#!" onclick="deleteProfile(${index})" >Delete Profile</a>
         </div>
         

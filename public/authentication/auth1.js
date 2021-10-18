@@ -155,7 +155,6 @@ const createUserDB = async (collection, uid, data) => {
       status: true,
     };
   } catch (error) {
-    console.error(error);
     if (dbRetry > 2) {
       dbRetry++;
       console.log(`Retring ${dbRetry}`);
