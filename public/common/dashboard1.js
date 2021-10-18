@@ -140,14 +140,20 @@ db.collection("sliders").onSnapshot((snaps) => {
                           alt="First slide"
                       />
                       <div class="carousel-caption d-none d-md-block">
-                          <h5 class="slider-txt">` +
+                          <h5 class="slider-txt " id="title-txt">` +
         title +
         `</h5>
-                          <p class="slidersm-txt">Here</p>
+                        
                       </div>
                   </div>
                   `;
-    } else {
+                  if (!docData.title) {
+                    document.getElementById("title-txt").style.display = "none"
+                  }
+        
+    } 
+    
+    else {
       document.getElementById("slidersData").innerHTML +=
         `
 
@@ -160,14 +166,18 @@ db.collection("sliders").onSnapshot((snaps) => {
                           alt="First slide"
                       />
                       <div class="carousel-caption d-none d-md-block">
-                          <h5 class="slider-txt">` +
+                          <h5 class="slider-txt" id="title-txt2">` +
         docData.title +
         `</h5>
-                          <p class="slidersm-txt">Here</p>
+                         
                       </div>
                   </div>
                   `;
+                  if (!docData.title) {
+                    document.getElementById("title-txt2").style.display = "none"
+                  }
     }
+    
   });
 });
 

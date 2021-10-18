@@ -52,6 +52,7 @@ const updateBasicInfo = async () => {
     console.log(createRes)
     if (!createRes.status) {
       alert(createRes.message);
+      document.getElementById("progressBar").style.display="none"
       return{
         status :false
       }
