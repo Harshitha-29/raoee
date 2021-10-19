@@ -16,7 +16,7 @@ const params = Object.fromEntries(urlSearchParams.entries());
 USER_ID = params['id'];
 let userType = params['utype'];
 if(!USER_ID || !userType) {
-  history.back();
+  window.location.href = './all-users.html'
 } else {
   getUserDetails({uid:USER_ID, userType: userType})
 }
@@ -295,20 +295,17 @@ const updateCv = async (e) => {
   document.getElementById("progressBar2").style.display="block";
 
   const workCountry = cvFormHTML['country'].value;
-  
-  
-    if(workCountry === -1 || statesSelected.length === 0 ) {
-      if(oldStateArr.length==0){
-        document.getElementById("progressBar2").style.display="none"
-        nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-        return;
-      }else{
-      
-        statesSelected = oldStateArr.map(s=>s);
-      }
+
+  if(workCountry === -1 || statesSelected.length === 0 ) {
+    if(oldStateArr.length==0){
+      document.getElementById("progressBar2").style.display="none"
+      nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+      return;
+    }else{
+      statesSelected = oldStateArr.map(s=>s);
     }
-  
-  console.log(statesSelected)
+  }
+
   const { verticals, subVerticals, expertise } = getUserPreferences();
 
   let resStorage, resURL;
@@ -1287,6 +1284,37 @@ async function displayCvDetails() {
     cvUrlHTML.href = USER.cv.url;
     verticalsBtnsHTML.innerHTML = ``;
 
+    workCountryHTML.innerText = USER.cv.workCountry;
+
+    let states ="<ul>";
+    USER.cv.workStates.map(s => {
+      states += `<li>${s}</li>`
+    })
+    states += `</ul>`;
+    workStatesHTML.innerHTML = states;
+
+    cvFormHTML['country'].value = USER.cv.workCountry;
+    let optionsState = ""
+    document.getElementById("sts").innerHTML = `
+		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+    USER.cv.workStates.map((s) => {
+      optionsState += `<option value="${s}" selected>${s}</option>`;
+      oldStateArr.push(s)
+    });
+      
+    populateStates("country","state")
+    setTimeout(function () {
+      document.getElementById("state").innerHTML += optionsState
+      new Choices("#state", {
+        removeItemButton: true,
+        maxItemCount: 100,
+        searchResultLimit: 100,
+        renderChoiceLimit: 100,
+      });
+      document.getElementById("stateOpt").style.display = "block";
+    }, 500);
+
+
     USER.cv.verticals.map((v, i) => {
       verticalsBtnsHTML.innerHTML += `
       <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
@@ -1353,62 +1381,7 @@ async function displayCvDetails() {
       verticalsTablesHTML.innerHTML += whole;
     });
 
-    workCountryHTML.innerText = USER.cv.workCountry;
-
-    // //
-    let options = "";
-
-   
-    // setTimeout(function(){
-    //   alert(8)
-    //   state.innerHTML += `
-    
-    //   ${options}
-    
-    // `;
-    // },800)
-    
-    // new Choices("#state", {
-    //   removeItemButton: true,
-    //   maxItemCount: 20,
-    //   searchResultLimit: 10,
-    //   renderChoiceLimit: 10,
-    // });
-
-  
-    let states ="<ul>";
-    USER.cv.workStates.map(s => {
-      states += `<li>${s}</li>`
-    })
-    states += `</ul>`;
-    workStatesHTML.innerHTML = states;
-
-
-    cvFormHTML['country'].value = USER.cv.workCountry;
-
-   
-    document.getElementById("sts").innerHTML = `
-			<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
-      USER.cv.workStates.map((s) => {
-        
-       document.getElementById("state").innerHTML += `<option value="${s}" selected>${s}</option>`;
-       oldStateArr.push(s)
-      });
-      console.log(oldStateArr)
-      populateStates("country","state")
-      setTimeout(function () {
-
-        
-        new Choices("#state", {
-          removeItemButton: true,
-          maxItemCount: 100,
-          searchResultLimit: 100,
-          renderChoiceLimit: 100,
-        });
-        document.getElementById("stateOpt").style.display = "block";
-      }, 500);
     editCvUrlHolderHTML.innerHTML = `
-    
     <a target="_blank" href="${USER.cv.url}" >
       <label
         class="btn btn-tertiary js-labelFile"

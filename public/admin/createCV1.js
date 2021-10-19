@@ -890,13 +890,9 @@ function optionSelected(e = false, data = false) {
   }
 
   const vid = v.split("__")[0];
-  const vname = v.split("__")[1];
   const svname = v.split("__")[2];
   const cat = v.split("__")[3];
   const val = v.split("__")[4];
-  const rowId = v.split("__")[5];
-
-  console.log(vid, svname, cat, val);
 
   let flag = false;
   for (let i = 0; i < userSelectedVerticals.length; i++) {
