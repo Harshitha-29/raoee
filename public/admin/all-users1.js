@@ -16,7 +16,7 @@ db.collection("miscellaneous")
   });
 
 // ////////////////////////////////////
-
+const DATA = [];
 async function extractCvs({ collectionName }) {
   return new Promise(async (resolve, reject) => {
     return await db
@@ -39,7 +39,6 @@ async function extractCvs({ collectionName }) {
 
 // ////////////////////////////////////
 
-const DATA = [];
 let reTry = 0;
 async function collectCvData() {
   let promises = [];
@@ -53,6 +52,83 @@ async function collectCvData() {
     .catch((error) => {
       console.error(error.message);
     });
+}
+
+// ////////////////////////////////////
+
+async function deleteProfile(index) {
+  const doc = DATA[index];
+  console.log(doc);
+
+  const deleteUserRes = await deleteUser({collectionName: doc.userType, docId: doc.userId});
+  if(!deleteUserRes.status) {
+    alert(deleteUserRes.message);
+    return
+  }
+
+  const deleteUserCvRes = await deleteCv({collectionName: doc.collectionName, docId: doc.docId});
+  if(!deleteUserCvRes.status) {
+    alert(deleteUserCvRes.message);
+    return
+  }
+
+  DATA.splice(index, 1);
+  document.querySelector(`#user-row-${index}`).remove();
+  
+  alert('successfully deleted the user.')
+
+
+}
+
+// ////////////////////////////////////
+
+let retryDeleteCv = 0;
+
+function deleteCv({collectionName, docId}) {
+  return db.collection(collectionName).doc(docId).delete().then(() => {
+    alert(`User CV deleted successfully.`)
+    return {
+      status: true,
+      message: `User CV deleted successfully.`
+    }
+  }).catch(error => {
+    console.error(error);
+    if(retryDeleteCv < 2) {
+      alert(error.message)
+      retryDeleteCv++;
+      deleteCv({collectionName, docId})
+    } else {
+      return {
+        status: false,
+        message: `Low network, Unable to delete. ${error.message}`
+      }
+    }
+  })
+}
+
+// ////////////////////////////////////
+
+let retryDeleteUser = 0;
+
+function deleteUser({collectionName, docId}) {
+  return db.collection(`${collectionName}s`).doc(docId).delete().then(() => {
+    return {
+      status: true,
+      message: `User deleted successfully.`
+    }
+  }).catch(error => {
+    console.error(error);
+    if(retryDeleteUser < 2) {
+      alert(error.message)
+      retryDeleteUser++;
+      deleteUser({collectionName, docId})
+    } else {
+      return {
+        status: false,
+        message: `Low network, Unable to delete. ${error.message}`
+      }
+    }
+  })
 }
 
 // ////////////////////////////////////
@@ -94,7 +170,7 @@ function displayDataTable() {
     });
 
     rows +=
-    `<tr>
+    `<tr id="user-row-${index}">
       <td>${d.fname} ${d.lname}</td>
       <td>${allVerticals}</td>
       <td>${allSubVerticals}</td>
