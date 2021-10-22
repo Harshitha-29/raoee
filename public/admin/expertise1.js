@@ -4,6 +4,7 @@ const USER = undefined;
 checkIfAdmin();
 
 const VERTICALS = [];
+var allExpArr = [];
 const verticalsDropdownHTML = document.querySelector("#verticalsDropdown");
 var subVerId=""
 // const subVerticalsDropdownHTML = document.querySelector(
@@ -19,15 +20,31 @@ db.collection("verticals").onSnapshot((snaps) => {
   const docs = snaps.docs;
   VERTICALS.length = 0;
   verticalsDropdownHTML.innerHTML = "";
+  var docData;
+  // document.getElementById("treeview").innerHTML=""
   docs.map((doc) => {
     if (!doc) {
       return;
     }
-    const docData = doc.data();
-    VERTICALS.push({ name: docData.name, subVerticals: docData.subVerticals });
+    
+    docData = doc.data();
+    console.log(doc.data())
+    VERTICALS.push({ name: docData.name, subVerticals: docData.subVerticals,id : docData._id });
     verticalsDropdownHTML.innerHTML += `<option value="${docData.name}">${docData.name}</option>`;
+    
+    document.getElementById("treeview").innerHTML +=`
+    <li style="padding:5px !important;border-radius:20px" data-icon-cls="fa fa-inbox"  data-expanded="true">`+docData.name+`
+        <ul id="`+docData._id+`">
+            
+          
+        </ul>
+    </li>
+    `
+ 
+ 
+   
   });
-
+  
   verticalsDropdownHTML.classList.add("selectpicker");
 
   if (VERTICALS.length === 0) {
@@ -36,11 +53,73 @@ db.collection("verticals").onSnapshot((snaps) => {
 
   let subOptions = "";
   console.log(VERTICALS);
+  let sbvr=""
   // subVerticalsDropdownHTML.innerHTML = "";
   VERTICALS[0].subVerticals.map((subVer) => {
     // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
     subOptions += `<option value="${subVer}">${subVer}</option>`;
+   
+    
   });
+  for(let k in VERTICALS){
+   
+    VERTICALS[k].subVerticals.map((subVer) => {
+      document.getElementById(VERTICALS[k].id).innerHTML+=`
+      <li  data-icon-cls="fa fa-inbox" data-expanded="true"><b>`+subVer+` </b>
+        <ul id="`+VERTICALS[k].id+"_"+subVer+`">
+       
+          
+        
+        </ul>
+      </li>`
+    });
+  
+    
+  }
+  
+  for(let k in VERTICALS){
+   
+    VERTICALS[k].subVerticals.map((subVer) => {
+     
+      let docRef = db.collection("verticals").doc(VERTICALS[k].name);
+
+    
+      let subDocRef = docRef.collection(subVer).doc(subVer);
+      subDocRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("FOR:"+VERTICALS[k].subVerticals)
+          for (let i in doc.data().expertise) {
+            document.getElementById(VERTICALS[k].id+"_"+subVer).innerHTML+=` <li >`+doc.data().expertise[i].category+`&nbsp;<i  ></i></li>`
+            
+          }
+        }
+        
+      });
+      
+    });
+     
+    
+  }
+  
+  // let docRef = db.collection("verticals").doc(docData.name);
+  // let subDocRef = docRef.collection(subVer).doc(subVer);
+  // subDocRef
+  // .get()
+  // .then((doc) => {
+  //   if (doc.exists) {
+  //     console.log("Document data:", doc.data());
+  //     console.log(subVer)
+  //     for (let i in doc.data().expertise) {
+  //       console.log(doc.data().expertise[i].category)
+  //       document.getElementById(subVer).innerHTML=`
+  //       <li >"dsf"<i class="fa fa-trash"></i></li>
+  //       `
+      
+  //     }
+  //   }
+  // });
   
   subVerticalsHolderHTML.innerHTML = `
     <label>Select Sub-Vertical
@@ -54,8 +133,9 @@ db.collection("verticals").onSnapshot((snaps) => {
       required >
       ${subOptions}
     </select>
+    
     `;
-
+  
   new Choices("#choices-multiple-remove-button", {
     removeItemButton: true,
     maxItemCount: 10,
@@ -66,7 +146,7 @@ db.collection("verticals").onSnapshot((snaps) => {
     changeExpertise2(e);
      
    });
- 
+  
   // console.log(subVerticalsDropdownHTML);
 });
 
@@ -86,20 +166,18 @@ const expertiseForm = async (e) => {
 
   try {
     for (let i = 0; i < subVerticalsSelected.length; i++) {
-      const ref = await db
-        .collection("verticals")
-        .doc(vertical)
-        .collection(subVerticalsSelected[i])
-        .doc(subVerticalsSelected[i]);
+      // const ref = await db
+      //   .collection("verticals")
+      //   .doc(vertical)
+      //   .collection(subVerticalsSelected[i])
+      //   .doc(subVerticalsSelected[i]);
       
       let ver = document.getElementById("verticalsDropdown").value;
       let subVer = document.getElementById(
         subVerId
       ).value;
       console.log(subVer)
-      if(!subVer){
-        alert(8)
-      }
+     
       let docRef = db.collection("verticals").doc(ver);
 
       let fetchedArr = [];
@@ -194,8 +272,99 @@ const expertiseForm = async (e) => {
 };
 
 expertisesFromBtnHTML.addEventListener("click", expertiseForm);
-
+document.getElementById("expertisesdeleteBtn").addEventListener('click',confirmDelete)
 // /////////////////////////////////////////////
+
+
+////////////////////DELETE EXPERTISE//////////////////////////
+function confirmDelete(){
+ let ans =  confirm("Are you sure to delete the expertise ? ")
+ if(ans){
+  deleteExpertise()
+  
+ }
+}
+function deleteExpertise(){
+  let ver = document.getElementById("verticalsDropdown").value;
+  let subVer = document.getElementById(
+    subVerId
+  ).value;
+  console.log(subVer)
+ 
+  let docRef = db.collection("verticals").doc(ver);
+
+  let fetchedArr = [];
+  let subDocRef = docRef.collection(subVer).doc(subVer);
+
+  expertiseCategory = document.getElementById("expertiseDropdown").value;
+
+  subDocRef
+    .get()
+    .then(async (doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        for (let i in doc.data().expertise) {
+          fetchedArr.push(doc.data().expertise[i]);
+        }
+        console.log(fetchedArr)
+        if(fetchedArr.length>0){
+          if (document.getElementById("editExpertise").checked == true) {
+            
+            let updatedObject = {};
+            for (let i in fetchedArr) {
+              if (
+                fetchedArr[i].category ==
+                document.getElementById("expertiseDropdown").value
+              ) {
+              
+                const index = fetchedArr.indexOf(fetchedArr[i]);
+                if (index > -1) {
+                  fetchedArr.splice(index, 1);
+                }
+  
+              }
+            }
+            console.log(fetchedArr)
+            let finalUpdatedObj = {};
+            finalUpdatedObj["expertise"] = fetchedArr;
+            finalUpdatedObj["name"] = subVer;
+            await subDocRef.update(finalUpdatedObj).then(function(){
+              nowuiDashboard.showNotification(
+                "top",
+                "center",
+                "Expertise Deleted Succesfully",
+                "primary"
+              );
+              setTimeout(function(){
+                location.reload();
+              },800)
+            }).catch(function(error){
+              nowuiDashboard.showNotification(
+                "top",
+                "center",
+                  error,
+                "primary"
+              );
+            })
+           
+           
+          }
+        }else{
+          nowuiDashboard.showNotification(
+            "top",
+            "center",
+            "No Expertise Found To Delete",
+            "primary"
+          );
+        }
+        
+      }
+    });
+}
+
+
+/////////////////////////////////////////////////////////////
+
 
 let subVerticalsSelected = [];
 
@@ -258,11 +427,14 @@ const changeSubVertical = (e) => {
   console.log(verticalIndex);
   let subOptions = "";
   // subVerticalsDropdownHTML.innerHTML = "";
+  console.log(VERTICALS[verticalIndex])
   VERTICALS[verticalIndex].subVerticals.map((subVer) => {
     // subVerticalsDropdownHTML.innerHTML += `<option value="${subVer}">${subVer}</option>`;
     subOptions += `<option value="${subVer}">${subVer}</option>`;
+   
+    
   });
-
+ 
   subVerticalsHolderHTML.innerHTML = `
     <label>Select Sub-Vertical
       <span style="color: red">*</span>
@@ -298,7 +470,7 @@ function changeExpertise(e){
      $('#tags').tagsinput('removeAll');
   }else{
     document.getElementById("editExpertise").disabled = false
- 
+    document.getElementById("expertisesdeleteBtn").style.display="none"
   }
   if(document.getElementById("choices").length == 0 ){
     
@@ -310,6 +482,7 @@ function changeExpertise(e){
      $('#tags').tagsinput('removeAll');
   }else{
     document.getElementById("exp").disabled = false  
+    document.getElementById("expertisesdeleteBtn").style.display="none"
   }
   subid="choices"
   triggerExpertise(subid);
@@ -328,6 +501,7 @@ function changeExpertise2(e){
      $('#tags').tagsinput('removeAll');
   }else{
     document.getElementById("editExpertise").disabled = false
+    document.getElementById("expertisesdeleteBtn").style.display="none"
  
   }
   if(document.getElementById("choices-multiple-remove-button").length == 0 ){
@@ -339,7 +513,8 @@ function changeExpertise2(e){
     document.getElementById("editExpertise").checked = false
      $('#tags').tagsinput('removeAll');
   }else{
-    document.getElementById("exp").disabled = false  
+    document.getElementById("exp").disabled = false 
+    document.getElementById("expertisesdeleteBtn").style.display="none" 
   }
   subid="choices-multiple-remove-button"
   triggerExpertise(subid);
@@ -353,12 +528,13 @@ function toggleEditExpertise(e){
     document.getElementById("exp").disabled = true
     document.getElementById("expertiseDropdown").disabled = false
     getSetTagsFromDb();
-
+    document.getElementById("expertisesdeleteBtn").style.display="inline-block"
 
   } else {
     document.getElementById("expertiseDropdown").disabled = true
     document.getElementById("exp").disabled = false
     $('#tags').tagsinput('removeAll');
+    document.getElementById("expertisesdeleteBtn").style.display="none"
   }
 }
 function getSetTagsFromDb(){
@@ -397,3 +573,9 @@ function getSetTagsFromDb(){
 }
 document.getElementById("editExpertise").addEventListener("change", toggleEditExpertise);
 document.getElementById("expertiseDropdown").addEventListener("change", getSetTagsFromDb);
+
+function deleteExp(obj,index,subVer){
+  console.log(obj)
+  console.log(index)
+  console.log(subVer)
+}

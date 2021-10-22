@@ -29,6 +29,7 @@
       href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
       rel="stylesheet"
     />
+
     <!-- CSS Files -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
@@ -60,6 +61,8 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css" />
+
   </head>
   <style>
     .choices__inner {
@@ -227,14 +230,15 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header" style="display: flex">
-                  <h5 class="title">Add Expertise Attributes</h5>
+                  <h5 class="title">Add/Update Expertise Attributes</h5>
+ 
                 </div>
 
                 <div class="card-body">
                   <form id="expertiseForm">
                     <div class="row">
-                      <div class="col-lg-6">
-                        <div class="row">
+                      <div class="col-lg-6" >
+                        <div class="row" >
                           <div class="col-md-12 pr-1">
                             <div class="form-group">
                               <label
@@ -312,8 +316,6 @@
                                 <div class="col-lg-4">
                                   <label
                                     >Select From Previous Added
-                         
-                                  
                                   <select
                                     style="
                                       overflow-y: scroll;
@@ -355,35 +357,77 @@
                               type="button"
                               class="btn btn-elegant center"
                             >
-                              Add Expertise
+                              Add/Update Expertise
                             </button>
+                          </div>
+                          <div class="col-md-4">
+                            <button
+                            id="expertisesdeleteBtn"
+                            style="
+                              background-color: red;
+                              color: white;
+                              display: none;
+                            "
+                            type="button"
+                            class="btn btn-elegant center"
+                            
+                          >
+                            Delete this Expertise
+                          </button>
                           </div>
                         </div>
                       </div>
-                      <!-- <div class="col-lg-6">
-                        <ul id="myUL">
-                          <li><span class="cart">Beverages</span>
-                            <ul class="nested">
-                              <li>Water</li>
-                              <li>Coffee</li>
-                              <li><span class="cart">Tea</span>
-                                <ul class="nested">
-                                  <li>Black Tea</li>
-                                  <li>White Tea</li>
-                                  <li><span class="caet">Green Tea</span>
-                                    <ul class="nested">
-                                      <li>Sencha</li>
-                                      <li>Gyokuro</li>
-                                      <li>Matcha</li>
-                                      <li>Pi Lo Chun</li>
-                                    </ul>
-                                  </li>
-                                </ul>
-                              </li>  
-                            </ul>
-                          </li>
-                        </ul>
-                      </div> -->
+                      <div class="col-lg-1" >
+                      </div>
+                      <div class="col-lg-4" style="border: 2px dotted orange;">
+                        <h5 style="margin-left: 10%;" class="title">All Added Expertise </h5>
+                          <div class="row" >
+                              <div class="col-md-10 col-md-offset-0">
+                                  <ul class="tree" id="treeview">
+                                      <!-- <li data-icon-cls="fa fa-inbox" data-expanded="true">Signalling
+                                          <ul>
+                                              <li data-expanded="true"><b>Design </b>
+                                                <ul>
+                                                  <li>EXP1 <i class="fa fa-trash"></i></li>
+                                                  <li>EXP2 <i class="fa fa-trash"></i></li>
+                                                </ul>
+                                              </li>
+                                              <li data-expanded="true"><b>SITE ENG</b>
+                                                <ul>
+                                                  <li>EXP1 <i class="fa fa-trash"></i></li>
+                                                  <li>EXP2 <i class="fa fa-trash"></i></li>
+                                                </ul>
+                                              </li>
+                                           
+                                          </ul>
+                                      </li>
+                                     
+                                      <li data-icon-cls="fa fa-inbox" data-expanded="true">Telecom
+                                        <ul>
+                                            <li data-expanded="true"><b>Design </b>
+                                              <ul>
+                                                <li>EXP1</li>
+                                                <li>EXP2</li>
+                                              </ul>
+                                            </li>
+                                            <li data-expanded="true"><b>SITE ENG</b>
+                                              <ul>
+                                                <li>EXP1</li>
+                                                <li>EXP2</li>
+                                              </ul>
+                                            </li>
+                                         
+                                        </ul>
+                                    </li> -->
+                                    
+                                  </ul>
+                              </div>
+                          </div>
+                  
+                      
+                      </div>
+                      <div class="col-lg-1" >
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -398,6 +442,7 @@
     <!--   Core JS Files   -->
     <script src="../assets/js/core/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+   
   </body>
   <script>
     $(document).ready(function () {
@@ -405,6 +450,7 @@
       $("#navigation").load("commonNavigation.html");
       $("#topbar").load("topBar.html");
       $("#footer").load("footer.html");
+      
     });
    
      
