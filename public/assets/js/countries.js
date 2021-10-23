@@ -721,12 +721,14 @@ function populateCountries(countryElementId, stateElementId) {
       country_arr[i],
       country_arr[i]
     );
+    
   }
-
+  
   // Assigned all countries. Now assign event listener for the states.
 
   if (stateElementId) {
     countryElement.onchange = function () {
+    
       document.getElementById("sts").innerHTML = "";
       document.getElementById("stateOpt").style.display = "none";
       document.getElementById("sts").innerHTML = `
@@ -742,6 +744,7 @@ function populateCountries(countryElementId, stateElementId) {
           renderChoiceLimit: 100,
         });
         document.getElementById("stateOpt").style.display = "block";
+        document.getElementById("workCity").style.display = "block";
       }, 500);
     };
   }

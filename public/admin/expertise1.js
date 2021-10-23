@@ -126,7 +126,7 @@ db.collection("verticals").onSnapshot((snaps) => {
               if(doc.data().expertise[i].tags[j])
               document.getElementById(VERTICALS[k].id+"_"+subVer+"_"+doc.data().expertise[i].category).innerHTML+=` 
              
-              <li style="color:green">*`+doc.data().expertise[i].tags[j]+`</li>
+              <li style="color:green"><span style="color:red">*</span>`+doc.data().expertise[i].tags[j]+`</li>
               
               </li>`
           
