@@ -31,9 +31,10 @@ db.collection("verticals").onSnapshot((snaps) => {
     console.log(doc.data())
     VERTICALS.push({ name: docData.name, subVerticals: docData.subVerticals,id : docData._id });
     verticalsDropdownHTML.innerHTML += `<option value="${docData.name}">${docData.name}</option>`;
+  
     
     document.getElementById("treeview").innerHTML +=`
-    <li style="padding:5px !important;border-radius:20px" data-icon-cls="fa fa-inbox"  data-expanded="true">`+docData.name+`
+    <li style="color:blue" data-icon-cls="fa fa-inbox"  data-expanded="true">`+docData.name+`
         <ul id="`+docData._id+`">
             
           
@@ -52,7 +53,7 @@ db.collection("verticals").onSnapshot((snaps) => {
   }
 
   let subOptions = "";
-  console.log(VERTICALS);
+  
   let sbvr=""
   // subVerticalsDropdownHTML.innerHTML = "";
   VERTICALS[0].subVerticals.map((subVer) => {
@@ -65,7 +66,7 @@ db.collection("verticals").onSnapshot((snaps) => {
    
     VERTICALS[k].subVerticals.map((subVer) => {
       document.getElementById(VERTICALS[k].id).innerHTML+=`
-      <li  data-icon-cls="fa fa-inbox" data-expanded="true"><b>`+subVer+` </b>
+      <li style="color:black" data-icon-cls="fa fa-inbox" data-expanded="true"><b>`+subVer+` </b>
         <ul id="`+VERTICALS[k].id+"_"+subVer+`">
        
           
@@ -89,9 +90,13 @@ db.collection("verticals").onSnapshot((snaps) => {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          console.log("FOR:"+VERTICALS[k].subVerticals)
+          
           for (let i in doc.data().expertise) {
-            document.getElementById(VERTICALS[k].id+"_"+subVer).innerHTML+=` <li >`+doc.data().expertise[i].category+`&nbsp;<i  ></i></li>`
+            document.getElementById(VERTICALS[k].id+"_"+subVer).innerHTML+=` <li style="color:purple">`+doc.data().expertise[i].category+`&nbsp;<i  ></i>
+            <ul id="`+VERTICALS[k].id+"_"+subVer+"_"+doc.data().expertise[i].category+`">
+
+            </ul>
+            </li>`
             
           }
         }
@@ -102,7 +107,41 @@ db.collection("verticals").onSnapshot((snaps) => {
      
     
   }
+  for(let k in VERTICALS){
+   
+    VERTICALS[k].subVerticals.map((subVer) => {
+     
+      let docRef = db.collection("verticals").doc(VERTICALS[k].name);
+
+    
+      let subDocRef = docRef.collection(subVer).doc(subVer);
+      subDocRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
   
+          for (let i in doc.data().expertise) {
+            
+            for(let j in doc.data().expertise[i].tags){
+              if(doc.data().expertise[i].tags[j])
+              document.getElementById(VERTICALS[k].id+"_"+subVer+"_"+doc.data().expertise[i].category).innerHTML+=` 
+             
+              <li style="color:green"><span style="color:red">*</span>`+doc.data().expertise[i].tags[j]+`</li>
+              
+              </li>`
+          
+            }
+           
+            
+          }
+        }
+        
+      });
+      
+    });
+     
+    
+  }
   // let docRef = db.collection("verticals").doc(docData.name);
   // let subDocRef = docRef.collection(subVer).doc(subVer);
   // subDocRef

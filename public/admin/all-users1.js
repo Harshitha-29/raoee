@@ -62,8 +62,10 @@ async function collectCvData() {
 
 async function deleteProfile(index) {
   const doc = DATA[index];
-  console.log(doc);
-
+  const res = confirm("Are you sure to delete the user profile?")
+  if(!res){
+    return;
+  }
   const deleteUserRes = await deleteUser({
     collectionName: doc.userType,
     docId: doc.userId,
@@ -85,7 +87,12 @@ async function deleteProfile(index) {
   DATA.splice(index, 1);
   document.querySelector(`#user-row-${index}`).remove();
 
-  alert("successfully deleted the user.");
+  nowuiDashboard.showNotification(
+    "top",
+    "center",
+    "User Deleted Successfully",
+    "primary"
+  );
 }
 
 // ////////////////////////////////////
@@ -98,7 +105,7 @@ function deleteCv({ collectionName, docId }) {
     .doc(docId)
     .delete()
     .then(() => {
-      alert(`User CV deleted successfully.`);
+      
       return {
         status: true,
         message: `User CV deleted successfully.`,
@@ -123,26 +130,7 @@ function deleteCv({ collectionName, docId }) {
 
 let retryDeleteUser = 0;
 
-function deleteUser({ collectionName, docId }) {
-  // return db.collection(`${collectionName}s`).doc(docId).delete().then(() => {
-  //   return {
-  //     status: true,
-  //     message: `User deleted successfully.`
-  //   }
-  // }).catch(error => {
-  //   console.error(error);
-  //   if(retryDeleteUser < 2) {
-  //     alert(error.message)
-  //     retryDeleteUser++;
-  //     deleteUser({collectionName, docId})
-  //   } else {
-  //     return {
-  //       status: false,
-  //       message: `Low network, Unable to delete. ${error.message}`
-  //     }
-  //   }
-  // })
-
+async function deleteUser({ collectionName, docId }) {
   try {
     const uRef = await db.collection(`${collectionName}s`).doc(docId);
     const rawData = await uRef.get();

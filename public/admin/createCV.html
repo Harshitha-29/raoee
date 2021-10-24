@@ -106,6 +106,108 @@
     .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
       width: 100% !important;
     }
+    .inputGroup {
+  background-color: #fff;
+  display: block;
+  margin:5px 0;
+  position: relative;
+}
+.inputGroup label {
+  padding: 5px 20px;
+  width: 100%;
+  display: block;
+  text-align: left;
+  color: #3C454C;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: color 200ms ease-in;
+  overflow: hidden;
+}
+.inputGroup label:before {
+  width: 5px;
+  height: 10px;
+  border-radius: 50%;
+  content: "";
+  background-color: rgb(146, 44, 141);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale3d(1, 1, 1);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  z-index: -1;
+}
+.inputGroup label:after {
+  width: 15px;
+  height: 15px;
+  content: "";
+  border: 2px solid #D1D7DC;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E ");
+  background-repeat: no-repeat;
+  background-position: 2px 3px;
+  border-radius: 50%;
+  z-index: 2;
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: all 200ms ease-in;
+}
+.inputGroup input:checked ~ label {
+  color: #fff;
+}
+.inputGroup input:checked ~ label:before {
+  transform: translate(-50%, -50%) scale3d(56, 56, 1);
+  opacity: 1;
+}
+.inputGroup input:checked ~ label:after {
+  background-color: #091758;
+  border-color: #54E0C7;
+}
+.inputGroup input {
+  width: 22px;
+  height: 22px;
+  order: 1;
+  z-index: 2;
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.form {
+  padding: 0 16px;
+  max-width: 550px;
+  margin: 50px auto;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 36px;
+}
+
+body {
+  background-color: #D1D7DC;
+  font-family: "Fira Sans", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+code {
+  background-color: #9AA3AC;
+  padding: 0 8px;
+}
   </style>
   <body class="user-profile">
     <div class="wrapper">
@@ -253,6 +355,91 @@
                           />
                         </div>
                       </div>
+                      <div class="col-md-4 pr-1">
+                        <div class="form-group">
+                          <label>Qualification</label>
+                          <div >
+                             <select required style="padding: 7px;width: 85%;" id="qualification" name ="status">
+                              <option value="Below 10th">Below 10th</option>
+                              <option value="Intermediate Passed">Intermediate Passed</option>
+                              <option value="ITI/Diploma">ITI/Diploma</option>
+                              <option value="Graduate">Graduate</option>
+                              <option value="Post Graduate">Post Graduate</option>
+                              <option value="Phd">Phd</option>
+                            </select> 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 px-1">
+                        <div class="form-group">
+                          <label>I am</label>
+                          <div >
+                             <select required style="padding: 7px;width: 85%;" id="employmentStatus" name ="status">
+                              <option value="Unemployed">Unemployed</option>
+                              <option value="Employed">Employed</option>
+                              <option value="Not Working">Not Working</option>
+                            </select> 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 pl-1">
+                        <div class="form-group">
+                          <label>Looking For</label>
+                          <div >
+                             <select required style="padding: 7px;width: 85%;" id="internStatus" name ="status">
+                              <option value="Paid Internship">Paid Internship</option>
+                              <option value="Unpaid Internship">Unpaid Internship</option>
+                              <option value="Change Of Job">Change Of Job</option>
+                            </select> 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 pr-1">
+                        <div class="form-group">
+                          <label>Certified  By Domestic Agency</label>
+                        
+                          <div class="inputGroup">
+                            <input id="radio1" name="radioN" type="radio"/>
+                            <label for="radio1">Yes</label>
+                          </div>
+                          <div class="inputGroup">
+                            <input id="radio2" name="radioN" type="radio"/>
+                            <label for="radio2">No</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 px-1">
+                        <div class="form-group">
+                          <label>Internationally  certified</label>
+                        
+                          <div class="inputGroup">
+                            <input id="radio3" name="radio" type="radio"/>
+                            <label for="radio3">Yes</label>
+                          </div>
+                          <div class="inputGroup">
+                            <input id="radio4" name="radio" type="radio"/>
+                            <label for="radio4">No</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 pl-1">
+                        <div class="form-group">
+                          <label>Gender</label>
+                        
+                          <div class="inputGroup">
+                            <input id="radio5" name="radioG" type="radio"/>
+                            <label for="radio5">Male</label>
+                          </div>
+                          <div class="inputGroup">
+                            <input id="radio6" name="radioG" type="radio"/>
+                            <label for="radio6">Female</label>
+                          </div>
+                          <div class="inputGroup">
+                            <input id="radio7" name="radioG" type="radio"/>
+                            <label for="radio7">Others</label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="card">
@@ -267,18 +454,32 @@
                             <div class="form-group">
                               <label>Prefered Country to work</label>
                               <div >
-     
                                  <select required style="padding: 7px;width: 85%;" id="country" name ="country"></select> 
                               </div>
                             </div>
                           </div>
                          
-                          <div class="col-md-5 px-1" id="stateOpt" style="display: none;;">
+                          <div class="col-md-4 pl-1" id="stateOpt" style="display: none;;">
                             <div class="form-group">
                               <label>Prefered State to work</label>
                               <div style='text-align:center;'>
                                   <div id="sts">
                                   </select>
+                                  </div>
+                 
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 px-1" id="workCity" style="display: none;;">
+                            <div class="form-group">
+                              <label>Prefered City to work</label>
+                              <div style='text-align:center;'>
+                                  <div >
+                                    <input type="text"
+                                    name="fname"
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="City *">
                                   </div>
                  
                               </div>
@@ -487,11 +688,30 @@
   <script>
     $(document).ready(function () {
         $(document).ready(function () {
+          
             $("#navigation").load("commonNavigation.html");
             $("#topbar").load("topBar.html");
             // $("#footer").load("footer.html");
+            new Choices("#employmentStatus", {
+              removeItemButton: true,
+              maxItemCount: 100,
+              searchResultLimit: 100,
+              renderChoiceLimit: 100,
             });
-        
+            new Choices("#internStatus", {
+              removeItemButton: true,
+              maxItemCount: 100,
+              searchResultLimit: 100,
+              renderChoiceLimit: 100,
+            });
+            new Choices("#qualification", {
+              removeItemButton: true,
+              maxItemCount: 100,
+              searchResultLimit: 100,
+              renderChoiceLimit: 100,
+            });
+            });
+            
       var cnt=0;
         let int= setInterval(function() {
           cnt++;
