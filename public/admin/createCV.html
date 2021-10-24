@@ -291,7 +291,7 @@ code {
                         </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Address</label>
@@ -354,16 +354,17 @@ code {
                             placeholder="ZIP Code"
                           />
                         </div>
-                      </div>
+                      </div> -->
+                      <div style="display: flex;">
                       <div class="col-md-4 pr-1">
                         <div class="form-group">
                           <label>Qualification</label>
                           <div >
-                             <select required style="padding: 7px;width: 85%;" id="qualification" name ="status">
+                             <select required style="padding: 7px;width: 85%;" id="qualification" name ="qualification">
                               <option value="Below 10th">Below 10th</option>
                               <option value="Intermediate Passed">Intermediate Passed</option>
                               <option value="ITI/Diploma">ITI/Diploma</option>
-                              <option value="Graduate">Graduate</option>
+                              <option selected value="Graduate">Graduate</option>
                               <option value="Post Graduate">Post Graduate</option>
                               <option value="Phd">Phd</option>
                             </select> 
@@ -374,8 +375,8 @@ code {
                         <div class="form-group">
                           <label>I am</label>
                           <div >
-                             <select required style="padding: 7px;width: 85%;" id="employmentStatus" name ="status">
-                              <option value="Unemployed">Unemployed</option>
+                             <select required style="padding: 7px;width: 85%;" id="employmentStatus" name ="employmentStatus">
+                              <option selected value="Unemployed">Unemployed</option>
                               <option value="Employed">Employed</option>
                               <option value="Not Working">Not Working</option>
                             </select> 
@@ -386,24 +387,25 @@ code {
                         <div class="form-group">
                           <label>Looking For</label>
                           <div >
-                             <select required style="padding: 7px;width: 85%;" id="internStatus" name ="status">
-                              <option value="Paid Internship">Paid Internship</option>
+                             <select required style="padding: 7px;width: 85%;" id="internStatus" name ="internStatus">
+                              <option selected value="Paid Internship">Paid Internship</option>
                               <option value="Unpaid Internship">Unpaid Internship</option>
                               <option value="Change Of Job">Change Of Job</option>
                             </select> 
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div style="display: flex;">
                       <div class="col-md-4 pr-1">
                         <div class="form-group">
                           <label>Certified  By Domestic Agency</label>
-                        
                           <div class="inputGroup">
-                            <input id="radio1" name="radioN" type="radio"/>
+                            <input checked id="radio1" name="certified-domestic" type="radio"/>
                             <label for="radio1">Yes</label>
                           </div>
                           <div class="inputGroup">
-                            <input id="radio2" name="radioN" type="radio"/>
+                            <input  id="radio2" name="certified-domestic" type="radio"/>
                             <label for="radio2">No</label>
                           </div>
                         </div>
@@ -411,13 +413,12 @@ code {
                       <div class="col-md-4 px-1">
                         <div class="form-group">
                           <label>Internationally  certified</label>
-                        
                           <div class="inputGroup">
-                            <input id="radio3" name="radio" type="radio"/>
+                            <input id="radio3" name="certified-internationally" type="radio"/>
                             <label for="radio3">Yes</label>
                           </div>
                           <div class="inputGroup">
-                            <input id="radio4" name="radio" type="radio"/>
+                            <input checked id="radio4" name="certified-internationally" type="radio"/>
                             <label for="radio4">No</label>
                           </div>
                         </div>
@@ -425,29 +426,27 @@ code {
                       <div class="col-md-4 pl-1">
                         <div class="form-group">
                           <label>Gender</label>
-                        
                           <div class="inputGroup">
-                            <input id="radio5" name="radioG" type="radio"/>
+                            <input checked id="radio5" name="gender" type="radio"/>
                             <label for="radio5">Male</label>
                           </div>
                           <div class="inputGroup">
-                            <input id="radio6" name="radioG" type="radio"/>
+                            <input id="radio6" name="gender" type="radio"/>
                             <label for="radio6">Female</label>
                           </div>
                           <div class="inputGroup">
-                            <input id="radio7" name="radioG" type="radio"/>
+                            <input id="radio7" name="gender" type="radio"/>
                             <label for="radio7">Others</label>
                           </div>
                         </div>
                       </div>
+                    </div>
                     </div>
 
                     <div class="card">
                       <div class="card-header" style="display: flex">
                         <h5 class="title">Add CV's</h5>
                       </div>
-
-                      
                       <div class="card-body" id="cvEditHolder">
                         <div class="row">
                           <div class="col-md-4 pr-1">
@@ -475,13 +474,15 @@ code {
                               <label>Prefered City to work</label>
                               <div style='text-align:center;'>
                                   <div >
-                                    <input type="text"
-                                    name="fname"
+                                    <input 
+                                    type="text"
+                                    name="work-city"
                                     type="text"
                                     class="form-control"
-                                    placeholder="City *">
-                                  </div>
-                 
+                                    placeholder="Work City *"
+                                    required
+                                  >
+                                </div>
                               </div>
                             </div>
                           </div>

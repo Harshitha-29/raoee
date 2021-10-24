@@ -43,6 +43,16 @@ const updateBasicInfo = async () => {
   let createRes;
   console.log(RAW_USER);
 
+  const workCountry = employeeFormHTML['country'].value;
+
+  if(workCountry === -1 || statesSelected.length === 0) {
+    alert('enter the preffered country and state where user emplyee wants to work');
+    return{
+      status :false
+    }
+  }
+
+
   if (!RAW_USER.email) {
     await onStateChange();
   }
@@ -83,11 +93,17 @@ const updateBasicInfo = async () => {
   const lname = employeeFormHTML["lname"].value || "";
   const phone = employeeFormHTML["phone"].value || "";
 
-  const address = employeeFormHTML["address"].value || "";
-  const city = employeeFormHTML["city"].value || "";
-  const state = employeeFormHTML["home-state"].value || "";
-  const country = employeeFormHTML["home-country"].value || "";
-  const postalCode = employeeFormHTML["postal-code"].value || "";
+  // const address = employeeFormHTML["address"].value || "";
+  // const city = employeeFormHTML["city"].value || "";
+  // const state = employeeFormHTML["home-state"].value || "";
+  // const country = employeeFormHTML["home-country"].value || "";
+  // const postalCode = employeeFormHTML["postal-code"].value || "";
+  const qualification = employeeFormHTML["qualification"].value || "";
+  const employmentStatus = employeeFormHTML["employmentStatus"].value || "";
+  const internStatus = employeeFormHTML["internStatus"].value || "";
+  const certifiedDomestic = employeeFormHTML["certified-domestic"].value || "";
+  const certifiedInternationally = employeeFormHTML["certified-internationally"].value || "";
+  const gender = employeeFormHTML["gender"].value || "";
 
   FORM_DATA = {
     fname,
@@ -97,20 +113,23 @@ const updateBasicInfo = async () => {
     userType,
     uid: USER_CREATED_ID,
     basicInfo: {
-      address,
-      city,
-      state,
-      country,
-      postalCode,
+      // address,
+      // city,
+      // state,
+      // country,
+      // postalCode,
+      qualification, employmentStatus, internStatus, certifiedDomestic, certifiedInternationally, gender,
       aboutMe: "",
     },
   };
 
-  if (address && city && state && country && postalCode) {
-    FORM_DATA.basicInfoAdded = true;
-  } else {
-    FORM_DATA.basicInfoAdded = false;
-  }
+  // if (address && city && state && country && postalCode) {
+  //   FORM_DATA.basicInfoAdded = true;
+  // } else {
+  //   FORM_DATA.basicInfoAdded = false;
+  // }
+  FORM_DATA.basicInfoAdded = true;
+
   return{
     status :true
   }
@@ -191,6 +210,7 @@ async function getCreatedUser({ collectionName, uid }) {
 function getUserPreferences() {
   const cvVerticals = [];
 
+  console.log( employeeFormHTML.querySelectorAll(`select[name="expertise"]`));
   employeeFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
     const all = e.value.split("__");
     const selectedVId = all[0];
@@ -199,6 +219,7 @@ function getUserPreferences() {
     const category = all[3];
     const value = all[4];
     const rowId = all[5];
+    console.log(document.querySelector(`input[data-rowid="${rowId}"]`).checked);
 
     if (document.querySelector(`input[data-rowid="${rowId}"]`).checked) {
       cvVerticals.push({
@@ -212,6 +233,7 @@ function getUserPreferences() {
 
     console.log(cvVerticals);
   });
+  console.log(cvVerticals);
 
   const vv = [];
   const sv = [];
@@ -280,15 +302,17 @@ const updateCv = async (e) => {
   const userType = 'employee';
 
   const workCountry = employeeFormHTML['country'].value;
+  const workCity = employeeFormHTML['work-city'].value;
   console.log(workCountry, statesSelected);
 
   if(workCountry === -1 || statesSelected.length === 0) {
     alert('enter the preffered country and state where user emplyee wants to work');
     return;
   }
-  const { verticals, subVerticals, expertise } = getUserPreferences();
-
-
+  const { verticals, subVerticals, expertise } = await getUserPreferences();
+  console.log(verticals);
+  console.log(subVerticals);
+  console.log(expertise);
   let resStorage, resURL;
   let data = {};
 
@@ -319,6 +343,7 @@ const updateCv = async (e) => {
   data.lname = employeeFormHTML["lname"].value || "";
   data.workCountry = workCountry;
   data.workStates = statesSelected;
+  data.workCity = workCity;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -338,6 +363,7 @@ const updateCv = async (e) => {
     docId: resDB.data.docId,
     workCountry,
     workStates : statesSelected,
+    workCity
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -416,12 +442,13 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
+  console.log(data);
   document.getElementById("progressBar").style.display="block"
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-
+  console.log(collectionName);
   try {
     const ref = await db.collection(collectionName).add({ ...data });
     return {
