@@ -133,7 +133,17 @@
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-md-12"><label class="labels">Mobile Number</label><input disabled type="text" id="phno" class="form-control" placeholder="enter phone number" value=""></div>
-                                        <div class="col-md-12"><label class="labels">Address Line 1</label><input disabled type="text" class="form-control" id="addr" placeholder="" value=""></div>
+                                     
+                                        <div class="col-md-6">
+                                          <br>
+                                          
+                                          <label class="labels">Qualification</label><p id="addr">Below !0 </p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                          <br>
+                                          <label class="labels">Gender</label><p id="addr">Below !0 </p>
+                                        </div>
                                         <div class="col-md-12"><label class="labels">City</label><input disabled type="text" class="form-control" id="city" placeholder="" value=""></div>
                                         <div class="col-md-12"><label class="labels">Postcode</label><input disabled type="text" class="form-control" id="post" placeholder="enter postcode" value=""></div>
 
@@ -470,7 +480,7 @@
        
         document.title = USER.fname
         if(USER.basicInfoAdded==true){
-       
+        console.log(USER)
         $("#favicon").attr("href",USER.basicInfo.imgUrl);
         $("#ename").text(USER.fname)
         $("#ename2").text(USER.fname)
