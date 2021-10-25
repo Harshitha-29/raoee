@@ -8,6 +8,25 @@ let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
 var oldStateArr=[];
+var empStatusDrop = new Choices("#employmentStatus", {
+  removeItemButton: true,
+  maxItemCount: 100,
+  searchResultLimit: 100,
+  renderChoiceLimit: 100,
+}).disable();
+var internStatusDrop= new Choices("#internStatus", {
+  removeItemButton: true,
+  maxItemCount: 100,
+  searchResultLimit: 100,
+  renderChoiceLimit: 100,
+}).disable();
+var qualificationDrop=new Choices("#qualification", {
+  removeItemButton: true,
+  maxItemCount: 100,
+  searchResultLimit: 100,
+  renderChoiceLimit: 100,
+
+}).disable();
 auth.onAuthStateChanged(async(user) => {
   if (user) {
     USER_RAW = user;
@@ -122,26 +141,39 @@ const toggleBasicInfoDisplay = (e) => {
     // console.log(userBasicFormHTML["qualification"]);
     // document.querySelector('#qualification').disabled = false;
     // userBasicFormHTML["qualification"].classList.remove('is-hidden');
-    userBasicFormHTML["qualification"].disabled = false;
-    userBasicFormHTML["employmentStatus"].disabled = false;
-    userBasicFormHTML["internStatus"].disabled = false;
-    userBasicFormHTML["certified-domestic"].disabled = false;
-    userBasicFormHTML["certified-internationally"].disabled = false;
-    userBasicFormHTML["gender"].disabled = false;
+   
+   // document.getElementById("qualification").disabled = true;
+    empStatusDrop.enable()
+    internStatusDrop.enable()
+    qualificationDrop.enable()
+    // userBasicFormHTML["certified-domestic"].disabled = false;
+    document.getElementById("radioDom1").disabled=false;
+    document.getElementById("radioDom2").disabled=false;
+    document.getElementById("radioInt1").disabled=false;
+    document.getElementById("radioInt2").disabled=false;
+    document.getElementById("radioGen1").disabled=false;
+    document.getElementById("radioGen2").disabled=false;
+    document.getElementById("radioGen3").disabled=false;
     updateBasicInfoBtnHTML.style.display = "block";
     console.log(userBasicFormHTML["qualification"]);
+    
+    
   } else {
+    empStatusDrop.disable()
+    internStatusDrop.disable()
+    qualificationDrop.disable()
     userBasicFormHTML["fname"].readOnly = true;
     userBasicFormHTML["lname"].readOnly = true;
-    userBasicFormHTML["phone"].readOnly = true;
-    userBasicFormHTML["qualification"].disabled = true;
-    // userBasicFormHTML["qualification"].classList.add('is-hidden');
-    userBasicFormHTML["employmentStatus"].disabled = true;
-    userBasicFormHTML["internStatus"].disabled = true;
-    userBasicFormHTML["certified-domestic"].disabled = true;
-    userBasicFormHTML["certified-internationally"].disabled = true;
-    userBasicFormHTML["gender"].disabled = true;
+    userBasicFormHTML["phone"].readOnly = true;   
+    document.getElementById("radioDom1").disabled=true;
+    document.getElementById("radioDom2").disabled=true;
+    document.getElementById("radioInt1").disabled=true;
+    document.getElementById("radioInt2").disabled=true;
+    document.getElementById("radioGen1").disabled=true;
+    document.getElementById("radioGen2").disabled=true;
+    document.getElementById("radioGen3").disabled=true;
     updateBasicInfoBtnHTML.style.display = "none";
+    
   }
 };
 

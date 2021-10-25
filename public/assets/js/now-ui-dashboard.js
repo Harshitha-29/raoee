@@ -66,7 +66,7 @@ $(document).ready(function() {
   if ($('.full-screen-map').length == 0 && $('.bd-docs').length == 0) {
     // On click navbar-collapse the menu will be white not transparent
     $('.collapse').on('show.bs.collapse', function() {
-      $(this).closest('.navbar').removeClass('navbar-transparent').addClass('bg-white');
+      // $(this).closest('.navbar').removeClass('navbar-transparent').addClass('bg-white');
     }).on('hide.bs.collapse', function() {
       $(this).closest('.navbar').addClass('navbar-transparent').removeClass('bg-white');
     });
@@ -144,7 +144,7 @@ $(window).resize(function() {
         $navbar.removeClass('bg-white').addClass('navbar-transparent');
       }
     } else if ($navbar.hasClass('navbar-transparent') && $(window).width() < 991 && isExpanded != "false") {
-      $navbar.addClass('bg-white').removeClass('navbar-transparent');
+      // $navbar.addClass('bg-white').removeClass('navbar-transparent');
     }
   }
   if (is_iPad) {
