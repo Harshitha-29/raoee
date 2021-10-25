@@ -120,7 +120,18 @@
                     <div class="container rounded bg-white mt-5 mb-5">
                         <div class="row">
                             <div class="col-md-3 border-right">
-                                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" height="150px" style="object-fit: cover;" id="eimg" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span id="ename2" class="font-weight-bold">Loading..</span><span id="eemail" class="text-black-50">Loading..</span><span> </span></div>
+                                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" height="150px" style="object-fit: cover;" id="eimg" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                                  <span id="ename2" class="font-weight-bold">Loading..</span>
+                                  <span id="eemail" class="text-black-50">Loading..</span><span id="gender" style="font-weight: 800;"  ></span>
+                                  <br>
+                                  <div >
+                                    <h3>Certificates</h3>
+                                    <hr/>
+                                    <p>Certified By Domestic Agency :<span id="cer1" style="font-weight:700"></span></p>
+                                    <p>Internationally certified : <span id="cer2" style="font-weight:700"></span></p>
+                                  </div>
+                                  <div class="mt-5 text-center"><button class="btn  profile-button" onclick=showCv() style="color:white;background-color: rgb(146, 44, 141);" type="button">View Resume/CV</button></div>
+                                </div>
                             </div>
                             <div class="col-md-4 border-right">
                                 <div class="p-3 py-5">
@@ -137,24 +148,45 @@
                                         <div class="col-md-6">
                                           <br>
                                           
-                                          <label class="labels">Qualification</label><p id="addr">Below !0 </p>
+                                          <label class="labels">Qualification</label><p id="quali">Loading ..</p>
+                                          <hr/>
                                         </div>
 
                                         <div class="col-md-6">
                                           <br>
-                                          <label class="labels">Gender</label><p id="addr">Below !0 </p>
+                                          <label class="labels">Employment Status</label><p id="empStatus">Loading ..</p>
+                                          <hr/>
                                         </div>
-                                        <div class="col-md-12"><label class="labels">City</label><input disabled type="text" class="form-control" id="city" placeholder="" value=""></div>
-                                        <div class="col-md-12"><label class="labels">Postcode</label><input disabled type="text" class="form-control" id="post" placeholder="enter postcode" value=""></div>
+                                    
+                                        <div class="col-md-6">
+                                        <br>
+                                          
+                                        <label class="labels">Looking For</label><p id="lookingFor">Loading ..</p>
+
+                                        <hr/>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                          <br>
+                                          <label class="labels">Years Of Experience</label><p id="yearExp">Loading ..</p>
+                                          <hr/>
+                                        </div>
+                                    
 
                                         <div class="col-md-12"><label class="labels">Email ID</label><input disabled type="text" class="form-control" id="eemail2" placeholder="enter email id" value=""></div>
                 
                                     </div>
                                     <div class="row mt-3">
-                                        <div class="col-md-6"><label class="labels">Country</label><input disabled type="text" id="country" class="form-control" placeholder="country" value=""></div>
-                                        <div class="col-md-6"><label class="labels">State/Region</label><input disabled type="text" id="state" class="form-control" value="" placeholder="state"></div>
+                                        <div class="col-md-6"><label class="labels">Preffered Country </label><input disabled type="text" id="country" class="form-control" placeholder="country" value=""></div>
+                                        <div class="col-md-6"><label class="labels">Preffered  City</label><input disabled type="text" id="city" class="form-control" value="" placeholder="state"></div>
+                                        <div class="col-md-12"><label class="labels">Preffered State/Region</label>
+                                          <ul id="states">
+                                            
+                                          </ul>
+                                        </div>
                                     </div>
-                                    <div class="mt-5 text-center"><button class="btn  profile-button" onclick=showCv() style="color:white;background-color: rgb(146, 44, 141);" type="button">View Resume/CV</button></div>
+                                    
+                                 
                                 </div>
                             </div>
                             <div class="col-md-5">
@@ -490,11 +522,30 @@
         $("#fname").attr('value',USER.fname)
         $("#lname").attr('value',USER.lname)
         $("#phno").attr('value',USER.phone)
-        $("#addr").attr('value',USER.basicInfo.address)
-        $("#city").attr('value',USER.basicInfo.city)
-        $("#post").attr('value',USER.basicInfo.postalCode)
-        $("#country").attr('value',USER.basicInfo.country)
-        $("#state").attr('value',USER.basicInfo.state)
+        document.getElementById("quali").innerHTML=USER.basicInfo.qualification
+        document.getElementById("empStatus").innerHTML=USER.basicInfo.employmentStatus
+        document.getElementById("lookingFor").innerHTML=USER.basicInfo.internStatus
+        document.getElementById("quali").innerHTML=USER.basicInfo.qualification
+        if(USER.basicInfo.gender=="Male"){
+          document.getElementById("gender").innerHTML=USER.basicInfo.gender
+          document.getElementById("gender").style.color="blue"
+          
+        }else{
+          document.getElementById("gender").innerHTML=USER.basicInfo.gender
+          document.getElementById("gender").style.color="pink"
+        }
+        document.getElementById("cer1").innerHTML=USER.basicInfo.certifiedDomestic
+        document.getElementById("cer2").innerHTML=USER.basicInfo.certifiedInternationally
+   
+        $("#city").attr('value',USER.cv.workCity)
+        $("#country").attr('value',USER.cv.workCountry)
+
+        for(let i in USER.cv.workStates){
+          document.getElementById("states").innerHTML+=`
+          <li>`+USER.cv.workStates[i]+`</li>
+          `
+        }
+        // $("#state").attr('value',USER.basicInfo.state)
         }
      
         
