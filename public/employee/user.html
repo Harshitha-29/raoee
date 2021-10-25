@@ -381,7 +381,7 @@ code {
                         </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Address</label>
@@ -444,94 +444,99 @@ code {
                             readonly
                           />
                         </div>
-                      </div>
-                      <div class="col-md-4 pr-1">
-                        <div class="form-group">
-                          <label>Qualification</label>
-                          <div >
-                             <select required disabled style="padding: 7px;width: 85%;z-index: 9999999;" id="qualification" name ="status" readonly>
-                              <option value="Below 10th">Below 10th</option>
-                              <option value="Intermediate Passed">Intermediate Passed</option>
-                              <option value="ITI/Diploma">ITI/Diploma</option>
-                              <option value="Graduate">Graduate</option>
-                              <option value="Post Graduate">Post Graduate</option>
-                              <option value="Phd">Phd</option>
-                            </select> 
+                      </div> -->
+                      <div style="display: flex;">
+                        <div class="col-md-4 pr-1">
+                          <div class="form-group">
+                            <label>Qualification</label>
+                            <div >
+                              <select disabled required style="padding: 7px;width: 85%;" id="qualification" name ="qualification" >
+                                <option selected disabled value="">Choose</option>
+                                <option value="Below 10th">Below 10th</option>
+                                <option value="Intermediate Passed">Intermediate Passed</option>
+                                <option value="ITI/Diploma">ITI/Diploma</option>
+                                <option value="Graduate">Graduate</option>
+                                <option value="Post Graduate">Post Graduate</option>
+                                <option value="Phd">Phd</option>
+                              </select> 
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 px-1">
+                          <div class="form-group">
+                            <label>I am</label>
+                            <div >
+                              <select disabled required style="padding: 7px;width: 85%;" id="employmentStatus" name ="employmentStatus">
+                                <option selected disabled value="">Choose</option>
+                                <option value="Unemployed">Unemployed</option>
+                                <option value="Employed">Employed</option>
+                                <option value="Not Working">Not Working</option>
+                              </select> 
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 pl-1">
+                          <div class="form-group">
+                            <label>Looking For</label>
+                            <div >
+                              <select disabled required style="padding: 7px;width: 85%;" id="internStatus" name ="internStatus">
+                                <option selected disabled value="">Choose</option>
+                                <option value="Paid Internship">Paid Internship</option>
+                                <option value="Unpaid Internship">Unpaid Internship</option>
+                                <option value="Change Of Job">Change Of Job</option>
+                              </select> 
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4 px-1">
-                        <div class="form-group">
-                          <label>I am</label>
-                          <div >
-                             <select disabled required style="padding: 7px;width: 85%;" id="employmentStatus" name ="status">
-                              <option value="Unemployed">Unemployed</option>
-                              <option value="Employed">Employed</option>
-                              <option value="Not Working">Not Working</option>
-                            </select> 
+                      <div style="display: flex;">
+                        <div class="col-md-4 pr-1">
+                          <div class="form-group">
+                            <label>Certified  By Domestic Agency</label>
+                            <div class="inputGroup">
+                              <input disabled id="radio1" name="certified-domestic" type="radio"/>
+                              <label for="radio1">Yes</label>
+                            </div>
+                            <div class="inputGroup">
+                              <input  disabled id="radio2" name="certified-domestic" type="radio"/>
+                              <label for="radio2">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 px-1">
+                          <div class="form-group">
+                            <label>Internationally  certified</label>
+                            <div class="inputGroup">
+                              <input disabled id="radio3" name="certified-internationally" type="radio"/>
+                              <label for="radio3">Yes</label>
+                            </div>
+                            <div class="inputGroup">
+                              <input disabled id="radio4" name="certified-internationally" type="radio"/>
+                              <label for="radio4">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 pl-1">
+                          <div class="form-group">
+                            <label>Gender</label>
+                            <div class="inputGroup">
+                              <input disabled id="radio5" name="gender" type="radio"/>
+                              <label for="radio5">Male</label>
+                            </div>
+                            <div class="inputGroup">
+                              <input disabled id="radio6" name="gender" type="radio"/>
+                              <label for="radio6">Female</label>
+                            </div>
+                            <div class="inputGroup">
+                              <input disabled id="radio7" name="gender" type="radio"/>
+                              <label for="radio7">Others</label>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4 pl-1">
-                        <div class="form-group">
-                          <label>Looking For</label>
-                          <div >
-                             <select disabled required style="padding: 7px;width: 85%;" id="internStatus" name ="status">
-                              <option value="Paid Internship">Paid Internship</option>
-                              <option value="Unpaid Internship">Unpaid Internship</option>
-                              <option value="Change Of Job">Change Of Job</option>
-                            </select> 
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4 pr-1">
-                        <div class="form-group">
-                          <label>Certified  By Domestic Agency</label>
-                        
-                          <div class="inputGroup">
-                            <input disabled id="radio1" name="radioN" type="radio"/>
-                            <label for="radio1">Yes</label>
-                          </div>
-                          <div class="inputGroup">
-                            <input disabled id="radio2" name="radioN" type="radio"/>
-                            <label for="radio2">No</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4 px-1">
-                        <div class="form-group">
-                          <label>Internationally  certified</label>
-                        
-                          <div class="inputGroup">
-                            <input disabled id="radio3" name="radio" type="radio"/>
-                            <label for="radio3">Yes</label>
-                          </div>
-                          <div class="inputGroup">
-                            <input disabled id="radio4" name="radio" type="radio"/>
-                            <label for="radio4">No</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4 pl-1">
-                        <div class="form-group">
-                          <label>Gender</label>
-                        
-                          <div class="inputGroup">
-                            <input disabled id="radio5" name="radioG" type="radio"/>
-                            <label for="radio5">Male</label>
-                          </div>
-                          <div class="inputGroup">
-                            <input disabled id="radio6" name="radioG" type="radio"/>
-                            <label for="radio6">Female</label>
-                          </div>
-                          <div class="inputGroup">
-                            <input disabled id="radio7" name="radioG" type="radio"/>
-                            <label for="radio7">Others</label>
-                          </div>
-                        </div>
-                      </div>
+                   
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>About Me</label>
@@ -551,7 +556,7 @@ code {
                         </div>
                         
                       </div>
-                    </div>
+                    </div> -->
                     <button
                       id="updateBasicInfoBtn"
                       style="background-color: rgb(31, 126, 189);color:#ffffff; display: none; "
@@ -569,7 +574,7 @@ code {
                       >Update Basic Profile
                     </button>
                   </form>
-                </div>
+              
               </div>
 
            

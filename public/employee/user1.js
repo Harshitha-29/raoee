@@ -119,23 +119,23 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["fname"].readOnly = false;
     userBasicFormHTML["lname"].readOnly = false;
     userBasicFormHTML["phone"].readOnly = false;
-    userBasicFormHTML["address"].readOnly = false;
-    userBasicFormHTML["city"].readOnly = false;
-    userBasicFormHTML["home-state"].readOnly = false;
-    userBasicFormHTML["home-country"].readOnly = false;
-    userBasicFormHTML["postal-code"].readOnly = false;
-    userBasicFormHTML["about-me"].readOnly = false;
+    userBasicFormHTML["qualification"].disabled = false;
+    userBasicFormHTML["employmentStatus"].disabled = false;
+    userBasicFormHTML["internStatus"].disabled = false;
+    userBasicFormHTML["certified-domestic"].disabled = false;
+    userBasicFormHTML["certified-internationally"].disabled = false;
+    userBasicFormHTML["gender"].disabled = false;
     updateBasicInfoBtnHTML.style.display = "block";
   } else {
     userBasicFormHTML["fname"].readOnly = true;
     userBasicFormHTML["lname"].readOnly = true;
     userBasicFormHTML["phone"].readOnly = true;
-    userBasicFormHTML["address"].readOnly = true;
-    userBasicFormHTML["city"].readOnly = true;
-    userBasicFormHTML["home-state"].readOnly = true;
-    userBasicFormHTML["home-country"].readOnly = true;
-    userBasicFormHTML["postal-code"].readOnly = true;
-    userBasicFormHTML["about-me"].readOnly = true;
+    userBasicFormHTML["qualification"].disabled = true;
+    userBasicFormHTML["employmentStatus"].disabled = true;
+    userBasicFormHTML["internStatus"].disabled = true;
+    userBasicFormHTML["certified-domestic"].disabled = true;
+    userBasicFormHTML["certified-internationally"].disabled = true;
+    userBasicFormHTML["gender"].disabled = true;
     updateBasicInfoBtnHTML.style.display = "none";
   }
 };
@@ -156,12 +156,12 @@ function displayUserDetails() {
   fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
   if (USER.basicInfoAdded) {
     aboutMeProfileHTML.innerText = USER.basicInfo.aboutMe;
-    userBasicFormHTML["address"].value = USER.basicInfo.address;
-    userBasicFormHTML["city"].value = USER.basicInfo.city;
-    userBasicFormHTML["home-state"].value = USER.basicInfo.state;
-    userBasicFormHTML["home-country"].value = USER.basicInfo.country;
-    userBasicFormHTML["postal-code"].value = USER.basicInfo.postalCode;
-    userBasicFormHTML["about-me"].value = USER.basicInfo.aboutMe;
+    // userBasicFormHTML["address"].value = USER.basicInfo.address;
+    // userBasicFormHTML["city"].value = USER.basicInfo.city;
+    // userBasicFormHTML["home-state"].value = USER.basicInfo.state;
+    // userBasicFormHTML["home-country"].value = USER.basicInfo.country;
+    // userBasicFormHTML["postal-code"].value = USER.basicInfo.postalCode;
+    // userBasicFormHTML["about-me"].value = USER?.basicInfo.aboutMe;
     blahHTML.src = USER?.basicInfo?.imgUrl || `../assets/img/userProfile.png`;
   }
 
@@ -181,12 +181,12 @@ const updateBasicInfo = async (e) => {
   const lname = userBasicFormHTML["lname"].value;
   const phone = userBasicFormHTML["phone"].value;
 
-  const address = userBasicFormHTML["address"].value;
-  const city = userBasicFormHTML["city"].value;
-  const state = userBasicFormHTML["home-state"].value;
-  const country = userBasicFormHTML["home-country"].value;
-  const postalCode = userBasicFormHTML["postal-code"].value;
-  const aboutMe = userBasicFormHTML["about-me"].value;
+  // const address = userBasicFormHTML["address"].value;
+  // const city = userBasicFormHTML["city"].value;
+  // const state = userBasicFormHTML["home-state"].value;
+  // const country = userBasicFormHTML["home-country"].value;
+  // const postalCode = userBasicFormHTML["postal-code"].value;
+  // const aboutMe = userBasicFormHTML["about-me"].value;
 
   const data = {
     ...USER,
@@ -195,12 +195,12 @@ const updateBasicInfo = async (e) => {
     phone,
     basicInfo: {
       ...USER.basicInfo,
-      address,
-      city,
-      state,
-      country,
-      postalCode,
-      aboutMe,
+      // address,
+      // city,
+      // state,
+      // country,
+      // postalCode,
+      // aboutMe,
       
     },
     basicInfoAdded: true,
