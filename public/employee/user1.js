@@ -122,7 +122,6 @@ const toggleBasicInfoDisplay = (e) => {
     // console.log(userBasicFormHTML["qualification"]);
     // document.querySelector('#qualification').disabled = false;
     // userBasicFormHTML["qualification"].classList.remove('is-hidden');
-    QQ = false
     userBasicFormHTML["qualification"].disabled = false;
     userBasicFormHTML["employmentStatus"].disabled = false;
     userBasicFormHTML["internStatus"].disabled = false;
@@ -136,7 +135,6 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["lname"].readOnly = true;
     userBasicFormHTML["phone"].readOnly = true;
     userBasicFormHTML["qualification"].disabled = true;
-    QQ = true
     // userBasicFormHTML["qualification"].classList.add('is-hidden');
     userBasicFormHTML["employmentStatus"].disabled = true;
     userBasicFormHTML["internStatus"].disabled = true;
