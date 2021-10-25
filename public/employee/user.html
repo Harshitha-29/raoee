@@ -447,10 +447,10 @@ code {
                       </div> -->
                       <div style="display: flex;">
                         <div class="col-md-4 pr-1">
-                          <div class="form-group">
+                          <div class="">
                             <label>Qualification</label>
                             <div >
-                              <select disabled required style="padding: 7px;width: 85%;" id="qualification" name ="qualification" >
+                              <select disabled  required style="padding: 7px;width: 85%;" id="qualification" name ="qualification" >
                                 <option selected disabled value="">Choose</option>
                                 <option value="Below 10th">Below 10th</option>
                                 <option value="Intermediate Passed">Intermediate Passed</option>
@@ -1045,6 +1045,7 @@ code {
   </body>
   <script>
     $(document).ready(function () {
+      let QQ =  true
       new Choices("#employmentStatus", {
               removeItemButton: true,
               maxItemCount: 100,
@@ -1062,6 +1063,7 @@ code {
               maxItemCount: 100,
               searchResultLimit: 100,
               renderChoiceLimit: 100,
+              disabled: QQ
             });
       var cnt=0;
         let int= setInterval(function(){
