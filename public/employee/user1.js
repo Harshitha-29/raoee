@@ -139,7 +139,6 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["lname"].readOnly = true;
     userBasicFormHTML["phone"].readOnly = true;
     userBasicFormHTML["qualification"].disabled = true;
-   // QQ = true
     // userBasicFormHTML["qualification"].classList.add('is-hidden');
     userBasicFormHTML["employmentStatus"].disabled = true;
     userBasicFormHTML["internStatus"].disabled = true;
