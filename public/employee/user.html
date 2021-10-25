@@ -450,8 +450,8 @@ code {
                           <div class="">
                             <label>Qualification</label>
                             <div >
-                              <select disabled  required style="padding: 7px;width: 85%;" id="qualification" name ="qualification" >
-                                <option selected disabled value="">Choose</option>
+                              <select  required style="padding: 7px;width: 85%;" id="qualification" name ="qualification" >
+                                <option selected  value="">Choose</option>
                                 <option value="Below 10th">Below 10th</option>
                                 <option value="Intermediate Passed">Intermediate Passed</option>
                                 <option value="ITI/Diploma">ITI/Diploma</option>
@@ -1045,7 +1045,7 @@ code {
   </body>
   <script>
     $(document).ready(function () {
-      let QQ =  true
+      
       new Choices("#employmentStatus", {
               removeItemButton: true,
               maxItemCount: 100,
@@ -1063,7 +1063,7 @@ code {
               maxItemCount: 100,
               searchResultLimit: 100,
               renderChoiceLimit: 100,
-              disabled: QQ
+            
             });
       var cnt=0;
         let int= setInterval(function(){

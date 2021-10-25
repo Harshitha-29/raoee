@@ -122,8 +122,10 @@ const toggleBasicInfoDisplay = (e) => {
     // console.log(userBasicFormHTML["qualification"]);
     // document.querySelector('#qualification').disabled = false;
     // userBasicFormHTML["qualification"].classList.remove('is-hidden');
-    QQ = false
     userBasicFormHTML["qualification"].disabled = false;
+   // document.getElementById("qualification").disabled = true;
+
+    document.getElementById("qualification").setAttribute("disabled", "disabled");
     userBasicFormHTML["employmentStatus"].disabled = false;
     userBasicFormHTML["internStatus"].disabled = false;
     userBasicFormHTML["certified-domestic"].disabled = false;
@@ -131,12 +133,13 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["gender"].disabled = false;
     updateBasicInfoBtnHTML.style.display = "block";
     console.log(userBasicFormHTML["qualification"]);
+    
   } else {
     userBasicFormHTML["fname"].readOnly = true;
     userBasicFormHTML["lname"].readOnly = true;
     userBasicFormHTML["phone"].readOnly = true;
     userBasicFormHTML["qualification"].disabled = true;
-    QQ = true
+   // QQ = true
     // userBasicFormHTML["qualification"].classList.add('is-hidden');
     userBasicFormHTML["employmentStatus"].disabled = true;
     userBasicFormHTML["internStatus"].disabled = true;
