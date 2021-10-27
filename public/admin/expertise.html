@@ -290,16 +290,16 @@
                           <div class="col-md-12 pr-1">
                             <div class="form-group" id="subVerticalsHolder22">
                               <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                   <label
-                                    >Enter New Area of Expertise
+                                    >Enter New Designation
                                     <span style="color: red">*</span></label
                                   >
                                   <div>
                                     <input
                                       name="expertiseCategory"
                                       type="text"
-                                      placeholder="Enter Area of Expertise"
+                                      placeholder="Enter Designation"
                                       style="width: 100%; padding: 10px"
                                       id="exp"
                                     />
@@ -329,9 +329,53 @@
                               </div>
                             </div>
                           </div>
+                          <div class="col-md-12 pr-1">
+                            <div class="form-group" id="subVerticalsHolder22">
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <label
+                                    > Area of Expertise for Designation
+                                    <span style="color: red">*</span></label
+                                  >
+                                  <div>
+                                    <input
+                                      name="expertiseCategory"
+                                      type="text"
+                                      placeholder="Ex : Merlock , Relay Interlocking"
+                                      style="width: 100%; padding: 10px"
+                                      id="subCatInput"
+                                      disabled
+                                    />
+                                  </div>
+                                 
+                                </div>
+                                <div class="col-lg-2">
+                                  <p>or</p>
+                                  <label class="switch">
+                                    <input type="checkbox" id="toggleSubExpertise"  disabled/>
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                                <div class="col-lg-4">
+                                  <label
+                                    >Select From Previous Added Exp
+                                  <select
+                                    style="
+                                      overflow-y: scroll;
+                                      width: 100%;
+                                      padding: 10px;
+                                    "
+                                    id="subCatDropdown"
+                                    name="Qexpertise"
+                                    disabled
+                                  ></select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           <div class="col-md-12">
                             <div class="form-group">
-                              <label>Enter Profession/Experience Level</label>
+                              <label>Enter Experience Level</label>
                               <br />
                               <input
                                 name="expertisesTags"

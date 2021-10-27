@@ -760,6 +760,7 @@ function displaySubVerticalDropdown() {
     searchResultLimit: 10,
     renderChoiceLimit: 10,
   });
+  
 
 }
 
@@ -984,7 +985,7 @@ function displayExpertiseTable(initial = false) {
               style="text-align: center; font-weight: 600"
               scope="col center"
             >
-              Area of Expertises
+              Designation - Expertise
               <br>
               (${sv.name})
             </th>
@@ -995,7 +996,7 @@ function displayExpertiseTable(initial = false) {
               style="text-align: center; font-weight: 600"
               scope="col"
             >
-              Your Profession / Experience
+              Your Experience
             </th>
           </tr>
         </thead>
@@ -1031,6 +1032,7 @@ function displayExpertiseTable(initial = false) {
         } else {
           tglTxt = "Yes";
         }
+        
         rows +=
           `
         <tr>
@@ -1052,6 +1054,8 @@ function displayExpertiseTable(initial = false) {
               data-rowid="${rowId}" 
               class="selectpicker"
               name="expertise"
+              id="cat12"
+              multiple
               ${isDisabled ? "disabled" : ""} 
               style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
             >
@@ -1061,18 +1065,30 @@ function displayExpertiseTable(initial = false) {
         </tr>
           `;
         i++;
+       
       });
-
+      
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
+
+      
     });
 
     tables += head + table;
+    setTimeout(function(){
+      new Choices("#cat12", {
+        removeItemButton: true,
+        maxItemCount: 20,
+        searchResultLimit: 10,
+        renderChoiceLimit: 10,
+      });
+    },2000)
   });
   tablesHolderHTML.innerHTML = tables;
+  
 }
 
 // //////////////////////////////////////////
