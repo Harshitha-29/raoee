@@ -332,7 +332,7 @@
                           <div class="col-md-12 pr-1">
                             <div class="form-group" id="subVerticalsHolder22">
                               <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-10">
                                   <label
                                     > Area of Expertise for Designation
                                     <span style="color: red">*</span></label
@@ -349,14 +349,14 @@
                                   </div>
                                  
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2" style="display:none">
                                   <p>or</p>
-                                  <label class="switch">
+                                  <label class="switch"  style="display:none">
                                     <input type="checkbox" id="toggleSubExpertise"  disabled/>
                                     <span class="slider round"></span>
                                   </label>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4"style="display:none">
                                   <label
                                     >Select From Previous Added Exp
                                   <select
@@ -373,21 +373,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label>Enter Experience Level</label>
-                              <br />
-                              <input
-                                name="expertisesTags"
-                                type="text"
-                                class="form-control"
-                                data-role="tagsinput"
-                                style="width: 100% !important"
-                                placeholder="Add tags Ex : Fresher , Less than 2 years"
-                                id="tags"
-                              />
-                            </div>
-                          </div>
+                         
                         </div>
                         <br />
                         <div class="row">
@@ -473,7 +459,45 @@
                       <div class="col-lg-1" >
                       </div>
                     </div>
+                  
                   </form>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" style="display: flex">
+                  <h5 class="title">Update Experience Level</h5>
+ 
+                </div>
+                <div class="card-body">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Enter Experience Level</label>
+                      <br />
+                      <input
+                        name="expertisesTags"
+                        type="text"
+                        class="form-control"
+                        data-role="tagsinput"
+                        style="width: 100% !important"
+                        placeholder="Add tags Ex : Fresher , Less than 2 years"
+                        id="tags"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <button
+                      id="experienceBtn"
+                      onclick="pushExperience()"
+                      style="
+                        background-color: rgb(146, 44, 141);
+                        color: white;
+                      "
+                      type="button"
+                      class="btn btn-elegant center"
+                    >
+                      Update 
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

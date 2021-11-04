@@ -199,7 +199,7 @@ async function signinAdmin({ email, password }) {
 async function getCreatedUser({ collectionName, uid }) {
   try {
     USER_CREATED_REF = await db.collection(collectionName).doc(uid);
-    await USER_CREATED_REF.get();
+    //await USER_CREATED_REF.get();
   } catch (error) {
     console.error(error);
   }
@@ -212,6 +212,7 @@ function getUserPreferences() {
 
   console.log( employeeFormHTML.querySelectorAll(`select[name="expertise"]`));
   employeeFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
+    console.log(e)
     const all = e.value.split("__");
     const selectedVId = all[0];
     const selectedVName = all[1];
@@ -379,7 +380,7 @@ const updateCv = async (e) => {
   }
   FORM_DATA.cvAdded = true;
 
-  await USER_CREATED_REF.set(FORM_DATA);
+  //await USER_CREATED_REF.set(FORM_DATA);
 
   nowuiDashboard.showNotification(
     "top",
@@ -890,14 +891,19 @@ function getSelectedVerticals(initial = false) {
 // /////////////////////////////////////////////////
 
 function sliderToggle(e) {
+  
   const eleRowId = e.target.dataset.rowid;
   console.log(eleRowId)
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
+   
     el.disabled = false;
+    
     document.getElementById(eleRowId).innerHTML="Yes"
     optionSelected(false, { data: el.value, selected: true });
+    
   } else {
+    idVal.disable()
     document.getElementById(eleRowId).innerHTML="No"
     el.disabled = true;
     optionSelected(false, { data: el.value, selected: false });
@@ -961,7 +967,7 @@ function optionSelected(e = false, data = false) {
 // /////////////////////////////////////////////////
 
 const tablesHolderHTML = document.querySelector("#tablesHolder");
-
+var multiCh;
 function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
@@ -992,6 +998,9 @@ function displayExpertiseTable(initial = false) {
             <th>
               Applicable?
             </th>
+            <th>
+              Select Designation
+            </th>
             <th
               style="text-align: center; font-weight: 600"
               scope="col"
@@ -1005,36 +1014,50 @@ function displayExpertiseTable(initial = false) {
       let rows = ``;
       let i = 0;
       let tglTxt = "";
+      var options2 ="";
       sv.expertise.map((exp) => {
         console.log(exp)
         let options = "";
+       
         let rowId = `rowId${Math.random()}_${Math.random()}`;
         isDisabled = true;
-        exp.tags.map((op) => {
-          if (exp?.selected) {
-            isDisabled = false;
-          } else {
-            isDisabled = true;
-          }
-          console.log(exp.value)
-            if (exp.value === op) {
-              options += `
-              <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
-            `;
-            } else {
-              options += `
-            <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
-          `;
-            }
+        if(exp.subCategory){
           
-        });
-        if (isDisabled) {
-          tglTxt = "No";
-        } else {
-          tglTxt = "Yes";
-        }
-        
-        rows +=
+          exp.subCategory.map((Iop) => {
+            console.log(Iop)
+            if (exp?.selected) {
+              isDisabled = false;
+            } else {
+              isDisabled = true;
+            }
+              if (exp.value === Iop) {
+                
+               options += `
+             
+                <div class="option"> 
+                  <input type="checkbox" name="desig" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop}__${rowId}"  value="" />
+                  <label for="option1">${Iop.name}</label>
+                </div>
+              `;
+              } else {
+                options += `
+                <div class="option"> 
+                  <input type="checkbox" name="desig" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop}__${rowId}"  value="" />
+                  <label for="option1">${Iop.name}</label>
+                </div>
+              `;
+              }
+             
+              
+          });
+      
+        console.log(options2)
+          if (isDisabled) {
+            tglTxt = "No";
+          } else {
+            tglTxt = "Yes";
+          }
+          rows +=
           `
         <tr>
           <td>${exp.category}</td>
@@ -1049,46 +1072,114 @@ function displayExpertiseTable(initial = false) {
           `</span>
         </label>
           </td>
+         
+          <td>
+            <div class="select-list"  >
+                <div class="title">Select Designation</div>
+                <div class="select-options" onchange="optionSelected(event)" data-rowid="${rowId}" id="designation">
+                
+                  ${options}
+                </div>
+            </div>
+          </td>
           <td>
             <select
-              onchange="optionSelected(event)"
               data-rowid="${rowId}" 
               class="selectpicker"
               name="expertise"
-              id="cat12"
-              
-              ${isDisabled ? "disabled" : ""} 
+              id="cat12`+rowId+`"
               style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
             >
-              ${options}
+              
             </select>
           </td>
         </tr>
           `;
         i++;
+        }
+        
+        let docRef = db.collection("experienceTags").doc("tags");
+
+          docRef.get().then((doc) => {
+          if (doc.exists) {
+              console.log("Document data:", doc.data());
+              for(let k in doc.data().tags){
+               
+                if(document.getElementById("cat12"+rowId))
+                  document.getElementById("cat12"+rowId).innerHTML += `
+                    <option  value="${doc.data().tags[k]}" >${doc.data().tags[k]}</option>
+                `;
+              }
+              
+          }
+          })
        
-      });
+        });
+     
       
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
-
-      
+        setTimeout(function(){
+          $(function() {
+            $('.multiselect-ui').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+        },1000)
     });
 
     tables += head + table;
-    // setTimeout(function(){
-    //   new Choices("#cat12", {
-    //     removeItemButton: true,
-    //     maxItemCount: 20,
-    //     searchResultLimit: 10,
-    //     renderChoiceLimit: 10,
-    //   });
-    // },2000)
+    
+     
+  
   });
   tablesHolderHTML.innerHTML = tables;
+  (function ($) {
+    $.fn.multiselect = function () {
+      var selector = this;
+      var options = $.extend(
+        {
+          onChange: function () {}
+        },
+        arguments[0] || {}
+      );
+  
+      activate();
+  
+      /////////
+  
+      function activate() {
+        //events
+        $(selector)
+          .find(".title")
+          .on("click", function (e) {
+            $(this).parent().find(".select-options").toggle();
+          });
+  
+        $(selector)
+          .find('input[type="checkbox"]')
+          .change(function (e) {
+            options.onChange.call(this);
+          });
+      }
+    };
+  })(jQuery);
+  
+  $(document).ready(function () {
+    $(".select-list").multiselect({
+      onChange: updateTable
+    });
+  });
+  
+  function updateTable() {
+    var checkboxValue = $(this).val();
+    var isChecked = $(this).is(":checked");
+  
+  
+  }
   
 }
 
