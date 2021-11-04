@@ -50,11 +50,53 @@
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
     />
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   </head>
   <style>
-    
+    .select-list {
+  font-family: 'Open Sans', sans-serif;
+  color: #555;
+  background: #fff;
+}
+.select-list .title {
+  display: inline-block;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #eaeaec;
+  border-radius: 5px;
+  padding: 10px 15px 10px 15px;
+}
+.select-list .title::after {
+  display: inline-block;
+  content: '>';
+  margin-left: 15px;
+  font-size: 11px;
+  transform: rotate(90deg) scale(1, 2);
+}
+.select-list .title:hover {
+  background: #eaeaec;
+}
+.select-list .select-options {
+  margin-top: 5px;
+  display: none;
+  position: absolute;
+  z-index: 500;
+  border: 1px solid #eaeaec;
+  background: #fff;
+}
+.select-list .select-options .option label {
+  display: inline-block;
+  padding: 10px 30px 10px 10px;
+}
+.select-list .select-options .option:hover {
+  background: #eaeaec;
+}
+.select-list .select-options .option input {
+  margin: 10px 0 12px 15px;
+}
+
     .choices__inner {
       border-radius: 20px;
       background-color: transparent;
@@ -194,11 +236,7 @@ body {
   font-family: "Fira Sans", sans-serif;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
+
 
 html {
   box-sizing: border-box;

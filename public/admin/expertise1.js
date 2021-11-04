@@ -35,7 +35,8 @@ db.collection("verticals").onSnapshot((snaps) => {
     
     document.getElementById("treeview").innerHTML +=`
     <li style="color:blue" data-icon-cls="fa fa-inbox"  data-expanded="true">`+docData.name+`
-        <ul id="`+docData._id+`">
+        <ul id="`+docData._id.split(" ").join("")
+        +`">
             
           
         </ul>
@@ -65,9 +66,9 @@ db.collection("verticals").onSnapshot((snaps) => {
   for(let k in VERTICALS){
    
     VERTICALS[k].subVerticals.map((subVer) => {
-      document.getElementById(VERTICALS[k].id).innerHTML+=`
+      document.getElementById(VERTICALS[k].id.split(" ").join("")).innerHTML+=`
       <li style="color:black" data-icon-cls="fa fa-inbox" data-expanded="true"><b>`+subVer+` </b>
-        <ul id="`+VERTICALS[k].id+"_"+subVer+`">
+        <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+`">
        
           
         
@@ -92,9 +93,8 @@ db.collection("verticals").onSnapshot((snaps) => {
         if (doc.exists) {
           
           for (let i in doc.data().expertise) {
-            document.getElementById(VERTICALS[k].id+"_"+subVer).innerHTML+=` <li style="color:purple">`+doc.data().expertise[i].category+`&nbsp;<i  ></i>
-            <ul id="`+VERTICALS[k].id+"_"+subVer+"_"+doc.data().expertise[i].category+`">
-
+            document.getElementById(VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")).innerHTML+=` <li style="color:purple">`+doc.data().expertise[i].category+`&nbsp;<i  ></i>
+            <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().expertise[i].category.split(" ").join("")+`">
             </ul>
             </li>`
             
@@ -122,13 +122,18 @@ db.collection("verticals").onSnapshot((snaps) => {
   
           for (let i in doc.data().expertise) {
             
-            for(let j in doc.data().expertise[i].tags){
-              if(doc.data().expertise[i].tags[j])
-              document.getElementById(VERTICALS[k].id+"_"+subVer+"_"+doc.data().expertise[i].category).innerHTML+=` 
+            for(let j in doc.data().expertise[i].subCategory){
              
-              <li style="color:green"><span style="color:red">*</span>`+doc.data().expertise[i].tags[j]+`</li>
+                console.log(doc.data().expertise[i].subCategory[j].name)
+       
+                document.getElementById(VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().expertise[i].category.split(" ").join("")).innerHTML+=` 
+               
+                <li style="color:green"><span style="color:red">*</span>`+doc.data().expertise[i].subCategory[j].name+`</li>
+                <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().expertise[i].category.split(" ").join("")+"_"+doc.data().expertise[i].subCategory[j].name.split(" ").join("")+"_"+j+`">
+                </ul>
+                </li>`
               
-              </li>`
+            
           
             }
            
@@ -142,6 +147,7 @@ db.collection("verticals").onSnapshot((snaps) => {
      
     
   }
+  
   // let docRef = db.collection("verticals").doc(docData.name);
   // let subDocRef = docRef.collection(subVer).doc(subVer);
   // subDocRef
@@ -198,19 +204,18 @@ const expertiseForm = async (e) => {
   e.preventDefault();
 
   const vertical = expertiseFormHTML["vertical"].value;
-  var expertiseCategorySelected = expertiseFormHTML["expertiseCategory"].value;
-  const expertisesTags = expertiseFormHTML["expertisesTags"].value;
+  var expertiseCategorySelected = document.getElementById("exp").value;
+  //const expertisesTags = expertiseFormHTML["expertisesTags"].value;
 
-  const expertiseTagList = expertisesTags.split(",").map((str) => str);
-
+  //const expertiseTagList = expertisesTags.split(",").map((str) => str);
+  const subCat = document.getElementById("subCatDropdown").value;
   try {
     for (let i = 0; i < subVerticalsSelected.length; i++) {
       // const ref = await db
       //   .collection("verticals")
       //   .doc(vertical)
       //   .collection(subVerticalsSelected[i])
-      //   .doc(subVerticalsSelected[i]);
-      
+      //   .doc(subVerticalsSelected[i]);     
       let ver = document.getElementById("verticalsDropdown").value;
       let subVer = document.getElementById(
         subVerId
@@ -222,7 +227,7 @@ const expertiseForm = async (e) => {
       let fetchedArr = [];
       let updatedTagsArr = [];
       let subDocRef = docRef.collection(subVer).doc(subVer);
-
+      let subCatFetchedArr = []
       expertiseCategory = document.getElementById("expertiseDropdown").value;
 
       subDocRef
@@ -237,65 +242,125 @@ const expertiseForm = async (e) => {
                 document.getElementById("expertiseDropdown").value
               ) {
                 // alert(doc.data().expertise[i].category)
+                for (let j in doc.data().expertise[i].subCategory) {
+                  subCatFetchedArr.push(doc.data().expertise[i].subCategory[j]);
+                  
+                }
                 for (let j in doc.data().expertise[i].tags) {
                   updatedTagsArr.push(doc.data().expertise[i].tags[j]);
                   $('#tags').tagsinput('add', doc.data().expertise[i].tags[j]);
                 }
-                for (let j in expertiseTagList) {
-                  updatedTagsArr.push(expertiseTagList[j]);
+                // for (let j in expertiseTagList) {
+                //   updatedTagsArr.push(expertiseTagList[j]);
                 
-                }
+                // }
               }
             }
-           
-            if (document.getElementById("editExpertise").checked == true) {
+          
+            if(document.getElementById("subCatInput").value && !document.getElementById("subCatInput").value.trim()=='' ){
+              
+              if (document.getElementById("editExpertise").checked == true) {
             
-              let updatedObject = {};
-              for (let i in fetchedArr) {
-                if (
-                  fetchedArr[i].category ==
-                  document.getElementById("expertiseDropdown").value
-                ) {
-                  updatedObject["category"] = fetchedArr[i].category;
-                  updatedObject["tags"] = expertiseTagList;
-
-                  delete fetchedArr[i];
-
-                  fetchedArr.splice(i, 1, updatedObject);
+                let updatedObject = {};
+                let subExpObj = {}
+                let subExpArr = [];
+                console.log(subCatFetchedArr)
+                // subExpObj["name"] = subCat
+                // subExpObj["tags"] = expertiseTagList
+                // subExpArr.push(subExpObj)
+                console.log( subExpArr)
+                for (let i in fetchedArr) {
+                  if (
+                    fetchedArr[i].category ==
+                    document.getElementById("expertiseDropdown").value
+                  ) {                   
+                    updatedObject["category"] = fetchedArr[i].category;  
+                    delete fetchedArr[i];
+                    if(subCatFetchedArr.length!=0){
+                      for(let j in subCatFetchedArr){                    
+                        if(subCatFetchedArr[j].name == document.getElementById("subCatDropdown").value && document.getElementById("toggleSubExpertise").checked){                       
+                          subExpObj["name"] = subCat
+                          //subExpObj["tags"] = expertiseTagList                         
+                          delete subCatFetchedArr[j];    
+                          subCatFetchedArr.splice(j, 1, subExpObj);
+                          console.log(subExpObj)
+                          break;
+                        }else if(subCatFetchedArr[j].name == document.getElementById("subCatInput").value && document.getElementById("toggleSubExpertise").checked==false){
+                          alert("Expertise Already Present .")
+                          return;
+                        }else if(!document.getElementById("toggleSubExpertise").checked){                        
+                          subExpObj["name"] = document.getElementById("subCatInput").value
+                          //subExpObj["tags"] = expertiseTagList
+                              // subExpArr.push(subExpObj)
+                          console.log(document.getElementById("subCatInput").value)                 
+                          subCatFetchedArr.push(subExpObj)
+                          break;
+                        }
+                      }
+                    }else{
+                      if(!document.getElementById("toggleSubExpertise").checked){
+                        subExpObj["name"] = document.getElementById("subCatInput").value
+                        //subExpObj["tags"] = expertiseTagList
+                            // subExpArr.push(subExpObj)
+                        console.log(document.getElementById("subCatInput").value)                         
+                        subCatFetchedArr.push(subExpObj)  
+                      }                  
+                    }                  
+                    console.log(subCatFetchedArr)
+                    updatedObject["subCategory"] =  subCatFetchedArr  
+                    fetchedArr.splice(i, 1, updatedObject);                   
+                  }
                 }
+                
+                let finalUpdatedObj = {};
+                finalUpdatedObj["expertise"] = fetchedArr;
+                finalUpdatedObj["name"] = subVer;
+                subDocRef.update(finalUpdatedObj);
+                nowuiDashboard.showNotification(
+                  "top",
+                  "center",
+                  "Expertise Updated Succesfully",
+                  "primary"
+                );
+                $('#tags').tagsinput('removeAll');
+  
+              } else {
+                let subExpObj = {}
+                let subExpArr = [];
+                let newExpertiseObj = {};
+                let finalUpdatedObj = {};
+                let nameVal = ""
+                if(!document.getElementById("subCatInput").value || document.getElementById("subCatInput").value ==""){
+                  nameVal = document.getElementById("subCatDropdown").value
+                }else{
+                  nameVal = document.getElementById("subCatInput").value
+                }
+                subExpObj["name"] = nameVal
+                //subExpObj["tags"] = expertiseTagList
+                subExpArr.push(subExpObj)
+                console.log(subExpArr)
+                
+                newExpertiseObj["category"] = expertiseCategorySelected;
+                newExpertiseObj["subCategory"] = subExpArr; 
+                fetchedArr.push(newExpertiseObj);
+                console.log(newExpertiseObj);
+                console.log(fetchedArr);
+                finalUpdatedObj["expertise"] = fetchedArr;
+                finalUpdatedObj["name"] = subVer;
+                subDocRef.update(finalUpdatedObj);
+                nowuiDashboard.showNotification(
+                  "top",
+                  "center",
+                  "Expertise Added Succesfully",
+                  "primary"
+                );
+                $('#tags').tagsinput('removeAll');
               }
-              let finalUpdatedObj = {};
-              finalUpdatedObj["expertise"] = fetchedArr;
-              finalUpdatedObj["name"] = subVer;
-              subDocRef.update(finalUpdatedObj);
-              nowuiDashboard.showNotification(
-                "top",
-                "center",
-                "Expertise Updated Succesfully",
-                "primary"
-              );
-              $('#tags').tagsinput('removeAll');
-
-            } else {
-              let newExpertiseObj = {};
-              let finalUpdatedObj = {};
-              newExpertiseObj["category"] = expertiseCategorySelected;
-              newExpertiseObj["tags"] = expertiseTagList;
-              fetchedArr.push(newExpertiseObj);
-              console.log(newExpertiseObj);
-              console.log(fetchedArr);
-              finalUpdatedObj["expertise"] = fetchedArr;
-              finalUpdatedObj["name"] = subVer;
-              subDocRef.update(finalUpdatedObj);
-              nowuiDashboard.showNotification(
-                "top",
-                "center",
-                "Expertise Added Succesfully",
-                "primary"
-              );
-              $('#tags').tagsinput('removeAll');
+            }else{
+              alert("Designation Field cannot be empty")
             }
-          } else {
+            
+          }else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
           }
@@ -521,6 +586,8 @@ function changeExpertise(e){
      $('#tags').tagsinput('removeAll');
   }else{
     document.getElementById("exp").disabled = false  
+    document.getElementById("subCatInput").disabled = false 
+    document.getElementById("toggleSubExpertise").disabled = false 
     document.getElementById("expertisesdeleteBtn").style.display="none"
   }
   subid="choices"
@@ -546,13 +613,16 @@ function changeExpertise2(e){
   if(document.getElementById("choices-multiple-remove-button").length == 0 ){
     
     document.getElementById("exp").disabled = true 
+   
     document.getElementById("exp") .value = ""
     document.getElementById("editExpertise").disabled = true
     document.getElementById("expertiseDropdown").disabled = true
     document.getElementById("editExpertise").checked = false
      $('#tags').tagsinput('removeAll');
   }else{
-    document.getElementById("exp").disabled = false 
+    document.getElementById("exp").disabled = false
+    document.getElementById("toggleSubExpertise").disabled = false  
+    document.getElementById("subCatInput").disabled = false 
     document.getElementById("expertisesdeleteBtn").style.display="none" 
   }
   subid="choices-multiple-remove-button"
@@ -566,52 +636,82 @@ function toggleEditExpertise(e){
   if (e?.target?.checked) {
     document.getElementById("exp").disabled = true
     document.getElementById("expertiseDropdown").disabled = false
-    getSetTagsFromDb();
+    //getSetTagsFromDb();
+    
     document.getElementById("expertisesdeleteBtn").style.display="inline-block"
 
   } else {
     document.getElementById("expertiseDropdown").disabled = true
     document.getElementById("exp").disabled = false
+    document.getElementById("toggleSubExpertise").disabled = false 
+    document.getElementById("subCatInput").disabled = false 
     $('#tags').tagsinput('removeAll');
     document.getElementById("expertisesdeleteBtn").style.display="none"
   }
 }
-function getSetTagsFromDb(){
- 
-  let ver = document.getElementById("verticalsDropdown").value;
-      let subVer = document.getElementById(
-        subVerId
-      ).value;
-      let docRef = db.collection("verticals").doc(ver);
 
-      let fetchedArr = [];
-      let updatedTagsArr = [];
-      let subDocRef = docRef.collection(subVer).doc(subVer);
-      $('#tags').tagsinput('removeAll');
-      subDocRef
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            console.log("Document data:", doc.data());
-            for (let i in doc.data().expertise) {
-              fetchedArr.push(doc.data().expertise[i]);
-              if (
-                doc.data().expertise[i].category ==
-                document.getElementById("expertiseDropdown").value
-              ) {
-                // alert(doc.data().expertise[i].category)
-                for (let j in doc.data().expertise[i].tags) {
-                
-                  $('#tags').tagsinput('add', doc.data().expertise[i].tags[j]);
-                }
-               
-              }
-            }
-          }
-        });
+function toggleSubExpertise(e){
+  if (e?.target?.checked) {
+    // document.getElementById("exp").disabled = true
+    document.getElementById("subCatInput").disabled = true
+    document.getElementById("subCatDropdown").disabled = false
+    // getSetTagsFromDb();
+    // document.getElementById("expertisesdeleteBtn").style.display="inline-block"
+    
+    //getSetSubTagsFromDb()
+  } else {
+    document.getElementById("subCatInput").disabled = false;
+    document.getElementById("subCatDropdown").disabled = true
+    // getSetTagsFromDb();
+    // getSetTagsFromDb();
+    // document.getElementById("expertiseDropdown").disabled = true
+    // document.getElementById("exp").disabled = false
+    // $('#tags').tagsinput('removeAll');
+    // document.getElementById("expertisesdeleteBtn").style.display="none"
+  }
 }
+
+
+function pushExperience(){
+  const expertisesTags = document.getElementById("tags").value;
+  const expertiseTagList = expertisesTags.split(",").map((str) => str);
+  
+  db.collection("experienceTags").doc("tags").set({
+    tags:expertiseTagList
+  })
+  .then(() => {
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Experience Updated Succesfully",
+      "primary"
+    );
+  })
+  .catch((error) => {
+      console.error("Error writing document: ", error);
+  });
+}
+let docRef = db.collection("experienceTags").doc("tags");
+
+docRef.get().then((doc) => {
+    if (doc.exists) {
+        console.log("Document data:", doc.data());
+        for(let k in doc.data().tags){
+          
+          $('#tags').tagsinput('add',doc.data().tags[k]);
+        }
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
 document.getElementById("editExpertise").addEventListener("change", toggleEditExpertise);
-document.getElementById("expertiseDropdown").addEventListener("change", getSetTagsFromDb);
+document.getElementById("toggleSubExpertise").addEventListener("change", toggleSubExpertise);
+// document.getElementById("expertiseDropdown").addEventListener("change", getSetTagsFromDb);
+//document.getElementById("subCatDropdown").addEventListener("change", getSetSubTagsFromDb);
+subCatDropdown
 
 function deleteExp(obj,index,subVer){
   console.log(obj)
