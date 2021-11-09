@@ -220,7 +220,11 @@ function getUserPreferences() {
   const sv = [];
   const prof = [];
   cvVerticals.map((cvv) => {
+    
+    console.log(vv)
+    console.log(cvv)
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
+    console.log(vIndex)
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
@@ -895,18 +899,24 @@ function getSelectedVerticals(initial = false) {
 
 // /////////////////////////////////////////////////
 
-function sliderToggle(e) {
+function sliderToggle(e ) {
+  console.log(e.target.dataset)
   const eleRowId = e.target.dataset.rowid;
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
+    
     el.disabled = false;
-
+    console.log(eleRowId)
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
+    document.getElementById("select-list_"+eleRowId).style.opacity = 1;
     document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
   } else {
     // idVal.disable();
     document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
+    document.getElementById("select-list_"+eleRowId).style.opacity = 0.4;
     optionSelected(false, { data: el.value, selected: false });
   }
 }
@@ -1057,17 +1067,18 @@ async function displayExpertiseTable() {
             // } else {
             //   isDisabled = true;
             // }
+
             if (exp.value === Iop) {
               options += `
-                <div class="option"> 
-                  <input type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  value="${Iop.name}" />
+                <div class="option" > 
+                  <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
             } else {
               options += `
-                <div class="option"> 
-                  <input type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  value="${Iop.name}" />
+                <div class="option" > 
+                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}" data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
@@ -1087,14 +1098,14 @@ async function displayExpertiseTable() {
               <label class="switch">
               <input type="checkbox" data-rowid="${rowId}"  ${
                 isDisabled ? "" : "checked"
-              }  onchange="sliderToggle(event)"   >
+              }  onchange="sliderToggle(event )"   >
               <span class="slider round"></span>
               <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
             </label>
             </td>
           
-            <td>
-              <div class="select-list"  >
+            <td style="">
+              <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
                   <div class="title">Select Designation</div>
                   <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation">
                     ${options}
@@ -1103,6 +1114,7 @@ async function displayExpertiseTable() {
             </td>
             <td>
               <select
+                disabled
                 data-rowid="${rowId}" 
                 class="selectpicker"
                 name="expertise-${rowId}"
@@ -1121,13 +1133,18 @@ async function displayExpertiseTable() {
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
-      setTimeout(function () {
-        $(function () {
-          $(".multiselect-ui").multiselect({
-            includeSelectAllOption: true,
-          });
-        });
-      }, 1000);
+      // setTimeout(function () {
+      //   $(function () {
+      //     $(".multiselect-ui").multiselect({
+      //       includeSelectAllOption: true,
+      //       minWidth: 300,
+      //       height: 150,
+      //       header: false,
+      //       noneSelectedText: "Select",
+      //       selectedList: 3
+      //     });
+      //   });
+      // }, 1000);
     });
 
     tables += head + table;
@@ -1150,12 +1167,13 @@ async function displayExpertiseTable() {
       activate();
 
       /////////
-
+      
       function activate() {
         //events
         $(selector)
           .find(".title")
           .on("click", function (e) {
+            
             $(this).parent().find(".select-options").toggle();
           });
 
@@ -1171,6 +1189,7 @@ async function displayExpertiseTable() {
   $(document).ready(function () {
     $(".select-list").multiselect({
       onChange: updateTable,
+      disabled : true,
     });
   });
 
