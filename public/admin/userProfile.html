@@ -522,10 +522,12 @@
         $("#fname").attr('value',USER.fname)
         $("#lname").attr('value',USER.lname)
         $("#phno").attr('value',USER.phone)
+
         document.getElementById("quali").innerHTML=USER.basicInfo.qualification
         document.getElementById("empStatus").innerHTML=USER.basicInfo.employmentStatus
         document.getElementById("lookingFor").innerHTML=USER.basicInfo.internStatus
         document.getElementById("quali").innerHTML=USER.basicInfo.qualification
+        document.getElementById("yearExp").innerHTML=USER.cv.yearExpirence
         if(USER.basicInfo.gender=="Male"){
           document.getElementById("gender").innerHTML=USER.basicInfo.gender
           document.getElementById("gender").style.color="blue"
@@ -579,6 +581,7 @@
               `
             }    
         }
+        
         for(let k in USER.cv.professions ){
           for(let m in USER.cv.professions[k].svers){
             
@@ -586,18 +589,13 @@
              
               document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]).innerHTML+=`
               <li >
-                <div class="treeview__level2" data-level="EXP" >
+                <div class="treeview__level2" data-level="DESIG" >
                   <span class="level-title">`+USER.cv.professions[k].svers[m].profs[n].prof+`</span>
-                  <div class="treeview__level-btns">
-                    <div class="btn btn-default btn-sm level-add"><span class=""></span></div>
-                    <div class="btn btn-default btn-sm level-remove"><span class="fr"></span></div>
-                   
-                    <div id="`+USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.professions[k].svers[m].profs[n].prof+`">
-                     
-                      
-                    </div>
-                  </div>
+                  
                 </div> 
+                <ul id="`+USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.professions[k].svers[m].profs[n].prof+`">
+
+                </ul>
               </li>
               `
             }
@@ -608,18 +606,44 @@
             // console.log(USER.cv.expertise[k].svers[m].expertise)
             for(let n in USER.cv.professions[k].svers[m].profs ){
              
-              for(let i in USER.cv.professions[k].svers[m].designations[n] ){
-               if(i=="prof"){
-                console.log(USER.cv.professions[k].svers[m].designations[n][i])
-                document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.professions[k].svers[m].profs[n].prof).innerHTML+=`
-                <div class="btn btn-default btn-sm level-same"><span>`+USER.cv.professions[k].svers[m].designations[n][i]+`</span></div>
-                `
-               }
-              
+              for(let i in USER.cv.professions[k].svers[m].profs[n].designations){
+                document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.professions[k].svers[m].profs[n].prof).innerHTML+=
+                `<li >
+                  <div class="treeview__level3" data-level="EXP" >
+                    <span class="level-title3">`+USER.cv.professions[k].svers[m].profs[n].designations[i]+`</span>
+                    <div class="treeview__level-btns">
+                   
+                   
+                    <div id="`+USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.professions[k].svers[m].profs[n].prof+`+`+USER.cv.professions[k].svers[m].profs[n].designations[i]+`">
+                     
+                      
+                    </div>
+                    </div>
+                  </div> 
+                
+                </li>
+                  `
               }
             }
           }
-        }    
+        }  
+        for(let k in USER.cv.professions ){
+          for(let m in USER.cv.professions[k].svers){
+            // console.log(USER.cv.expertise[k].svers[m].expertise)
+            for(let n in USER.cv.professions[k].svers[m].profs ){
+             
+              for(let i in USER.cv.professions[k].svers[m].profs[n].designations){
+
+                document.getElementById(USER.cv.verticals[k].id+`+`+USER.cv.subVerticals[k].sver[m]+`+`+USER.cv.professions[k].svers[m].profs[n].prof+`+`+USER.cv.professions[k].svers[m].profs[n].designations[i]).innerHTML+=`
+   
+                    
+                    
+                    <div class="btn btn-default btn-sm level-sub"><span>`+USER.cv.professions[k].svers[m].profs[n].value+`</span></div>
+                  `
+              }
+            }
+          }
+        }   
     });
     function showCv(){
        window.open(USER.cv.url,"_blank")

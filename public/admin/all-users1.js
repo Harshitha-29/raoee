@@ -178,8 +178,11 @@ function displayDataTable() {
       // v.sver.map(sv => {
       //   allSubVerticals += `, ${sv}`
       // })
-      allSubVerticals += v.sver.join(", ");
+      console.log(v.sver)
+      allSubVerticals += `,${v.sver}`;
+      console.log(allSubVerticals )
     });
+    allSubVerticals = allSubVerticals.substring(1);
 
     // allSubVerticals = allSubVerticals.substring(1, allSubVerticals.length)
 
@@ -189,19 +192,20 @@ function displayDataTable() {
     d.professions.map((v) => {
       v.svers.map((sv) => {
         sv.profs.map((e) => {
-          allCategories += `${e.prof}, `;
-          allValues += `${e.value}, `;
+          allCategories += `, ${e.prof}`;
+         
         });
       });
     });
-
+    allCategories = allCategories.substring(1);
+    allValues = allValues.substring(1);
     rows +=
       `<tr id="user-row-${index}">
       <td>${d.fname} ${d.lname}</td>
       <td>${allVerticals}</td>
       <td>${allSubVerticals}</td>
       <td>${allCategories}</td>
-      <td>${allValues}</td>
+      <td>${d.workCity}</td>
       <td>
       <div class="dropdown">
       <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
