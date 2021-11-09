@@ -903,20 +903,44 @@ function sliderToggle(e ) {
   console.log(e.target.dataset)
   const eleRowId = e.target.dataset.rowid;
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
+  document.addEventListener("click", (evt) => {
+    const flyoutElement = document.querySelector(".select-list");
+    let targetElement = evt.target; // clicked element
+  
+    do {
+        if (targetElement == flyoutElement) {
+            // This is a click inside. Do nothing, just return.
+            console.log("Clicked inside!");
+
+            return;
+        }
+        // Go up the DOM
+        targetElement = targetElement.parentNode;
+    } while (targetElement);
+  
+    // This is a click outside.
+    console.log("now")
+    document.querySelector(".select-options").style.display = "none";
+   
+    
+  });
   if (e.target.checked) {
     
     el.disabled = false;
-    console.log(eleRowId)
+    
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
     document.getElementById("select-list_"+eleRowId).style.opacity = 1;
     document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
   } else {
     // idVal.disable();
+    
     document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
     document.getElementById("select-list_"+eleRowId).style.opacity = 0.4;
+   
+    document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
 }
@@ -1029,7 +1053,7 @@ async function displayExpertiseTable() {
               style="text-align: center; font-weight: 600"
               scope="col center"
             >
-              Designation - Expertise
+              Designation 
               <br>
               (${sv.name})
             </th>
@@ -1037,13 +1061,13 @@ async function displayExpertiseTable() {
               Applicable?
             </th>
             <th>
-              Select Designation
+              Select Expertise
             </th>
             <th
               style="text-align: center; font-weight: 600"
               scope="col"
             >
-              Your Experience
+              Your Maximum Experience
             </th>
           </tr>
         </thead>
@@ -1070,14 +1094,14 @@ async function displayExpertiseTable() {
 
             if (exp.value === Iop) {
               options += `
-                <div class="option" > 
+                <div class="option"  > 
                   <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
             } else {
               options += `
-                <div class="option" > 
+                <div class="option"  > 
                   <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}" data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
@@ -1107,7 +1131,7 @@ async function displayExpertiseTable() {
             <td style="">
               <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
                   <div class="title">Select Designation</div>
-                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation">
+                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
                   </div>
               </div>

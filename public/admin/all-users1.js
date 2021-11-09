@@ -169,9 +169,9 @@ function displayDataTable() {
     console.log(d);
     let allVerticals = "";
     d.verticals.map((v) => {
-      allVerticals += `, ${v.name}`;
+      allVerticals += `,${v.name}`;
     });
-    allVerticals = allVerticals.substring(2);
+    allVerticals = allVerticals.substring(1);
 
     let allSubVerticals = "";
     d.subVerticals.map((v) => {
@@ -186,10 +186,10 @@ function displayDataTable() {
     let allCategories = "";
     let allValues = "";
 
-    d.expertise.map((v) => {
+    d.professions.map((v) => {
       v.svers.map((sv) => {
-        sv.expertise.map((e) => {
-          allCategories += `${e.category}, `;
+        sv.profs.map((e) => {
+          allCategories += `${e.prof}, `;
           allValues += `${e.value}, `;
         });
       });
