@@ -16,11 +16,8 @@ const USER = undefined;
 async function onStateChange() {
   return await auth.onAuthStateChanged((user) => {
     if (user) {
-      console.log(user);
       if (user.displayName === "admin") {
         RAW_USER = user;
-        console.log("----------")
-        console.log(RAW_USER);
       }
     }
   });
@@ -41,17 +38,17 @@ const updateBasicInfo = async () => {
   const email = employeeFormHTML["email"].value;
   const userType = "employee";
   let createRes;
-  console.log(RAW_USER);
 
-  const workCountry = employeeFormHTML['country'].value;
+  const workCountry = employeeFormHTML["country"].value;
 
-  if(workCountry === -1 || statesSelected.length === 0) {
-    alert('enter the preffered country and state where user emplyee wants to work');
-    return{
-      status :false
-    }
+  if (workCountry === -1 || statesSelected.length === 0) {
+    alert(
+      "enter the preffered country and state where user emplyee wants to work"
+    );
+    return {
+      status: false,
+    };
   }
-
 
   if (!RAW_USER.email) {
     await onStateChange();
@@ -59,23 +56,22 @@ const updateBasicInfo = async () => {
 
   if (email) {
     createRes = await createUserAuth(email, "raoeeEmployee", userType);
-    console.log(createRes)
     if (!createRes.status) {
       alert(createRes.message);
-      document.getElementById("progressBar").style.display="none"
-      return{
-        status :false
-      }
+      document.getElementById("progressBar").style.display = "none";
+      return {
+        status: false,
+      };
     }
   }
-  console.log("user created");
+  console.log("updateBasicInfo : user created : id", createRes.data.uid);
 
   USER_CREATED_ID = createRes.data.uid;
   USER_CREATED_REF = await db
     .collection(`${userType}s`)
     .doc(createRes.data.uid);
 
-  console.log(RAW_USER);
+  console.log('updateBasicInfo : RAW_USER ', RAW_USER);
 
   const signinAdminRes = await signinAdmin({
     email: RAW_USER.email,
@@ -83,26 +79,21 @@ const updateBasicInfo = async () => {
   });
   if (!signinAdminRes.status) {
     alert(signinAdminRes.message);
-    return{
-      status :false
-    }
+    return {
+      status: false,
+    };
   }
-  console.log("admin logged in");
+  console.log("updateBasicInfo : admin logged in");
 
   const fname = employeeFormHTML["fname"].value || "";
   const lname = employeeFormHTML["lname"].value || "";
   const phone = employeeFormHTML["phone"].value || "";
-
-  // const address = employeeFormHTML["address"].value || "";
-  // const city = employeeFormHTML["city"].value || "";
-  // const state = employeeFormHTML["home-state"].value || "";
-  // const country = employeeFormHTML["home-country"].value || "";
-  // const postalCode = employeeFormHTML["postal-code"].value || "";
   const qualification = employeeFormHTML["qualification"].value || "";
   const employmentStatus = employeeFormHTML["employmentStatus"].value || "";
   const internStatus = employeeFormHTML["internStatus"].value || "";
   const certifiedDomestic = employeeFormHTML["certified-domestic"].value || "";
-  const certifiedInternationally = employeeFormHTML["certified-internationally"].value || "";
+  const certifiedInternationally =
+    employeeFormHTML["certified-internationally"].value || "";
   const gender = employeeFormHTML["gender"].value || "";
 
   FORM_DATA = {
@@ -111,40 +102,36 @@ const updateBasicInfo = async () => {
     phone,
     email,
     userType,
+    userCreatedAt : new Date(),
+    userCreatedAtStr : `${new Date()}`,
+    userCreatedByAdmin : true,
     uid: USER_CREATED_ID,
     basicInfo: {
-      // address,
-      // city,
-      // state,
-      // country,
-      // postalCode,
-      qualification, employmentStatus, internStatus, certifiedDomestic, certifiedInternationally, gender,
+      qualification,
+      employmentStatus,
+      internStatus,
+      certifiedDomestic,
+      certifiedInternationally,
+      gender,
       aboutMe: "",
     },
   };
 
-  // if (address && city && state && country && postalCode) {
-  //   FORM_DATA.basicInfoAdded = true;
-  // } else {
-  //   FORM_DATA.basicInfoAdded = false;
-  // }
   FORM_DATA.basicInfoAdded = true;
 
-  return{
-    status :true
-  }
+  return {
+    status: true,
+  };
 };
 
 // /////////////////////////////////////////////////////////
 
 async function createUserAuth(email, password, type) {
-  document.getElementById("progressBar").style.display="block"
- 
-   return await auth.createUserWithEmailAndPassword(email, password)
-    .then(async (userCredential) => {
-     
-      console.log(userCredential);
+  document.getElementById("progressBar").style.display = "block";
 
+  return await auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(async (userCredential) => {
       let user = userCredential.user;
       await user.updateProfile({
         displayName: type,
@@ -176,7 +163,6 @@ async function createUserAuth(email, password, type) {
 // /////////////////////////////////////////////////////////
 
 async function signinAdmin({ email, password }) {
-  console.log(email, password);
   return await auth
     .signInWithEmailAndPassword(email, password)
     .then((user) => {
@@ -209,45 +195,41 @@ async function getCreatedUser({ collectionName, uid }) {
 
 function getUserPreferences() {
   const cvVerticals = [];
-
-  console.log( employeeFormHTML.querySelectorAll(`select[name="expertise"]`));
-  employeeFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
-    console.log(e)
-    const all = e.value.split("__");
+  document.querySelectorAll(`input[name=designation_checkbox]:checked`).forEach((e) => {
+    const all = e.id.split("__");
     const selectedVId = all[0];
     const selectedVName = all[1];
     const selectedSubV = all[2];
-    const category = all[3];
-    const value = all[4];
-    const rowId = all[5];
-    console.log(document.querySelector(`input[data-rowid="${rowId}"]`).checked);
+    const profession = all[3];
+    const designation = all[4];
+    const index = all[5];
 
-    if (document.querySelector(`input[data-rowid="${rowId}"]`).checked) {
+    const value = document.querySelector(`select[name=expertise-${index}`).value;
       cvVerticals.push({
         verName: selectedVName,
         ver: selectedVId,
         subVertical: selectedSubV,
-        category,
-        value,
+        profession,
+        designation,
+        value
       });
-    }
-
-    console.log(cvVerticals);
   });
-  console.log(cvVerticals);
+  console.log('getUserPreferences : cvVerticals',cvVerticals);
 
   const vv = [];
   const sv = [];
-  const ee = [];
+  const prof = [];
   cvVerticals.map((cvv) => {
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
         ver: cvv.ver,
-        sver: [],
+        sver: [
+          
+        ],
       });
-      ee.push({
+      prof.push({
         ver: cvv.ver,
         svers: [],
       });
@@ -258,23 +240,42 @@ function getUserPreferences() {
 
     if (svIndex === -1) {
       sv[vIndex].sver.push(cvv.subVertical);
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
+    } 
 
-      ee[vIndex].svers.push({
+    const profvIndex = prof.findIndex(p => p.ver == cvv.ver);
+    const profsvIndex = prof[profvIndex].svers.findIndex(p => p.sver === cvv.subVertical);
+
+    if(profsvIndex === -1) {
+      prof[profvIndex].svers.push({
         sver: cvv.subVertical,
-        expertise: [{ category: cvv.category, value: cvv.value }],
-      });
+        profs: [{
+          prof: cvv.profession,
+          designations: [cvv.designation],
+          value: cvv.value
+        }]
+      })
     } else {
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-      svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
-      ee[vIndex].svers[svIndex].expertise.push({
-        category: cvv.category,
-        value: cvv.value,
-      });
+      let profIndex = prof[profvIndex].svers[profsvIndex].profs.findIndex(p => p.prof === cvv.profession);
+      if(profIndex === -1) {
+        prof[profvIndex].svers[profsvIndex].profs.push({
+          prof: cvv.profession,
+          designations: [cvv.designation],
+          value: cvv.value
+        })
+      } else {
+      const desigIndex = prof[profvIndex].svers[profsvIndex].profs[profIndex].designations.findIndex(d => d === cvv.designation);
+      if(desigIndex === -1) {
+        prof[profvIndex].svers[profsvIndex].profs[profIndex].designations.push(cvv.designation);
+      }
+      }
     }
   });
 
-  return { verticals: vv, subVerticals: sv, expertise: ee };
+  console.log('getUserPreferences : vv',vv);
+  console.log('getUserPreferences : sv',sv);
+  console.log('getUserPreferences : prof',prof);
+
+  return { verticals: vv, subVerticals: sv, professions: prof };
 }
 
 // /////////////////////////////////////////////////////////
@@ -290,54 +291,57 @@ function selectedState(e) {
 
 // /////////////////////////////////////////////////////////
 
-// const employeeFormHTML = document.querySelector("#cvForm");
 let FILE = false;
 let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
   let funRes = await updateBasicInfo();
-  if(!funRes.status){
+  if (!funRes.status) {
     return;
   }
-  const userType = 'employee';
+  const userType = "employee";
 
-  const workCountry = employeeFormHTML['country'].value;
-  const workCity = employeeFormHTML['work-city'].value;
-  console.log(workCountry, statesSelected);
+  const workCountry = employeeFormHTML["country"].value;
+  const workCity = employeeFormHTML["work-city"].value;
+  const experienceYear = employeeFormHTML['experienceYear'].value;
 
-  if(workCountry === -1 || statesSelected.length === 0) {
-    alert('enter the preffered country and state where user emplyee wants to work');
-    return;
-  }
-  const { verticals, subVerticals, expertise } = await getUserPreferences();
-  console.log(verticals);
-  console.log(subVerticals);
-  console.log(expertise);
+  const { verticals, subVerticals, professions } = await getUserPreferences();
+  console.log('updateCv : verticals ',verticals);
+  console.log('updateCv : subVerticals',subVerticals);
+  console.log('updateCv : expertise',professions);
+
   let resStorage, resURL;
   let data = {};
 
   if (FILE_NAME) {
-    resStorage = await uploadFileToStorage({ ref: `${userType}s/${USER_CREATED_ID}`, fileName: FILE_NAME, file: FILE });
+    resStorage = await uploadFileToStorage({
+      ref: `${userType}s/${USER_CREATED_ID}`,
+      fileName: FILE_NAME,
+      file: FILE,
+    });
     retryStorage = 0;
     if (!resStorage.status) {
       alert(resStorage.message);
       return;
     }
 
-    resURL = await getUrlOfFile({ ref: `${userType}s/${USER_CREATED_ID}`, fileName: FILE_NAME});
+    resURL = await getUrlOfFile({
+      ref: `${userType}s/${USER_CREATED_ID}`,
+      fileName: FILE_NAME,
+    });
     retryURL = 0;
     if (!resURL.status) {
       alert(resURL.message);
       return;
     }
     data.url = resURL.data.url;
-    data.fileName = FILE_NAME; 
+    data.fileName = FILE_NAME;
   }
-  
+
   data.verticals = verticals;
   data.subVerticals = subVerticals;
-  data.expertise = expertise;
+  data.professions = professions;
   data.userType = userType;
   data.userId = USER_CREATED_ID;
   data.fname = employeeFormHTML["fname"].value || "";
@@ -345,26 +349,28 @@ const updateCv = async (e) => {
   data.workCountry = workCountry;
   data.workStates = statesSelected;
   data.workCity = workCity;
+  data.yearExpirence = experienceYear;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
   if (!resDB.status) {
     alert(resDB.message);
-    document.getElementById("progressBar").style.display="none"
+    document.getElementById("progressBar").style.display = "none";
     return;
   }
 
   data = {
     verticals,
     subVerticals,
-    expertise,
-    fileName: FILE_NAME ,
+    professions,
+    fileName: FILE_NAME,
     url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
     workCountry,
-    workStates : statesSelected,
-    workCity
+    workStates: statesSelected,
+    workCity,
+    yearExpirence : experienceYear
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -376,11 +382,11 @@ const updateCv = async (e) => {
   }
 
   FORM_DATA.cv = {
-    ...data
-  }
+    ...data,
+  };
   FORM_DATA.cvAdded = true;
 
-  //await USER_CREATED_REF.set(FORM_DATA);
+  await USER_CREATED_REF.set(FORM_DATA);
 
   nowuiDashboard.showNotification(
     "top",
@@ -388,11 +394,11 @@ const updateCv = async (e) => {
     "Record Added Successfully",
     "primary"
   );
-   employeeFormHTML.reset();
-  // FILE_NAME = false;
-  // FILE = false;
+  employeeFormHTML.reset();
+  FILE_NAME = false;
+  FILE = false;
 
-  document.getElementById("progressBar").style.display="none"
+  document.getElementById("progressBar").style.display = "none";
 };
 
 employeeFormHTML.addEventListener("submit", updateCv);
@@ -443,13 +449,13 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
-  console.log(data);
-  document.getElementById("progressBar").style.display="block"
+  // console.log('uploadCVToDb : data ',data);
+  document.getElementById("progressBar").style.display = "block";
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-  console.log(collectionName);
+  // console.log('uploadCVToDb : collectionName ',collectionName);
   try {
     const ref = await db.collection(collectionName).add({ ...data });
     return {
@@ -460,14 +466,13 @@ const uploadCVToDb = async ({ data }) => {
         docId: ref.id,
       },
     };
-    
   } catch (error) {
     console.error(error);
     if (retryDB < 2) {
       retryDB++;
       alert(`Retry. Attempt: ${retryDB} Reason: ${error.message} `);
       uploadCVToDb({ data });
-      document.getElementById("progressBar").style.display="none"
+      document.getElementById("progressBar").style.display = "none";
     } else {
       return {
         status: false,
@@ -533,8 +538,11 @@ const uploadFileToStorage = async ({ ref, fileName, file }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  const res = checkFileType({file: FILE, fileTypes:  ['pdf', 'ppt', 'docx', 'png', 'pptx', 'doc']})
-  if(!res.status) {
+  const res = checkFileType({
+    file: FILE,
+    fileTypes: ["pdf", "ppt", "docx", "png", "pptx", "doc"],
+  });
+  if (!res.status) {
     alert(res.message);
     return;
   }
@@ -723,10 +731,9 @@ function displaySubVerticalDropdown() {
   let options = "";
   subVerticalDropHolderHTML.innerHTML = ``;
 
-  // console.log(userSelectedMainVerticals);
+  // console.log('displaySubVerticalDropdown : userSelectedMainVerticals ',userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
-      // subVerticalsSelected.map(selected )
       let flag = "";
       for (let i = 0; i < subVerticalsSelected.length; i++) {
         if (subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
@@ -761,8 +768,6 @@ function displaySubVerticalDropdown() {
     searchResultLimit: 10,
     renderChoiceLimit: 10,
   });
-  
-
 }
 
 // ///////////////////////////////////////////
@@ -891,20 +896,16 @@ function getSelectedVerticals(initial = false) {
 // /////////////////////////////////////////////////
 
 function sliderToggle(e) {
-  
   const eleRowId = e.target.dataset.rowid;
-  console.log(eleRowId)
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   if (e.target.checked) {
-   
     el.disabled = false;
-    
-    document.getElementById(eleRowId).innerHTML="Yes"
+
+    document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
-    
   } else {
-    idVal.disable()
-    document.getElementById(eleRowId).innerHTML="No"
+    // idVal.disable();
+    document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
     optionSelected(false, { data: el.value, selected: false });
   }
@@ -915,7 +916,6 @@ function sliderToggle(e) {
 function optionSelected(e = false, data = false) {
   let v, selected;
   if (e) {
-    console.log(e.target.value);
     v = e.target.value;
     selected = true;
   } else {
@@ -951,9 +951,9 @@ function optionSelected(e = false, data = false) {
               userSelectedVerticals[i].subverticals[j].expertise[k].value = val;
               userSelectedVerticals[i].subverticals[j].expertise[k].selected =
                 selected;
-              console.log(
-                userSelectedVerticals[i].subverticals[j].expertise[k]
-              );
+              // console.log('optionSelected : userSelectedVerticals[i].subverticals[j].expertise[k]', 
+              //   userSelectedVerticals[i].subverticals[j].expertise[k]
+              // );
               flag = true;
               break;
             }
@@ -966,13 +966,40 @@ function optionSelected(e = false, data = false) {
 
 // /////////////////////////////////////////////////
 
+let commonExpirences = [];
+let commonExpirencesOptions = ``;
+
+async function extractCommonExpirences() {
+  await db.collection("experienceTags").doc("tags").get().then(doc => {
+    const data = doc.data();
+    data.tags.map(t => {
+      commonExpirences.push(t); 
+    })
+  })
+  commonExpirencesFun();
+}
+
+function commonExpirencesFun() {
+  commonExpirences.map(exp => {
+    commonExpirencesOptions += 
+    `<option  value="${exp}" >${exp}</option> `;
+  })
+}
+
+
+// /////////////////////////////////////////////////
+
 const tablesHolderHTML = document.querySelector("#tablesHolder");
-var multiCh;
-function displayExpertiseTable(initial = false) {
+
+async function displayExpertiseTable() {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
-
-  console.log(userSelectedVerticals);
+  if(commonExpirences.length === 0) {
+    await extractCommonExpirences();
+    commonExpirencesFun();
+  }
+  
+  console.log('displayExpertiseTable : userSelectedVerticals', userSelectedVerticals);
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -982,6 +1009,7 @@ function displayExpertiseTable(initial = false) {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
+      // console.log("displayExpertiseTable : sv : ", sv);
       let isDisabled = true;
       let tableHead = `
       <table class="table table-bordered">
@@ -1012,145 +1040,117 @@ function displayExpertiseTable(initial = false) {
         <tbody>`;
 
       let rows = ``;
-      let i = 0;
       let tglTxt = "";
-      var options2 ="";
-      sv.expertise.map((exp) => {
-        console.log(exp)
+      let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
+      console.log(randNum);
+      sv.expertise.map((exp, index) => {
+        let rowId = `rowId_${randNum + index}`;
+        // console.log("displayExpertiseTable :sv : exp", exp);
         let options = "";
-       
-        let rowId = `rowId${Math.random()}_${Math.random()}`;
         isDisabled = true;
-        if(exp.subCategory){
-          
-          exp.subCategory.map((Iop) => {
-            console.log(Iop)
-            if (exp?.selected) {
-              isDisabled = false;
+        if (exp.subCategory) {
+          exp.subCategory.map((Iop, subIndex) => {
+            // rowId = `rowId_${randNum + index}_${subIndex}`;
+            // console.log("displayExpertiseTable : sv : exp : Iop ", Iop);
+            // if (exp?.selected) {
+            //   isDisabled = false;
+            // } else {
+            //   isDisabled = true;
+            // }
+            if (exp.value === Iop) {
+              options += `
+                <div class="option"> 
+                  <input type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  value="${Iop.name}" />
+                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                </div>
+              `;
             } else {
-              isDisabled = true;
+              options += `
+                <div class="option"> 
+                  <input type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  value="${Iop.name}" />
+                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                </div>
+              `;
             }
-              if (exp.value === Iop) {
-                
-               options += `
-             
-                <div class="option"> 
-                  <input type="checkbox" name="desig" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop}__${rowId}"  value="" />
-                  <label for="option1">${Iop.name}</label>
-                </div>
-              `;
-              } else {
-                options += `
-                <div class="option"> 
-                  <input type="checkbox" name="desig" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop}__${rowId}"  value="" />
-                  <label for="option1">${Iop.name}</label>
-                </div>
-              `;
-              }
-             
-              
           });
-      
-        console.log(options2)
+
           if (isDisabled) {
             tglTxt = "No";
           } else {
             tglTxt = "Yes";
           }
-          rows +=
-          `
-        <tr>
-          <td>${exp.category}</td>
-          <td>
-          <label class="switch">
-          <input type="checkbox" data-rowid="${rowId}"  ${
-            isDisabled ? "" : "checked"
-          }  onchange="sliderToggle(event)"   >
-          <span class="slider round"></span>
-          <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">` +
-          tglTxt +
-          `</span>
-        </label>
-          </td>
-         
-          <td>
-            <div class="select-list"  >
-                <div class="title">Select Designation</div>
-                <div class="select-options" onchange="optionSelected(event)" data-rowid="${rowId}" id="designation">
-                
-                  ${options}
-                </div>
-            </div>
-          </td>
-          <td>
-            <select
-              data-rowid="${rowId}" 
-              class="selectpicker"
-              name="expertise"
-              id="cat12`+rowId+`"
-              style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
-            >
-              
-            </select>
-          </td>
-        </tr>
-          `;
-        i++;
-        }
-        
-        let docRef = db.collection("experienceTags").doc("tags");
 
-          docRef.get().then((doc) => {
-          if (doc.exists) {
-              console.log("Document data:", doc.data());
-              for(let k in doc.data().tags){
-               
-                if(document.getElementById("cat12"+rowId))
-                  document.getElementById("cat12"+rowId).innerHTML += `
-                    <option  value="${doc.data().tags[k]}" >${doc.data().tags[k]}</option>
-                `;
-              }
-              
-          }
-          })
+          rows +=`
+          <tr>
+            <td>${exp.category}</td>
+            <td>
+              <label class="switch">
+              <input type="checkbox" data-rowid="${rowId}"  ${
+                isDisabled ? "" : "checked"
+              }  onchange="sliderToggle(event)"   >
+              <span class="slider round"></span>
+              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
+            </label>
+            </td>
+          
+            <td>
+              <div class="select-list"  >
+                  <div class="title">Select Designation</div>
+                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation">
+                    ${options}
+                  </div>
+              </div>
+            </td>
+            <td>
+              <select
+                data-rowid="${rowId}" 
+                class="selectpicker"
+                name="expertise-${rowId}"
+                style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
+              >
+              ${commonExpirencesOptions}
+              </select>
+            </td>
+          </tr>`;
+        }
        
-        });
-     
-      
+      });
+
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
-        setTimeout(function(){
-          $(function() {
-            $('.multiselect-ui').multiselect({
-                includeSelectAllOption: true
-            });
+      setTimeout(function () {
+        $(function () {
+          $(".multiselect-ui").multiselect({
+            includeSelectAllOption: true,
+          });
         });
-        },1000)
+      }, 1000);
     });
 
     tables += head + table;
-    
-     
-  
   });
+
   tablesHolderHTML.innerHTML = tables;
+
   (function ($) {
     $.fn.multiselect = function () {
       var selector = this;
       var options = $.extend(
         {
-          onChange: function () {}
+          onChange: function (val) {
+            console.log(val);
+          },
         },
         arguments[0] || {}
       );
-  
+
       activate();
-  
+
       /////////
-  
+
       function activate() {
         //events
         $(selector)
@@ -1158,7 +1158,7 @@ function displayExpertiseTable(initial = false) {
           .on("click", function (e) {
             $(this).parent().find(".select-options").toggle();
           });
-  
+
         $(selector)
           .find('input[type="checkbox"]')
           .change(function (e) {
@@ -1167,20 +1167,18 @@ function displayExpertiseTable(initial = false) {
       }
     };
   })(jQuery);
-  
+
   $(document).ready(function () {
     $(".select-list").multiselect({
-      onChange: updateTable
+      onChange: updateTable,
     });
   });
-  
-  function updateTable() {
-    var checkboxValue = $(this).val();
-    var isChecked = $(this).is(":checked");
-  
-  
-  }
-  
+
+}
+
+function updateTable() {
+  var checkboxValue = $(this).val();
+  var isChecked = $(this).is(":checked");
 }
 
 // //////////////////////////////////////////
@@ -1204,32 +1202,33 @@ function getNameOfId(id) {
 }
 
 
+
 // /////////////////////////////////////////////////////////
 
-function checkFileType({file, fileTypes}) {
-  console.log(file);
-  let fExt = file.name.split('.');
-  fExt = fExt[fExt.length -1]
+function checkFileType({ file, fileTypes }) {
+  // console.log('checkFileType : file ',file);
+  let fExt = file.name.split(".");
+  fExt = fExt[fExt.length - 1];
 
-  const fileIndex = fileTypes.findIndex(type => type === fExt);
-  console.log(fileIndex);
-  if(fileIndex === -1) {
+  const fileIndex = fileTypes.findIndex((type) => type === fExt);
+  // console.log(`checkFileType : fileIndex `,fileIndex);
+  if (fileIndex === -1) {
     return {
       status: false,
-      message: 'wrong file extension uploaded'
-    }
+      message: "wrong file extension uploaded",
+    };
   }
 
-  if(file.size > 5000000) {
+  if (file.size > 5000000) {
     return {
       status: false,
-      message: 'too large file'
-    }
+      message: "too large file",
+    };
   }
 
   return {
-    status: true
-  }
+    status: true,
+  };
 }
 
 // /////////////////////////////////////////////////////////
