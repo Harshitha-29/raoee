@@ -2,316 +2,238 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
-// ////////////////////////////////////////////
-let USER = false;
-let USER_REF = false;
-let USER_ID = false;
-let USER_RAW = false;
-var oldStateArr=[];
-var empStatusDrop = new Choices("#employmentStatus", {
-  removeItemButton: true,
-  maxItemCount: 100,
-  searchResultLimit: 100,
-  renderChoiceLimit: 100,
-}).disable();
-var internStatusDrop= new Choices("#internStatus", {
-  removeItemButton: true,
-  maxItemCount: 100,
-  searchResultLimit: 100,
-  renderChoiceLimit: 100,
-}).disable();
-var qualificationDrop=new Choices("#qualification", {
-  removeItemButton: true,
-  maxItemCount: 100,
-  searchResultLimit: 100,
-  renderChoiceLimit: 100,
+let RAW_USER = false;
+let USER_CREATED_REF;
+let USER_CREATED_ID;
+let FORM_DATA = false;
 
-}).disable();
-auth.onAuthStateChanged(async(user) => {
-  if (user) {
-    USER_RAW = user;
-    USER_ID = user.uid;
-    if (user.emailVerified == false) {
-      $("#exampleModalCenter").modal({
-        backdrop: "static",
-        keyboard: false,
-        show: true,
-      });
-      document.getElementById("emailID").innerHTML = user.email;
+const USER = undefined;
+
+//checkIfAdmin();
+
+// /////////////////////////////////////////////////////////
+
+async function onStateChange() {
+  return await auth.onAuthStateChanged((user) => {
+    if (user) {
+      if (user.displayName === "admin") {
+        RAW_USER = user;
+      }
     }
-    getUserDetails({ uid: user.uid, userType: user.displayName });
-   
-  } else {
-
-    return (window.location.href = `./../authentication/auth.html`);
-  }
-});
-
-const topbarUsernameHTML = document.querySelector('#topbar-username');
-const topbarImgHTML = document.querySelector('#topbar-img');
-
-function displayAuthSigns() {
-  topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
-  if(USER.basicInfoAdded) {
-    if(USER.basicInfo.imgUrl) { 
-      topbarImgHTML.src = USER.basicInfo.imgUrl;
-    }
-  }
-}
-
-function sendEmail() {
-  USER_RAW.sendEmailVerification().then(function () {
-    nowuiDashboard.showNotification(
-      "top",
-      "center",
-      "Email Sent Successfully",
-      "primary"
-    );
   });
 }
 
-// ////////////////////////////////////////////
-let retryUser = 0;
-async function getUserDetails({ uid, userType }) {
+const pwd = window.localStorage.getItem("key_id");
 
-  if (userType === "employee") {
-    userType = `${userType}s`;
-  }
-  try {
-    USER_REF = await db.collection(userType).doc(uid);
-    const refDoc = await USER_REF.get();
-    USER = await refDoc.data();
-  
-    displayUserDetails();
-    displayAuthSigns()
-  } catch (error) {
-    console.error(error);
-    if (retryUser < 2) {
-      retryUser++;
-      alert(`Retrying.  Attempt: ${retryUser}`);
-      getUserDetails({ uid, userType });
-    } else {
-      return {
-        status: false,
-        message: `Canoy Fetch. Reson: ${error.message}`,
-      };
-    }
-  }
-}
-
-// /////////////////////////////////////////////
-const editCvBtnHTML = document.querySelector("#editCvBtn");
-const editCvBtnHTML2 = document.querySelector("#editCvBtn2");
-const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
-const cvEditHolderHTML = document.querySelector("#cvEditHolder");
-
-const toggleCvDisplay = (e) => {
-  if (e?.target?.checked) {
-    cvEditHolderHTML.style.display = "block";
-    cvInfoHolderHTML.style.display = "none";
-  } else {
-    cvEditHolderHTML.style.display = "none";
-    cvInfoHolderHTML.style.display = "block";
-  }
-};
-const toggleUploadCvDisplay = (e) => {
-  if (e?.target?.checked) {
-    document.getElementById("cv-file").style.display="block"
-    document.getElementById("uploadNewCv").style.display="block"
-    document.getElementById("editCvUrlHolder").style.display="none"
-  } else {
-    document.getElementById("cv-file").style.display="none"
-    document.getElementById("uploadNewCv").style.display="none"
-    document.getElementById("editCvUrlHolder").style.display="block"
-  }
-};
-
-editCvBtnHTML.addEventListener("change", toggleCvDisplay);
-editCvBtnHTML2.addEventListener("change", toggleUploadCvDisplay);
-// ////////////////////////////////////////
-const userBasicFormHTML = document.querySelector("#userBasicForm");
-const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
-const updateBasicInfoBtnHTML = document.querySelector("#updateBasicInfoBtn");
-
-const toggleBasicInfoDisplay = (e) => {
-  if (e?.target?.checked) {
-    userBasicFormHTML["fname"].readOnly = false;
-    userBasicFormHTML["lname"].readOnly = false;
-    userBasicFormHTML["phone"].readOnly = false;
-    // console.log(userBasicFormHTML["qualification"]);
-    // document.querySelector('#qualification').disabled = false;
-    // userBasicFormHTML["qualification"].classList.remove('is-hidden');
-   
-   // document.getElementById("qualification").disabled = true;
-    empStatusDrop.enable()
-    internStatusDrop.enable()
-    qualificationDrop.enable()
-    // userBasicFormHTML["certified-domestic"].disabled = false;
-    document.getElementById("radioDom1").disabled=false;
-    document.getElementById("radioDom2").disabled=false;
-    document.getElementById("radioInt1").disabled=false;
-    document.getElementById("radioInt2").disabled=false;
-    document.getElementById("radioGen1").disabled=false;
-    document.getElementById("radioGen2").disabled=false;
-    document.getElementById("radioGen3").disabled=false;
-    updateBasicInfoBtnHTML.style.display = "block";
-    console.log(userBasicFormHTML["qualification"]);
-    
-    
-  } else {
-    empStatusDrop.disable()
-    internStatusDrop.disable()
-    qualificationDrop.disable()
-    userBasicFormHTML["fname"].readOnly = true;
-    userBasicFormHTML["lname"].readOnly = true;
-    userBasicFormHTML["phone"].readOnly = true;   
-    document.getElementById("radioDom1").disabled=true;
-    document.getElementById("radioDom2").disabled=true;
-    document.getElementById("radioInt1").disabled=true;
-    document.getElementById("radioInt2").disabled=true;
-    document.getElementById("radioGen1").disabled=true;
-    document.getElementById("radioGen2").disabled=true;
-    document.getElementById("radioGen3").disabled=true;
-    updateBasicInfoBtnHTML.style.display = "none";
-    
-  }
-};
-
-// toggleBasicInfoDisplay(null, false)
-
-editBasicInfoBtnHTML.addEventListener("change", toggleBasicInfoDisplay);
-
-// ////////////////////////////////////////
-
-const fullNameProfileHTML = document.querySelector("#fullNameProfile");
-const aboutMeProfileHTML = document.querySelector("#aboutMeProfile");
-const blahHTML = document.querySelector("#blah");
-
-function displayUserDetails() {
-  userBasicFormHTML["fname"].value = USER.fname;
-  userBasicFormHTML["lname"].value = USER.lname;
-  userBasicFormHTML["email"].value = USER.email;
-  userBasicFormHTML["phone"].value = USER.phone;
-  fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
-  if (USER.basicInfoAdded) {
-    aboutMeProfileHTML.innerText = USER.basicInfo.aboutMe;
-    // userBasicFormHTML["address"].value = USER.basicInfo.address;
-    // userBasicFormHTML["city"].value = USER.basicInfo.city;
-    // userBasicFormHTML["home-state"].value = USER.basicInfo.state;
-    // userBasicFormHTML["home-country"].value = USER.basicInfo.country;
-    // userBasicFormHTML["postal-code"].value = USER.basicInfo.postalCode;
-    // userBasicFormHTML["about-me"].value = USER?.basicInfo.aboutMe;
-    blahHTML.src = USER?.basicInfo?.imgUrl || `../assets/img/userProfile.png`;
-  }
-
-  if (!USER.cvAdded) {
-    editCvBtnHTML.checked = true;
-    cvEditHolderHTML.style.display = "block";
-    cvInfoHolderHTML.style.display = "none";
-    editCvBtnHTML.disabled = true;
-  }
+if (!pwd) {
+  alert("Please login again to add emploee");
+  window.location.href = `./../authentication/auth.html`;
 }
 
 // /////////////////////////////////////////////////////////
 
-const updateBasicInfo = async (e) => {
-  e.preventDefault();
-  const fname = userBasicFormHTML["fname"].value;
-  const lname = userBasicFormHTML["lname"].value;
-  const phone = userBasicFormHTML["phone"].value;
+const employeeFormHTML = document.querySelector("#employeeForm");
 
-  // const address = userBasicFormHTML["address"].value;
-  // const city = userBasicFormHTML["city"].value;
-  // const state = userBasicFormHTML["home-state"].value;
-  // const country = userBasicFormHTML["home-country"].value;
-  // const postalCode = userBasicFormHTML["postal-code"].value;
-  // const aboutMe = userBasicFormHTML["about-me"].value;
+const updateBasicInfo = async () => {
+  const email = employeeFormHTML["email"].value;
+  const userType = "employee";
+  let createRes;
 
-  const data = {
-    ...USER,
+  const workCountry = employeeFormHTML["country"].value;
+
+  if (workCountry === -1 || statesSelected.length === 0) {
+    alert(
+      "enter the preffered country and state where user emplyee wants to work"
+    );
+    return {
+      status: false,
+    };
+  }
+
+  if (!RAW_USER.email) {
+    await onStateChange();
+  }
+
+  if (email) {
+    createRes = await createUserAuth(email, "raoeeEmployee", userType);
+    if (!createRes.status) {
+      alert(createRes.message);
+      document.getElementById("progressBar").style.display = "none";
+      return {
+        status: false,
+      };
+    }
+  }
+  console.log("updateBasicInfo : user created : id", createRes.data.uid);
+
+  USER_CREATED_ID = createRes.data.uid;
+  USER_CREATED_REF = await db
+    .collection(`${userType}s`)
+    .doc(createRes.data.uid);
+
+  console.log('updateBasicInfo : RAW_USER ', RAW_USER);
+
+  const signinAdminRes = await signinAdmin({
+    email: RAW_USER.email,
+    password: pwd,
+  });
+  if (!signinAdminRes.status) {
+    alert(signinAdminRes.message);
+    return {
+      status: false,
+    };
+  }
+  console.log("updateBasicInfo : admin logged in");
+
+  const fname = employeeFormHTML["fname"].value || "";
+  const lname = employeeFormHTML["lname"].value || "";
+  const phone = employeeFormHTML["phone"].value || "";
+  const qualification = employeeFormHTML["qualification"].value || "";
+  const employmentStatus = employeeFormHTML["employmentStatus"].value || "";
+  const internStatus = employeeFormHTML["internStatus"].value || "";
+  const certifiedDomestic = employeeFormHTML["certified-domestic"].value || "";
+  const certifiedInternationally =
+    employeeFormHTML["certified-internationally"].value || "";
+  const gender = employeeFormHTML["gender"].value || "";
+
+  FORM_DATA = {
     fname,
     lname,
     phone,
+    email,
+    userType,
+    userCreatedAt : new Date(),
+    userCreatedAtStr : `${new Date()}`,
+    userCreatedByAdmin : true,
+    uid: USER_CREATED_ID,
     basicInfo: {
-      ...USER.basicInfo,
-      // address,
-      // city,
-      // state,
-      // country,
-      // postalCode,
-      // aboutMe,
-      
+      qualification,
+      employmentStatus,
+      internStatus,
+      certifiedDomestic,
+      certifiedInternationally,
+      gender,
+      aboutMe: "",
     },
-    basicInfoAdded: true,
   };
 
-  try {
-    if (USER.cvAdded) {
-      if (
-        fname !== USER.fname ||
-        lname !== USER.lname ||
-        lname !== USER.lname
-      ) {
-        const cvRef = await db
-          .collection(USER.cv.collectionName)
-          .doc(USER.cv.docId);
-        const cvDoc = await cvRef.get();
-        const cvData = await cvDoc.data();
-        cvData.fname = fname;
-        cvData.lname = lname;
-        await cvRef.update(cvData);
-      }
-    }
+  FORM_DATA.basicInfoAdded = true;
 
-    await USER_REF.update(data);
-    
-    nowuiDashboard.showNotification('top','center',"Data updated Successfully","primary");
-    getUserDetails({ uid: USER_ID, userType: USER.userType });
-  } catch (error) {
-    console.error(error);
-    alert(`Try again. Reason: ${error.message}`);
-  }
+  return {
+    status: true,
+  };
 };
 
-userBasicFormHTML.addEventListener("submit", updateBasicInfo);
+// /////////////////////////////////////////////////////////
+
+async function createUserAuth(email, password, type) {
+  document.getElementById("progressBar").style.display = "block";
+
+  return await auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(async (userCredential) => {
+      let user = userCredential.user;
+      await user.updateProfile({
+        displayName: type,
+      });
+      return {
+        status: true,
+        message: "user auth created ",
+        data: {
+          uid: user.uid,
+        },
+      };
+    })
+    .catch((error) => {
+      console.error(error);
+      var errorMessage = error.message;
+      // nowuiDashboard.showNotification(
+      //   "top",
+      //   "center",
+      //   errorMessage.substring(9),
+      //   "primary"
+      // );
+      return {
+        status: false,
+        message: `Please Retry : ${errorMessage}`,
+      };
+    });
+}
+
+// /////////////////////////////////////////////////////////
+
+async function signinAdmin({ email, password }) {
+  return await auth
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      return {
+        status: true,
+      };
+    })
+    .catch((error) => {
+      console.error(error);
+      document.getElementById("showMessage").innerHTML = " ";
+      return {
+        status: false,
+        message: " Something went wrong ",
+      };
+    });
+}
+
+// /////////////////////////////////////////////////////////
+
+async function getCreatedUser({ collectionName, uid }) {
+  try {
+    USER_CREATED_REF = await db.collection(collectionName).doc(uid);
+    //await USER_CREATED_REF.get();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // /////////////////////////////////////////////////////////
 
 function getUserPreferences() {
   const cvVerticals = [];
-
-  cvFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
-    const all = e.value.split("__");
+  document.querySelectorAll(`input[name=designation_checkbox]:checked`).forEach((e) => {
+    const all = e.id.split("__");
     const selectedVId = all[0];
     const selectedVName = all[1];
     const selectedSubV = all[2];
-    const category = all[3];
-    const value = all[4];
-    const rowId = all[5];
+    const profession = all[3];
+    const designation = all[4];
+    const index = all[5];
 
-    if (document.querySelector(`input[data-rowid="${rowId}"]`).checked) {
+    const value = document.querySelector(`select[name=expertise-${index}`).value;
       cvVerticals.push({
         verName: selectedVName,
         ver: selectedVId,
         subVertical: selectedSubV,
-        category,
-        value,
+        profession,
+        designation,
+        value
       });
-    }
   });
+  console.log('getUserPreferences : cvVerticals',cvVerticals);
 
   const vv = [];
   const sv = [];
-  const ee = [];
+  const prof = [];
   cvVerticals.map((cvv) => {
+    
+    console.log(vv)
+    console.log(cvv)
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
+    console.log(vIndex)
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
         ver: cvv.ver,
-        sver: [],
+        sver: [
+          
+        ],
       });
-      ee.push({
+      prof.push({
         ver: cvv.ver,
         svers: [],
       });
@@ -322,27 +244,45 @@ function getUserPreferences() {
 
     if (svIndex === -1) {
       sv[vIndex].sver.push(cvv.subVertical);
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
+    } 
 
-      ee[vIndex].svers.push({
+    const profvIndex = prof.findIndex(p => p.ver == cvv.ver);
+    const profsvIndex = prof[profvIndex].svers.findIndex(p => p.sver === cvv.subVertical);
+
+    if(profsvIndex === -1) {
+      prof[profvIndex].svers.push({
         sver: cvv.subVertical,
-        expertise: [{ category: cvv.category, value: cvv.value }],
-      });
+        profs: [{
+          prof: cvv.profession,
+          designations: [cvv.designation],
+          value: cvv.value
+        }]
+      })
     } else {
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-      svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
-      ee[vIndex].svers[svIndex].expertise.push({
-        category: cvv.category,
-        value: cvv.value,
-      });
+      let profIndex = prof[profvIndex].svers[profsvIndex].profs.findIndex(p => p.prof === cvv.profession);
+      if(profIndex === -1) {
+        prof[profvIndex].svers[profsvIndex].profs.push({
+          prof: cvv.profession,
+          designations: [cvv.designation],
+          value: cvv.value
+        })
+      } else {
+      const desigIndex = prof[profvIndex].svers[profsvIndex].profs[profIndex].designations.findIndex(d => d === cvv.designation);
+      if(desigIndex === -1) {
+        prof[profvIndex].svers[profsvIndex].profs[profIndex].designations.push(cvv.designation);
+      }
+      }
     }
   });
 
-  return { verticals: vv, subVerticals: sv, expertise: ee };
+  console.log('getUserPreferences : vv',vv);
+  console.log('getUserPreferences : sv',sv);
+  console.log('getUserPreferences : prof',prof);
+
+  return { verticals: vv, subVerticals: sv, professions: prof };
 }
 
 // /////////////////////////////////////////////////////////
-
 let statesSelected = [];
 
 function selectedState(e) {
@@ -353,43 +293,47 @@ function selectedState(e) {
   }
 }
 
-
 // /////////////////////////////////////////////////////////
 
-const cvFormHTML = document.querySelector("#cvForm");
 let FILE = false;
 let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
-  document.getElementById("progressBar2").style.display="block";
-
-  const workCountry = cvFormHTML['country'].value;
-  
-  if(workCountry === -1 || statesSelected.length === 0 ) {
-    if(oldStateArr.length==0){
-      document.getElementById("progressBar2").style.display="none"
-      nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-      return;
-    }else{
-      statesSelected = oldStateArr.map(s=>s);
-    }
+  let funRes = await updateBasicInfo();
+  if (!funRes.status) {
+    return;
   }
+  const userType = "employee";
 
-  const { verticals, subVerticals, expertise } = getUserPreferences();
+  const workCountry = employeeFormHTML["country"].value;
+  const workCity = employeeFormHTML["work-city"].value;
+  const experienceYear = employeeFormHTML['experienceYear'].value;
+
+  const { verticals, subVerticals, professions } = await getUserPreferences();
+  console.log('updateCv : verticals ',verticals);
+  console.log('updateCv : subVerticals',subVerticals);
+  console.log('updateCv : expertise',professions);
 
   let resStorage, resURL;
   let data = {};
 
   if (FILE_NAME) {
-    resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
+    resStorage = await uploadFileToStorage({
+      ref: `${userType}s/${USER_CREATED_ID}`,
+      fileName: FILE_NAME,
+      file: FILE,
+    });
     retryStorage = 0;
     if (!resStorage.status) {
       alert(resStorage.message);
       return;
     }
 
-    resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
+    resURL = await getUrlOfFile({
+      ref: `${userType}s/${USER_CREATED_ID}`,
+      fileName: FILE_NAME,
+    });
     retryURL = 0;
     if (!resURL.status) {
       alert(resURL.message);
@@ -397,146 +341,71 @@ const updateCv = async (e) => {
     }
     data.url = resURL.data.url;
     data.fileName = FILE_NAME;
-
-    if (USER.cvAdded) {
-      const resDeleteStorage = await deleteStorage({
-        ref: `${USER.userType}s/${USER.uid}`,
-        fileName: USER.cv.fileName,
-      });
-      if (!resDeleteStorage.status) {
-        alert(resDB.message);
-        // return;
-      }
-    }
-
-  } else {
-    if (USER.cvAdded) {
-      data.url = USER.cv.url;
-      data.fileName = USER.cv.fileName;
-    } else {
-      nowuiDashboard.showNotification('top','center',"Please Update the CV File ","primary");
-      return;
-    }
   }
 
   data.verticals = verticals;
   data.subVerticals = subVerticals;
-  data.expertise = expertise;
-  data.userType = USER.userType;
-  data.userId = USER.uid;
-  data.fname = USER.fname;
-  data.lname = USER.lname;
+  data.professions = professions;
+  data.userType = userType;
+  data.userId = USER_CREATED_ID;
+  data.fname = employeeFormHTML["fname"].value || "";
+  data.lname = employeeFormHTML["lname"].value || "";
   data.workCountry = workCountry;
   data.workStates = statesSelected;
- 
+  data.workCity = workCity;
+  data.yearExpirence = experienceYear;
+
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
   if (!resDB.status) {
     alert(resDB.message);
+    document.getElementById("progressBar").style.display = "none";
     return;
   }
 
   data = {
     verticals,
     subVerticals,
-    expertise,
-    fileName: FILE_NAME ? FILE_NAME : USER.cv.fileName,
-    url: FILE_NAME ? resURL.data.url : USER.cv.url,
+    professions,
+    fileName: FILE_NAME,
+    url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
     workCountry,
-    workStates: statesSelected
+    workStates: statesSelected,
+    workCity,
+    yearExpirence : experienceYear
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
     collectionName: resDB.data.collectionName,
   });
+
   if (!resUpdateCvDb.status) {
     alert(resDB.message);
-    // return;
   }
 
-  if(USER.cvAdded){
-    const resDeleteCvDb = await deleteCvDb({
-      collectionName: USER.cv.collectionName,
-      docId: USER.cv.docId,
-    });
-    if (!resDeleteCvDb.status) {
-      alert(resDB.message);
-      // return;
-    }
-  }
-  
-  const resUserDB = await uploadToUserDb({ data });
-  retryUserDB = 0;
-  if (!resUserDB.status) {
-    alert(resUserDB.message);
-    return;
-  }
+  FORM_DATA.cv = {
+    ...data,
+  };
+  FORM_DATA.cvAdded = true;
 
+  await USER_CREATED_REF.set(FORM_DATA);
 
-  // nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
-  document.getElementById("progressBar2").style.display="none"
-  cvEditHolderHTML.style.display = "none";
-  cvInfoHolderHTML.style.display = "block";
-  editCvBtnHTML.checked = false;
-  nowuiDashboard.showNotification('top','center',"Data updated successfully","primary");
-  getUserDetails({ uid: USER_ID, userType: USER.userType });
-  setTimeout(function(){
-    location.reload();
-  },2000)
+  nowuiDashboard.showNotification(
+    "top",
+    "center",
+    "Record Added Successfully",
+    "primary"
+  );
+  employeeFormHTML.reset();
+  FILE_NAME = false;
+  FILE = false;
+
+  document.getElementById("progressBar").style.display = "none";
 };
 
-cvFormHTML.addEventListener("submit", updateCv);
-
-// /////////////////////////////////////////////////////////
-let retryDeleteStorage = 0;
-const deleteStorage = async ({ ref, fileName }) => {
-  try {
-    await storage.ref(ref).child(fileName).delete();
-    return {
-      status: true,
-      message: `Delete Succefully.`,
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryDeleteStorage < 2) {
-      retryDeleteStorage++;
-      alert(`Retrying Attempt: ${retryDeleteStorage} Reason: ${error.message}`);
-      deleteStorage({ ref, fileName });
-    } else {
-      return {
-        status: false,
-        message: `Failed to delete. Reason: ${error.message}`,
-      };
-    }
-  }
-};
-
-// /////////////////////////////////////////////////////////
-
-let retryDeleteCvDb = 0;
-const deleteCvDb = async ({ collectionName, docId }) => {
-  try {
-    await db.collection(collectionName).doc(docId).delete();
-    return {
-      status: true,
-      message: `Delete Succefully.`,
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryDeleteCvDb < 2) {
-      retryDeleteCvDb++;
-      alert(`Retrying Attempt: ${retryDeleteCvDb} Reason: ${error.message}`);
-      deleteStorage({ ref, fileName });
-    } else {
-      return {
-        status: false,
-        message: `Failed to delete. Reason: ${error.message}`,
-      };
-    }
-  }
-};
+employeeFormHTML.addEventListener("submit", updateCv);
 
 // /////////////////////////////////////////////////////////
 let retryUpdateCollectionsDb = 0;
@@ -584,11 +453,13 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
+  // console.log('uploadCVToDb : data ',data);
+  document.getElementById("progressBar").style.display = "block";
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
   });
-
+  // console.log('uploadCVToDb : collectionName ',collectionName);
   try {
     const ref = await db.collection(collectionName).add({ ...data });
     return {
@@ -605,6 +476,7 @@ const uploadCVToDb = async ({ data }) => {
       retryDB++;
       alert(`Retry. Attempt: ${retryDB} Reason: ${error.message} `);
       uploadCVToDb({ data });
+      document.getElementById("progressBar").style.display = "none";
     } else {
       return {
         status: false,
@@ -616,43 +488,10 @@ const uploadCVToDb = async ({ data }) => {
 
 // /////////////////////////////////////////////////////////
 
-let retryUserDB = 0;
-const uploadToUserDb = async ({ data }) => {
-  try {
-    USER.cv = {
-      ...data,
-    };
-    USER.cvAdded = true;
-    await USER_REF.update(USER);
-
-    return {
-      status: true,
-      message: "Successfully added the record.",
-    };
-  } catch (error) {
-    console.error(error);
-    if (retryUserDB < 2) {
-      retryUserDB++;
-      alert(`Retry. Attempt: ${retryUserDB} Reason: ${error.message} `);
-      uploadToUserDb({ data });
-    } else {
-      USER.cvAdded = false;
-      return {
-        status: false,
-        message: `Failed to add the record. Reason: ${error.message}`,
-      };
-    }
-  }
-};
-
-// /////////////////////////////////////////////////////////
 let retryURL = 0;
-const getUrlOfFile = async ({ ref }) => {
+const getUrlOfFile = async ({ ref, fileName }) => {
   try {
-    const url = await storage
-      .ref(`${ref}/${USER.uid}`)
-      .child(FILE_NAME)
-      .getDownloadURL();
+    const url = await storage.ref(ref).child(fileName).getDownloadURL();
     return {
       status: true,
       message: "Success. Fetched the file from storage.",
@@ -665,7 +504,7 @@ const getUrlOfFile = async ({ ref }) => {
     if (retryURL < 2) {
       retryURL++;
       alert(`Retry. Attempt: ${retryURL} Reason: ${error.message} `);
-      getUrlOfFile({ ref });
+      getUrlOfFile({ ref, fileName });
     } else {
       return {
         status: false,
@@ -677,9 +516,9 @@ const getUrlOfFile = async ({ ref }) => {
 
 // /////////////////////////////////////////////////////////
 let retryStorage = 0;
-const uploadFileToStorage = async ({ ref }) => {
+const uploadFileToStorage = async ({ ref, fileName, file }) => {
   try {
-    await storage.ref(`${ref}/${USER.uid}`).child(FILE_NAME).put(FILE);
+    await storage.ref(ref).child(fileName).put(file);
     return {
       status: true,
       message: "Uplading to file to storage success",
@@ -689,7 +528,7 @@ const uploadFileToStorage = async ({ ref }) => {
     if (retryStorage < 2) {
       retryStorage++;
       alert(`Retry. Attempt: ${retryStorage} Reason: ${error.message} `);
-      uploadFileToStorage({ ref });
+      uploadFileToStorage({ ref, fileName, file });
     } else {
       return {
         status: false,
@@ -703,21 +542,23 @@ const uploadFileToStorage = async ({ ref }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  const res = checkFileType({file: FILE, fileTypes: ['pdf', 'ppt', 'docx', 'png', 'pptx', 'doc']})
-  if(!res.status) {
+  const res = checkFileType({
+    file: FILE,
+    fileTypes: ["pdf", "ppt", "docx", "png", "pptx", "doc"],
+  });
+  if (!res.status) {
     alert(res.message);
     return;
   }
+
   if (FILE) {
     FILE_NAME = `${new Date().valueOf()}__${FILE.name}`;
   }
 }
 
-cvFormHTML["cv-file"].addEventListener("change", uploadCVFile);
+employeeFormHTML["cv-file"].addEventListener("change", uploadCVFile);
 
 // /////////////////////////////////////////////////////////
-
-
 
 let VERTICALS = [];
 

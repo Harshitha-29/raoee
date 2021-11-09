@@ -717,8 +717,6 @@ cvFormHTML["cv-file"].addEventListener("change", uploadCVFile);
 
 // /////////////////////////////////////////////////////////
 
-
-
 let VERTICALS = [];
 
 db.collection("verticals").onSnapshot(async (snaps) => {
@@ -756,6 +754,7 @@ db.collection("verticals").onSnapshot(async (snaps) => {
 
   displayVerticalDropdown();
   storeAllNamesIds();
+  displayCvDetails();
 });
 
 // /////////////////////////////////////////////////////////
@@ -766,10 +765,29 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
   let options = "";
-
-  VERTICALS.map((ver) => {
-    options += `<option value="${ver.name}">${ver.name}</option>`;
-  });
+  if (USER.cvAdded) {
+    document.getElementById("editResumeBtn").style.display="block"
+    document.getElementById("cv-file").style.display="none"
+    document.getElementById("uploadNewCv").style.display="none"
+    VERTICALS.map((ver) => {
+      let isVPresent = USER.cv.verticals.filter((v) => v.name === ver.name);
+      if (isVPresent.length > 0) {
+        options += `<option value="${ver.name}" selected>${ver.name}</option>`;
+      } else {
+        options += `<option value="${ver.name}">${ver.name}</option>`;
+      }
+    });
+    setTimeout(() => {
+      verticalSelected();
+      displaySubVerticalDropdown(true);
+    }, 2000);
+  } else {
+    
+    document.getElementById("editResumeBtn").style.display="none"
+    VERTICALS.map((ver) => {
+      options += `<option value="${ver.name}">${ver.name}</option>`;
+    });
+  }
 
   verticalDropHolderHTML.innerHTML = `
   <label>Select Vertical
@@ -890,13 +908,24 @@ const subVerticalDropHolderHTML = document.querySelector(
   "#subVerticalDropHolder"
 );
 
-function displaySubVerticalDropdown() {
+function displaySubVerticalDropdown(initial = false) {
   let options = "";
   subVerticalDropHolderHTML.innerHTML = ``;
 
-  // console.log('displaySubVerticalDropdown : userSelectedMainVerticals ',userSelectedMainVerticals);
+  if (initial) {
+    if (USER.cvAdded) {
+      USER.cv.subVerticals.map((sv) => {
+        const name = getNameOfId(sv.ver);
+        sv.sver.map((svv) => {
+          subVerticalsSelected.push(`${name}__${svv}`);
+        });
+      });
+    }
+  }
+  // console.log(userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
+      // subVerticalsSelected.map(selected )
       let flag = "";
       for (let i = 0; i < subVerticalsSelected.length; i++) {
         if (subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
@@ -931,6 +960,10 @@ function displaySubVerticalDropdown() {
     searchResultLimit: 10,
     renderChoiceLimit: 10,
   });
+
+  if (initial) {
+    subVerticalSelected(false, true);
+  }
 }
 
 // ///////////////////////////////////////////
@@ -1058,48 +1091,17 @@ function getSelectedVerticals(initial = false) {
 
 // /////////////////////////////////////////////////
 
-function sliderToggle(e ) {
-  console.log(e.target.dataset)
+function sliderToggle(e) {
   const eleRowId = e.target.dataset.rowid;
+  
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
-  document.addEventListener("click", (evt) => {
-    const flyoutElement = document.querySelector(".select-list");
-    let targetElement = evt.target; // clicked element
-  
-    do {
-        if (targetElement == flyoutElement) {
-            // This is a click inside. Do nothing, just return.
-            console.log("Clicked inside!");
-
-            return;
-        }
-        // Go up the DOM
-        targetElement = targetElement.parentNode;
-    } while (targetElement);
-  
-    // This is a click outside.
-    console.log("now")
-    document.querySelector(".select-options").style.display = "none";
-   
-    
-  });
   if (e.target.checked) {
-    
     el.disabled = false;
-    
-    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
-    document.getElementById("select-list_"+eleRowId).style.opacity = 1;
-    document.getElementById(eleRowId).innerHTML = "Yes";
+    document.getElementById(eleRowId).innerHTML="Yes"
     optionSelected(false, { data: el.value, selected: true });
   } else {
-    // idVal.disable();
-    
-    document.getElementById(eleRowId).innerHTML = "No";
+    document.getElementById(eleRowId).innerHTML="No"
     el.disabled = true;
-    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
-    document.getElementById("select-list_"+eleRowId).style.opacity = 0.4;
-   
-    document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
 }
@@ -1109,6 +1111,7 @@ function sliderToggle(e ) {
 function optionSelected(e = false, data = false) {
   let v, selected;
   if (e) {
+
     v = e.target.value;
     selected = true;
   } else {
@@ -1117,9 +1120,13 @@ function optionSelected(e = false, data = false) {
   }
 
   const vid = v.split("__")[0];
+  const vname = v.split("__")[1];
   const svname = v.split("__")[2];
   const cat = v.split("__")[3];
   const val = v.split("__")[4];
+  const rowId = v.split("__")[5];
+
+
 
   let flag = false;
   for (let i = 0; i < userSelectedVerticals.length; i++) {
@@ -1144,9 +1151,7 @@ function optionSelected(e = false, data = false) {
               userSelectedVerticals[i].subverticals[j].expertise[k].value = val;
               userSelectedVerticals[i].subverticals[j].expertise[k].selected =
                 selected;
-              // console.log('optionSelected : userSelectedVerticals[i].subverticals[j].expertise[k]', 
-              //   userSelectedVerticals[i].subverticals[j].expertise[k]
-              // );
+              
               flag = true;
               break;
             }
@@ -1159,40 +1164,13 @@ function optionSelected(e = false, data = false) {
 
 // /////////////////////////////////////////////////
 
-let commonExpirences = [];
-let commonExpirencesOptions = ``;
-
-async function extractCommonExpirences() {
-  await db.collection("experienceTags").doc("tags").get().then(doc => {
-    const data = doc.data();
-    data.tags.map(t => {
-      commonExpirences.push(t); 
-    })
-  })
-  commonExpirencesFun();
-}
-
-function commonExpirencesFun() {
-  commonExpirences.map(exp => {
-    commonExpirencesOptions += 
-    `<option  value="${exp}" >${exp}</option> `;
-  })
-}
-
-
-// /////////////////////////////////////////////////
-
 const tablesHolderHTML = document.querySelector("#tablesHolder");
 
-async function displayExpertiseTable() {
+function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
-  if(commonExpirences.length === 0) {
-    await extractCommonExpirences();
-    commonExpirencesFun();
-  }
+
   
-  console.log('displayExpertiseTable : userSelectedVerticals', userSelectedVerticals);
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -1202,7 +1180,6 @@ async function displayExpertiseTable() {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
-      // console.log("displayExpertiseTable : sv : ", sv);
       let isDisabled = true;
       let tableHead = `
       <table class="table table-bordered">
@@ -1212,103 +1189,140 @@ async function displayExpertiseTable() {
               style="text-align: center; font-weight: 600"
               scope="col center"
             >
-              Designation 
+              Area of Expertises
               <br>
               (${sv.name})
             </th>
             <th>
               Applicable?
             </th>
-            <th>
-              Select Expertise
-            </th>
             <th
               style="text-align: center; font-weight: 600"
               scope="col"
             >
-              Your Maximum Experience
+              Your Profession / Experience
             </th>
           </tr>
         </thead>
         <tbody>`;
 
       let rows = ``;
-      let tglTxt = "";
-      let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
-      console.log(randNum);
-      sv.expertise.map((exp, index) => {
-        let rowId = `rowId_${randNum + index}`;
-        // console.log("displayExpertiseTable :sv : exp", exp);
+      let i = 0;
+      let tglTxt=""
+      sv.expertise.map((exp) => {
+        
         let options = "";
+        let rowId = `rowId${Math.random()}_${Math.random()}`;
         isDisabled = true;
-        if (exp.subCategory) {
-          exp.subCategory.map((Iop, subIndex) => {
-            // rowId = `rowId_${randNum + index}_${subIndex}`;
-            // console.log("displayExpertiseTable : sv : exp : Iop ", Iop);
-            // if (exp?.selected) {
-            //   isDisabled = false;
-            // } else {
-            //   isDisabled = true;
-            // }
+        exp.tags.map((op) => {
+          if (exp?.selected ) {
+            isDisabled = false;
+          } else {
+            isDisabled = true;
+          }
+          if (initial) {
+            if (USER.cvAdded) {
+              let flag = false;
+              for (let i = 0; i < USER.cv.expertise.length; i++) {
+                const eachSelectedVExpertise = USER.cv.expertise[i];
+                const cvv = eachSelectedVExpertise.ver;
+                if (flag) {
+                  break;
+                }
 
-            if (exp.value === Iop) {
-              options += `
-                <div class="option"  > 
-                  <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                </div>
+                for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
+                  const eachSelectedVSExpertise =
+                    eachSelectedVExpertise.svers[j];
+                  const cvsv = eachSelectedVSExpertise.sver;
+                  if (flag) {
+                    break;
+                  }
+                  for (
+                    let k = 0;
+                    k < eachSelectedVSExpertise.expertise.length;
+                    k++
+                  ) {
+                    const eachSelectedExpertise =
+                      eachSelectedVSExpertise.expertise[k];
+                    const cvCat = eachSelectedExpertise.category;
+                    const cvVal = eachSelectedExpertise.value;
+
+                    // if (flag) {
+                    //   break;
+                    // }
+
+                    if (
+                      cvv === v._id &&
+                      sv.name === cvsv &&
+                      exp.category === cvCat &&
+                      op === cvVal
+                    ) {
+                      exp.value = op;
+                      exp.selected = true;
+                      isDisabled = false
+                      flag = true;
+                      break;
+                    }
+                  }
+                }
+              }
+
+              if (flag) {
+                options += `
+                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" selected >${op}</option>
               `;
+              } else {
+                options += `
+                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
+              `;
+              }
+            }
+          } else {
+            if (exp.value === op) {
+          
+              options += `
+              <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
+            `;
             } else {
               options += `
-                <div class="option"  > 
-                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}" data-rowID="${rowId}"  value="${Iop.name}" />
-                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                </div>
-              `;
+            <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
+          `;
             }
-          });
-
-          if (isDisabled) {
-            tglTxt = "No";
-          } else {
-            tglTxt = "Yes";
           }
 
-          rows +=`
-          <tr>
-            <td>${exp.category}</td>
-            <td>
-              <label class="switch">
-              <input type="checkbox" data-rowid="${rowId}"  ${
-                isDisabled ? "" : "checked"
-              }  onchange="sliderToggle(event )"   >
-              <span class="slider round"></span>
-              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
-            </label>
-            </td>
-          
-            <td style="">
-              <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
-                  <div class="title">Select Designation</div>
-                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
-                    ${options}
-                  </div>
-              </div>
-            </td>
-            <td>
-              <select
-                disabled
-                data-rowid="${rowId}" 
-                class="selectpicker"
-                name="expertise-${rowId}"
-                style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
-              >
-              ${commonExpirencesOptions}
-              </select>
-            </td>
-          </tr>`;
+        });
+        if(isDisabled ){
+          tglTxt = "No"
+        }else{
+          tglTxt = "Yes"
         }
-       
+        rows += `
+        <tr>
+          <td>${exp.category}</td>
+          <td>
+          <label class="switch">
+          <input type="checkbox" data-rowid="${rowId}"  ${
+       isDisabled ? "" : "checked"
+    }  onchange="sliderToggle(event)"   >
+          <span class="slider round"></span>
+          <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">`+tglTxt+`</span>
+        </label>
+          </td>
+          <td>
+            <select
+              onchange="optionSelected(event)"
+              data-rowid="${rowId}" 
+              class="selectpicker"
+              name="expertise"
+              ${isDisabled ? "disabled" : ""} 
+              style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
+            >
+              ${options}
+            </select>
+          </td>
+        </tr>
+          `;
+        i++;
       });
 
       let tableBody = rows;
@@ -1316,71 +1330,141 @@ async function displayExpertiseTable() {
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
-      // setTimeout(function () {
-      //   $(function () {
-      //     $(".multiselect-ui").multiselect({
-      //       includeSelectAllOption: true,
-      //       minWidth: 300,
-      //       height: 150,
-      //       header: false,
-      //       noneSelectedText: "Select",
-      //       selectedList: 3
-      //     });
-      //   });
-      // }, 1000);
     });
 
     tables += head + table;
   });
-
   tablesHolderHTML.innerHTML = tables;
-
-  (function ($) {
-    $.fn.multiselect = function () {
-      var selector = this;
-      var options = $.extend(
-        {
-          onChange: function (val) {
-            console.log(val);
-          },
-        },
-        arguments[0] || {}
-      );
-
-      activate();
-
-      /////////
-      
-      function activate() {
-        //events
-        $(selector)
-          .find(".title")
-          .on("click", function (e) {
-            
-            $(this).parent().find(".select-options").toggle();
-          });
-
-        $(selector)
-          .find('input[type="checkbox"]')
-          .change(function (e) {
-            options.onChange.call(this);
-          });
-      }
-    };
-  })(jQuery);
-
-  $(document).ready(function () {
-    $(".select-list").multiselect({
-      onChange: updateTable,
-      disabled : true,
-    });
-  });
-
 }
 
-function updateTable() {
-  var checkboxValue = $(this).val();
-  var isChecked = $(this).is(":checked");
+// //////////////////////////////////////////
+const cvUrlHTML = document.querySelector("#cvUrl");
+const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
+const verticalsTablesHTML = document.querySelector("#verticalsTables");
+const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
+const workCountryHTML = document.querySelector('#work-country');
+const workStatesHTML = document.querySelector('#work-states');
+const stsHTML = document.querySelector('#sts');
+
+async function displayCvDetails() {
+  if (USER.cvAdded) {
+    cvUrlHTML.href = USER.cv.url;
+    verticalsBtnsHTML.innerHTML = ``;
+
+   
+    workCountryHTML.innerText = USER.cv.workCountry;
+
+    let states ="<ul>";
+    USER.cv.workStates.map(s => {
+      states += `<li>${s}</li>`
+    })
+    states += `</ul>`;
+    workStatesHTML.innerHTML = states;
+
+    cvFormHTML['country'].value = USER.cv.workCountry;
+    let optionsState = ""
+    document.getElementById("sts").innerHTML = `
+		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+    USER.cv.workStates.map((s) => {
+      optionsState += `<option value="${s}" selected>${s}</option>`;
+      oldStateArr.push(s)
+    });
+      
+    populateStates("country","state")
+    setTimeout(function () {
+      document.getElementById("state").innerHTML += optionsState
+      new Choices("#state", {
+        removeItemButton: true,
+        maxItemCount: 100,
+        searchResultLimit: 100,
+        renderChoiceLimit: 100,
+      });
+      document.getElementById("stateOpt").style.display = "block";
+    }, 500);
+      
+    USER.cv.verticals.map((v, i) => {
+      verticalsBtnsHTML.innerHTML += `
+      <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
+      `;
+    });
+  
+    USER.cv.expertise.map(async (v) => {
+      let name = await getNameOfId(v.ver);
+      let head = `
+      <div id="${v.ver}" class="collapse">
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr style="text-align: center">
+              <th
+                style="text-align: center; font-weight: 600"
+                scope="col"
+              >
+                Sub-Vertical [${name}]
+              </th>
+              <th
+                style="text-align: center; font-weight: 600"
+                scope="col"
+              >
+                Expertise
+              </th>
+              <th
+                style="text-align: center; font-weight: 600"
+                scope="col"
+              >
+                Experience
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      let body = ``;
+      let rows = "";
+      v.svers.map((sv) => {
+        sv.expertise.map((e) => {
+          rows += `
+          <tr>
+            <td>
+            ${sv.sver}
+            </td>
+            <td>
+              ${e.category}
+            </td>
+            <td>
+              ${e.value}
+            </td>
+          </tr>
+          `;
+        });
+        body = rows;
+      });
+
+      let end = `
+        </table>
+      </div>
+      `;
+
+      let whole = head + body + end;
+      verticalsTablesHTML.innerHTML += whole;
+    });
+
+      
+    editCvUrlHolderHTML.innerHTML = `
+    <a target="_blank" href="${USER.cv.url}" >
+      <label
+        class="btn btn-tertiary js-labelFile"
+        style="background-color: transparent"
+      >
+        <i class="icon fa fa-eye"></i>
+        <span class="js-fileName"
+          >View Your CSV</span
+        >
+      </label>
+    </a>
+    
+    `
+    ;
+  }
 }
 
 // //////////////////////////////////////////
@@ -1403,53 +1487,160 @@ function getNameOfId(id) {
   return name;
 }
 
+// //////////////////////////////////////////
 
+let IMG = false;
+let IMG_NAME = false;
+
+const userImageHTML = document.querySelector("#userImage");
+
+const uploadImgLocal = (e) => {
+  if (!USER.basicInfoAdded) {
+    nowuiDashboard.showNotification('top','center',"Please add all your details in order to update the profile image","primary");
+    blahHTML.src = `../assets/img/userProfile.png`;
+    return;
+  }
+  readURL(e);
+  IMG = e.target.files[0];
+  IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
+  uploadImgToDB();
+};
+
+userImageHTML.addEventListener("change", uploadImgLocal);
+// //////////////////////////////////////////
+
+let retryImgStorage = 0;
+const uploadImgToStorage = async ({ ref }) => {
+  try {
+    await storage.ref(`${ref}/${USER.uid}`).child(IMG_NAME).put(IMG);
+    return {
+      status: true,
+      message: "Uplading to file to storage success",
+    };
+  } catch (error) {
+    console.error(error);
+    if (retryImgStorage < 2) {
+      retryImgStorage++;
+      alert(`Retry. Attempt: ${retryImgStorage} Reason: ${error.message} `);
+      uploadImgToStorage({ ref });
+    } else {
+      return {
+        status: false,
+        message: `Failed to upload file to stoarge. Reason: ${error.message}`,
+      };
+    }
+  }
+};
 
 // /////////////////////////////////////////////////////////
 
-function checkFileType({ file, fileTypes }) {
-  // console.log('checkFileType : file ',file);
-  let fExt = file.name.split(".");
-  fExt = fExt[fExt.length - 1];
-
-  const fileIndex = fileTypes.findIndex((type) => type === fExt);
-  // console.log(`checkFileType : fileIndex `,fileIndex);
-  if (fileIndex === -1) {
+let retryImgURL = 0;
+const getUrlOfImg = async ({ ref }) => {
+  try {
+    const url = await storage
+      .ref(`${ref}/${USER.uid}`)
+      .child(IMG_NAME)
+      .getDownloadURL();
     return {
-      status: false,
-      message: "wrong file extension uploaded",
+      status: true,
+      message: "Success. Fetched the file from storage.",
+      data: {
+        url,
+      },
     };
+  } catch (error) {
+    console.error(error);
+    if (retryImgURL < 2) {
+      retryImgURL++;
+      alert(`Retry. Attempt: ${retryImgURL} Reason: ${error.message} `);
+      getUrlOfImg({ ref });
+    } else {
+      return {
+        status: false,
+        message: `Failed to fetch the file from stoarge. Reason: ${error.message}`,
+      };
+    }
+  }
+};
+
+// /////////////////////////////////////////////////////////
+
+async function uploadImgToDB() {
+  const data = USER;
+  document.getElementById("progressBar").style.display="block"
+  if (USER.basicInfo.imgUrl) {
+    const resDelete = await deleteStorage({
+      ref: `${USER.userType}s/${USER_ID}`,
+      fileName: USER.basicInfo.imgName,
+    });
   }
 
-  if (file.size > 5000000) {
-    return {
-      status: false,
-      message: "too large file",
-    };
+  const resStorage = await uploadImgToStorage({ ref: `${USER.userType}s` });
+
+  if (!resStorage.status) {
+    
+    nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
+    return;
+  }
+  const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
+  if (!resUrl.status) {
+   
+    nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
+    return;
   }
 
-  return {
-    status: true,
-  };
+  data.basicInfo.imgName = IMG_NAME;
+  data.basicInfo.imgUrl = resUrl.data.url;
+
+  await USER_REF.update(data);
+  getUserDetails({ uid: USER_ID, userType: USER.userType });
+  
+  nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
+  document.getElementById("progressBar").style.display="none"
 }
 
 // /////////////////////////////////////////////////////////
-// let retryLogout = 0;
+let retryLogout = 0;
 
-// function logoutUser() {
-//   auth
-//     .signOut()
-//     .then(() => {
-//       // Sign-out successful.
-//       window.location.href = "./../adminDash.html";
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       if (retryLogout < 2) {
-//         retryLogout++;
-//         logoutUser();
-//       } else {
-//         alert(`unable to logout at moment. Reason: ${error.message}`);
-//       }
-//     });
-// }
+function logoutUser() {
+  auth.signOut().then(() => {
+    // Sign-out successful.
+    window.location.href="./../index.html"
+  }).catch((error) => {
+    console.error(error);
+    if(retryLogout < 2) {
+      retryLogout++;
+      logoutUser();
+    } else {
+      alert(`unable to logout at moment. Reason: ${error.message}`)
+    }
+  });
+}
+
+// ////////////////////
+
+function checkFileType({file, fileTypes}) {
+
+  let fExt = file.name.split('.');
+  fExt = fExt[fExt.length -1]
+
+  const fileIndex = fileTypes.findIndex(type => type === fExt);
+
+  if(fileIndex === -1) {
+    return {
+      status: false,
+      message: 'wrong file extension uploaded'
+    }
+  }
+
+  if(file.size > 3000000) {
+    return {
+      status: false,
+      message: 'too large file'
+    }
+  }
+
+  return {
+    status: true
+  }
+}
