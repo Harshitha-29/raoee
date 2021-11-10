@@ -1118,7 +1118,7 @@ async function displayExpertiseTable() {
                 if(Iop.name!="None" && Iop.name!="none"){
             
                 options += `
-                <div class="option"  > 
+                <div class="option"> 
                   <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
@@ -1157,7 +1157,7 @@ async function displayExpertiseTable() {
           
             <td style="">
               <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
-                  <div class="title">Select Designation</div>
+                  <div class="title" id="title_`+rowId+`">Select Designation</div>
                   <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
                   </div>
@@ -1175,6 +1175,14 @@ async function displayExpertiseTable() {
               </select>
             </td>
           </tr>`;
+          setTimeout(function(){
+            if(options.includes("hidden")){
+              
+              document.getElementById("select-list_"+rowId).classList.remove("select-list")
+              document.getElementById("title_"+rowId).innerHTML="----"
+            }
+          },500)
+          
         }
        
       });
