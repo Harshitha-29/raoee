@@ -195,7 +195,10 @@ async function getCreatedUser({ collectionName, uid }) {
 
 function getUserPreferences() {
   const cvVerticals = [];
-  document.querySelectorAll(`input[name=designation_checkbox]:checked`).forEach((e) => {
+  //document.querySelectorAll(`input[name=designation_checkbox]:checked`).forEach((e) => {
+    for(let i=0;i<document.querySelectorAll(`input[name=designation_checkbox]:checked`).length;i++){
+
+    const e = document.querySelectorAll(`input[name=designation_checkbox]:checked`)[i];
     const all = e.id.split("__");
     const selectedVId = all[0];
     const selectedVName = all[1];
@@ -203,6 +206,10 @@ function getUserPreferences() {
     const profession = all[3];
     const designation = all[4];
     const index = all[5];
+    if(!document.querySelector(`input[name=slider_${index}]:checked`)  ){
+      console.log(!document.querySelector(`input[name=slider_${index}]:checked`))
+      continue ;
+    }
 
     const value = document.querySelector(`select[name=expertise-${index}`).value;
       cvVerticals.push({
@@ -213,9 +220,14 @@ function getUserPreferences() {
         designation,
         value
       });
-  });
-  console.log('getUserPreferences : cvVerticals',cvVerticals);
+  }
 
+  console.log('getUserPreferences : cvVerticals',cvVerticals);
+  if(cvVerticals.length==0){
+    document.getElementById("progressBar").style.display = "none";
+    alert("Select atleast 1 Designation")
+    return;
+  }
   const vv = [];
   const sv = [];
   const prof = [];
@@ -900,9 +912,10 @@ function getSelectedVerticals(initial = false) {
 // /////////////////////////////////////////////////
 
 function sliderToggle(e ) {
-  console.log(e.target.dataset)
+  
   const eleRowId = e.target.dataset.rowid;
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
+
   document.addEventListener("click", (evt) => {
     const flyoutElement = document.querySelector(".select-list");
     let targetElement = evt.target; // clicked element
@@ -910,7 +923,7 @@ function sliderToggle(e ) {
     do {
         if (targetElement == flyoutElement) {
             // This is a click inside. Do nothing, just return.
-            console.log("Clicked inside!");
+            
 
             return;
         }
@@ -919,14 +932,14 @@ function sliderToggle(e ) {
     } while (targetElement);
   
     // This is a click outside.
-    console.log("now")
+  
     document.querySelector(".select-options").style.display = "none";
    
     
   });
   if (e.target.checked) {
     
-    el.disabled = false;
+    el.disabled=false;
     
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
     document.getElementById("select-list_"+eleRowId).style.opacity = 1;
@@ -1093,6 +1106,7 @@ async function displayExpertiseTable() {
             // }
 
             if (exp.value === Iop) {
+            
               options += `
                 <div class="option"  > 
                   <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1100,12 +1114,24 @@ async function displayExpertiseTable() {
                 </div>
               `;
             } else {
-              options += `
+              
+                if(Iop.name!="None" && Iop.name!="none"){
+            
+                options += `
                 <div class="option"  > 
-                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}" data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
+              }else{
+                options += `
+                <div class="option" hidden > 
+                  <input hidden checked type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
+                </div>
+              `;
+              }
+              
             }
           });
 
@@ -1114,13 +1140,14 @@ async function displayExpertiseTable() {
           } else {
             tglTxt = "Yes";
           }
-
+     
+          
           rows +=`
           <tr>
             <td>${exp.category}</td>
             <td>
               <label class="switch">
-              <input type="checkbox" data-rowid="${rowId}"  ${
+              <input type="checkbox" name="slider_${rowId}"  data-rowid="${rowId}"  ${
                 isDisabled ? "" : "checked"
               }  onchange="sliderToggle(event )"   >
               <span class="slider round"></span>
