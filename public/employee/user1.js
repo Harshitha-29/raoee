@@ -718,7 +718,6 @@ cvFormHTML["cv-file"].addEventListener("change", uploadCVFile);
 // /////////////////////////////////////////////////////////
 
 
-
 let VERTICALS = [];
 
 db.collection("verticals").onSnapshot(async (snaps) => {
@@ -1059,9 +1058,10 @@ function getSelectedVerticals(initial = false) {
 // /////////////////////////////////////////////////
 
 function sliderToggle(e ) {
-  console.log(e.target.dataset)
+  
   const eleRowId = e.target.dataset.rowid;
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
+
   document.addEventListener("click", (evt) => {
     const flyoutElement = document.querySelector(".select-list");
     let targetElement = evt.target; // clicked element
@@ -1069,7 +1069,7 @@ function sliderToggle(e ) {
     do {
         if (targetElement == flyoutElement) {
             // This is a click inside. Do nothing, just return.
-            console.log("Clicked inside!");
+            
 
             return;
         }
@@ -1078,14 +1078,14 @@ function sliderToggle(e ) {
     } while (targetElement);
   
     // This is a click outside.
-    console.log("now")
+  
     document.querySelector(".select-options").style.display = "none";
    
     
   });
   if (e.target.checked) {
     
-    el.disabled = false;
+    el.disabled=false;
     
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
     document.getElementById("select-list_"+eleRowId).style.opacity = 1;
@@ -1252,6 +1252,7 @@ async function displayExpertiseTable() {
             // }
 
             if (exp.value === Iop) {
+            
               options += `
                 <div class="option"  > 
                   <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1259,12 +1260,24 @@ async function displayExpertiseTable() {
                 </div>
               `;
             } else {
-              options += `
-                <div class="option"  > 
-                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}" data-rowID="${rowId}"  value="${Iop.name}" />
+              
+                if(Iop.name!="None" && Iop.name!="none"){
+            
+                options += `
+                <div class="option"> 
+                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
+              }else{
+                options += `
+                <div class="option" hidden > 
+                  <input hidden checked type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
+                </div>
+              `;
+              }
+              
             }
           });
 
@@ -1273,13 +1286,14 @@ async function displayExpertiseTable() {
           } else {
             tglTxt = "Yes";
           }
-
+     
+          
           rows +=`
           <tr>
             <td>${exp.category}</td>
             <td>
               <label class="switch">
-              <input type="checkbox" data-rowid="${rowId}"  ${
+              <input type="checkbox" name="slider_${rowId}"  data-rowid="${rowId}"  ${
                 isDisabled ? "" : "checked"
               }  onchange="sliderToggle(event )"   >
               <span class="slider round"></span>
@@ -1289,7 +1303,7 @@ async function displayExpertiseTable() {
           
             <td style="">
               <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
-                  <div class="title">Select Designation</div>
+                  <div class="title" id="title_`+rowId+`">Select Designation</div>
                   <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
                   </div>
@@ -1307,6 +1321,14 @@ async function displayExpertiseTable() {
               </select>
             </td>
           </tr>`;
+          setTimeout(function(){
+            if(options.includes("hidden")){
+              
+              document.getElementById("select-list_"+rowId).classList.remove("select-list")
+              document.getElementById("title_"+rowId).innerHTML="----"
+            }
+          },500)
+          
         }
        
       });
