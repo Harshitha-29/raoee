@@ -7633,6 +7633,16 @@ input[type="button"].btn-block {
   position: relative;
   z-index: 1;
 }
+.treeview__level3 {
+  padding: 3px;
+  padding-left: 42.5px;
+  display: inline-block;
+  border-radius: 5px;
+  font-weight: 700;
+  border: 1px solid #e3e5ef;
+  position: relative;
+  z-index: 1;
+}
 .treeview__level:before {
   content: attr(data-level);
   position: absolute;
@@ -7662,6 +7672,22 @@ input[type="button"].btn-block {
   border-radius: 20%;
   border: 7.5px solid #eef6d5;
   background-color: gray;
+  color: #fff;
+  font-size: 12px;
+}
+.treeview__level3:before {
+  content: attr(data-level);
+  position: absolute;
+  left: -27.5px;
+  top: -6.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  width: 45px;
+  border-radius: 20%;
+  border: 7.5px solid #eef6d5;
+  background-color: pink;
   color: #fff;
   font-size: 12px;
 }

@@ -169,39 +169,43 @@ function displayDataTable() {
     console.log(d);
     let allVerticals = "";
     d.verticals.map((v) => {
-      allVerticals += `, ${v.name}`;
+      allVerticals += `,${v.name}`;
     });
-    allVerticals = allVerticals.substring(2);
+    allVerticals = allVerticals.substring(1);
 
     let allSubVerticals = "";
     d.subVerticals.map((v) => {
       // v.sver.map(sv => {
       //   allSubVerticals += `, ${sv}`
       // })
-      allSubVerticals += v.sver.join(", ");
+      console.log(v.sver)
+      allSubVerticals += `,${v.sver}`;
+      console.log(allSubVerticals )
     });
+    allSubVerticals = allSubVerticals.substring(1);
 
     // allSubVerticals = allSubVerticals.substring(1, allSubVerticals.length)
 
     let allCategories = "";
     let allValues = "";
 
-    d.expertise.map((v) => {
+    d.professions.map((v) => {
       v.svers.map((sv) => {
-        sv.expertise.map((e) => {
-          allCategories += `${e.category}, `;
-          allValues += `${e.value}, `;
+        sv.profs.map((e) => {
+          allCategories += `, ${e.prof}`;
+         
         });
       });
     });
-
+    allCategories = allCategories.substring(1);
+    allValues = allValues.substring(1);
     rows +=
       `<tr id="user-row-${index}">
       <td>${d.fname} ${d.lname}</td>
       <td>${allVerticals}</td>
       <td>${allSubVerticals}</td>
       <td>${allCategories}</td>
-      <td>${allValues}</td>
+      <td>${d.workCity}</td>
       <td>
       <div class="dropdown">
       <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

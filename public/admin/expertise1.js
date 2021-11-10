@@ -220,8 +220,7 @@ const expertiseForm = async (e) => {
       let subVer = document.getElementById(
         subVerId
       ).value;
-      console.log(subVer)
-     
+      console.log(subVer)     
       let docRef = db.collection("verticals").doc(ver);
 
       let fetchedArr = [];
@@ -234,7 +233,7 @@ const expertiseForm = async (e) => {
         .get()
         .then((doc) => {
           if (doc.exists) {
-            console.log("Document data:", doc.data());
+          
             for (let i in doc.data().expertise) {
               fetchedArr.push(doc.data().expertise[i]);
               if (
