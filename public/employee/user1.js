@@ -344,10 +344,20 @@ function getUserPreferences() {
 // /////////////////////////////////////////////////////////
 
 let statesSelected = [];
-
+let countrySelected = [];
 function selectedState(e) {
+ 
   if (e) {
+    
     statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
+function selectedCountry(e) {
+  
+  if (e) {
+    countrySelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
     );
   }
@@ -364,9 +374,9 @@ const updateCv = async (e) => {
   e.preventDefault();
   document.getElementById("progressBar2").style.display="block";
 
-  const workCountry = cvFormHTML['country'].value;
+  //const workCountry = cvFormHTML['country'].value;
   
-  if(workCountry === -1 || statesSelected.length === 0 ) {
+  if(countrySelected === 0 || statesSelected.length === 0 ) {
     if(oldStateArr.length==0){
       document.getElementById("progressBar2").style.display="none"
       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
@@ -426,7 +436,7 @@ const updateCv = async (e) => {
   data.userId = USER.uid;
   data.fname = USER.fname;
   data.lname = USER.lname;
-  data.workCountry = workCountry;
+  data.workCountry = countrySelected;
   data.workStates = statesSelected;
  
   const resDB = await uploadCVToDb({ data });
@@ -444,7 +454,7 @@ const updateCv = async (e) => {
     url: FILE_NAME ? resURL.data.url : USER.cv.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
-    workCountry,
+    workCountry:countrySelected,
     workStates: statesSelected
   };
 

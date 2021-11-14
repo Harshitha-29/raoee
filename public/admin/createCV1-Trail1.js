@@ -39,9 +39,9 @@ const updateBasicInfo = async () => {
   const userType = "employee";
   let createRes;
 
-  const workCountry = employeeFormHTML["country"].value;
+  //const workCountry = employeeFormHTML["country"].value;
 
-  if (workCountry === -1 || statesSelected.length === 0) {
+  if (countrySelected===0 || statesSelected.length === 0) {
     alert(
       "enter the preffered country and state where user emplyee wants to work"
     );
@@ -49,7 +49,8 @@ const updateBasicInfo = async () => {
       status: false,
     };
   }
-
+  
+  
   if (!RAW_USER.email) {
     await onStateChange();
   }
@@ -296,10 +297,20 @@ function getUserPreferences() {
 
 // /////////////////////////////////////////////////////////
 let statesSelected = [];
-
+let countrySelected = [];
 function selectedState(e) {
+ 
   if (e) {
+    
     statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
+function selectedCountry(e) {
+  
+  if (e) {
+    countrySelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
     );
   }
@@ -318,7 +329,8 @@ const updateCv = async (e) => {
   }
   const userType = "employee";
 
-  const workCountry = employeeFormHTML["country"].value;
+  // const workCountry = employeeFormHTML["country"].value;
+  //const workCountry:countrySelected = countrySelected;
   const workCity = employeeFormHTML["work-city"].value;
   const experienceYear = employeeFormHTML['experienceYear'].value;
 
@@ -362,7 +374,7 @@ const updateCv = async (e) => {
   data.userId = USER_CREATED_ID;
   data.fname = employeeFormHTML["fname"].value || "";
   data.lname = employeeFormHTML["lname"].value || "";
-  data.workCountry = workCountry;
+  data.workCountry= countrySelected;
   data.workStates = statesSelected;
   data.workCity = workCity;
   data.yearExpirence = experienceYear;
@@ -383,7 +395,7 @@ const updateCv = async (e) => {
     url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
-    workCountry,
+    workCountry:countrySelected,
     workStates: statesSelected,
     workCity,
     yearExpirence : experienceYear
