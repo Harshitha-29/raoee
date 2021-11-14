@@ -1070,10 +1070,12 @@ async function displayExpertiseTable() {
               <br>
               (${sv.name})
             </th>
-            <th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
               Applicable?
             </th>
-            <th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
               Select Expertise
             </th>
             <th
@@ -1109,7 +1111,7 @@ async function displayExpertiseTable() {
             
               options += `
                 <div class="option"  > 
-                  <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                  <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
@@ -1119,14 +1121,14 @@ async function displayExpertiseTable() {
             
                 options += `
                 <div class="option"> 
-                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
               }else{
                 options += `
                 <div class="option" hidden > 
-                  <input hidden checked type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
                 </div>
               `;
@@ -1157,8 +1159,8 @@ async function displayExpertiseTable() {
           
             <td style="">
               <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
-                  <div class="title" id="title_`+rowId+`">Select Designation</div>
-                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
+                  <div class="title" id="title_`+rowId+`">Select Expertise</div>
+                  <div class="select-options" style="max-height:300px;overflow-y:scroll;" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
                   </div>
               </div>
