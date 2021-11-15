@@ -762,6 +762,7 @@ function displaySubVerticalDropdown() {
   // console.log('displaySubVerticalDropdown : userSelectedMainVerticals ',userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
+      
       let flag = "";
       for (let i = 0; i < subVerticalsSelected.length; i++) {
         if (subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
@@ -769,7 +770,8 @@ function displaySubVerticalDropdown() {
           break;
         }
       }
-      options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
+      if(sv.expertise.length>0)
+        options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
     });
   });
 
@@ -1077,7 +1079,7 @@ async function displayExpertiseTable() {
     commonExpirencesFun();
   }
   
-  console.log('displayExpertiseTable : userSelectedVerticals', userSelectedVerticals);
+  
   userSelectedVerticals.map((v) => {
     let head = `
     <h6 style="font-weight: 600">
@@ -1094,7 +1096,7 @@ async function displayExpertiseTable() {
       let rows = ``;
       let tglTxt = "";
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
-      console.log(randNum);
+      
       var rowId;
       sv.expertise.map((exp, index) => {
         rowId = `rowId_${randNum + index}`;
@@ -1112,7 +1114,7 @@ async function displayExpertiseTable() {
             // }
 
             if (exp.value === Iop) {
-            
+           
               options += `
                 <div class="option"  > 
                   <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1120,7 +1122,7 @@ async function displayExpertiseTable() {
                 </div>
               `;
             } else {
-              
+             
                 if(Iop.name!="None" && Iop.name!="none"){
             
                 options += `
