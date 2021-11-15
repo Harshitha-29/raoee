@@ -923,11 +923,14 @@ function getSelectedVerticals(initial = false) {
 
 // /////////////////////////////////////////////////
 
-function sliderToggle(e ) {
+function sliderToggle(e) {
   
   const eleRowId = e.target.dataset.rowid;
+  console.log(eleRowId)
+  let numId=(eleRowId.substring(6)) 
+ 
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
-
+  
   document.addEventListener("click", (evt) => {
     const flyoutElement = document.querySelector(".select-list");
     let targetElement = evt.target; // clicked element
@@ -949,17 +952,33 @@ function sliderToggle(e ) {
    
     
   });
+  var table_id= ("table_"+eleRowId.substring(6,8))
   if (e.target.checked) {
-    
+
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+
+      if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
+        
+        document.getElementById(tog_id).disabled=true;
+      }
+    }
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents
+   
     el.disabled=false;
-    
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
     document.getElementById("select-list_"+eleRowId).style.opacity = 1;
     document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
+
   } else {
-    // idVal.disable();
-    
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+      if(table_id.substring(6) == tog_id.substring(13,15))
+        document.getElementById(tog_id).disabled=false;  
+    }
     document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
@@ -1070,42 +1089,15 @@ async function displayExpertiseTable() {
     v.subverticals.map((sv) => {
       // console.log("displayExpertiseTable : sv : ", sv);
       let isDisabled = true;
-      let tableHead = `
-      <table class="table table-bordered">
-        <thead class="thead-dark">
-          <tr style="text-align: center">
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col center"
-            >
-              Designation 
-              <br>
-              (${sv.name})
-            </th>
-            <th  style="text-align: center; font-weight: 600"
-            scope="col center">
-              Applicable?
-            </th>
-            <th  style="text-align: center; font-weight: 600"
-            scope="col center">
-              Select Expertise
-            </th>
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col"
-            >
-              Your Maximum Experience
-            </th>
-          </tr>
-        </thead>
-        <tbody>`;
+     
 
       let rows = ``;
       let tglTxt = "";
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
       console.log(randNum);
+      var rowId;
       sv.expertise.map((exp, index) => {
-        let rowId = `rowId_${randNum + index}`;
+        rowId = `rowId_${randNum + index}`;
         // console.log("displayExpertiseTable :sv : exp", exp);
         let options = "";
         isDisabled = true;
@@ -1161,9 +1153,9 @@ async function displayExpertiseTable() {
             <td>${exp.category}</td>
             <td>
               <label class="switch">
-              <input type="checkbox" name="slider_${rowId}"  data-rowid="${rowId}"  ${
+              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"  data-rowid="${rowId}"  ${
                 isDisabled ? "" : "checked"
-              }  onchange="sliderToggle(event )"   >
+              }  onchange="sliderToggle(event)"   >
               <span class="slider round"></span>
               <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
             </label>
@@ -1200,7 +1192,35 @@ async function displayExpertiseTable() {
         }
        
       });
-
+      let tableHead = `
+      <table id="table_${rowId.substring(6,8)}" class="table table-bordered">
+        <thead class="thead-dark">
+          <tr style="text-align: center">
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col center"
+            >
+              Designation 
+              <br>
+              (${sv.name})
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Applicable?
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Select Expertise
+            </th>
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Your Maximum Experience
+            </th>
+          </tr>
+        </thead>
+        <tbody>`;
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
