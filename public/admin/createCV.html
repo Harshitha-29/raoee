@@ -53,6 +53,7 @@
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    
   </head>
   <style>
     .select-list {
@@ -94,7 +95,7 @@
   background: #eaeaec;
 }
 .select-list .select-options .option input {
-  margin: 10px 0 12px 15px;
+  margin: 10px 0 0px 15px;
 }
 
     .choices__inner {
@@ -519,7 +520,7 @@ code {
                             <div class="form-group">
                               <label>Prefered Country to work</label>
                               <div >
-                                 <select required style="padding: 7px;width: 85%;" id="country" name ="country" multiple></select> 
+                                 <select required style="padding: 7px;width: 85%;" id="country" name ="country" onchange=selectedCountry(event) multiple></select> 
                               </div>
                             </div>
                           </div>
@@ -596,7 +597,7 @@ code {
                               </div>
                             </div>
                           </div>
-                          <div id="tablesHolder">
+                          <div class="table-responsive" id="tablesHolder">
                             <!-- <h6 style="font-weight: 600">
                               Select Expertise (
                               <b style="color: red">Vertical Selected : Signalling</b> )

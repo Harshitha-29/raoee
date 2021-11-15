@@ -39,9 +39,9 @@ const updateBasicInfo = async () => {
   const userType = "employee";
   let createRes;
 
-  const workCountry = employeeFormHTML["country"].value;
+  //const workCountry = employeeFormHTML["country"].value;
 
-  if (workCountry === -1 || statesSelected.length === 0) {
+  if (countrySelected===0 || statesSelected.length === 0) {
     alert(
       "enter the preffered country and state where user emplyee wants to work"
     );
@@ -49,7 +49,8 @@ const updateBasicInfo = async () => {
       status: false,
     };
   }
-
+  
+  
   if (!RAW_USER.email) {
     await onStateChange();
   }
@@ -296,10 +297,20 @@ function getUserPreferences() {
 
 // /////////////////////////////////////////////////////////
 let statesSelected = [];
-
+let countrySelected = [];
 function selectedState(e) {
+ 
   if (e) {
+    
     statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
+function selectedCountry(e) {
+  
+  if (e) {
+    countrySelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
     );
   }
@@ -318,7 +329,8 @@ const updateCv = async (e) => {
   }
   const userType = "employee";
 
-  const workCountry = employeeFormHTML["country"].value;
+  // const workCountry = employeeFormHTML["country"].value;
+  //const workCountry:countrySelected = countrySelected;
   const workCity = employeeFormHTML["work-city"].value;
   const experienceYear = employeeFormHTML['experienceYear'].value;
 
@@ -362,7 +374,7 @@ const updateCv = async (e) => {
   data.userId = USER_CREATED_ID;
   data.fname = employeeFormHTML["fname"].value || "";
   data.lname = employeeFormHTML["lname"].value || "";
-  data.workCountry = workCountry;
+  data.workCountry= countrySelected;
   data.workStates = statesSelected;
   data.workCity = workCity;
   data.yearExpirence = experienceYear;
@@ -383,7 +395,7 @@ const updateCv = async (e) => {
     url: resURL.data.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
-    workCountry,
+    workCountry:countrySelected,
     workStates: statesSelected,
     workCity,
     yearExpirence : experienceYear
@@ -1070,10 +1082,12 @@ async function displayExpertiseTable() {
               <br>
               (${sv.name})
             </th>
-            <th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
               Applicable?
             </th>
-            <th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
               Select Expertise
             </th>
             <th
@@ -1109,7 +1123,7 @@ async function displayExpertiseTable() {
             
               options += `
                 <div class="option"  > 
-                  <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                  <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
@@ -1119,14 +1133,14 @@ async function displayExpertiseTable() {
             
                 options += `
                 <div class="option"> 
-                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
               }else{
                 options += `
                 <div class="option" hidden > 
-                  <input hidden checked type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
                 </div>
               `;
@@ -1157,8 +1171,8 @@ async function displayExpertiseTable() {
           
             <td style="">
               <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
-                  <div class="title" id="title_`+rowId+`">Select Designation</div>
-                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
+                  <div class="title" id="title_`+rowId+`">Select Expertise</div>
+                  <div class="select-options" style="max-height:300px;overflow-y:scroll;" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
                   </div>
               </div>

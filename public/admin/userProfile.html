@@ -509,7 +509,7 @@
         USER_REF = await db.collection(userType).doc(uid);
         const refDoc = await USER_REF.get();
         USER = await refDoc.data();
-       
+        console.log(USER)
         document.title = USER.fname
         if(USER.basicInfoAdded==true){
         console.log(USER)

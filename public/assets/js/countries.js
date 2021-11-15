@@ -691,11 +691,11 @@ function populateStates(countryElementId, stateElementId) {
   for(let k in selectedCountry){
     var selectedCountryIndex =
     selectedCountry[k].choiceId;
-    console.log(selectedCountry[k])
+
     var stateElement = document.getElementById(stateElementId);
      //stateElement.length = 0; // Fixed by Julian Woods
     // stateElement.options[0] = new Option('Select State','');
-    stateElement.selectedIndex = 0;
+    //stateElement.selectedIndex = 0;
     var state_arr = s_a[selectedCountryIndex].split("|");
     for (var i = 0; i < state_arr.length; i++) {
     
@@ -715,6 +715,9 @@ function populateCountries(countryElementId, stateElementId) {
   // given the id of the <select> tag as function argument, it inserts <option> tags
   var countryElement = document.getElementById(countryElementId);
   countryElement.length = 0;
+  $(countryElement).change(function(e){
+    selectedCountry(e)
+  });
   // countryElement.options[0] = new Option("Select Country", "-1");
   // countryElement.selectedIndex = 0;
   for (var i = 0; i < country_arr.length; i++) {

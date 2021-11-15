@@ -344,10 +344,20 @@ function getUserPreferences() {
 // /////////////////////////////////////////////////////////
 
 let statesSelected = [];
-
+let countrySelected = [];
 function selectedState(e) {
+ 
   if (e) {
+    
     statesSelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
+function selectedCountry(e) {
+  
+  if (e) {
+    countrySelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
     );
   }
@@ -364,9 +374,9 @@ const updateCv = async (e) => {
   e.preventDefault();
   document.getElementById("progressBar2").style.display="block";
 
-  const workCountry = cvFormHTML['country'].value;
+  //const workCountry = cvFormHTML['country'].value;
   
-  if(workCountry === -1 || statesSelected.length === 0 ) {
+  if(countrySelected === 0 || statesSelected.length === 0 ) {
     if(oldStateArr.length==0){
       document.getElementById("progressBar2").style.display="none"
       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
@@ -426,7 +436,7 @@ const updateCv = async (e) => {
   data.userId = USER.uid;
   data.fname = USER.fname;
   data.lname = USER.lname;
-  data.workCountry = workCountry;
+  data.workCountry = countrySelected;
   data.workStates = statesSelected;
  
   const resDB = await uploadCVToDb({ data });
@@ -444,7 +454,7 @@ const updateCv = async (e) => {
     url: FILE_NAME ? resURL.data.url : USER.cv.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
-    workCountry,
+    workCountry:countrySelected,
     workStates: statesSelected
   };
 
@@ -1255,7 +1265,7 @@ async function displayExpertiseTable() {
             
               options += `
                 <div class="option"  > 
-                  <input  type="checkbox" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                  <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
@@ -1265,14 +1275,14 @@ async function displayExpertiseTable() {
             
                 options += `
                 <div class="option"> 
-                  <input  type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
               `;
               }else{
                 options += `
                 <div class="option" hidden > 
-                  <input hidden checked type="checkbox" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
                 </div>
               `;
@@ -1304,7 +1314,7 @@ async function displayExpertiseTable() {
             <td style="">
               <div class="select-list" id="select-list_`+rowId+`" style="pointer-events:none;opacity:0.4"  >
                   <div class="title" id="title_`+rowId+`">Select Designation</div>
-                  <div class="select-options" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
+                  <div class="select-options" style="max-height:250px;overflow-y:scroll" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
                   </div>
               </div>
