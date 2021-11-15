@@ -1056,10 +1056,11 @@ async function extractCommonExpirences() {
       commonExpirences.push(t); 
     })
   })
-  commonExpirencesFun();
+  
 }
 
 function commonExpirencesFun() {
+  console.log("came")
   commonExpirences.map(exp => {
     commonExpirencesOptions += 
     `<option  value="${exp}" >${exp}</option> `;
