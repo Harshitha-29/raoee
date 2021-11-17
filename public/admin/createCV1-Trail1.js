@@ -65,14 +65,14 @@ const updateBasicInfo = async () => {
       };
     }
   }
-  console.log("updateBasicInfo : user created : id", createRes.data.uid);
+  //console.log("updateBasicInfo : user created : id", createRes.data.uid);
 
   USER_CREATED_ID = createRes.data.uid;
   USER_CREATED_REF = await db
     .collection(`${userType}s`)
     .doc(createRes.data.uid);
 
-  console.log('updateBasicInfo : RAW_USER ', RAW_USER);
+  //console.log('updateBasicInfo : RAW_USER ', RAW_USER);
 
   const signinAdminRes = await signinAdmin({
     email: RAW_USER.email,
@@ -84,7 +84,7 @@ const updateBasicInfo = async () => {
       status: false,
     };
   }
-  console.log("updateBasicInfo : admin logged in");
+  //console.log("updateBasicInfo : admin logged in");
 
   const fname = employeeFormHTML["fname"].value || "";
   const lname = employeeFormHTML["lname"].value || "";
@@ -208,7 +208,7 @@ function getUserPreferences() {
     const designation = all[4];
     const index = all[5];
     if(!document.querySelector(`input[name=slider_${index}]:checked`)  ){
-      console.log(!document.querySelector(`input[name=slider_${index}]:checked`))
+     // console.log(!document.querySelector(`input[name=slider_${index}]:checked`))
       continue ;
     }
 
@@ -223,7 +223,7 @@ function getUserPreferences() {
       });
   }
 
-  console.log('getUserPreferences : cvVerticals',cvVerticals);
+  //console.log('getUserPreferences : cvVerticals',cvVerticals);
   if(cvVerticals.length==0){
     document.getElementById("progressBar").style.display = "none";
     alert("Select atleast 1 Designation")
@@ -234,10 +234,9 @@ function getUserPreferences() {
   const prof = [];
   cvVerticals.map((cvv) => {
     
-    console.log(vv)
-    console.log(cvv)
+   
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
-    console.log(vIndex)
+    
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
@@ -288,9 +287,9 @@ function getUserPreferences() {
     }
   });
 
-  console.log('getUserPreferences : vv',vv);
-  console.log('getUserPreferences : sv',sv);
-  console.log('getUserPreferences : prof',prof);
+  // console.log('getUserPreferences : vv',vv);
+  // console.log('getUserPreferences : sv',sv);
+  // console.log('getUserPreferences : prof',prof);
 
   return { verticals: vv, subVerticals: sv, professions: prof };
 }
@@ -335,9 +334,9 @@ const updateCv = async (e) => {
   const experienceYear = employeeFormHTML['experienceYear'].value;
 
   const { verticals, subVerticals, professions } = await getUserPreferences();
-  console.log('updateCv : verticals ',verticals);
-  console.log('updateCv : subVerticals',subVerticals);
-  console.log('updateCv : expertise',professions);
+  // console.log('updateCv : verticals ',verticals);
+  // console.log('updateCv : subVerticals',subVerticals);
+  // console.log('updateCv : expertise',professions);
 
   let resStorage, resURL;
   let data = {};
@@ -928,7 +927,7 @@ function getSelectedVerticals(initial = false) {
 function sliderToggle(e) {
   
   const eleRowId = e.target.dataset.rowid;
-  console.log(eleRowId)
+  //console.log(eleRowId)
   let numId=(eleRowId.substring(6)) 
  
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
@@ -1060,7 +1059,7 @@ async function extractCommonExpirences() {
 }
 
 function commonExpirencesFun() {
-  console.log("came")
+  //console.log("came")
   commonExpirences.map(exp => {
     commonExpirencesOptions += 
     `<option  value="${exp}" >${exp}</option> `;
@@ -1123,8 +1122,8 @@ async function displayExpertiseTable() {
                 </div>
               `;
             } else {
-             
-                if(Iop.name!="None" && Iop.name!="none"){
+              
+                if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
             
                 options += `
                 <div class="option"> 
@@ -1134,9 +1133,9 @@ async function displayExpertiseTable() {
               `;
               }else{
                 options += `
-                <div class="option" hidden > 
+                <div class="option"  > 
                   <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
+                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                 </div>
               `;
               }
@@ -1184,13 +1183,13 @@ async function displayExpertiseTable() {
               </select>
             </td>
           </tr>`;
-          setTimeout(function(){
-            if(options.includes("hidden")){
+          // setTimeout(function(){
+          //   if(options.includes("hidden")){
               
-              document.getElementById("select-list_"+rowId).classList.remove("select-list")
-              document.getElementById("title_"+rowId).innerHTML="----"
-            }
-          },500)
+          //     document.getElementById("select-list_"+rowId).classList.remove("select-list")
+          //     document.getElementById("title_"+rowId).innerHTML="----"
+          //   }
+          // },500)
           
         }
        
@@ -1254,7 +1253,7 @@ async function displayExpertiseTable() {
       var options = $.extend(
         {
           onChange: function (val) {
-            console.log(val);
+            //console.log(val);
           },
         },
         arguments[0] || {}
