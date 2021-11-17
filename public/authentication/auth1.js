@@ -57,6 +57,8 @@ const signupEmployee = async (e) => {
     basicInfoAdded: false,
     cvAdded: false,
     createdAt: new Date(),
+    createdAtStr: `${new Date()}`,
+    createdByAdmin: false
   };
 
   let dbRes = await createUserDB(`${userType}s`, authRes.data.uid, data);
@@ -73,10 +75,7 @@ const signupEmployee = async (e) => {
     user.sendEmailVerification().then(function () {
       window.location = "./../index.html";
     })
-  
   });
- 
-
 };
 
 emplyeeFormHTML.addEventListener("submit", signupEmployee);

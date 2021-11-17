@@ -423,77 +423,13 @@ code {
                         </div>
                       </div>
                     </div>
-                    <!-- <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label>Address</label>
-                          <input
-                            name="address"
-                            type="text"
-                            class="form-control"
-                            placeholder="Home Address"
-                            readonly
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-3 pr-1">
-                        <div class="form-group">
-                          <label>City</label>
-                          <input
-                            name="city"
-                            type="text"
-                            class="form-control"
-                            placeholder="City"
-                            readonly
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-3 px-1">
-                        <div class="form-group">
-                          <label>State</label>
-                          <input
-                            name="home-state"
-                            type="text"
-                            class="form-control"
-                            placeholder="State"
-                            readonly
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-3 pl-1">
-                        <div class="form-group">
-                          <label>Country</label>
-                          <input
-                            name="home-country"
-                            type="text"
-                            class="form-control"
-                            placeholder="Country"
-                            value="India"
-                            readonly
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-3 pl-1">
-                        <div class="form-group">
-                          <label>Postal Code</label>
-                          <input
-                            type="number"
-                            name="postal-code"
-                            class="form-control"
-                            placeholder="ZIP Code"
-                            readonly
-                          />
-                        </div>
-                      </div> -->
                       <div class="row">
                         <div class="col-md-4 col-sm-12 ">
                           <div class="">
                             <label>Qualification</label>
                             <div >
                               <select required style="padding: 7px;width: 85%;" id="qualification" name ="qualification" >
-                                <option selected  value="">Choose</option>
+                                <option   disabled value="Choose">Choose</option>
                                 <option value="Below 10th">Below 10th</option>
                                 <option value="Intermediate Passed">Intermediate Passed</option>
                                 <option value="ITI/Diploma">ITI/Diploma</option>
@@ -509,7 +445,7 @@ code {
                             <label>I am</label>
                             <div >
                               <select  required style="padding: 7px;width: 85%;" id="employmentStatus" name ="employmentStatus">
-                                <option selected disabled value="">Choose</option>
+                                <option  disabled value="Choose">Choose</option>
                                 <option value="Unemployed">Unemployed</option>
                                 <option value="Employed">Employed</option>
                                 <option value="Not Working">Not Working</option>
@@ -522,7 +458,7 @@ code {
                             <label>Looking For</label>
                             <div >
                               <select required style="padding: 7px;width: 85%;" id="internStatus" name ="internStatus">
-                                <option selected disabled value="">Choose</option>
+                                <option  disabled value="Choose">Choose</option>
                                 <option value="Paid Internship">Paid Internship</option>
                                 <option value="Unpaid Internship">Unpaid Internship</option>
                                 <option value="Change Of Job">Change Of Job</option>
@@ -536,11 +472,11 @@ code {
                           <div class="form-group">
                             <label>Certified  By Domestic Agency</label>
                             <div class="inputGroup">
-                              <input disabled id="radioDom1" name="certified-domestic" type="radio"/>
+                              <input disabled id="radioDom1" name="certified-domestic" type="radio" value="Yes" />
                               <label for="radioDom1">Yes</label>
                             </div>
                             <div class="inputGroup">
-                              <input  disabled id="radioDom2" name="certified-domestic" type="radio"/>
+                              <input  disabled id="radioDom2" name="certified-domestic" type="radio" value="No" />
                               <label for="radioDom2">No</label>
                             </div>
                           </div>
@@ -549,11 +485,11 @@ code {
                           <div class="form-group">
                             <label>Internationally  certified</label>
                             <div class="inputGroup">
-                              <input disabled id="radioInt1" name="certified-internationally" type="radio"/>
+                              <input disabled id="radioInt1" name="certified-internationally" type="radio" value="Yes" />
                               <label for="radioInt1">Yes</label>
                             </div>
                             <div class="inputGroup">
-                              <input disabled id="radioInt2" name="certified-internationally" type="radio"/>
+                              <input disabled id="radioInt2" name="certified-internationally" type="radio" value="No" />
                               <label for="radioInt2">No</label>
                             </div>
                           </div>
@@ -562,15 +498,15 @@ code {
                           <div class="form-group">
                             <label>Gender</label>
                             <div class="inputGroup">
-                              <input disabled id="radioGen1" name="gender" type="radio"/>
+                              <input disabled id="radioGen1" name="gender" type="radio" value="Male" />
                               <label for="radioGen1">Male</label>
                             </div>
                             <div class="inputGroup">
-                              <input disabled id="radioGen2" name="gender" type="radio"/>
+                              <input disabled id="radioGen2" name="gender" type="radio" value="Female" />
                               <label for="radioGen2">Female</label>
                             </div>
                             <div class="inputGroup">
-                              <input disabled id="radioGen3" name="gender" type="radio"/>
+                              <input disabled id="radioGen3" name="gender" type="radio" value="Others" />
                               <label for="radioGen3">Others</label>
                             </div>
                           </div>
@@ -583,7 +519,8 @@ code {
                             <span style="color: red">*</span></label
                           >
                           <input
-                  
+                          readonly
+                            required
                             name="experienceYear"
                             type="number"
                             class="form-control"
@@ -683,15 +620,9 @@ code {
                     <div id="progressBar" style="display:none" class="Loading"></div>
                   </div>
                   <p id="aboutMeProfile" class="description text-center">
-                   
                   </p>
-                  
                 </div>
-                
-                
               </div>
-
-           
             </div>
           </div>
           <div class="row">
@@ -706,10 +637,7 @@ code {
                       <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;"> Edit</span>
                     </label>
                   </h5>
-                  
                 </div>
-                
-
                 <div id="cvInfoHolder" style="padding:10px ;">
                   <div class="row">
                     <div class="col-md-5 pr-1" style="margin-left: 1%;">
@@ -727,7 +655,6 @@ code {
                         </ul> -->
                       </div>
                     </div>
-                
                   </div>
 
                   <div class="form-group" style="display: flex;margin-right: 65%;padding: 10px;">
@@ -749,7 +676,6 @@ code {
                       Selected Verticals (Click To Expand)
                     </h6>
                     <div id="verticalsBtns">
-
                       <!-- <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#signalling">Signalling ></button> -->
                       <!-- <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);"data-parent="#acd" data-toggle="collapse" href="#telecom">Telecom ></button> -->
                     </div>
@@ -816,8 +742,7 @@ code {
                         <div class="form-group">
                           <label>Prefered Country to work</label>
                           <div >
- 
-                             <select required style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+                             <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
                           </div>
                         </div>
                       </div>
@@ -839,13 +764,12 @@ code {
                           <div style='text-align:center;'>
                               <div >
                                 <input type="text"
-                                name="fname"
+                                name="work-city"
                                 type="text"
                                 class="form-control"
                                 style="height: 40px;"
                                 placeholder="City *">
                               </div>
-             
                           </div>
                         </div>
                       </div>
@@ -1066,7 +990,7 @@ code {
         </div>
       
      
-        <div style="" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header ftco-degree-bg">
