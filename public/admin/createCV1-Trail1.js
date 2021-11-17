@@ -1097,9 +1097,10 @@ async function displayExpertiseTable() {
       let tglTxt = "";
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
       
-      var rowId;
+      let rowIdT;
       sv.expertise.map((exp, index) => {
-        rowId = `rowId_${randNum + index}`;
+         let rowId = `rowId_${randNum + index}`;
+         rowIdT = `rowId_${randNum + index}`
         // console.log("displayExpertiseTable :sv : exp", exp);
         let options = "";
         isDisabled = true;
@@ -1135,7 +1136,7 @@ async function displayExpertiseTable() {
                 options += `
                 <div class="option"  > 
                   <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
+                  <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                 </div>
               `;
               }
@@ -1183,19 +1184,19 @@ async function displayExpertiseTable() {
               </select>
             </td>
           </tr>`;
-          // setTimeout(function(){
-          //   if(options.includes("hidden")){
+          setTimeout(function(){
+            if(options.includes("hidden")){
               
-          //     document.getElementById("select-list_"+rowId).classList.remove("select-list")
-          //     document.getElementById("title_"+rowId).innerHTML="----"
-          //   }
-          // },500)
+              document.getElementById("select-list_"+rowId).classList.remove("select-list")
+              document.getElementById("title_"+rowId).innerHTML="----"
+            }
+          },500)
           
         }
        
       });
       let tableHead = `
-      <table id="table_${rowId.substring(6,8)}" class="table table-bordered">
+      <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
         <thead class="thead-dark">
           <tr style="text-align: center">
             <th
