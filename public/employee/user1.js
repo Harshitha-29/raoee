@@ -8,6 +8,7 @@ let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
 var oldStateArr = [];
+var oldCountryArr=[];
 var empStatusDrop = new Choices("#employmentStatus", {
   removeItemButton: true,
   maxItemCount: 100,
@@ -441,6 +442,13 @@ const updateCv = async (e) => {
       return;
     } else {
       statesSelected = oldStateArr.map((s) => s);
+    }
+    if (oldCountryArr.length == 0) {
+      document.getElementById("progressBar2").style.display = "none";
+      // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+      return;
+    } else {
+      countrySelected = oldCountryArr.map((s) => s);
     }
   }
 
@@ -1750,18 +1758,32 @@ async function displayCvDetails() {
     })
     states += `</ul>`;
     workStatesHTML.innerHTML = states;
-
-    cvFormHTML['country'].value = USER.cv.workCountry;
+    console.log(USER.cv.workCountry)
+    //cvFormHTML['country'].value = USER.cv.workCountry;
     let optionsState = ""
+    let optionsCountry="";
     document.getElementById("sts").innerHTML = `
 		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
     USER.cv.workStates.map((s) => {
       optionsState += `<option value="${s}" selected>${s}</option>`;
       oldStateArr.push(s)
     });
-      
-    //populateStates("country","state")
+    document.getElementById("cts").innerHTML=`
+     <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+    `
+    USER.cv.workCountry.map((c) => {
+      optionsCountry+= `<option value="${c}" selected>${c}</option>`;
+      oldCountryArr.push(c)
+    });
+  
+   
+ 
+    document.getElementById('country').innerHTML+=optionsCountry
+    populateCountries("country", "state");
+    
+   // populateStates("country","state")
     setTimeout(function () {
+   
       document.getElementById("state").innerHTML += optionsState
       new Choices("#state", {
         removeItemButton: true,
@@ -1769,6 +1791,7 @@ async function displayCvDetails() {
         searchResultLimit: 100,
         renderChoiceLimit: 100,
       });
+      
       document.getElementById("stateOpt").style.display = "block";
     }, 500);
       

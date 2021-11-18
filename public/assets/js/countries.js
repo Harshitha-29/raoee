@@ -434,11 +434,11 @@ s_a[103] =
   "Bacs-Kiskun|Baranya|Bekes|Bekescsaba|Borsod-Abauj-Zemplen|Budapest|Csongrad|Debrecen|Dunaujvaros|Eger|Fejer|Gyor|Gyor-Moson-Sopron|Hajdu-Bihar|Heves|Hodmezovasarhely|Jasz-Nagykun-Szolnok|Kaposvar|Kecskemet|Komarom-Esztergom|Miskolc|Nagykanizsa|Nograd|Nyiregyhaza|Pecs|Pest|Somogy|Sopron|Szabolcs-Szatmar-Bereg|Szeged|Szekesfehervar|Szolnok|Szombathely|Tatabanya|Tolna|Vas|Veszprem|Veszprem|Zala|Zalaegerszeg";
 s_a[104] =
   "Akranes|Akureyri|Arnessysla|Austur-Bardhastrandarsysla|Austur-Hunavatnssysla|Austur-Skaftafellssysla|Borgarfjardharsysla|Dalasysla|Eyjafjardharsysla|Gullbringusysla|Hafnarfjordhur|Husavik|Isafjordhur|Keflavik|Kjosarsysla|Kopavogur|Myrasysla|Neskaupstadhur|Nordhur-Isafjardharsysla|Nordhur-Mulasys-la|Nordhur-Thingeyjarsysla|Olafsfjordhur|Rangarvallasysla|Reykjavik|Saudharkrokur|Seydhisfjordhur|Siglufjordhur|Skagafjardharsysla|Snaefellsnes-og Hnappadalssysla|Strandasysla|Sudhur-Mulasysla|Sudhur-Thingeyjarsysla|Vesttmannaeyjar|Vestur-Bardhastrandarsysla|Vestur-Hunavatnssysla|Vestur-Isafjardharsysla|Vestur-Skaftafellssysla";
-s_a[105] =
+s_a[107] =
   "Andaman and Nicobar Islands|Andhra Pradesh|Arunachal Pradesh|Assam|Bihar|Chandigarh|Chhattisgarh|Dadra and Nagar Haveli|Daman and Diu|Delhi|Goa|Gujarat|Haryana|Himachal Pradesh|Jammu and Kashmir|Jharkhand|Karnataka|Kerala|Lakshadweep|Madhya Pradesh|Maharashtra|Manipur|Meghalaya|Mizoram|Nagaland|Orissa|Pondicherry|Punjab|Rajasthan|Sikkim|Tamil Nadu|Tripura|Uttar Pradesh|Uttaranchal|West Bengal";
 s_a[106] =
   "Aceh|Bali|Banten|Bengkulu|East Timor|Gorontalo|Irian Jaya|Jakarta Raya|Jambi|Jawa Barat|Jawa Tengah|Jawa Timur|Kalimantan Barat|Kalimantan Selatan|Kalimantan Tengah|Kalimantan Timur|Kepulauan Bangka Belitung|Lampung|Maluku|Maluku Utara|Nusa Tenggara Barat|Nusa Tenggara Timur|Riau|Sulawesi Selatan|Sulawesi Tengah|Sulawesi Tenggara|Sulawesi Utara|Sumatera Barat|Sumatera Selatan|Sumatera Utara|Yogyakarta";
-s_a[107] =
+s_a[105] =
   "Ardabil|Azarbayjan-e Gharbi|Azarbayjan-e Sharqi|Bushehr|Chahar Mahall va Bakhtiari|Esfahan|Fars|Gilan|Golestan|Hamadan|Hormozgan|Ilam|Kerman|Kermanshah|Khorasan|Khuzestan|Kohgiluyeh va Buyer Ahmad|Kordestan|Lorestan|Markazi|Mazandaran|Qazvin|Qom|Semnan|Sistan va Baluchestan|Tehran|Yazd|Zanjan";
 s_a[108] =
   "Al Anbar|Al Basrah|Al Muthanna|Al Qadisiyah|An Najaf|Arbil|As Sulaymaniyah|At Ta'mim|Babil|Baghdad|Dahuk|Dhi Qar|Diyala|Karbala'|Maysan|Ninawa|Salah ad Din|Wasit";
@@ -686,7 +686,7 @@ s_a[252] =
   "Bulawayo|Harare|ManicalandMashonaland Central|Mashonaland East|Mashonaland West|Masvingo|Matabeleland North|Matabeleland South|Midlands";
 
 function populateStates(countryElementId, stateElementId) {
- 
+  console.log(countryElementId._prevState.items)
   let selectedCountry=(countryElementId._prevState.items)
   for(let k in selectedCountry){
     var selectedCountryIndex =
@@ -697,6 +697,7 @@ function populateStates(countryElementId, stateElementId) {
     // stateElement.options[0] = new Option('Select State','');
     //stateElement.selectedIndex = 0;
     var state_arr = s_a[selectedCountryIndex].split("|");
+    console.log(state_arr)
     for (var i = 0; i < state_arr.length; i++) {
     
         stateElement.options[stateElement.length] = new Option(
@@ -714,12 +715,12 @@ function populateCountries(countryElementId, stateElementId) {
   
   // given the id of the <select> tag as function argument, it inserts <option> tags
   var countryElement = document.getElementById(countryElementId);
-  countryElement.length = 0;
+  //countryElement.length = 0;
   $(countryElement).change(function(e){
     selectedCountry(e)
   });
   // countryElement.options[0] = new Option("Select Country", "-1");
-  // countryElement.selectedIndex = 0;
+
   for (var i = 0; i < country_arr.length; i++) {
     countryElement.options[countryElement.length] = new Option(
       country_arr[i],
@@ -733,11 +734,12 @@ function populateCountries(countryElementId, stateElementId) {
     searchResultLimit: 100,
     renderChoiceLimit: 100,
   });
+  console.log(count_ind)
   // Assigned all countries. Now assign event listener for the states.
 
   if (stateElementId) {
     countryElement.onchange = function () {
-    
+      console.log("called")
       document.getElementById("sts").innerHTML = "";
       document.getElementById("stateOpt").style.display = "none";
       document.getElementById("sts").innerHTML = `
