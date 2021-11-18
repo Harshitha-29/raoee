@@ -96,6 +96,7 @@ const updateBasicInfo = async () => {
   const certifiedInternationally =
     employeeFormHTML["certified-internationally"].value || "";
   const gender = employeeFormHTML["gender"].value || "";
+  const experienceYear = employeeFormHTML['experienceYear'].value;
 
   FORM_DATA = {
     fname,
@@ -103,9 +104,9 @@ const updateBasicInfo = async () => {
     phone,
     email,
     userType,
-    userCreatedAt : new Date(),
-    userCreatedAtStr : `${new Date()}`,
-    userCreatedByAdmin : true,
+    createdAt : new Date(),
+    createdAtStr : `${new Date()}`,
+    createdByAdmin : true,
     uid: USER_CREATED_ID,
     basicInfo: {
       qualification,
@@ -114,7 +115,7 @@ const updateBasicInfo = async () => {
       certifiedDomestic,
       certifiedInternationally,
       gender,
-      aboutMe: "",
+      experienceYear
     },
   };
 
@@ -196,9 +197,7 @@ async function getCreatedUser({ collectionName, uid }) {
 
 function getUserPreferences() {
   const cvVerticals = [];
-  //document.querySelectorAll(`input[name=designation_checkbox]:checked`).forEach((e) => {
-    for(let i=0;i<document.querySelectorAll(`input[name=designation_checkbox]:checked`).length;i++){
-
+  for(let i=0;i<document.querySelectorAll(`input[name=designation_checkbox]:checked`).length;i++){
     const e = document.querySelectorAll(`input[name=designation_checkbox]:checked`)[i];
     const all = e.id.split("__");
     const selectedVId = all[0];
@@ -213,14 +212,14 @@ function getUserPreferences() {
     }
 
     const value = document.querySelector(`select[name=expertise-${index}`).value;
-      cvVerticals.push({
-        verName: selectedVName,
-        ver: selectedVId,
-        subVertical: selectedSubV,
-        profession,
-        designation,
-        value
-      });
+    cvVerticals.push({
+      verName: selectedVName,
+      ver: selectedVId,
+      subVertical: selectedSubV,
+      profession,
+      designation,
+      value
+    });
   }
 
   //console.log('getUserPreferences : cvVerticals',cvVerticals);
@@ -233,17 +232,13 @@ function getUserPreferences() {
   const sv = [];
   const prof = [];
   cvVerticals.map((cvv) => {
-    
-   
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
     
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
         ver: cvv.ver,
-        sver: [
-          
-        ],
+        sver: [],
       });
       prof.push({
         ver: cvv.ver,
@@ -253,14 +248,12 @@ function getUserPreferences() {
 
     vIndex = sv.findIndex((v) => v.ver === cvv.ver);
     let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
-
     if (svIndex === -1) {
       sv[vIndex].sver.push(cvv.subVertical);
     } 
 
     const profvIndex = prof.findIndex(p => p.ver == cvv.ver);
     const profsvIndex = prof[profvIndex].svers.findIndex(p => p.sver === cvv.subVertical);
-
     if(profsvIndex === -1) {
       prof[profvIndex].svers.push({
         sver: cvv.subVertical,
@@ -331,8 +324,7 @@ const updateCv = async (e) => {
   // const workCountry = employeeFormHTML["country"].value;
   //const workCountry:countrySelected = countrySelected;
   const workCity = employeeFormHTML["work-city"].value;
-  const experienceYear = employeeFormHTML['experienceYear'].value;
-
+  
   const { verticals, subVerticals, professions } = await getUserPreferences();
   // console.log('updateCv : verticals ',verticals);
   // console.log('updateCv : subVerticals',subVerticals);
@@ -373,10 +365,21 @@ const updateCv = async (e) => {
   data.userId = USER_CREATED_ID;
   data.fname = employeeFormHTML["fname"].value || "";
   data.lname = employeeFormHTML["lname"].value || "";
+  data.phone = FORM_DATA.phone;
+  data.email = FORM_DATA.email;
+  data.createdAt = FORM_DATA.createdAt;
+  data.createdAtStr = FORM_DATA.createdAtStr;
+  data.createdByAdmin = true;
   data.workCountry= countrySelected;
   data.workStates = statesSelected;
   data.workCity = workCity;
-  data.yearExpirence = experienceYear;
+  data.yearExpirence = FORM_DATA.basicInfo.experienceYear;
+  data.qualification  = FORM_DATA.basicInfo.qualification ;
+  data.employmentStatus  = FORM_DATA.basicInfo.employmentStatus ;
+  data.internStatus  = FORM_DATA.basicInfo.internStatus ;
+  data.certifiedDomestic  = FORM_DATA.basicInfo.certifiedDomestic ;
+  data.certifiedInternationally  = FORM_DATA.basicInfo.certifiedInternationally ;
+  data.gender = FORM_DATA.basicInfo.gender ;
 
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
@@ -397,7 +400,6 @@ const updateCv = async (e) => {
     workCountry:countrySelected,
     workStates: statesSelected,
     workCity,
-    yearExpirence : experienceYear
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -937,21 +939,15 @@ function sliderToggle(e) {
     let targetElement = evt.target; // clicked element
   
     do {
-        if (targetElement == flyoutElement) {
-            // This is a click inside. Do nothing, just return.
-            
-
-            return;
-        }
-        // Go up the DOM
-        targetElement = targetElement.parentNode;
+      if (targetElement == flyoutElement) {
+        // This is a click inside. Do nothing, just return.
+        return;
+      }
+      // Go up the DOM
+      targetElement = targetElement.parentNode;
     } while (targetElement);
-  
     // This is a click outside.
-  
     document.querySelector(".select-options").style.display = "none";
-   
-    
   });
   var table_id= ("table_"+eleRowId.substring(6,8))
   if (e.target.checked) {
@@ -984,7 +980,6 @@ function sliderToggle(e) {
     el.disabled = true;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
     document.getElementById("select-list_"+eleRowId).style.opacity = 0.4;
-   
     document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
@@ -1081,6 +1076,7 @@ async function displayExpertiseTable() {
   
   
   userSelectedVerticals.map((v) => {
+    console.log('displayExpertiseTable : userSelectedVerticals : v', v);
     let head = `
     <h6 style="font-weight: 600">
       Select Expertise (
@@ -1089,7 +1085,7 @@ async function displayExpertiseTable() {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
-      // console.log("displayExpertiseTable : sv : ", sv);
+      console.log('displayExpertiseTable : userSelectedVerticals : sv', sv);
       let isDisabled = true;
      
 
@@ -1115,7 +1111,6 @@ async function displayExpertiseTable() {
             // }
 
             if (exp.value === Iop) {
-           
               options += `
                 <div class="option"  > 
                   <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1131,7 +1126,7 @@ async function displayExpertiseTable() {
                   <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                 </div>
-              `;
+                `;
               }else{
                 options += `
                 <div class="option"  > 
@@ -1140,7 +1135,6 @@ async function displayExpertiseTable() {
                 </div>
               `;
               }
-              
             }
           });
 
@@ -1149,7 +1143,6 @@ async function displayExpertiseTable() {
           } else {
             tglTxt = "Yes";
           }
-     
           
           rows +=`
           <tr>
@@ -1186,14 +1179,11 @@ async function displayExpertiseTable() {
           </tr>`;
           setTimeout(function(){
             if(options.includes("hidden")){
-              
               document.getElementById("select-list_"+rowId).classList.remove("select-list")
               document.getElementById("title_"+rowId).innerHTML="----"
             }
           },500)
-          
         }
-       
       });
       let tableHead = `
       <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
@@ -1229,20 +1219,7 @@ async function displayExpertiseTable() {
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
-      // setTimeout(function () {
-      //   $(function () {
-      //     $(".multiselect-ui").multiselect({
-      //       includeSelectAllOption: true,
-      //       minWidth: 300,
-      //       height: 150,
-      //       header: false,
-      //       noneSelectedText: "Select",
-      //       selectedList: 3
-      //     });
-      //   });
-      // }, 1000);
     });
-
     tables += head + table;
   });
 
