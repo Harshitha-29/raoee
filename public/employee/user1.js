@@ -8,6 +8,7 @@ let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
 var oldStateArr = [];
+var oldCountryArr=[];
 var empStatusDrop = new Choices("#employmentStatus", {
   removeItemButton: true,
   maxItemCount: 100,
@@ -181,7 +182,9 @@ function displayUserDetails() {
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
   userBasicFormHTML["phone"].value = USER.phone;
-  userBasicFormHTML["experienceYear"].value = USER.basicInfo.experienceYear;
+
+  if(USER?.basicInfo?.experienceYear)
+    userBasicFormHTML["experienceYear"].value = USER.basicInfo.experienceYear;
   fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
   if (USER.basicInfoAdded) {
 
@@ -260,12 +263,12 @@ const updateBasicInfo = async (e) => {
 
     await USER_REF.update(data);
 
-    // nowuiDashboard.showNotification(
-    //   "top",
-    //   "center",
-    //   "Data updated Successfully",
-    //   "primary"
-    // );
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Basic Data updated Successfully",
+      "primary"
+    );
     getUserDetails({ uid: USER_ID, userType: USER.userType });
   } catch (error) {
     console.error(error);
@@ -440,6 +443,13 @@ const updateCv = async (e) => {
     } else {
       statesSelected = oldStateArr.map((s) => s);
     }
+    if (oldCountryArr.length == 0) {
+      document.getElementById("progressBar2").style.display = "none";
+      // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+      return;
+    } else {
+      countrySelected = oldCountryArr.map((s) => s);
+    }
   }
 
   const { verticals, subVerticals, professions } = getUserPreferences();
@@ -565,12 +575,12 @@ const updateCv = async (e) => {
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
-  // nowuiDashboard.showNotification(
-  //   "top",
-  //   "center",
-  //   "Data updated successfully",
-  //   "primary"
-  // );
+  nowuiDashboard.showNotification(
+    "top",
+    "center",
+    "Data updated successfully",
+    "primary"
+  );
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   setTimeout(function () {
     location.reload();
@@ -1193,12 +1203,17 @@ function getSelectedVerticals(initial = false) {
 // /////////////////////////////////////////////////
 
 function sliderToggle(e) {
+  
   const eleRowId = e.target.dataset.rowid;
+  //console.log(eleRowId)
+  let numId=(eleRowId.substring(6)) 
+ 
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
-
+  
   document.addEventListener("click", (evt) => {
     const flyoutElement = document.querySelector(".select-list");
     let targetElement = evt.target; // clicked element
+  
     do {
       if (targetElement == flyoutElement) {
         // This is a click inside. Do nothing, just return.
@@ -1210,21 +1225,38 @@ function sliderToggle(e) {
     // This is a click outside.
     document.querySelector(".select-options").style.display = "none";
   });
-
+  var table_id= ("table_"+eleRowId.substring(6,8))
   if (e.target.checked) {
-    el.disabled = false;
-    document.getElementById("select-list_" + eleRowId).style.pointerEvents =
-      "all";
-    document.getElementById("select-list_" + eleRowId).style.opacity = 1;
+
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+
+      if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
+        
+        document.getElementById(tog_id).disabled=true;
+      }
+    }
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents
+   
+    el.disabled=false;
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
+    document.getElementById("select-list_"+eleRowId).style.opacity = 1;
     document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
+
   } else {
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+      if(table_id.substring(6) == tog_id.substring(13,15))
+        document.getElementById(tog_id).disabled=false;  
+    }
     document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
-    document.getElementById("select-list_" + eleRowId).style.pointerEvents =
-      "none";
-    document.getElementById("select-list_" + eleRowId).style.opacity = 0.4;
-    document.getElementById("designation_" + eleRowId).style.display = "none";
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
+    document.getElementById("select-list_"+eleRowId).style.opacity = 0.4;
+    document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
 }
@@ -1298,7 +1330,7 @@ async function extractCommonExpirences() {
         commonExpirences.push(t);
       });
     });
-  commonExpirencesFun();
+  
 }
 
 function commonExpirencesFun() {
@@ -1308,8 +1340,10 @@ function commonExpirencesFun() {
 }
 
 function commonSelectExpirencesFun(selectedOP) {
+  
   console.log(selectedOP);
   commonExpirences.map((exp) => {
+    //console.log(exp)
     if(selectedOP === exp) {
       console.log(selectedOP);
       console.log(exp);
@@ -1350,40 +1384,15 @@ async function displayExpertiseTable(initial = false) {
     v.subverticals.map((sv) => {
       console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
       let isDisabled = true;
-      let tableHead = `
-      <table class="table table-bordered">
-        <thead class="thead-dark">
-          <tr style="text-align: center">
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col center"
-            >
-              Designation 
-              <br>
-              (${sv.name})
-            </th>
-            <th>
-              Applicable?
-            </th>
-            <th>
-              Select Expertise
-            </th>
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col"
-            >
-              Your Maximum Experience
-            </th>
-          </tr>
-        </thead>
-        <tbody>`;
+      
 
       let rows = ``;
       let tglTxt = "";
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
-
+      let rowIdT;
       sv.expertise.map((exp, index) => {
         let rowId = `rowId_${randNum + index}`;
+        rowIdT = `rowId_${randNum + index}`;
         // console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
         let options = "";
         isDisabled = true;
@@ -1436,10 +1445,10 @@ async function displayExpertiseTable(initial = false) {
                       for(let l = 0; l < eachSelectedExpertise.designations.length; l++) {
                         // console.log(eachSelectedExpertise.designations[l]);
                         const des = eachSelectedExpertise.designations[l];
-                        console.log(cvv, v._id);
-                        console.log(cvsv, sv.name);
-                        console.log(exp.category, cvProf);
-                        console.log(eachSelectedExpertise.designations[l], cvDesigations[l], cvDesigations.includes(des));
+                        // console.log(cvv, v._id);
+                        // console.log(cvsv, sv.name);
+                        // console.log(exp.category, cvProf);
+                        //console.log(eachSelectedExpertise.designations[l], cvDesigations[l], cvDesigations.includes(des));
 
                         if (
                           cvv === v._id &&
@@ -1463,6 +1472,7 @@ async function displayExpertiseTable(initial = false) {
                 }
 
                 if (flag) {
+             
                   options += `
                   <div class="option"  > 
                     <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1473,6 +1483,7 @@ async function displayExpertiseTable(initial = false) {
                 
 
                 } else {
+                 
                   options += `
                   <div class="option"  > 
                     <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1482,8 +1493,8 @@ async function displayExpertiseTable(initial = false) {
                 }
               }
             } else {
-              console.log('exp.value', exp.value);
-              console.log('Iop', Iop);
+              // console.log('exp.value', exp.value);
+              // console.log('Iop', Iop);
               if(exp.value === Iop) {
                 options += `
                   <div class="option"  > 
@@ -1492,38 +1503,42 @@ async function displayExpertiseTable(initial = false) {
                   </div>
                 `;
               } else {
-                // if (Iop.name != "None" && Iop.name != "none") {
-                //   options += `
-                //   <div class="option"> 
-                //     <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                //     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                //   </div>
-                // `;
-                // } else {
+                if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
+            
                   options += `
-                  <div class="option"  > 
+                  <div class="option"> 
                     <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
+                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                  </div>
+                  `;
+                }else{
+                  options += `
+                  <div class="option" hidden > 
+                    <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                   </div>
                 `;
-                // }
+                }
               }
             }
           });
 
           if (isDisabled) {
+            
             tglTxt = "No";
           } else {
+            console.log("came")
             tglTxt = "Yes";
           }
+         
           rows +=
           `<tr>
             <td>${exp.category}</td>
             <td>
               <label class="switch">
-              <input type="checkbox" name="slider_${rowId}"  data-rowid="${rowId}"  ${
-              isDisabled ? "" : "checked"
-            }  onchange="sliderToggle(event )"   >
+              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"  data-rowid="${rowId}"  ${
+                isDisabled ? "" : checkMe("toggle_"+rowId)
+              }  onchange="sliderToggle(event)">
               <span class="slider round"></span>
               <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
             </label>
@@ -1535,6 +1550,7 @@ async function displayExpertiseTable(initial = false) {
             `" style="pointer-events:none;opacity:0.4"  >
                   <div class="title" id="title_` +
             rowId +
+            
             `">Select Designation</div>
                   <div class="select-options" style="max-height:250px;overflow-y:scroll" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
                     ${options}
@@ -1544,6 +1560,7 @@ async function displayExpertiseTable(initial = false) {
             <td>
               <select
                 disabled
+                id="exper_${rowId}"
                 data-rowid="${rowId}" 
                 class="selectpicker"
                 name="expertise-${rowId}"
@@ -1553,15 +1570,53 @@ async function displayExpertiseTable(initial = false) {
               </select>
             </td>
           </tr>`;
-          // setTimeout(function(){
-          //   if(options.includes("hidden")){
-          //     document.getElementById("select-list_"+rowId).classList.remove("select-list")
-          //     document.getElementById("title_"+rowId).innerHTML="----"
-          //   }
-          // },500)
+          function checkMe(id){
+            
+            setTimeout(function(){
+              document.getElementById(id).checked="true"
+              openDesignationDropdown(id,rowId)
+            },500)
+            
+          }
+          setTimeout(function(){
+            if(options.includes("hidden")){
+              document.getElementById("select-list_"+rowId).classList.remove("select-list")
+              document.getElementById("title_"+rowId).innerHTML="----"
+              document.getElementById("toggle_"+rowId)
+            }
+          },500)
+          
         }
       });
-
+      let tableHead = `
+      <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
+        <thead class="thead-dark">
+          <tr style="text-align: center">
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col center"
+            >
+              Designation 
+              <br>
+              (${sv.name})
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Applicable?
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Select Expertise
+            </th>
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Your Maximum Experience
+            </th>
+          </tr>
+        </thead>
+        <tbody>`;
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
@@ -1612,7 +1667,23 @@ async function displayExpertiseTable(initial = false) {
     });
   });
 }
+function openDesignationDropdown(toggleId,rowId){
+  document.getElementById("select-list_"+rowId).style.pointerEvents="all";
+  document.getElementById("select-list_"+rowId).style.opacity=1;
+  document.getElementById("exper_"+rowId).disabled=false;
+  let eleRowId = rowId
+  var table_id= ("table_"+eleRowId.substring(6,8))
+  for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
+      
+    let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
 
+    if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
+      
+      document.getElementById(tog_id).disabled=true;
+    }
+  }
+  
+}
 function updateTable() {
   var checkboxValue = $(this).val();
   var isChecked = $(this).is(":checked");
@@ -1687,18 +1758,32 @@ async function displayCvDetails() {
     })
     states += `</ul>`;
     workStatesHTML.innerHTML = states;
-
-    cvFormHTML['country'].value = USER.cv.workCountry;
+    console.log(USER.cv.workCountry)
+    //cvFormHTML['country'].value = USER.cv.workCountry;
     let optionsState = ""
+    let optionsCountry="";
     document.getElementById("sts").innerHTML = `
 		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
     USER.cv.workStates.map((s) => {
       optionsState += `<option value="${s}" selected>${s}</option>`;
       oldStateArr.push(s)
     });
-      
-    // populateStates("country","state")
+    document.getElementById("cts").innerHTML=`
+     <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+    `
+    USER.cv.workCountry.map((c) => {
+      optionsCountry+= `<option value="${c}" selected>${c}</option>`;
+      oldCountryArr.push(c)
+    });
+  
+   
+ 
+    document.getElementById('country').innerHTML+=optionsCountry
+    populateCountries("country", "state");
+    
+   // populateStates("country","state")
     setTimeout(function () {
+   
       document.getElementById("state").innerHTML += optionsState
       new Choices("#state", {
         removeItemButton: true,
@@ -1706,6 +1791,7 @@ async function displayCvDetails() {
         searchResultLimit: 100,
         renderChoiceLimit: 100,
       });
+      
       document.getElementById("stateOpt").style.display = "block";
     }, 500);
       

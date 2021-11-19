@@ -65,14 +65,14 @@ const updateBasicInfo = async () => {
       };
     }
   }
-  console.log("updateBasicInfo : user created : id", createRes.data.uid);
+  //console.log("updateBasicInfo : user created : id", createRes.data.uid);
 
   USER_CREATED_ID = createRes.data.uid;
   USER_CREATED_REF = await db
     .collection(`${userType}s`)
     .doc(createRes.data.uid);
 
-  console.log('updateBasicInfo : RAW_USER ', RAW_USER);
+  //console.log('updateBasicInfo : RAW_USER ', RAW_USER);
 
   const signinAdminRes = await signinAdmin({
     email: RAW_USER.email,
@@ -84,7 +84,7 @@ const updateBasicInfo = async () => {
       status: false,
     };
   }
-  console.log("updateBasicInfo : admin logged in");
+  //console.log("updateBasicInfo : admin logged in");
 
   const fname = employeeFormHTML["fname"].value || "";
   const lname = employeeFormHTML["lname"].value || "";
@@ -207,7 +207,7 @@ function getUserPreferences() {
     const designation = all[4];
     const index = all[5];
     if(!document.querySelector(`input[name=slider_${index}]:checked`)  ){
-      console.log(!document.querySelector(`input[name=slider_${index}]:checked`))
+     // console.log(!document.querySelector(`input[name=slider_${index}]:checked`))
       continue ;
     }
 
@@ -222,7 +222,7 @@ function getUserPreferences() {
     });
   }
 
-  console.log('getUserPreferences : cvVerticals',cvVerticals);
+  //console.log('getUserPreferences : cvVerticals',cvVerticals);
   if(cvVerticals.length==0){
     document.getElementById("progressBar").style.display = "none";
     alert("Select atleast 1 Designation")
@@ -232,10 +232,8 @@ function getUserPreferences() {
   const sv = [];
   const prof = [];
   cvVerticals.map((cvv) => {
-    console.log(vv)
-    console.log(cvv)
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
-    console.log(vIndex)
+    
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
@@ -282,9 +280,9 @@ function getUserPreferences() {
     }
   });
 
-  console.log('getUserPreferences : vv',vv);
-  console.log('getUserPreferences : sv',sv);
-  console.log('getUserPreferences : prof',prof);
+  // console.log('getUserPreferences : vv',vv);
+  // console.log('getUserPreferences : sv',sv);
+  // console.log('getUserPreferences : prof',prof);
 
   return { verticals: vv, subVerticals: sv, professions: prof };
 }
@@ -328,9 +326,9 @@ const updateCv = async (e) => {
   const workCity = employeeFormHTML["work-city"].value;
   
   const { verticals, subVerticals, professions } = await getUserPreferences();
-  console.log('updateCv : verticals ',verticals);
-  console.log('updateCv : subVerticals',subVerticals);
-  console.log('updateCv : expertise',professions);
+  // console.log('updateCv : verticals ',verticals);
+  // console.log('updateCv : subVerticals',subVerticals);
+  // console.log('updateCv : expertise',professions);
 
   let resStorage, resURL;
   let data = {};
@@ -765,6 +763,7 @@ function displaySubVerticalDropdown() {
   // console.log('displaySubVerticalDropdown : userSelectedMainVerticals ',userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
+      
       let flag = "";
       for (let i = 0; i < subVerticalsSelected.length; i++) {
         if (subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
@@ -772,7 +771,8 @@ function displaySubVerticalDropdown() {
           break;
         }
       }
-      options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
+      if(sv.expertise.length>0)
+        options += `<option value="${ver.name}__${sv.name}" ${flag}>${ver.name} : ${sv.name}</option>`;
     });
   });
 
@@ -927,9 +927,13 @@ function getSelectedVerticals(initial = false) {
 // /////////////////////////////////////////////////
 
 function sliderToggle(e) {
+  
   const eleRowId = e.target.dataset.rowid;
+  //console.log(eleRowId)
+  let numId=(eleRowId.substring(6)) 
+ 
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
-
+  
   document.addEventListener("click", (evt) => {
     const flyoutElement = document.querySelector(".select-list");
     let targetElement = evt.target; // clicked element
@@ -945,14 +949,33 @@ function sliderToggle(e) {
     // This is a click outside.
     document.querySelector(".select-options").style.display = "none";
   });
-
+  var table_id= ("table_"+eleRowId.substring(6,8))
   if (e.target.checked) {
+
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+
+      if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
+        
+        document.getElementById(tog_id).disabled=true;
+      }
+    }
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents
+   
     el.disabled=false;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
     document.getElementById("select-list_"+eleRowId).style.opacity = 1;
     document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
+
   } else {
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+      if(table_id.substring(6) == tog_id.substring(13,15))
+        document.getElementById(tog_id).disabled=false;  
+    }
     document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
@@ -1027,10 +1050,11 @@ async function extractCommonExpirences() {
       commonExpirences.push(t); 
     })
   })
-  commonExpirencesFun();
+  
 }
 
 function commonExpirencesFun() {
+  //console.log("came")
   commonExpirences.map(exp => {
     commonExpirencesOptions += 
     `<option  value="${exp}" >${exp}</option> `;
@@ -1050,7 +1074,7 @@ async function displayExpertiseTable() {
     commonExpirencesFun();
   }
   
-  console.log('displayExpertiseTable : userSelectedVerticals', userSelectedVerticals);
+  
   userSelectedVerticals.map((v) => {
     console.log('displayExpertiseTable : userSelectedVerticals : v', v);
     let head = `
@@ -1063,43 +1087,17 @@ async function displayExpertiseTable() {
     v.subverticals.map((sv) => {
       console.log('displayExpertiseTable : userSelectedVerticals : sv', sv);
       let isDisabled = true;
-      let tableHead = `
-      <table class="table table-bordered">
-        <thead class="thead-dark">
-          <tr style="text-align: center">
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col center"
-            >
-              Designation 
-              <br>
-              (${sv.name})
-            </th>
-            <th  style="text-align: center; font-weight: 600"
-            scope="col center">
-              Applicable?
-            </th>
-            <th  style="text-align: center; font-weight: 600"
-            scope="col center">
-              Select Expertise
-            </th>
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col"
-            >
-              Your Maximum Experience
-            </th>
-          </tr>
-        </thead>
-        <tbody>`;
+     
 
       let rows = ``;
       let tglTxt = "";
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
-      console.log(randNum);
+      
+      let rowIdT;
       sv.expertise.map((exp, index) => {
-        console.log('displayExpertiseTable : userSelectedVerticals : exp', exp);
-        let rowId = `rowId_${randNum + index}`;
+         let rowId = `rowId_${randNum + index}`;
+         rowIdT = `rowId_${randNum + index}`
+        // console.log("displayExpertiseTable :sv : exp", exp);
         let options = "";
         isDisabled = true;
         if (exp.subCategory) {
@@ -1120,8 +1118,10 @@ async function displayExpertiseTable() {
                 </div>
               `;
             } else {
-              if(Iop.name!="None" && Iop.name!="none"){
-              options += `
+              
+                if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
+            
+                options += `
                 <div class="option"> 
                   <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                   <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
@@ -1129,9 +1129,9 @@ async function displayExpertiseTable() {
                 `;
               }else{
                 options += `
-                <div class="option" hidden > 
+                <div class="option"  > 
                   <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">"${Iop.name}"</label>
+                  <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                 </div>
               `;
               }
@@ -1149,9 +1149,9 @@ async function displayExpertiseTable() {
             <td>${exp.category}</td>
             <td>
               <label class="switch">
-              <input type="checkbox" name="slider_${rowId}"  data-rowid="${rowId}"  ${
+              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"  data-rowid="${rowId}"  ${
                 isDisabled ? "" : "checked"
-              }  onchange="sliderToggle(event )"   >
+              }  onchange="sliderToggle(event)"   >
               <span class="slider round"></span>
               <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
             </label>
@@ -1185,7 +1185,35 @@ async function displayExpertiseTable() {
           },500)
         }
       });
-
+      let tableHead = `
+      <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
+        <thead class="thead-dark">
+          <tr style="text-align: center">
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col center"
+            >
+              Designation 
+              <br>
+              (${sv.name})
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Applicable?
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Select Expertise
+            </th>
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Your Maximum Experience
+            </th>
+          </tr>
+        </thead>
+        <tbody>`;
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
@@ -1203,7 +1231,7 @@ async function displayExpertiseTable() {
       var options = $.extend(
         {
           onChange: function (val) {
-            console.log(val);
+            //console.log(val);
           },
         },
         arguments[0] || {}
