@@ -575,12 +575,12 @@ const updateCv = async (e) => {
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
-  nowuiDashboard.showNotification(
-    "top",
-    "center",
-    "Data updated successfully",
-    "primary"
-  );
+  // nowuiDashboard.showNotification(
+  //   "top",
+  //   "center",
+  //   "Data updated successfully",
+  //   "primary"
+  // );
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   setTimeout(function () {
     location.reload();
@@ -887,7 +887,6 @@ function displayVerticalDropdown() {
       displaySubVerticalDropdown(true);
     }, 2000);
   } else {
-    
     document.getElementById("editResumeBtn").style.display="none"
     VERTICALS.map((ver) => {
       options += `<option value="${ver.name}">${ver.name}</option>`;
@@ -959,6 +958,8 @@ function verticalSelected(e) {
 
   // getSelectedVerticals();
   userSelectedVerticals.length = 0;
+  console.log('verticalSelected :', userSelectedMainVerticals);
+  console.log('verticalSelected :', resDeleted);
   userSelectedMainVerticals.map((uv) => {
     if (resDeleted && resDeleted[0] === uv.name) {
       uv.subVerticals.map((svv) => {
@@ -1159,7 +1160,7 @@ function subVerticalSelected(e = false, initial = false) {
 function getSelectedVerticals(initial = false) {
   userSelectedVerticals = [];
 
-  // console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
+  console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
   userSelectedMainVerticals.map((v) => {
     let flag = false;
     for (let i = 0; i < subVerticalsSelected.length; i++) {
@@ -1340,10 +1341,10 @@ function commonExpirencesFun() {
 }
 
 function commonSelectExpirencesFun(selectedOP) {
-  
+  commonExpirencesOptions = '';
   console.log(selectedOP);
   commonExpirences.map((exp) => {
-    //console.log(exp)
+    console.log(exp)
     if(selectedOP === exp) {
       console.log(selectedOP);
       console.log(exp);
@@ -1353,8 +1354,6 @@ function commonSelectExpirencesFun(selectedOP) {
     }
   });
 }
-
-
 
 // /////////////////////////////////////////////////
 
@@ -1393,13 +1392,18 @@ async function displayExpertiseTable(initial = false) {
       sv.expertise.map((exp, index) => {
         let rowId = `rowId_${randNum + index}`;
         rowIdT = `rowId_${randNum + index}`;
-        // console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
+        console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
         let options = "";
         isDisabled = true;
         if (exp.subCategory) {
           exp.subCategory.map((Iop, subIndex) => {
+            let lastIndex = false;
+            if( exp.subCategory.length == subIndex + 1) {
+              lastIndex = true;
+            }
             // rowId = `rowId_${randNum + index}_${subIndex}`;
             // console.log("displayExpertiseTable : sv : exp : Iop ", Iop);
+            
             if (exp?.selected) {
               isDisabled = false;
             } else {
@@ -1407,29 +1411,37 @@ async function displayExpertiseTable(initial = false) {
             }
             if (initial) {
               if (USER.cvAdded) {
+              
+                let allDesSets = new Set();
                 let flag = false;
+                console.log('if aaa flag', flag);
                 // console.log('USER.cv :', USER.cv);
                 for (let i = 0; i < USER.cv.professions.length; i++) {
+                  console.log('if aaa i', i);
+                  // if (flag) {
+                  //   break;
+                  // }
                   rowId = `rowId_${randNum + index}`;
                   const eachSelectedVExpertise = USER.cv.professions[i];
                   const cvv = eachSelectedVExpertise.ver;
-                  if (flag) {
-                    break;
-                  }
                   // console.log('eachSelectedVExpertise', eachSelectedVExpertise);
+                  console.log('if aaa flag', flag);
                   for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
+                    // if (flag) {
+                    //   break;
+                    // }
                     const eachSelectedVSExpertise =
                       eachSelectedVExpertise.svers[j];
                     const cvsv = eachSelectedVSExpertise.sver;
-                    if (flag) {
-                      break;
-                    }
                     // console.log('eachSelectedVSExpertise :', eachSelectedVSExpertise);
                     for (
                       let k = 0;
                       k < eachSelectedVSExpertise.profs.length;
                       k++
                     ) {
+                      // if (flag) {
+                      //   break;
+                      // }
                       const eachSelectedExpertise =
                         eachSelectedVSExpertise.profs[k];
                         // console.log(eachSelectedExpertise);
@@ -1438,18 +1450,19 @@ async function displayExpertiseTable(initial = false) {
                       const cvDesigations = eachSelectedExpertise.designations;
                       const cvVal = eachSelectedExpertise.value;
   
-                      // if (flag) {
-                      //   break;
-                      // }
-
+                      console.log('if aaa flag', flag);
+                      console.log('if aaa', eachSelectedExpertise.designations);
                       for(let l = 0; l < eachSelectedExpertise.designations.length; l++) {
                         // console.log(eachSelectedExpertise.designations[l]);
                         const des = eachSelectedExpertise.designations[l];
                         // console.log(cvv, v._id);
                         // console.log(cvsv, sv.name);
                         // console.log(exp.category, cvProf);
-                        //console.log(eachSelectedExpertise.designations[l], cvDesigations[l], cvDesigations.includes(des));
-
+                        // console.log(eachSelectedExpertise.designations[l], cvDesigations[l], cvDesigations.includes(des));
+                        console.log('if aaa', des);
+                        // if (flag) {
+                        //   break;
+                        // }
                         if (
                           cvv === v._id &&
                           sv.name === cvsv &&
@@ -1458,32 +1471,47 @@ async function displayExpertiseTable(initial = false) {
                           // &&
                           // op === cvVal
                         ) {
-                          commonSelectExpirencesFun(des)
+                          console.log('if aaa', cvv, v._id, cvsv, sv.name, cvProf, exp.category, des, cvDesigations.includes(des) );
+                          commonSelectExpirencesFun(eachSelectedExpertise.value)
                           // exp.value = op;
+                          allDesSets.add(des)
                           exp.selected = true;
                           isDisabled = false;
                           flag = true;
-                          break;
-                        }
+                         
+                        } 
+
                       }
-  
                     }
                   }
                 }
+            
+                console.log('zzflag :', flag);
+                console.log('zz Iop :', Iop);
+                console.log('lastIndex :', lastIndex);
 
+                console.log('zz allDesSets : ', allDesSets);
                 if (flag) {
-             
-                  options += `
-                  <div class="option"  > 
-                    <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                  </div>
-                `;
-
-                
-
+                  allDesSets.forEach(d => {
+                    if(d === Iop.name) {
+                      console.log('zz if');
+                      options += `
+                      <div class="option"  > 
+                        <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                        <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                      </div>
+                    `;
+                    } else {
+                      console.log('zz else');
+                      options += `
+                      <div class="option"  > 
+                        <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                        <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                      </div>`;
+                    }
+                  })
                 } else {
-                 
+                  console.log('zz flag : else');
                   options += `
                   <div class="option"  > 
                     <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1493,8 +1521,6 @@ async function displayExpertiseTable(initial = false) {
                 }
               }
             } else {
-              // console.log('exp.value', exp.value);
-              // console.log('Iop', Iop);
               if(exp.value === Iop) {
                 options += `
                   <div class="option"  > 
@@ -1524,7 +1550,6 @@ async function displayExpertiseTable(initial = false) {
           });
 
           if (isDisabled) {
-            
             tglTxt = "No";
           } else {
             console.log("came")
