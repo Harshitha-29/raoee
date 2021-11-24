@@ -1226,7 +1226,21 @@ function sliderToggle(e) {
     document.querySelector(".select-options").style.display = "none";
   });
   var table_id= ("table_"+eleRowId.substring(6,8))
+  let arr=[]
   if (e.target.checked) {
+    let allSelectedTogs = JSON.parse(window.localStorage.getItem("selectedToggles"))
+    if(allSelectedTogs){
+      for(let i in allSelectedTogs ){
+        arr.push(allSelectedTogs[i])
+      }
+    }else{
+      arr.push(eleRowId)
+      window.localStorage.setItem("selectedToggles",JSON.stringify(arr))
+    }
+    arr.push(eleRowId)
+    window.localStorage.setItem("selectedToggles",JSON.stringify(arr))
+   
+
 
     for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
       
@@ -1237,7 +1251,7 @@ function sliderToggle(e) {
         document.getElementById(tog_id).disabled=true;
       }
     }
-    document.getElementById("select-list_"+eleRowId).style.pointerEvents
+  
    
     el.disabled=false;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
@@ -1246,6 +1260,7 @@ function sliderToggle(e) {
     optionSelected(false, { data: el.value, selected: true });
 
   } else {
+    window.localStorage.removeItem("selectedToggles"+eleRowId)
     for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
       
       let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
@@ -1373,6 +1388,7 @@ async function displayExpertiseTable(initial = false) {
     userSelectedVerticals
   );
   userSelectedVerticals.map((v) => {
+    console.log("NEW")
     console.log("displayExpertiseTable : userSelectedVerticals : v", v);
     let head = `
     <h6 style="font-weight: 600">
@@ -1584,6 +1600,10 @@ async function displayExpertiseTable(initial = false) {
               document.getElementById("title_"+rowId).innerHTML="----"
               document.getElementById("toggle_"+rowId)
             }
+          console.log("%%")
+          console.log(rowId)
+       
+         
           },500)
           
         }
