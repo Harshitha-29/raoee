@@ -1327,6 +1327,7 @@ async function extractCommonExpirences() {
     .get()
     .then((doc) => {
       const data = doc.data();
+      commonExpirences = []
       data.tags.map((t) => {
         commonExpirences.push(t);
       });
@@ -1397,6 +1398,7 @@ async function displayExpertiseTable(initial = false) {
         isDisabled = true;
         if (exp.subCategory) {
           exp.subCategory.map((Iop, subIndex) => {
+            
             let lastIndex = false;
             if( exp.subCategory.length == subIndex + 1) {
               lastIndex = true;
@@ -1411,12 +1413,16 @@ async function displayExpertiseTable(initial = false) {
             }
             if (initial) {
               if (USER.cvAdded) {
+                
               
                 let allDesSets = new Set();
+                let allUnDesSets = new Set();
                 let flag = false;
                 console.log('if aaa flag', flag);
                 // console.log('USER.cv :', USER.cv);
+                let prevDes = false;
                 for (let i = 0; i < USER.cv.professions.length; i++) {
+                  prevDes = false;
                   console.log('if aaa i', i);
                   // if (flag) {
                   //   break;
@@ -1439,86 +1445,71 @@ async function displayExpertiseTable(initial = false) {
                       k < eachSelectedVSExpertise.profs.length;
                       k++
                     ) {
-                      // if (flag) {
-                      //   break;
-                      // }
-                      const eachSelectedExpertise =
-                        eachSelectedVSExpertise.profs[k];
-                        // console.log(eachSelectedExpertise);
-
+                      const eachSelectedExpertise = eachSelectedVSExpertise.profs[k];
                       const cvProf = eachSelectedExpertise.prof;
                       const cvDesigations = eachSelectedExpertise.designations;
                       const cvVal = eachSelectedExpertise.value;
-  
-                      console.log('if aaa flag', flag);
-                      console.log('if aaa', eachSelectedExpertise.designations);
+
                       for(let l = 0; l < eachSelectedExpertise.designations.length; l++) {
-                        // console.log(eachSelectedExpertise.designations[l]);
                         const des = eachSelectedExpertise.designations[l];
-                        // console.log(cvv, v._id);
-                        // console.log(cvsv, sv.name);
-                        // console.log(exp.category, cvProf);
-                        // console.log(eachSelectedExpertise.designations[l], cvDesigations[l], cvDesigations.includes(des));
-                        console.log('if aaa', des);
-                        // if (flag) {
-                        //   break;
-                        // }
+                        console.log('zzz des', des, cvProf, cvsv, cvv);
                         if (
                           cvv === v._id &&
                           sv.name === cvsv &&
                           exp.category === cvProf &&
                           cvDesigations.includes(des) 
-                          // &&
-                          // op === cvVal
+                          
                         ) {
-                          console.log('if aaa', cvv, v._id, cvsv, sv.name, cvProf, exp.category, des, cvDesigations.includes(des) );
                           commonSelectExpirencesFun(eachSelectedExpertise.value)
-                          // exp.value = op;
-                          allDesSets.add(des)
+                          allDesSets.add(des);
+                          console.log('zzz allDesSets : ', allDesSets);
                           exp.selected = true;
                           isDisabled = false;
                           flag = true;
-                         
-                        } 
-
+                        } else {
+                          
+                        }
                       }
                     }
                   }
                 }
-            
-                console.log('zzflag :', flag);
-                console.log('zz Iop :', Iop);
-                console.log('lastIndex :', lastIndex);
 
-                console.log('zz allDesSets : ', allDesSets);
-                if (flag) {
-                  allDesSets.forEach(d => {
-                    if(d === Iop.name) {
-                      console.log('zz if');
+
+                console.log('zzza allDesSets : ', allDesSets, Iop.name);
+
+                allDesSets.forEach(d => {
+                  if(d === Iop.name) {
+                    console.log('qqq d name',d, Iop.name );
+                      prevDes = Iop.name;
                       options += `
                       <div class="option"  > 
                         <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                         <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                       </div>
                     `;
-                    } else {
-                      console.log('zz else');
-                      options += `
-                      <div class="option"  > 
-                        <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                        <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                      </div>`;
+                  } else {
+                    if(prevDes !== Iop.name) {
+                      console.log('allDesSets.has(prevDes)', allDesSets.has(prevDes), Iop.name);
+                      if(!allDesSets.has(Iop.name)) {
+                        prevDes = Iop.name
+                        options += `
+                        <div class="option"  > 
+                          <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                          <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                        </div>
+                      `;
+                      }
                     }
-                  })
-                } else {
-                  console.log('zz flag : else');
-                  options += `
-                  <div class="option"  > 
-                    <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                  </div>
-                `;
-                }
+                  }
+                })
+                // allUnDesSets.forEach(d => {
+                //   options += `
+                //   <div class="option"  > 
+                //     <input  type="checkbox" class="plus-minus"  name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${d.name}__${rowId}"  data-rowID="${rowId}" value="${d.name}" />
+                //     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${d.name}__${rowId}">${d.name}</label>
+                //   </div>
+                // `;
+                // })
               }
             } else {
               if(exp.value === Iop) {
@@ -1603,13 +1594,13 @@ async function displayExpertiseTable(initial = false) {
             },500)
             
           }
-          setTimeout(function(){
-            if(options.includes("hidden")){
-              document.getElementById("select-list_"+rowId).classList.remove("select-list")
-              document.getElementById("title_"+rowId).innerHTML="----"
-              document.getElementById("toggle_"+rowId)
-            }
-          },500)
+          // setTimeout(function(){
+          //   if(options.includes("hidden")){
+          //     document.getElementById("select-list_"+rowId).classList.remove("select-list")
+          //     document.getElementById("title_"+rowId).innerHTML="----"
+          //     document.getElementById("toggle_"+rowId)
+          //   }
+          // },500)
           
         }
       });
@@ -1770,6 +1761,7 @@ const verticalsTablesHTML = document.querySelector("#verticalsTables");
 const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
 const workCountryHTML = document.querySelector('#work-country');
 const workStatesHTML = document.querySelector('#work-states');
+const workCitiesHTML = document.querySelector('#work-cities');
 const stsHTML = document.querySelector('#sts');
 
 async function displayCvDetails() {
@@ -1783,6 +1775,10 @@ async function displayCvDetails() {
     })
     states += `</ul>`;
     workStatesHTML.innerHTML = states;
+
+    workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
+
+
     console.log(USER.cv.workCountry)
     //cvFormHTML['country'].value = USER.cv.workCountry;
     let optionsState = ""
@@ -1925,7 +1921,7 @@ function logoutUser() {
     .signOut()
     .then(() => {
       // Sign-out successful.
-      window.location.href = "./../adminDash.html";
+      window.location.href = "./../authentication/auth.html";
     })
     .catch((error) => {
       console.error(error);
@@ -1937,3 +1933,120 @@ function logoutUser() {
       }
     });
 }
+
+// //////////////////////////////////////////
+
+let IMG = false;
+let IMG_NAME = false;
+
+const userImageHTML = document.querySelector("#userImage");
+
+const uploadImgLocal = (e) => {
+  if (!USER.basicInfoAdded) {
+    nowuiDashboard.showNotification('top','center',"Please add all your details in order to update the profile image","primary");
+    blahHTML.src = `../assets/img/userProfile.png`;
+    return;
+  }
+  readURL(e);
+  IMG = e.target.files[0];
+  IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
+  uploadImgToDB();
+};
+
+userImageHTML.addEventListener("change", uploadImgLocal);
+
+// //////////////////////////////////////////
+
+// /////////////////////////////////////////////////////////
+
+async function uploadImgToDB() {
+  const data = USER;
+  document.getElementById("progressBar").style.display="block"
+  if (USER.basicInfo.imgUrl) {
+    const resDelete = await deleteStorage({
+      ref: `${USER.userType}s/${USER_ID}`,
+      fileName: USER.basicInfo.imgName,
+    });
+  }
+
+  const resStorage = await uploadImgToStorage({ ref: `${USER.userType}s` });
+
+  if (!resStorage.status) {
+    
+    // nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
+    return;
+  }
+  const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
+  if (!resUrl.status) {
+   
+    // nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
+    return;
+  }
+
+  data.basicInfo.imgName = IMG_NAME;
+  data.basicInfo.imgUrl = resUrl.data.url;
+
+  await USER_REF.update(data);
+  getUserDetails({ uid: USER_ID, userType: USER.userType });
+  
+  // nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
+  document.getElementById("progressBar").style.display="none"
+}
+
+// //////////////////////////////////////////
+
+let retryImgStorage = 0;
+const uploadImgToStorage = async ({ ref }) => {
+  try {
+    await storage.ref(`${ref}/${USER.uid}`).child(IMG_NAME).put(IMG);
+    return {
+      status: true,
+      message: "Uplading to file to storage success",
+    };
+  } catch (error) {
+    console.error(error);
+    if (retryImgStorage < 2) {
+      retryImgStorage++;
+      alert(`Retry. Attempt: ${retryImgStorage} Reason: ${error.message} `);
+      uploadImgToStorage({ ref });
+    } else {
+      return {
+        status: false,
+        message: `Failed to upload file to stoarge. Reason: ${error.message}`,
+      };
+    }
+  }
+};
+
+// /////////////////////////////////////////////////////////
+
+let retryImgURL = 0;
+const getUrlOfImg = async ({ ref }) => {
+  try {
+    const url = await storage
+      .ref(`${ref}/${USER.uid}`)
+      .child(IMG_NAME)
+      .getDownloadURL();
+    return {
+      status: true,
+      message: "Success. Fetched the file from storage.",
+      data: {
+        url,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    if (retryImgURL < 2) {
+      retryImgURL++;
+      alert(`Retry. Attempt: ${retryImgURL} Reason: ${error.message} `);
+      getUrlOfImg({ ref });
+    } else {
+      return {
+        status: false,
+        message: `Failed to fetch the file from stoarge. Reason: ${error.message}`,
+      };
+    }
+  }
+};
+
+// /////////////////////////////////////////////////////////
