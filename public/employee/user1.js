@@ -1234,9 +1234,6 @@ function sliderToggle(e) {
       for(let i in allSelectedTogs ){
         arr.push(allSelectedTogs[i])
       }
-    }else{
-      arr.push(eleRowId)
-      window.localStorage.setItem("selectedToggles",JSON.stringify(arr))
     }
     arr.push(eleRowId)
     window.localStorage.setItem("selectedToggles",JSON.stringify(arr))
@@ -1261,7 +1258,19 @@ function sliderToggle(e) {
     optionSelected(false, { data: el.value, selected: true });
 
   } else {
-    window.localStorage.removeItem("selectedToggles"+eleRowId)
+    let allSelectedTogs = JSON.parse(window.localStorage.getItem("selectedToggles"))
+    if(allSelectedTogs){
+      for(let i in allSelectedTogs){
+       
+        if(allSelectedTogs[i]==eleRowId){
+          const index = allSelectedTogs.indexOf(eleRowId);
+            if (index > -1) {
+              allSelectedTogs.splice(index, 1);
+            }
+        }
+      }
+      window.localStorage.setItem("selectedToggles",JSON.stringify(allSelectedTogs))
+    }
     for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
       
       let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
@@ -1612,7 +1621,7 @@ async function displayExpertiseTable(initial = false) {
             </td>
           </tr>`;
           function checkMe(id){
-            
+            console.log(id)
             setTimeout(function(){
               document.getElementById(id).checked="true"
               openDesignationDropdown(id,rowId)
@@ -1625,10 +1634,8 @@ async function displayExpertiseTable(initial = false) {
               document.getElementById("title_"+rowId).innerHTML="----"
               document.getElementById("toggle_"+rowId)
             }
-          console.log("%%")
-          console.log(rowId)
-       
-         
+            let selectedtogs =JSON.parse(window.localStorage.getItem("selectedToggles"))
+           
           },500)
           
         }
