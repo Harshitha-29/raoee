@@ -301,9 +301,9 @@ function getUserPreferences() {
     const designation = all[4];
     const index = all[5];
     if (!document.querySelector(`input[name=slider_${index}]:checked`)) {
-      console.log(
-        !document.querySelector(`input[name=slider_${index}]:checked`)
-      );
+      // console.log(
+      //   !document.querySelector(`input[name=slider_${index}]:checked`)
+      // );
       continue;
     }
 
@@ -320,7 +320,7 @@ function getUserPreferences() {
     });
   }
 
-  console.log("getUserPreferences : cvVerticals", cvVerticals);
+  //console.log("getUserPreferences : cvVerticals", cvVerticals);
   if (cvVerticals.length == 0) {
     document.getElementById("progressBar").style.display = "none";
     alert("Select atleast 1 Designation");
@@ -331,10 +331,7 @@ function getUserPreferences() {
   const sv = [];
   const prof = [];
   cvVerticals.map((cvv) => {
-    console.log(vv);
-    console.log(cvv);
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
-    console.log(vIndex);
     if (vIndex === -1) {
       vv.push({ id: cvv.ver, name: cvv.verName });
       sv.push({
@@ -391,9 +388,9 @@ function getUserPreferences() {
     }
   });
 
-  console.log("getUserPreferences : vv", vv);
-  console.log("getUserPreferences : sv", sv);
-  console.log("getUserPreferences : prof", prof);
+  // console.log("getUserPreferences : vv", vv);
+  // console.log("getUserPreferences : sv", sv);
+  // console.log("getUserPreferences : prof", prof);
 
   return { verticals: vv, subVerticals: sv, professions: prof };
 }
@@ -438,14 +435,14 @@ const updateCv = async (e) => {
   if (countrySelected === 0 || statesSelected.length === 0) {
     if (oldStateArr.length == 0) {
       document.getElementById("progressBar2").style.display = "none";
-      // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
       return;
     } else {
       statesSelected = oldStateArr.map((s) => s);
     }
     if (oldCountryArr.length == 0) {
       document.getElementById("progressBar2").style.display = "none";
-      // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
       return;
     } else {
       countrySelected = oldCountryArr.map((s) => s);
@@ -453,9 +450,9 @@ const updateCv = async (e) => {
   }
 
   const { verticals, subVerticals, professions } = getUserPreferences();
-  console.log("updateCv : verticals", verticals);
-  console.log("updateCv : subVerticals", subVerticals);
-  console.log("updateCv : professions", professions);
+  // console.log("updateCv : verticals", verticals);
+  // console.log("updateCv : subVerticals", subVerticals);
+  // console.log("updateCv : professions", professions);
 
   let resStorage, resURL;
   let data = {};
@@ -492,12 +489,12 @@ const updateCv = async (e) => {
       data.url = USER.cv.url;
       data.fileName = USER.cv.fileName;
     } else {
-      // nowuiDashboard.showNotification(
-      //   "top",
-      //   "center",
-      //   "Please Update the CV File ",
-      //   "primary"
-      // );
+      nowuiDashboard.showNotification(
+        "top",
+        "center",
+        "Please Update the CV File ",
+        "primary"
+      );
       return;
     }
   }
@@ -570,17 +567,17 @@ const updateCv = async (e) => {
     return;
   }
 
-  // nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
+  nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
   document.getElementById("progressBar2").style.display = "none";
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
-  // nowuiDashboard.showNotification(
-  //   "top",
-  //   "center",
-  //   "Data updated successfully",
-  //   "primary"
-  // );
+  nowuiDashboard.showNotification(
+    "top",
+    "center",
+    "Data updated successfully",
+    "primary"
+  );
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   setTimeout(function () {
     location.reload();
@@ -684,7 +681,7 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
-  console.log('uploadCVToDb : data :', data);
+  // console.log('uploadCVToDb : data :', data);
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
@@ -958,8 +955,8 @@ function verticalSelected(e) {
 
   // getSelectedVerticals();
   userSelectedVerticals.length = 0;
-  console.log('verticalSelected :', userSelectedMainVerticals);
-  console.log('verticalSelected :', resDeleted);
+  // console.log('verticalSelected :', userSelectedMainVerticals);
+  // console.log('verticalSelected :', resDeleted);
   userSelectedMainVerticals.map((uv) => {
     if (resDeleted && resDeleted[0] === uv.name) {
       uv.subVerticals.map((svv) => {
@@ -1160,7 +1157,7 @@ function subVerticalSelected(e = false, initial = false) {
 function getSelectedVerticals(initial = false) {
   userSelectedVerticals = [];
 
-  console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
+  // console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
   userSelectedMainVerticals.map((v) => {
     let flag = false;
     for (let i = 0; i < subVerticalsSelected.length; i++) {
@@ -1203,12 +1200,17 @@ function getSelectedVerticals(initial = false) {
 
 // /////////////////////////////////////////////////
 
-function sliderToggle(e) {
-  
+function setLocalState(index,svname){
+  alert(8)
+  console.log(index+"--"+svname)
+}
+
+function sliderToggle(e,index,svName) {
+
   const eleRowId = e.target.dataset.rowid;
   //console.log(eleRowId)
   let numId=(eleRowId.substring(6)) 
- 
+  window.localStorage.setItem(svName+"_table",index)
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   
   document.addEventListener("click", (evt) => {
@@ -1367,12 +1369,9 @@ function commonExpirencesFun() {
 
 function commonSelectExpirencesFun(selectedOP) {
   commonExpirencesOptions = '';
-  console.log(selectedOP);
   commonExpirences.map((exp) => {
-    console.log(exp)
+
     if(selectedOP === exp) {
-      console.log(selectedOP);
-      console.log(exp);
       commonExpirencesOptions += `<option selected value="${exp}" >${exp}</option> `;
     } else {
       commonExpirencesOptions += `<option  value="${exp}" >${exp}</option> `;
@@ -1392,13 +1391,12 @@ async function displayExpertiseTable(initial = false) {
     commonExpirencesFun();
   }
 
-  console.log(
-    "displayExpertiseTable : userSelectedVerticals",
-    userSelectedVerticals
-  );
+  // console.log(
+  //   "displayExpertiseTable : userSelectedVerticals",
+  //   userSelectedVerticals
+  // );
   userSelectedVerticals.map((v) => {
-    console.log("NEW")
-    console.log("displayExpertiseTable : userSelectedVerticals : v", v);
+   // console.log("displayExpertiseTable : userSelectedVerticals : v", v);
     let head = `
     <h6 style="font-weight: 600">
       Select Expertise (
@@ -1407,10 +1405,10 @@ async function displayExpertiseTable(initial = false) {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
-      console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
+      //console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
+
       let isDisabled = true;
       
-
       let rows = ``;
       let tglTxt = "";
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
@@ -1418,7 +1416,7 @@ async function displayExpertiseTable(initial = false) {
       sv.expertise.map((exp, index) => {
         let rowId = `rowId_${randNum + index}`;
         rowIdT = `rowId_${randNum + index}`;
-        console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
+        //console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
         let options = "";
         isDisabled = true;
         if (exp.subCategory) {
@@ -1443,20 +1441,18 @@ async function displayExpertiseTable(initial = false) {
                 let allDesSets = new Set();
                 let allUnDesSets = new Set();
                 let flag = false;
-                console.log('if aaa flag', flag);
+               
                 // console.log('USER.cv :', USER.cv);
                 let prevDes = false;
                 for (let i = 0; i < USER.cv.professions.length; i++) {
                   prevDes = false;
-                  console.log('if aaa i', i);
                   // if (flag) {
                   //   break;
                   // }
                   rowId = `rowId_${randNum + index}`;
                   const eachSelectedVExpertise = USER.cv.professions[i];
                   const cvv = eachSelectedVExpertise.ver;
-                  // console.log('eachSelectedVExpertise', eachSelectedVExpertise);
-                  console.log('if aaa flag', flag);
+                
                   for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
                     // if (flag) {
                     //   break;
@@ -1464,7 +1460,6 @@ async function displayExpertiseTable(initial = false) {
                     const eachSelectedVSExpertise =
                       eachSelectedVExpertise.svers[j];
                     const cvsv = eachSelectedVSExpertise.sver;
-                    // console.log('eachSelectedVSExpertise :', eachSelectedVSExpertise);
                     for (
                       let k = 0;
                       k < eachSelectedVSExpertise.profs.length;
@@ -1477,7 +1472,6 @@ async function displayExpertiseTable(initial = false) {
 
                       for(let l = 0; l < eachSelectedExpertise.designations.length; l++) {
                         const des = eachSelectedExpertise.designations[l];
-                        console.log('zzz des', des, cvProf, cvsv, cvv);
                         if (
                           cvv === v._id &&
                           sv.name === cvsv &&
@@ -1487,7 +1481,6 @@ async function displayExpertiseTable(initial = false) {
                         ) {
                           commonSelectExpirencesFun(eachSelectedExpertise.value)
                           allDesSets.add(des);
-                          console.log('zzz allDesSets : ', allDesSets);
                           exp.selected = true;
                           isDisabled = false;
                           flag = true;
@@ -1499,12 +1492,8 @@ async function displayExpertiseTable(initial = false) {
                   }
                 }
 
-
-                console.log('zzza allDesSets : ', allDesSets, Iop.name);
-
                 allDesSets.forEach(d => {
                   if(d === Iop.name) {
-                    console.log('qqq d name',d, Iop.name );
                       prevDes = Iop.name;
                       options += `
                       <div class="option"  > 
@@ -1514,7 +1503,6 @@ async function displayExpertiseTable(initial = false) {
                     `;
                   } else {
                     if(prevDes !== Iop.name) {
-                      console.log('allDesSets.has(prevDes)', allDesSets.has(prevDes), Iop.name);
                       if(!allDesSets.has(Iop.name)) {
                         prevDes = Iop.name
                         options += `
@@ -1568,18 +1556,17 @@ async function displayExpertiseTable(initial = false) {
           if (isDisabled) {
             tglTxt = "No";
           } else {
-            console.log("came")
             tglTxt = "Yes";
           }
-         
+          var tempSvName = sv.name.split(' ').filter(s => s).join(''); 
           rows +=
           `<tr>
             <td>${exp.category}</td>
             <td>
               <label class="switch">
-              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"  data-rowid="${rowId}"  ${
+              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"   data-rowid="${rowId}"  ${
                 isDisabled ? "" : checkMe("toggle_"+rowId)
-              }  onchange="sliderToggle(event)">
+              }  onchange=sliderToggle(event,"`+index+`","`+tempSvName+`") >
               <span class="slider round"></span>
               <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
             </label>
@@ -1612,7 +1599,7 @@ async function displayExpertiseTable(initial = false) {
             </td>
           </tr>`;
           function checkMe(id){
-            console.log(id)
+            
             setTimeout(function(){
               document.getElementById(id).checked="true"
               openDesignationDropdown(id,rowId)
@@ -1625,9 +1612,16 @@ async function displayExpertiseTable(initial = false) {
               document.getElementById("title_"+rowId).innerHTML="----"
               document.getElementById("toggle_"+rowId)
             }
-            let selectedtogs =JSON.parse(window.localStorage.getItem("selectedToggles"))
-           
+
+            
+            
           },500)
+          
+        }
+        console.log(tempSvName)
+
+        var sd_local_data = (window.localStorage.getItem(tempSvName+"_table"));
+        if(sd_local_data){
           
         }
       });
@@ -1665,9 +1659,14 @@ async function displayExpertiseTable(initial = false) {
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
+     
+
     });
     tables += head + table;
+
+
   });
+
 
   tablesHolderHTML.innerHTML = tables;
 
@@ -1677,7 +1676,7 @@ async function displayExpertiseTable(initial = false) {
       var options = $.extend(
         {
           onChange: function (val) {
-            console.log(val);
+            
           },
         },
         arguments[0] || {}
@@ -1709,7 +1708,12 @@ async function displayExpertiseTable(initial = false) {
       disabled: true,
     });
   });
+
+  
 }
+
+
+
 function openDesignationDropdown(toggleId,rowId){
   document.getElementById("select-list_"+rowId).style.pointerEvents="all";
   document.getElementById("select-list_"+rowId).style.opacity=1;
@@ -1806,7 +1810,7 @@ async function displayCvDetails() {
     workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
 
 
-    console.log(USER.cv.workCountry)
+    //console.log(USER.cv.workCountry)
     //cvFormHTML['country'].value = USER.cv.workCountry;
     let optionsState = ""
     let optionsCountry="";
@@ -1851,7 +1855,7 @@ async function displayCvDetails() {
     
     // console.log('displayCvDetails : cv', USER.cv);
     USER.cv.professions.map(async (v) => {
-      console.log('displayCvDetails : cv : v', v);
+      //console.log('displayCvDetails : cv : v', v);
       let name = await getNameOfId(v.ver);
       let head = `
       <div id="${v.ver}" class="collapse">
@@ -2000,13 +2004,13 @@ async function uploadImgToDB() {
 
   if (!resStorage.status) {
     
-    // nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
+    nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
     return;
   }
   const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
   if (!resUrl.status) {
    
-    // nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
+     nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
     return;
   }
 
@@ -2016,7 +2020,7 @@ async function uploadImgToDB() {
   await USER_REF.update(data);
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   
-  // nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
+  nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
   document.getElementById("progressBar").style.display="none"
 }
 
