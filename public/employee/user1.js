@@ -1260,6 +1260,8 @@ function sliderToggle(e) {
     document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
+
+  displayExpertiseTable()
 }
 
 // /////////////////////////////////////////////////
@@ -1373,6 +1375,7 @@ async function displayExpertiseTable(initial = false) {
     userSelectedVerticals
   );
   userSelectedVerticals.map((v) => {
+    let options = ''
     console.log("displayExpertiseTable : userSelectedVerticals : v", v);
     let head = `
     <h6 style="font-weight: 600">
@@ -1394,7 +1397,7 @@ async function displayExpertiseTable(initial = false) {
         let rowId = `rowId_${randNum + index}`;
         rowIdT = `rowId_${randNum + index}`;
         console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
-        let options = "";
+
         isDisabled = true;
         if (exp.subCategory) {
           exp.subCategory.map((Iop, subIndex) => {
@@ -1458,7 +1461,6 @@ async function displayExpertiseTable(initial = false) {
                           sv.name === cvsv &&
                           exp.category === cvProf &&
                           cvDesigations.includes(des) 
-                          
                         ) {
                           commonSelectExpirencesFun(eachSelectedExpertise.value)
                           allDesSets.add(des);
@@ -1466,9 +1468,7 @@ async function displayExpertiseTable(initial = false) {
                           exp.selected = true;
                           isDisabled = false;
                           flag = true;
-                        } else {
-                          
-                        }
+                        } 
                       }
                     }
                   }
@@ -1502,39 +1502,39 @@ async function displayExpertiseTable(initial = false) {
                     }
                   }
                 })
-                // allUnDesSets.forEach(d => {
-                //   options += `
-                //   <div class="option"  > 
-                //     <input  type="checkbox" class="plus-minus"  name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${d.name}__${rowId}"  data-rowID="${rowId}" value="${d.name}" />
-                //     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${d.name}__${rowId}">${d.name}</label>
-                //   </div>
-                // `;
-                // })
+
               }
             } else {
+              console.log('ggg outer else ',v._id, v.name, sv.name,  exp.category, Iop.name, rowId, initial);
               if(exp.value === Iop) {
+              console.log('ggg selected ', exp.category, Iop.name);
                 options += `
                   <div class="option"  > 
-                    <input checked type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                    <input checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                   </div>
                 `;
               } else {
+              console.log('ggg else  ', exp.category, Iop.name);
                 if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
-            
+                  console.log('ggg if');
                   options += `
                   <div class="option"> 
-                    <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                   </div>
                   `;
-                }else{
+                  // console.log('ggg', options);
+                } 
+                else {
+                  console.log('ggg else  else', exp.category, Iop.name);
                   options += `
                   <div class="option" hidden > 
-                    <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <input hidden checked  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                     <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                   </div>
                 `;
+                // console.log('ggg', options);
                 }
               }
             }
@@ -1546,7 +1546,7 @@ async function displayExpertiseTable(initial = false) {
             console.log("came")
             tglTxt = "Yes";
           }
-         
+
           rows +=
           `<tr>
             <td>${exp.category}</td>
