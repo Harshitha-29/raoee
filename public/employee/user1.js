@@ -1283,8 +1283,6 @@ function sliderToggle(e) {
     document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
-
- 
 }
 
 // /////////////////////////////////////////////////
@@ -1533,7 +1531,7 @@ async function displayExpertiseTable(initial = false) {
                     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                   </div>
                   `;
-                  // console.log('ggg', options);
+                  console.log('ggg', options);
                 } 
                 else {
                   console.log('ggg else  else', exp.category, Iop.name);
@@ -1543,7 +1541,7 @@ async function displayExpertiseTable(initial = false) {
                     <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                   </div>
                 `;
-                // console.log('ggg', options);
+                console.log('ggg', options);
                 }
               }
             }
