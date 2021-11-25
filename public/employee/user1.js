@@ -865,7 +865,7 @@ db.collection("verticals").onSnapshot(async (snaps) => {
 const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
-  let options = "";
+    var options = "";
 
   if (USER.cvAdded) {
     document.getElementById("editResumeBtn").style.display="block"
@@ -1200,17 +1200,14 @@ function getSelectedVerticals(initial = false) {
 
 // /////////////////////////////////////////////////
 
-function setLocalState(index,svname){
-  alert(8)
-  console.log(index+"--"+svname)
-}
 
-function sliderToggle(e,index,svName) {
+
+function sliderToggle(e) {
 
   const eleRowId = e.target.dataset.rowid;
   //console.log(eleRowId)
   let numId=(eleRowId.substring(6)) 
-  window.localStorage.setItem(svName+"_table",index)
+ 
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
   
   document.addEventListener("click", (evt) => {
@@ -1287,7 +1284,7 @@ function sliderToggle(e,index,svName) {
     optionSelected(false, { data: el.value, selected: false });
   }
 
-  displayExpertiseTable()
+ 
 }
 
 // /////////////////////////////////////////////////
@@ -1557,7 +1554,9 @@ async function displayExpertiseTable(initial = false) {
           } else {
             tglTxt = "Yes";
           }
-          var tempSvName = sv.name.split(' ').filter(s => s).join(''); 
+         // var tempSvName = sv.name.split(' ').filter(s => s).join(''); 
+
+   
           rows +=
           `<tr>
             <td>${exp.category}</td>
@@ -1565,7 +1564,7 @@ async function displayExpertiseTable(initial = false) {
               <label class="switch">
               <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"   data-rowid="${rowId}"  ${
                 isDisabled ? "" : checkMe("toggle_"+rowId)
-              }  onchange=sliderToggle(event,"`+index+`","`+tempSvName+`") >
+              }  onchange=sliderToggle(event) >
               <span class="slider round"></span>
               <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
             </label>
@@ -1615,14 +1614,9 @@ async function displayExpertiseTable(initial = false) {
             
             
           },500)
-          
+          console.log(options )
         }
-        console.log(tempSvName)
-
-        var sd_local_data = (window.localStorage.getItem(tempSvName+"_table"));
-        if(sd_local_data){
-          
-        }
+        
       });
       let tableHead = `
       <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
