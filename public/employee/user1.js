@@ -1286,6 +1286,8 @@ function sliderToggle(e,index,svName) {
     document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
+
+  displayExpertiseTable()
 }
 
 // /////////////////////////////////////////////////
@@ -1477,16 +1479,13 @@ async function displayExpertiseTable(initial = false) {
                           sv.name === cvsv &&
                           exp.category === cvProf &&
                           cvDesigations.includes(des) 
-                          
                         ) {
                           commonSelectExpirencesFun(eachSelectedExpertise.value)
                           allDesSets.add(des);
                           exp.selected = true;
                           isDisabled = false;
                           flag = true;
-                        } else {
-                          
-                        }
+                        } 
                       }
                     }
                   }
@@ -1515,39 +1514,39 @@ async function displayExpertiseTable(initial = false) {
                     }
                   }
                 })
-                // allUnDesSets.forEach(d => {
-                //   options += `
-                //   <div class="option"  > 
-                //     <input  type="checkbox" class="plus-minus"  name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${d.name}__${rowId}"  data-rowID="${rowId}" value="${d.name}" />
-                //     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${d.name}__${rowId}">${d.name}</label>
-                //   </div>
-                // `;
-                // })
+
               }
             } else {
+              console.log('ggg outer else ',v._id, v.name, sv.name,  exp.category, Iop.name, rowId, initial);
               if(exp.value === Iop) {
+              console.log('ggg selected ', exp.category, Iop.name);
                 options += `
                   <div class="option"  > 
-                    <input checked type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                    <input checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
                     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                   </div>
                 `;
               } else {
+              console.log('ggg else  ', exp.category, Iop.name);
                 if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
-            
+                  console.log('ggg if');
                   options += `
                   <div class="option"> 
-                    <input   type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                   </div>
                   `;
-                }else{
+                  // console.log('ggg', options);
+                } 
+                else {
+                  console.log('ggg else  else', exp.category, Iop.name);
                   options += `
                   <div class="option" hidden > 
-                    <input hidden checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <input hidden checked  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                     <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                   </div>
                 `;
+                // console.log('ggg', options);
                 }
               }
             }
