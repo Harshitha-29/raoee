@@ -7,27 +7,27 @@ let USER = false;
 let USER_REF = false;
 let USER_ID = false;
 let USER_RAW = false;
-var oldStateArr=[];
+var oldStateArr = [];
+var oldCountryArr=[];
 var empStatusDrop = new Choices("#employmentStatus", {
   removeItemButton: true,
   maxItemCount: 100,
   searchResultLimit: 100,
   renderChoiceLimit: 100,
 }).disable();
-var internStatusDrop= new Choices("#internStatus", {
+var internStatusDrop = new Choices("#internStatus", {
   removeItemButton: true,
   maxItemCount: 100,
   searchResultLimit: 100,
   renderChoiceLimit: 100,
 }).disable();
-var qualificationDrop=new Choices("#qualification", {
+var qualificationDrop = new Choices("#qualification", {
   removeItemButton: true,
   maxItemCount: 100,
   searchResultLimit: 100,
   renderChoiceLimit: 100,
-
 }).disable();
-auth.onAuthStateChanged(async(user) => {
+auth.onAuthStateChanged(async (user) => {
   if (user) {
     USER_RAW = user;
     USER_ID = user.uid;
@@ -40,20 +40,18 @@ auth.onAuthStateChanged(async(user) => {
       document.getElementById("emailID").innerHTML = user.email;
     }
     getUserDetails({ uid: user.uid, userType: user.displayName });
-   
   } else {
-
     return (window.location.href = `./../authentication/auth.html`);
   }
 });
 
-const topbarUsernameHTML = document.querySelector('#topbar-username');
-const topbarImgHTML = document.querySelector('#topbar-img');
+const topbarUsernameHTML = document.querySelector("#topbar-username");
+const topbarImgHTML = document.querySelector("#topbar-img");
 
 function displayAuthSigns() {
-  topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
-  if(USER.basicInfoAdded) {
-    if(USER.basicInfo.imgUrl) { 
+  topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`;
+  if (USER.basicInfoAdded) {
+    if (USER.basicInfo.imgUrl) {
       topbarImgHTML.src = USER.basicInfo.imgUrl;
     }
   }
@@ -73,7 +71,6 @@ function sendEmail() {
 // ////////////////////////////////////////////
 let retryUser = 0;
 async function getUserDetails({ uid, userType }) {
-
   if (userType === "employee") {
     userType = `${userType}s`;
   }
@@ -81,9 +78,9 @@ async function getUserDetails({ uid, userType }) {
     USER_REF = await db.collection(userType).doc(uid);
     const refDoc = await USER_REF.get();
     USER = await refDoc.data();
-  
+
     displayUserDetails();
-    displayAuthSigns()
+    displayAuthSigns();
   } catch (error) {
     console.error(error);
     if (retryUser < 2) {
@@ -116,13 +113,13 @@ const toggleCvDisplay = (e) => {
 };
 const toggleUploadCvDisplay = (e) => {
   if (e?.target?.checked) {
-    document.getElementById("cv-file").style.display="block"
-    document.getElementById("uploadNewCv").style.display="block"
-    document.getElementById("editCvUrlHolder").style.display="none"
+    document.getElementById("cv-file").style.display = "block";
+    document.getElementById("uploadNewCv").style.display = "block";
+    document.getElementById("editCvUrlHolder").style.display = "none";
   } else {
-    document.getElementById("cv-file").style.display="none"
-    document.getElementById("uploadNewCv").style.display="none"
-    document.getElementById("editCvUrlHolder").style.display="block"
+    document.getElementById("cv-file").style.display = "none";
+    document.getElementById("uploadNewCv").style.display = "none";
+    document.getElementById("editCvUrlHolder").style.display = "block";
   }
 };
 
@@ -138,42 +135,35 @@ const toggleBasicInfoDisplay = (e) => {
     userBasicFormHTML["fname"].readOnly = false;
     userBasicFormHTML["lname"].readOnly = false;
     userBasicFormHTML["phone"].readOnly = false;
-    // console.log(userBasicFormHTML["qualification"]);
-    // document.querySelector('#qualification').disabled = false;
-    // userBasicFormHTML["qualification"].classList.remove('is-hidden');
-   
-   // document.getElementById("qualification").disabled = true;
-    empStatusDrop.enable()
-    internStatusDrop.enable()
-    qualificationDrop.enable()
+    userBasicFormHTML["experienceYear"].readOnly = false;
+    empStatusDrop.enable();
+    internStatusDrop.enable();
+    qualificationDrop.enable();
     // userBasicFormHTML["certified-domestic"].disabled = false;
-    document.getElementById("radioDom1").disabled=false;
-    document.getElementById("radioDom2").disabled=false;
-    document.getElementById("radioInt1").disabled=false;
-    document.getElementById("radioInt2").disabled=false;
-    document.getElementById("radioGen1").disabled=false;
-    document.getElementById("radioGen2").disabled=false;
-    document.getElementById("radioGen3").disabled=false;
+    document.getElementById("radioDom1").disabled = false;
+    document.getElementById("radioDom2").disabled = false;
+    document.getElementById("radioInt1").disabled = false;
+    document.getElementById("radioInt2").disabled = false;
+    document.getElementById("radioGen1").disabled = false;
+    document.getElementById("radioGen2").disabled = false;
+    document.getElementById("radioGen3").disabled = false;
     updateBasicInfoBtnHTML.style.display = "block";
-    console.log(userBasicFormHTML["qualification"]);
-    
-    
   } else {
-    empStatusDrop.disable()
-    internStatusDrop.disable()
-    qualificationDrop.disable()
+    empStatusDrop.disable();
+    internStatusDrop.disable();
+    qualificationDrop.disable();
     userBasicFormHTML["fname"].readOnly = true;
     userBasicFormHTML["lname"].readOnly = true;
-    userBasicFormHTML["phone"].readOnly = true;   
-    document.getElementById("radioDom1").disabled=true;
-    document.getElementById("radioDom2").disabled=true;
-    document.getElementById("radioInt1").disabled=true;
-    document.getElementById("radioInt2").disabled=true;
-    document.getElementById("radioGen1").disabled=true;
-    document.getElementById("radioGen2").disabled=true;
-    document.getElementById("radioGen3").disabled=true;
+    userBasicFormHTML["phone"].readOnly = true;
+    userBasicFormHTML["experienceYear"].readOnly = true;
+    document.getElementById("radioDom1").disabled = true;
+    document.getElementById("radioDom2").disabled = true;
+    document.getElementById("radioInt1").disabled = true;
+    document.getElementById("radioInt2").disabled = true;
+    document.getElementById("radioGen1").disabled = true;
+    document.getElementById("radioGen2").disabled = true;
+    document.getElementById("radioGen3").disabled = true;
     updateBasicInfoBtnHTML.style.display = "none";
-    
   }
 };
 
@@ -192,15 +182,21 @@ function displayUserDetails() {
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
   userBasicFormHTML["phone"].value = USER.phone;
+
+  if(USER?.basicInfo?.experienceYear)
+    userBasicFormHTML["experienceYear"].value = USER.basicInfo.experienceYear;
   fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
   if (USER.basicInfoAdded) {
-    aboutMeProfileHTML.innerText = USER.basicInfo.aboutMe;
-    // userBasicFormHTML["address"].value = USER.basicInfo.address;
-    // userBasicFormHTML["city"].value = USER.basicInfo.city;
-    // userBasicFormHTML["home-state"].value = USER.basicInfo.state;
-    // userBasicFormHTML["home-country"].value = USER.basicInfo.country;
-    // userBasicFormHTML["postal-code"].value = USER.basicInfo.postalCode;
-    // userBasicFormHTML["about-me"].value = USER?.basicInfo.aboutMe;
+
+    userBasicFormHTML["qualification"].value = USER.basicInfo.qualification;
+    userBasicFormHTML["employmentStatus"].value =
+      USER.basicInfo.employmentStatus;
+    userBasicFormHTML["internStatus"].value = USER.basicInfo.internStatus;
+    userBasicFormHTML["certified-domestic"].value =
+      USER.basicInfo.certifiedDomestic;
+    userBasicFormHTML["certified-internationally"].value =
+      USER.basicInfo.certifiedInternationally;
+    userBasicFormHTML["gender"].value = USER.basicInfo.gender;
     blahHTML.src = USER?.basicInfo?.imgUrl || `../assets/img/userProfile.png`;
   }
 
@@ -220,12 +216,14 @@ const updateBasicInfo = async (e) => {
   const lname = userBasicFormHTML["lname"].value;
   const phone = userBasicFormHTML["phone"].value;
 
-  // const address = userBasicFormHTML["address"].value;
-  // const city = userBasicFormHTML["city"].value;
-  // const state = userBasicFormHTML["home-state"].value;
-  // const country = userBasicFormHTML["home-country"].value;
-  // const postalCode = userBasicFormHTML["postal-code"].value;
-  // const aboutMe = userBasicFormHTML["about-me"].value;
+  const qualification = userBasicFormHTML["qualification"].value;
+  const employmentStatus = userBasicFormHTML["employmentStatus"].value;
+  const internStatus = userBasicFormHTML["internStatus"].value;
+  const certifiedDomestic = userBasicFormHTML["certified-domestic"].value;
+  const certifiedInternationally =
+    userBasicFormHTML["certified-internationally"].value;
+  const gender = userBasicFormHTML["gender"].value;
+  const experienceYear = userBasicFormHTML['experienceYear'].value;
 
   const data = {
     ...USER,
@@ -234,13 +232,13 @@ const updateBasicInfo = async (e) => {
     phone,
     basicInfo: {
       ...USER.basicInfo,
-      // address,
-      // city,
-      // state,
-      // country,
-      // postalCode,
-      // aboutMe,
-      
+      qualification,
+      employmentStatus,
+      internStatus,
+      certifiedDomestic,
+      certifiedInternationally,
+      gender,
+      experienceYear
     },
     basicInfoAdded: true,
   };
@@ -264,8 +262,13 @@ const updateBasicInfo = async (e) => {
     }
 
     await USER_REF.update(data);
-    
-    nowuiDashboard.showNotification('top','center',"Data updated Successfully","primary");
+
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Basic Data updated Successfully",
+      "primary"
+    );
     getUserDetails({ uid: USER_ID, userType: USER.userType });
   } catch (error) {
     console.error(error);
@@ -280,29 +283,53 @@ userBasicFormHTML.addEventListener("submit", updateBasicInfo);
 function getUserPreferences() {
   const cvVerticals = [];
 
-  cvFormHTML.querySelectorAll(`select[name="expertise"]`).forEach((e) => {
-    const all = e.value.split("__");
+  for (
+    let i = 0;
+    i <
+    document.querySelectorAll(`input[name=designation_checkbox]:checked`)
+      .length;
+    i++
+  ) {
+    const e = document.querySelectorAll(
+      `input[name=designation_checkbox]:checked`
+    )[i];
+    const all = e.id.split("__");
     const selectedVId = all[0];
     const selectedVName = all[1];
     const selectedSubV = all[2];
-    const category = all[3];
-    const value = all[4];
-    const rowId = all[5];
-
-    if (document.querySelector(`input[data-rowid="${rowId}"]`).checked) {
-      cvVerticals.push({
-        verName: selectedVName,
-        ver: selectedVId,
-        subVertical: selectedSubV,
-        category,
-        value,
-      });
+    const profession = all[3];
+    const designation = all[4];
+    const index = all[5];
+    if (!document.querySelector(`input[name=slider_${index}]:checked`)) {
+      // console.log(
+      //   !document.querySelector(`input[name=slider_${index}]:checked`)
+      // );
+      continue;
     }
-  });
+
+    const value = document.querySelector(
+      `select[name=expertise-${index}`
+    ).value;
+    cvVerticals.push({
+      verName: selectedVName,
+      ver: selectedVId,
+      subVertical: selectedSubV,
+      profession,
+      designation,
+      value,
+    });
+  }
+
+  //console.log("getUserPreferences : cvVerticals", cvVerticals);
+  if (cvVerticals.length == 0) {
+    document.getElementById("progressBar").style.display = "none";
+    alert("Select atleast 1 Designation");
+    return;
+  }
 
   const vv = [];
   const sv = [];
-  const ee = [];
+  const prof = [];
   cvVerticals.map((cvv) => {
     let vIndex = vv.findIndex((v) => v.id === cvv.ver);
     if (vIndex === -1) {
@@ -311,7 +338,7 @@ function getUserPreferences() {
         ver: cvv.ver,
         sver: [],
       });
-      ee.push({
+      prof.push({
         ver: cvv.ver,
         svers: [],
       });
@@ -319,32 +346,59 @@ function getUserPreferences() {
 
     vIndex = sv.findIndex((v) => v.ver === cvv.ver);
     let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
-
     if (svIndex === -1) {
       sv[vIndex].sver.push(cvv.subVertical);
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
+    }
 
-      ee[vIndex].svers.push({
+    const profvIndex = prof.findIndex((p) => p.ver == cvv.ver);
+    const profsvIndex = prof[profvIndex].svers.findIndex(
+      (p) => p.sver === cvv.subVertical
+    );
+    if (profsvIndex === -1) {
+      prof[profvIndex].svers.push({
         sver: cvv.subVertical,
-        expertise: [{ category: cvv.category, value: cvv.value }],
+        profs: [
+          {
+            prof: cvv.profession,
+            designations: [cvv.designation],
+            value: cvv.value,
+          },
+        ],
       });
     } else {
-      vIndex = ee.findIndex((v) => v.ver === cvv.ver);
-      svIndex = ee[vIndex].svers.findIndex((sv) => sv.sver === cvv.subVertical);
-      ee[vIndex].svers[svIndex].expertise.push({
-        category: cvv.category,
-        value: cvv.value,
-      });
+      let profIndex = prof[profvIndex].svers[profsvIndex].profs.findIndex(
+        (p) => p.prof === cvv.profession
+      );
+      if (profIndex === -1) {
+        prof[profvIndex].svers[profsvIndex].profs.push({
+          prof: cvv.profession,
+          designations: [cvv.designation],
+          value: cvv.value,
+        });
+      } else {
+        const desigIndex = prof[profvIndex].svers[profsvIndex].profs[
+          profIndex
+        ].designations.findIndex((d) => d === cvv.designation);
+        if (desigIndex === -1) {
+          prof[profvIndex].svers[profsvIndex].profs[
+            profIndex
+          ].designations.push(cvv.designation);
+        }
+      }
     }
   });
 
-  return { verticals: vv, subVerticals: sv, expertise: ee };
+  // console.log("getUserPreferences : vv", vv);
+  // console.log("getUserPreferences : sv", sv);
+  // console.log("getUserPreferences : prof", prof);
+
+  return { verticals: vv, subVerticals: sv, professions: prof };
 }
 
 // /////////////////////////////////////////////////////////
 
 let statesSelected = [];
-
+let countrySelected = [];
 function selectedState(e) {
   if (e) {
     statesSelected = Array.from(e.target.selectedOptions).map(
@@ -352,7 +406,13 @@ function selectedState(e) {
     );
   }
 }
-
+function selectedCountry(e) {
+  if (e) {
+    countrySelected = Array.from(e.target.selectedOptions).map(
+      (x) => x.value ?? x.text
+    );
+  }
+}
 
 // /////////////////////////////////////////////////////////
 
@@ -362,21 +422,37 @@ let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
-  document.getElementById("progressBar2").style.display="block";
 
-  const workCountry = cvFormHTML['country'].value;
-  
-  if(workCountry === -1 || statesSelected.length === 0 ) {
-    if(oldStateArr.length==0){
-      document.getElementById("progressBar2").style.display="none"
-      nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+  if (!USER.basicInfoAdded) {
+    alert("Before adding CV, Please add basic information first .");
+    return;
+  }
+
+  document.getElementById("progressBar2").style.display = "block";
+
+  const workCity = cvFormHTML["work-city"].value;
+
+  if (countrySelected === 0 || statesSelected.length === 0) {
+    if (oldStateArr.length == 0) {
+      document.getElementById("progressBar2").style.display = "none";
+       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
       return;
-    }else{
-      statesSelected = oldStateArr.map(s=>s);
+    } else {
+      statesSelected = oldStateArr.map((s) => s);
+    }
+    if (oldCountryArr.length == 0) {
+      document.getElementById("progressBar2").style.display = "none";
+       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+      return;
+    } else {
+      countrySelected = oldCountryArr.map((s) => s);
     }
   }
 
-  const { verticals, subVerticals, expertise } = getUserPreferences();
+  const { verticals, subVerticals, professions } = getUserPreferences();
+  // console.log("updateCv : verticals", verticals);
+  // console.log("updateCv : subVerticals", subVerticals);
+  // console.log("updateCv : professions", professions);
 
   let resStorage, resURL;
   let data = {};
@@ -408,27 +484,43 @@ const updateCv = async (e) => {
         // return;
       }
     }
-
   } else {
     if (USER.cvAdded) {
       data.url = USER.cv.url;
       data.fileName = USER.cv.fileName;
     } else {
-      nowuiDashboard.showNotification('top','center',"Please Update the CV File ","primary");
+      nowuiDashboard.showNotification(
+        "top",
+        "center",
+        "Please Update the CV File ",
+        "primary"
+      );
       return;
     }
   }
 
   data.verticals = verticals;
   data.subVerticals = subVerticals;
-  data.expertise = expertise;
+  data.professions = professions;
   data.userType = USER.userType;
   data.userId = USER.uid;
   data.fname = USER.fname;
   data.lname = USER.lname;
-  data.workCountry = workCountry;
+  data.phone = USER.phone;
+  data.email = USER.email;
+  data.createdAt = USER.createdAt;
+  data.createdAtStr = USER.createdAtStr;
+  data.createdByAdmin = USER?.createdByAdmin ? USER.createdByAdmin : false;
+  data.workCountry = countrySelected;
   data.workStates = statesSelected;
- 
+  data.workCity = workCity;
+  data.qualification = USER.basicInfo.qualification;
+  data.employmentStatus = USER.basicInfo.employmentStatus;
+  data.internStatus = USER.basicInfo.internStatus;
+  data.certifiedDomestic = USER.basicInfo.certifiedDomestic;
+  data.certifiedInternationally = USER.basicInfo.certifiedInternationally;
+  data.gender = USER.basicInfo.gender;
+
   const resDB = await uploadCVToDb({ data });
   retryDB = 0;
   if (!resDB.status) {
@@ -439,13 +531,14 @@ const updateCv = async (e) => {
   data = {
     verticals,
     subVerticals,
-    expertise,
+    professions,
     fileName: FILE_NAME ? FILE_NAME : USER.cv.fileName,
     url: FILE_NAME ? resURL.data.url : USER.cv.url,
     collectionName: resDB.data.collectionName,
     docId: resDB.data.docId,
-    workCountry,
-    workStates: statesSelected
+    workCountry: countrySelected,
+    workStates: statesSelected,
+    workCity: workCity,
   };
 
   const resUpdateCvDb = await updateCollectionsDb({
@@ -456,7 +549,7 @@ const updateCv = async (e) => {
     // return;
   }
 
-  if(USER.cvAdded){
+  if (USER.cvAdded) {
     const resDeleteCvDb = await deleteCvDb({
       collectionName: USER.cv.collectionName,
       docId: USER.cv.docId,
@@ -466,7 +559,7 @@ const updateCv = async (e) => {
       // return;
     }
   }
-  
+
   const resUserDB = await uploadToUserDb({ data });
   retryUserDB = 0;
   if (!resUserDB.status) {
@@ -474,17 +567,21 @@ const updateCv = async (e) => {
     return;
   }
 
-
-  // nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
-  document.getElementById("progressBar2").style.display="none"
+  nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
+  document.getElementById("progressBar2").style.display = "none";
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
-  nowuiDashboard.showNotification('top','center',"Data updated successfully","primary");
+  nowuiDashboard.showNotification(
+    "top",
+    "center",
+    "Data updated successfully",
+    "primary"
+  );
   getUserDetails({ uid: USER_ID, userType: USER.userType });
-  setTimeout(function(){
+  setTimeout(function () {
     location.reload();
-  },2000)
+  }, 2000);
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -584,6 +681,7 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
+  // console.log('uploadCVToDb : data :', data);
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
@@ -703,8 +801,11 @@ const uploadFileToStorage = async ({ ref }) => {
 
 function uploadCVFile(e) {
   FILE = e.target.files[0];
-  const res = checkFileType({file: FILE, fileTypes: ['pdf', 'ppt', 'docx', 'png', 'pptx', 'doc']})
-  if(!res.status) {
+  const res = checkFileType({
+    file: FILE,
+    fileTypes: ["pdf", "ppt", "docx", "png", "pptx", "doc"],
+  });
+  if (!res.status) {
     alert(res.message);
     return;
   }
@@ -764,7 +865,8 @@ db.collection("verticals").onSnapshot(async (snaps) => {
 const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
-  let options = "";
+    var options = "";
+
   if (USER.cvAdded) {
     document.getElementById("editResumeBtn").style.display="block"
     document.getElementById("cv-file").style.display="none"
@@ -782,12 +884,15 @@ function displayVerticalDropdown() {
       displaySubVerticalDropdown(true);
     }, 2000);
   } else {
-    
     document.getElementById("editResumeBtn").style.display="none"
     VERTICALS.map((ver) => {
       options += `<option value="${ver.name}">${ver.name}</option>`;
     });
   }
+
+  // VERTICALS.map((ver) => {
+  //   options += `<option value="${ver.name}">${ver.name}</option>`;
+  // });
 
   verticalDropHolderHTML.innerHTML = `
   <label>Select Vertical
@@ -813,7 +918,7 @@ function displayVerticalDropdown() {
     renderChoiceLimit: 10,
   });
 
-  // $("#choices-multiple-remove-button").selectedIndex = "1";
+
 }
 
 // ///////////////////////////////////////////
@@ -850,6 +955,8 @@ function verticalSelected(e) {
 
   // getSelectedVerticals();
   userSelectedVerticals.length = 0;
+  // console.log('verticalSelected :', userSelectedMainVerticals);
+  // console.log('verticalSelected :', resDeleted);
   userSelectedMainVerticals.map((uv) => {
     if (resDeleted && resDeleted[0] === uv.name) {
       uv.subVerticals.map((svv) => {
@@ -922,10 +1029,10 @@ function displaySubVerticalDropdown(initial = false) {
       });
     }
   }
-  // console.log(userSelectedMainVerticals);
+
+  // console.log('displaySubVerticalDropdown : userSelectedMainVerticals ',userSelectedMainVerticals);
   userSelectedMainVerticals.map((ver) => {
     ver.subVerticals.map((sv) => {
-      // subVerticalsSelected.map(selected )
       let flag = "";
       for (let i = 0; i < subVerticalsSelected.length; i++) {
         if (subVerticalsSelected[i] === `${ver.name}__${sv.name}`) {
@@ -1050,6 +1157,7 @@ function subVerticalSelected(e = false, initial = false) {
 function getSelectedVerticals(initial = false) {
   userSelectedVerticals = [];
 
+  // console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
   userSelectedMainVerticals.map((v) => {
     let flag = false;
     for (let i = 0; i < subVerticalsSelected.length; i++) {
@@ -1081,6 +1189,7 @@ function getSelectedVerticals(initial = false) {
       });
     }
   });
+  // console.log('getSelectedVerticals : userSelectedVerticals',userSelectedVerticals);
 
   if (initial) {
     displayExpertiseTable(true);
@@ -1091,17 +1200,87 @@ function getSelectedVerticals(initial = false) {
 
 // /////////////////////////////////////////////////
 
+
+
 function sliderToggle(e) {
+
   const eleRowId = e.target.dataset.rowid;
-  
+  //console.log(eleRowId)
+  let numId=(eleRowId.substring(6)) 
+ 
   const el = document.querySelector(`select[data-rowid="${eleRowId}"]`);
+  
+  document.addEventListener("click", (evt) => {
+    const flyoutElement = document.querySelector(".select-list");
+    let targetElement = evt.target; // clicked element
+  
+    do {
+      if (targetElement == flyoutElement) {
+        // This is a click inside. Do nothing, just return.
+        return;
+      }
+      // Go up the DOM
+      targetElement = targetElement.parentNode;
+    } while (targetElement);
+    // This is a click outside.
+    document.querySelector(".select-options").style.display = "none";
+  });
+  var table_id= ("table_"+eleRowId.substring(6,8))
+  let arr=[]
   if (e.target.checked) {
-    el.disabled = false;
-    document.getElementById(eleRowId).innerHTML="Yes"
+    let allSelectedTogs = JSON.parse(window.localStorage.getItem("selectedToggles"))
+    if(allSelectedTogs){
+      for(let i in allSelectedTogs ){
+        arr.push(allSelectedTogs[i])
+      }
+    }
+    arr.push(eleRowId)
+    window.localStorage.setItem("selectedToggles",JSON.stringify(arr))
+   
+
+
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+
+      if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
+        
+        document.getElementById(tog_id).disabled=true;
+      }
+    }
+  
+   
+    el.disabled=false;
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
+    document.getElementById("select-list_"+eleRowId).style.opacity = 1;
+    document.getElementById(eleRowId).innerHTML = "Yes";
     optionSelected(false, { data: el.value, selected: true });
+
   } else {
-    document.getElementById(eleRowId).innerHTML="No"
+    let allSelectedTogs = JSON.parse(window.localStorage.getItem("selectedToggles"))
+    if(allSelectedTogs){
+      for(let i in allSelectedTogs){
+       
+        if(allSelectedTogs[i]==eleRowId){
+          const index = allSelectedTogs.indexOf(eleRowId);
+            if (index > -1) {
+              allSelectedTogs.splice(index, 1);
+            }
+        }
+      }
+      window.localStorage.setItem("selectedToggles",JSON.stringify(allSelectedTogs))
+    }
+    for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
+      
+      let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+      if(table_id.substring(6) == tog_id.substring(13,15))
+        document.getElementById(tog_id).disabled=false;  
+    }
+    document.getElementById(eleRowId).innerHTML = "No";
     el.disabled = true;
+    document.getElementById("select-list_"+eleRowId).style.pointerEvents = "none"
+    document.getElementById("select-list_"+eleRowId).style.opacity = 0.4;
+    document.getElementById("designation_"+eleRowId).style.display = "none";
     optionSelected(false, { data: el.value, selected: false });
   }
 }
@@ -1111,7 +1290,6 @@ function sliderToggle(e) {
 function optionSelected(e = false, data = false) {
   let v, selected;
   if (e) {
-
     v = e.target.value;
     selected = true;
   } else {
@@ -1120,13 +1298,9 @@ function optionSelected(e = false, data = false) {
   }
 
   const vid = v.split("__")[0];
-  const vname = v.split("__")[1];
   const svname = v.split("__")[2];
   const cat = v.split("__")[3];
   const val = v.split("__")[4];
-  const rowId = v.split("__")[5];
-
-
 
   let flag = false;
   for (let i = 0; i < userSelectedVerticals.length; i++) {
@@ -1151,7 +1325,9 @@ function optionSelected(e = false, data = false) {
               userSelectedVerticals[i].subverticals[j].expertise[k].value = val;
               userSelectedVerticals[i].subverticals[j].expertise[k].selected =
                 selected;
-              
+              // console.log('optionSelected : userSelectedVerticals[i].subverticals[j].expertise[k]',
+              //   userSelectedVerticals[i].subverticals[j].expertise[k]
+              // );
               flag = true;
               break;
             }
@@ -1164,14 +1340,60 @@ function optionSelected(e = false, data = false) {
 
 // /////////////////////////////////////////////////
 
+let commonExpirences = [];
+let commonExpirencesOptions = ``;
+
+async function extractCommonExpirences() {
+  await db
+    .collection("experienceTags")
+    .doc("tags")
+    .get()
+    .then((doc) => {
+      const data = doc.data();
+      commonExpirences = []
+      data.tags.map((t) => {
+        commonExpirences.push(t);
+      });
+    });
+  
+}
+
+function commonExpirencesFun() {
+  commonExpirences.map((exp) => {
+    commonExpirencesOptions += `<option  value="${exp}" >${exp}</option> `;
+  });
+}
+
+function commonSelectExpirencesFun(selectedOP) {
+  commonExpirencesOptions = '';
+  commonExpirences.map((exp) => {
+
+    if(selectedOP === exp) {
+      commonExpirencesOptions += `<option selected value="${exp}" >${exp}</option> `;
+    } else {
+      commonExpirencesOptions += `<option  value="${exp}" >${exp}</option> `;
+    }
+  });
+}
+
+// /////////////////////////////////////////////////
+
 const tablesHolderHTML = document.querySelector("#tablesHolder");
 
-function displayExpertiseTable(initial = false) {
+async function displayExpertiseTable(initial = false) {
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
+  if (commonExpirences.length === 0) {
+    await extractCommonExpirences();
+    commonExpirencesFun();
+  }
 
-  
+  // console.log(
+  //   "displayExpertiseTable : userSelectedVerticals",
+  //   userSelectedVerticals
+  // );
   userSelectedVerticals.map((v) => {
+   // console.log("displayExpertiseTable : userSelectedVerticals : v", v);
     let head = `
     <h6 style="font-weight: 600">
       Select Expertise (
@@ -1180,180 +1402,408 @@ function displayExpertiseTable(initial = false) {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
+      //console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
+
       let isDisabled = true;
+      
+      let rows = ``;
+      let tglTxt = "";
+      let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
+      let rowIdT;
+      sv.expertise.map((exp, index) => {
+        console.log("------------------")
+
+        let rowId = `rowId_${randNum + index}`;
+        rowIdT = `rowId_${randNum + index}`;
+        //console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
+        let options = "";
+      
+        isDisabled = true;
+        if (exp.subCategory) {
+          exp.subCategory.map((Iop, subIndex) => {
+            
+            let lastIndex = false;
+            if( exp.subCategory.length == subIndex + 1) {
+              lastIndex = true;
+            }
+            // rowId = `rowId_${randNum + index}_${subIndex}`;
+            // console.log("displayExpertiseTable : sv : exp : Iop ", Iop);
+            
+            if (exp?.selected) {
+              isDisabled = false;
+            } else {
+              isDisabled = true;
+            }
+            if (initial) {
+        
+              if (USER.cvAdded) {
+                
+                
+                let allDesSets = new Set();
+                let allUnDesSets = new Set();
+                let flag = false;
+               
+                // console.log('USER.cv :', USER.cv);
+                let prevDes = false;
+                for (let i = 0; i < USER.cv.professions.length; i++) {
+                  prevDes = false;
+                  // if (flag) {
+                  //   break;
+                  // }
+                  rowId = `rowId_${randNum + index}`;
+                  const eachSelectedVExpertise = USER.cv.professions[i];
+                  const cvv = eachSelectedVExpertise.ver;
+                
+                  for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
+                    // if (flag) {
+                    //   break;
+                    // }
+                    const eachSelectedVSExpertise =
+                      eachSelectedVExpertise.svers[j];
+                    const cvsv = eachSelectedVSExpertise.sver;
+                    for (
+                      let k = 0;
+                      k < eachSelectedVSExpertise.profs.length;
+                      k++
+                    ) {
+                      const eachSelectedExpertise = eachSelectedVSExpertise.profs[k];
+                      const cvProf = eachSelectedExpertise.prof;
+                      const cvDesigations = eachSelectedExpertise.designations;
+                      const cvVal = eachSelectedExpertise.value;
+
+                      for(let l = 0; l < eachSelectedExpertise.designations.length; l++) {
+                        const des = eachSelectedExpertise.designations[l];
+                        if (
+                          cvv === v._id &&
+                          sv.name === cvsv &&
+                          exp.category === cvProf &&
+                          cvDesigations.includes(des) 
+                        ) {
+                          commonSelectExpirencesFun(eachSelectedExpertise.value)
+                          allDesSets.add(des);
+                          exp.selected = true;
+                          isDisabled = false;
+                          flag = true;
+                        } 
+                      }
+                    }
+                  }
+                }
+
+                allDesSets.forEach(d => {
+                  if(d === Iop.name) {
+                      prevDes = Iop.name;
+                      options += `
+                      <div class="option"  > 
+                        <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                        <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                      </div>
+                    `;
+                  } else {
+                    if(prevDes !== Iop.name) {
+                      if(!allDesSets.has(Iop.name)) {
+                        prevDes = Iop.name
+                        options += `
+                        <div class="option"  > 
+                          <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                          <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                        </div>
+                      `;
+                      }
+                    }
+                  }
+                })
+
+              }
+            } 
+            else {
+              console.log("ERrerererere")
+              console.log('ggg outer else ',v._id, v.name, sv.name,  exp.category, Iop.name, rowId, initial);
+              if(exp.value === Iop) {
+              console.log('ggg selected ', exp.category, Iop.name);
+                options += `
+                  <div class="option"  > 
+                    <input checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
+                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                  </div>
+                `;
+              } else {
+                options += `
+                <div class="option"> 
+                  <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                  <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                </div>
+                `;
+                console.log('ggg', options);
+              console.log('ggg else  ', exp.category, Iop.name);
+                if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
+                  console.log('ggg if');
+                  options += `
+                  <div class="option"> 
+                    <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
+                  </div>
+                  `;
+                  console.log('ggg', options);
+                } 
+                else {
+                  console.log('ggg else  else', exp.category, Iop.name);
+                  options += `
+                  <div class="option" hidden > 
+                    <input hidden checked  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
+                    <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
+                  </div>
+                `;
+                console.log('ggg', options);
+                }
+              }
+            }
+          });
+
+          if (isDisabled) {
+            tglTxt = "No";
+          } else {
+            tglTxt = "Yes";
+          }
+         // var tempSvName = sv.name.split(' ').filter(s => s).join(''); 
+
+   
+          rows +=
+          `<tr>
+            <td>${exp.category}</td>
+            <td>
+              <label class="switch">
+              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"   data-rowid="${rowId}"  ${
+                isDisabled ? "" : checkMe("toggle_"+rowId)
+              }  onchange=sliderToggle(event) >
+              <span class="slider round"></span>
+              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
+            </label>
+            </td>
+          
+            <td style="">
+              <div class="select-list" id="select-list_` +
+            rowId +
+            `" style="pointer-events:none;opacity:0.4"  >
+                  <div class="title" id="title_` +
+            rowId +
+            
+            `">Select Designation</div>
+                  <div class="select-options" style="max-height:250px;overflow-y:scroll" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
+                    ${options}
+                  </div>
+              </div>
+            </td>
+            <td>
+              <select
+                disabled
+                id="exper_${rowId}"
+                data-rowid="${rowId}" 
+                class="selectpicker"
+                name="expertise-${rowId}"
+                style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
+              >
+              ${commonExpirencesOptions}
+              </select>
+            </td>
+          </tr>`;
+          function checkMe(id){
+            
+            setTimeout(function(){
+              document.getElementById(id).checked="true"
+              openDesignationDropdown(id,rowId)
+            },500)
+            
+          }
+          setTimeout(function(){
+            if(options.includes("hidden")){
+              document.getElementById("select-list_"+rowId).classList.remove("select-list")
+              document.getElementById("title_"+rowId).innerHTML="----"
+              document.getElementById("toggle_"+rowId)
+            }
+            
+          },500)
+        
+        }
+        
+      });
       let tableHead = `
-      <table class="table table-bordered">
+      <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
         <thead class="thead-dark">
           <tr style="text-align: center">
             <th
               style="text-align: center; font-weight: 600"
               scope="col center"
             >
-              Area of Expertises
+              Designation 
               <br>
               (${sv.name})
             </th>
-            <th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
               Applicable?
+            </th>
+            <th  style="text-align: center; font-weight: 600"
+            scope="col center">
+              Select Expertise
             </th>
             <th
               style="text-align: center; font-weight: 600"
               scope="col"
             >
-              Your Profession / Experience
+              Your Maximum Experience
             </th>
           </tr>
         </thead>
         <tbody>`;
-
-      let rows = ``;
-      let i = 0;
-      let tglTxt=""
-      sv.expertise.map((exp) => {
-        
-        let options = "";
-        let rowId = `rowId${Math.random()}_${Math.random()}`;
-        isDisabled = true;
-        exp.tags.map((op) => {
-          if (exp?.selected ) {
-            isDisabled = false;
-          } else {
-            isDisabled = true;
-          }
-          if (initial) {
-            if (USER.cvAdded) {
-              let flag = false;
-              for (let i = 0; i < USER.cv.expertise.length; i++) {
-                const eachSelectedVExpertise = USER.cv.expertise[i];
-                const cvv = eachSelectedVExpertise.ver;
-                if (flag) {
-                  break;
-                }
-
-                for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
-                  const eachSelectedVSExpertise =
-                    eachSelectedVExpertise.svers[j];
-                  const cvsv = eachSelectedVSExpertise.sver;
-                  if (flag) {
-                    break;
-                  }
-                  for (
-                    let k = 0;
-                    k < eachSelectedVSExpertise.expertise.length;
-                    k++
-                  ) {
-                    const eachSelectedExpertise =
-                      eachSelectedVSExpertise.expertise[k];
-                    const cvCat = eachSelectedExpertise.category;
-                    const cvVal = eachSelectedExpertise.value;
-
-                    // if (flag) {
-                    //   break;
-                    // }
-
-                    if (
-                      cvv === v._id &&
-                      sv.name === cvsv &&
-                      exp.category === cvCat &&
-                      op === cvVal
-                    ) {
-                      exp.value = op;
-                      exp.selected = true;
-                      isDisabled = false
-                      flag = true;
-                      break;
-                    }
-                  }
-                }
-              }
-
-              if (flag) {
-                options += `
-                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" selected >${op}</option>
-              `;
-              } else {
-                options += `
-                <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
-              `;
-              }
-            }
-          } else {
-            if (exp.value === op) {
-          
-              options += `
-              <option selected value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
-            `;
-            } else {
-              options += `
-            <option value="${v._id}__${v.name}__${sv.name}__${exp.category}__${op}__${rowId}" >${op}</option>
-          `;
-            }
-          }
-
-        });
-        if(isDisabled ){
-          tglTxt = "No"
-        }else{
-          tglTxt = "Yes"
-        }
-        rows += `
-        <tr>
-          <td>${exp.category}</td>
-          <td>
-          <label class="switch">
-          <input type="checkbox" data-rowid="${rowId}"  ${
-       isDisabled ? "" : "checked"
-    }  onchange="sliderToggle(event)"   >
-          <span class="slider round"></span>
-          <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">`+tglTxt+`</span>
-        </label>
-          </td>
-          <td>
-            <select
-              onchange="optionSelected(event)"
-              data-rowid="${rowId}" 
-              class="selectpicker"
-              name="expertise"
-              ${isDisabled ? "disabled" : ""} 
-              style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
-            >
-              ${options}
-            </select>
-          </td>
-        </tr>
-          `;
-        i++;
-      });
-
       let tableBody = rows;
       let tableEnd = ` </tbody>
       </table>`;
 
       table += tableHead + tableBody + tableEnd;
-    });
+     
 
+    });
     tables += head + table;
+
+
   });
+
+
   tablesHolderHTML.innerHTML = tables;
+
+  (function ($) {
+    $.fn.multiselect = function () {
+      var selector = this;
+      var options = $.extend(
+        {
+          onChange: function (val) {
+            
+          },
+        },
+        arguments[0] || {}
+      );
+      activate();
+
+      /////////
+
+      function activate() {
+        //events
+        $(selector)
+          .find(".title")
+          .on("click", function (e) {
+            $(this).parent().find(".select-options").toggle();
+          });
+
+        $(selector)
+          .find('input[type="checkbox"]')
+          .change(function (e) {
+            options.onChange.call(this);
+          });
+      }
+    };
+  })(jQuery);
+
+  $(document).ready(function () {
+    $(".select-list").multiselect({
+      onChange: updateTable,
+      disabled: true,
+    });
+  });
+
+  
+}
+
+
+
+function openDesignationDropdown(toggleId,rowId){
+  document.getElementById("select-list_"+rowId).style.pointerEvents="all";
+  document.getElementById("select-list_"+rowId).style.opacity=1;
+  document.getElementById("exper_"+rowId).disabled=false;
+  let eleRowId = rowId
+  var table_id= ("table_"+eleRowId.substring(6,8))
+  for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
+      
+    let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
+
+    if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
+      
+      document.getElementById(tog_id).disabled=true;
+    }
+  }
+  
+}
+function updateTable() {
+  var checkboxValue = $(this).val();
+  var isChecked = $(this).is(":checked");
 }
 
 // //////////////////////////////////////////
+
+let ID_NAME_VERTICALS = [];
+
+async function storeAllNamesIds() {
+  ID_NAME_VERTICALS = VERTICALS.map((v) => {
+    return { name: v.name, id: v._id };
+  });
+}
+
+// //////////////////////////////////////////
+
+function getNameOfId(id) {
+  // if(ID_NAME_VERTICALS.length === 0) await storeAllNamesIds();
+
+  let name = ID_NAME_VERTICALS.filter((v) => v.id === id);
+  name = name[0].name;
+  return name;
+}
+
+// /////////////////////////////////////////////////////////
+
+function checkFileType({ file, fileTypes }) {
+  // console.log('checkFileType : file ',file);
+  let fExt = file.name.split(".");
+  fExt = fExt[fExt.length - 1];
+
+  const fileIndex = fileTypes.findIndex((type) => type === fExt);
+  // console.log(`checkFileType : fileIndex `,fileIndex);
+  if (fileIndex === -1) {
+    return {
+      status: false,
+      message: "wrong file extension uploaded",
+    };
+  }
+
+  if (file.size > 5000000) {
+    return {
+      status: false,
+      message: "too large file",
+    };
+  }
+
+  return {
+    status: true,
+  };
+}
+
+// /////////////////////////////////////////////////////////
+
 const cvUrlHTML = document.querySelector("#cvUrl");
 const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
 const verticalsTablesHTML = document.querySelector("#verticalsTables");
 const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
 const workCountryHTML = document.querySelector('#work-country');
 const workStatesHTML = document.querySelector('#work-states');
+const workCitiesHTML = document.querySelector('#work-cities');
 const stsHTML = document.querySelector('#sts');
 
 async function displayCvDetails() {
+  
   if (USER.cvAdded) {
+    
     cvUrlHTML.href = USER.cv.url;
     verticalsBtnsHTML.innerHTML = ``;
-
-   
     workCountryHTML.innerText = USER.cv.workCountry;
-
     let states ="<ul>";
     USER.cv.workStates.map(s => {
       states += `<li>${s}</li>`
@@ -1361,17 +1811,35 @@ async function displayCvDetails() {
     states += `</ul>`;
     workStatesHTML.innerHTML = states;
 
-    cvFormHTML['country'].value = USER.cv.workCountry;
+    workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
+
+
+    //console.log(USER.cv.workCountry)
+    //cvFormHTML['country'].value = USER.cv.workCountry;
     let optionsState = ""
+    let optionsCountry="";
     document.getElementById("sts").innerHTML = `
 		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
     USER.cv.workStates.map((s) => {
       optionsState += `<option value="${s}" selected>${s}</option>`;
       oldStateArr.push(s)
     });
-      
-    populateStates("country","state")
+    document.getElementById("cts").innerHTML=`
+     <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+    `
+    USER.cv.workCountry.map((c) => {
+      optionsCountry+= `<option value="${c}" selected>${c}</option>`;
+      oldCountryArr.push(c)
+    });
+  
+   
+ 
+    document.getElementById('country').innerHTML+=optionsCountry
+    populateCountries("country", "state");
+    
+   // populateStates("country","state")
     setTimeout(function () {
+   
       document.getElementById("state").innerHTML += optionsState
       new Choices("#state", {
         removeItemButton: true,
@@ -1379,6 +1847,7 @@ async function displayCvDetails() {
         searchResultLimit: 100,
         renderChoiceLimit: 100,
       });
+      
       document.getElementById("stateOpt").style.display = "block";
     }, 500);
       
@@ -1387,8 +1856,10 @@ async function displayCvDetails() {
       <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
       `;
     });
-  
-    USER.cv.expertise.map(async (v) => {
+    
+    // console.log('displayCvDetails : cv', USER.cv);
+    USER.cv.professions.map(async (v) => {
+      //console.log('displayCvDetails : cv : v', v);
       let name = await getNameOfId(v.ver);
       let head = `
       <div id="${v.ver}" class="collapse">
@@ -1405,13 +1876,19 @@ async function displayCvDetails() {
                 style="text-align: center; font-weight: 600"
                 scope="col"
               >
-                Expertise
+                Proffestions
               </th>
               <th
                 style="text-align: center; font-weight: 600"
                 scope="col"
               >
-                Experience
+                Designations
+              </th>
+              <th
+                style="text-align: center; font-weight: 600"
+                scope="col"
+              >
+                Expertice
               </th>
             </tr>
           </thead>
@@ -1421,14 +1898,17 @@ async function displayCvDetails() {
       let body = ``;
       let rows = "";
       v.svers.map((sv) => {
-        sv.expertise.map((e) => {
+        sv.profs.map((e) => {
           rows += `
           <tr>
             <td>
             ${sv.sver}
             </td>
             <td>
-              ${e.category}
+            ${e.prof}
+            </td>
+            <td>
+              ${e.designations.join(', ')}
             </td>
             <td>
               ${e.value}
@@ -1464,27 +1944,64 @@ async function displayCvDetails() {
     
     `
     ;
+  }else{
+    let optionsState = ""
+    let optionsCountry="";
+    document.getElementById("sts").innerHTML = `
+		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+   
+    document.getElementById("cts").innerHTML=`
+     <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+    `
+    
+  
+   
+ 
+    document.getElementById('country').innerHTML+=optionsCountry
+    populateCountries("country", "state");
+    
+   // populateStates("country","state")
+    setTimeout(function () {
+   
+      document.getElementById("state").innerHTML += optionsState
+      new Choices("#state", {
+        removeItemButton: true,
+        maxItemCount: 100,
+        searchResultLimit: 100,
+        renderChoiceLimit: 100,
+      });
+      
+      document.getElementById("stateOpt").style.display = "block";
+    }, 500);
+      
+    USER.cv.verticals.map((v, i) => {
+      verticalsBtnsHTML.innerHTML += `
+      <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
+      `;
+    });
   }
 }
 
 // //////////////////////////////////////////
 
-let ID_NAME_VERTICALS = [];
+let retryLogout = 0;
 
-async function storeAllNamesIds() {
-  ID_NAME_VERTICALS = VERTICALS.map((v) => {
-    return { name: v.name, id: v._id };
-  });
-}
-
-// //////////////////////////////////////////
-
-function getNameOfId(id) {
-  // if(ID_NAME_VERTICALS.length === 0) await storeAllNamesIds();
-
-  let name = ID_NAME_VERTICALS.filter((v) => v.id === id);
-  name = name[0].name;
-  return name;
+function logoutUser() {
+  auth
+    .signOut()
+    .then(() => {
+      // Sign-out successful.
+      window.location.href = "./../authentication/auth.html";
+    })
+    .catch((error) => {
+      console.error(error);
+      if (retryLogout < 2) {
+        retryLogout++;
+        logoutUser();
+      } else {
+        alert(`unable to logout at moment. Reason: ${error.message}`);
+      }
+    });
 }
 
 // //////////////////////////////////////////
@@ -1507,6 +2024,45 @@ const uploadImgLocal = (e) => {
 };
 
 userImageHTML.addEventListener("change", uploadImgLocal);
+
+// //////////////////////////////////////////
+
+// /////////////////////////////////////////////////////////
+
+async function uploadImgToDB() {
+  const data = USER;
+  document.getElementById("progressBar").style.display="block"
+  if (USER.basicInfo.imgUrl) {
+    const resDelete = await deleteStorage({
+      ref: `${USER.userType}s/${USER_ID}`,
+      fileName: USER.basicInfo.imgName,
+    });
+  }
+
+  const resStorage = await uploadImgToStorage({ ref: `${USER.userType}s` });
+
+  if (!resStorage.status) {
+    
+    nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
+    return;
+  }
+  const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
+  if (!resUrl.status) {
+   
+     nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
+    return;
+  }
+
+  data.basicInfo.imgName = IMG_NAME;
+  data.basicInfo.imgUrl = resUrl.data.url;
+
+  await USER_REF.update(data);
+  getUserDetails({ uid: USER_ID, userType: USER.userType });
+  
+  nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
+  document.getElementById("progressBar").style.display="none"
+}
+
 // //////////////////////////////////////////
 
 let retryImgStorage = 0;
@@ -1564,83 +2120,3 @@ const getUrlOfImg = async ({ ref }) => {
 };
 
 // /////////////////////////////////////////////////////////
-
-async function uploadImgToDB() {
-  const data = USER;
-  document.getElementById("progressBar").style.display="block"
-  if (USER.basicInfo.imgUrl) {
-    const resDelete = await deleteStorage({
-      ref: `${USER.userType}s/${USER_ID}`,
-      fileName: USER.basicInfo.imgName,
-    });
-  }
-
-  const resStorage = await uploadImgToStorage({ ref: `${USER.userType}s` });
-
-  if (!resStorage.status) {
-    
-    nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
-    return;
-  }
-  const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
-  if (!resUrl.status) {
-   
-    nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
-    return;
-  }
-
-  data.basicInfo.imgName = IMG_NAME;
-  data.basicInfo.imgUrl = resUrl.data.url;
-
-  await USER_REF.update(data);
-  getUserDetails({ uid: USER_ID, userType: USER.userType });
-  
-  nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
-  document.getElementById("progressBar").style.display="none"
-}
-
-// /////////////////////////////////////////////////////////
-let retryLogout = 0;
-
-function logoutUser() {
-  auth.signOut().then(() => {
-    // Sign-out successful.
-    window.location.href="./../index.html"
-  }).catch((error) => {
-    console.error(error);
-    if(retryLogout < 2) {
-      retryLogout++;
-      logoutUser();
-    } else {
-      alert(`unable to logout at moment. Reason: ${error.message}`)
-    }
-  });
-}
-
-// ////////////////////
-
-function checkFileType({file, fileTypes}) {
-
-  let fExt = file.name.split('.');
-  fExt = fExt[fExt.length -1]
-
-  const fileIndex = fileTypes.findIndex(type => type === fExt);
-
-  if(fileIndex === -1) {
-    return {
-      status: false,
-      message: 'wrong file extension uploaded'
-    }
-  }
-
-  if(file.size > 3000000) {
-    return {
-      status: false,
-      message: 'too large file'
-    }
-  }
-
-  return {
-    status: true
-  }
-}

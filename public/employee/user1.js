@@ -972,6 +972,7 @@ function verticalSelected(e) {
   if (resDeleted) {
     subVerticalSelected();
   }
+ 
   getSelectedVerticals();
 }
 
@@ -1148,6 +1149,7 @@ function subVerticalSelected(e = false, initial = false) {
 
   getSelectedVerticals();
   if (initial) {
+   
     getSelectedVerticals(true);
   }
 }
@@ -1190,9 +1192,10 @@ function getSelectedVerticals(initial = false) {
     }
   });
   // console.log('getSelectedVerticals : userSelectedVerticals',userSelectedVerticals);
-
+ 
   if (initial) {
-    displayExpertiseTable(true);
+    console.log(userSelectedVerticals)
+    displayExpertiseTable();
   } else {
     displayExpertiseTable();
   }
@@ -1381,6 +1384,7 @@ function commonSelectExpirencesFun(selectedOP) {
 const tablesHolderHTML = document.querySelector("#tablesHolder");
 
 async function displayExpertiseTable(initial = false) {
+ 
   tablesHolderHTML.innerHTML = ``;
   let tables = ``;
   if (commonExpirences.length === 0) {
@@ -1392,7 +1396,9 @@ async function displayExpertiseTable(initial = false) {
   //   "displayExpertiseTable : userSelectedVerticals",
   //   userSelectedVerticals
   // );
-  userSelectedVerticals.map((v) => {
+  
+  userSelectedVerticals.map((v,index) => {
+    
    // console.log("displayExpertiseTable : userSelectedVerticals : v", v);
     let head = `
     <h6 style="font-weight: 600">
@@ -1403,7 +1409,7 @@ async function displayExpertiseTable(initial = false) {
     let table = ``;
     v.subverticals.map((sv) => {
       //console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
-
+     
       let isDisabled = true;
       
       let rows = ``;
@@ -1411,11 +1417,14 @@ async function displayExpertiseTable(initial = false) {
       let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
       let rowIdT;
       sv.expertise.map((exp, index) => {
+     
         let rowId = `rowId_${randNum + index}`;
         rowIdT = `rowId_${randNum + index}`;
         //console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
         let options = "";
+      
         isDisabled = true;
+      
         if (exp.subCategory) {
           exp.subCategory.map((Iop, subIndex) => {
             
@@ -1431,10 +1440,12 @@ async function displayExpertiseTable(initial = false) {
             } else {
               isDisabled = true;
             }
+           
             if (initial) {
+        
               if (USER.cvAdded) {
                 
-              
+                
                 let allDesSets = new Set();
                 let allUnDesSets = new Set();
                 let flag = false;
@@ -1489,6 +1500,7 @@ async function displayExpertiseTable(initial = false) {
                 allDesSets.forEach(d => {
                   if(d === Iop.name) {
                       prevDes = Iop.name;
+                     
                       options += `
                       <div class="option"  > 
                         <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1498,6 +1510,7 @@ async function displayExpertiseTable(initial = false) {
                   } else {
                     if(prevDes !== Iop.name) {
                       if(!allDesSets.has(Iop.name)) {
+                       
                         prevDes = Iop.name
                         options += `
                         <div class="option"  > 
@@ -1511,10 +1524,13 @@ async function displayExpertiseTable(initial = false) {
                 })
 
               }
-            } else {
-              console.log('ggg outer else ',v._id, v.name, sv.name,  exp.category, Iop.name, rowId, initial);
+            } 
+            else {
+              // console.log("ERrerererere")
+              // console.log('ggg outer else ',v._id, v.name, sv.name,  exp.category, Iop.name, rowId, initial);
               if(exp.value === Iop) {
-              console.log('ggg selected ', exp.category, Iop.name);
+         
+              // console.log('ggg selected ', exp.category, Iop.name);
                 options += `
                   <div class="option"  > 
                     <input checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
@@ -1522,39 +1538,43 @@ async function displayExpertiseTable(initial = false) {
                   </div>
                 `;
               } else {
-              console.log('ggg else  ', exp.category, Iop.name);
+               
                 if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
-                  console.log('ggg if');
+                  
                   options += `
                   <div class="option"> 
                     <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                     <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
                   </div>
                   `;
-                  console.log('ggg', options);
+                  
                 } 
                 else {
-                  console.log('ggg else  else', exp.category, Iop.name);
+                 
+                  //console.log('ggg else  else', exp.category, Iop.name);
                   options += `
                   <div class="option" hidden > 
                     <input hidden checked  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
                     <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
                   </div>
                 `;
-                console.log('ggg', options);
+             
                 }
               }
             }
+            //console.log(options)
           });
-
+          // console.log(exp+"--"+index)
+          // console.log(options)
           if (isDisabled) {
             tglTxt = "No";
           } else {
             tglTxt = "Yes";
           }
          // var tempSvName = sv.name.split(' ').filter(s => s).join(''); 
-
-   
+         
+       
+         
           rows +=
           `<tr>
             <td>${exp.category}</td>
@@ -1594,6 +1614,7 @@ async function displayExpertiseTable(initial = false) {
               </select>
             </td>
           </tr>`;
+          
           function checkMe(id){
             
             setTimeout(function(){
@@ -1608,13 +1629,11 @@ async function displayExpertiseTable(initial = false) {
               document.getElementById("title_"+rowId).innerHTML="----"
               document.getElementById("toggle_"+rowId)
             }
-
-            
             
           },500)
-          console.log(options )
+          
         }
-        
+      // debugger;
       });
       let tableHead = `
       <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
@@ -1655,6 +1674,7 @@ async function displayExpertiseTable(initial = false) {
     });
     tables += head + table;
 
+    
 
   });
 
@@ -1787,7 +1807,9 @@ const workCitiesHTML = document.querySelector('#work-cities');
 const stsHTML = document.querySelector('#sts');
 
 async function displayCvDetails() {
+  
   if (USER.cvAdded) {
+    
     cvUrlHTML.href = USER.cv.url;
     verticalsBtnsHTML.innerHTML = ``;
     workCountryHTML.innerText = USER.cv.workCountry;
@@ -1931,6 +1953,41 @@ async function displayCvDetails() {
     
     `
     ;
+  }else{
+    let optionsState = ""
+    let optionsCountry="";
+    document.getElementById("sts").innerHTML = `
+		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+   
+    document.getElementById("cts").innerHTML=`
+     <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+    `
+    
+  
+   
+ 
+    document.getElementById('country').innerHTML+=optionsCountry
+    populateCountries("country", "state");
+    
+   // populateStates("country","state")
+    setTimeout(function () {
+   
+      document.getElementById("state").innerHTML += optionsState
+      new Choices("#state", {
+        removeItemButton: true,
+        maxItemCount: 100,
+        searchResultLimit: 100,
+        renderChoiceLimit: 100,
+      });
+      
+      document.getElementById("stateOpt").style.display = "block";
+    }, 500);
+      
+    USER.cv.verticals.map((v, i) => {
+      verticalsBtnsHTML.innerHTML += `
+      <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.id}">${v.name} ></button>
+      `;
+    });
   }
 }
 
