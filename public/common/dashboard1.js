@@ -16,14 +16,14 @@ auth.onAuthStateChanged((user) => {
     USER_RAW = user;
     USER_TYPE = user.displayName;
   
-    if (user.emailVerified == false) {
-      $("#exampleModalCenter").modal({
-        backdrop: "static",
-        keyboard: false,
-        show: true,
-      });
-      document.getElementById("emailID").innerHTML = user.email;
-    }
+    // if (user.emailVerified == false) {
+    //   $("#exampleModalCenter").modal({
+    //     backdrop: "static",
+    //     keyboard: false,
+    //     show: true,
+    //   });
+    //   document.getElementById("emailID").innerHTML = user.email;
+    // }
     getUserInfo()
   } else {
     displayAuthSigns()
