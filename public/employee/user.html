@@ -52,8 +52,12 @@
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css"
     />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css"> -->
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css"> -->
+
   </head>
   <style>
       .select-list {
@@ -646,7 +650,7 @@ code {
                     </label>
                   </h5>
                 </div>
-                <div id="cvInfoHolder" style="padding:10px ;">
+                <div id="cvInfoHolder" style="padding:10px ; ">
                   <div class="row">
                     <div class="col-md-5 pr-1" style="margin-left: 1%;">
                         <label style="font-weight: 700;color: brown;">Preferd Country to work</label>
@@ -753,7 +757,7 @@ code {
                     </div> -->
                   </div>
                   </div>
-                 </div>
+                </div>
           
 
                 <div class="card-body" id="cvEditHolder" style="display: none;">
@@ -1039,17 +1043,30 @@ code {
       </div>
     </div>
     <!--   Core JS Files   -->
-    <!-- <script src="../assets/js/core/jquery.min.js"></script> -->
+    <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
-<script src="./../assets/js/countries.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+
+    <!-- <script src="../assets/js/core/jquery.min.js"></script> -->
+    <script src="./../assets/js/countries.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script> -->
 
   </body>
   <script>
     $(document).ready(function () {
-      $('select').selectpicker();
+      // setTimeout(() => {
+  //   $('.selectpicker').selectpicker();
+  // }, 2000)
+  
       var cnt=0;
         let int= setInterval(function(){
           cnt++;
@@ -1106,13 +1123,7 @@ code {
      // first parameter is id of country drop-down and second parameter is id of state drop-down
     
   </script>
-<script src="../assets/js/plugins/bootstrap-notify.js"></script>
-<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
-<script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-<script src="../assets/js/core/popper.min.js"></script>
-<script src="../assets/js/core/bootstrap.min.js"></script>
 
 
 <!-- <script src="./../assets/js/multiselect-dropdown.js"></script> -->
@@ -1121,6 +1132,9 @@ code {
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
 <script src="./../assets/firebase.js"></script>
+<script src="./../common/firebase-common.js"></script>
 <script src="./user1.js"></script>
+<script src="./user-cv.js"></script>
+<script src="./user-cv-submit.js"></script>
 
 </html>
