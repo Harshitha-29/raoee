@@ -458,18 +458,6 @@ const updateCv = async (e) => {
   if (countrySelected === 0 || statesSelected.length === 0) {
     if (oldStateArr.length == 0) {
       document.getElementById("progressBar2").style.display = "none";
-<<<<<<< HEAD:public/employee/OldUser1.js
-       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-      return;
-    } else {
-      statesSelected = oldStateArr.map((s) => s);
-    }
-    if (oldCountryArr.length == 0) {
-      document.getElementById("progressBar2").style.display = "none";
-       nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-      return;
-    } else {
-=======
       // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
       return;
     } else {
@@ -480,7 +468,6 @@ const updateCv = async (e) => {
       // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
       return;
     } else {
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
       countrySelected = oldCountryArr.map((s) => s);
     }
   }

@@ -313,8 +313,9 @@ function displayExpertiseTable({ professtionsToDisplay }) {
   }
   tables += head + table;
   tablesHolderHTML.innerHTML = tables;
-
+  $('select').selectpicker();
   activeDesDropdownFun();
+  
   // exeJquery();
 }
 
@@ -473,6 +474,8 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
       </select>
     </td>
   </tr>`;
+  
+ 
   return row;
 }
 
