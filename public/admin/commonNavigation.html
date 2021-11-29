@@ -94,6 +94,12 @@
             <p>About/Why Us</p>
           </a>
         </li>
+        <li class="" id="ourTeam">
+          <a href="./ourTeam.html" >
+            <i class="now-ui-icons business_globe"></i>
+            <p>Our Team</p>
+          </a>
+        </li>
         <li id="vertical">
           <a href="./vertical.html">
             <i class="now-ui-icons design_vector"></i>
@@ -215,6 +221,15 @@
       $("#about-why").removeClass("active")
       $('#vertical').removeClass('active')
       $("#site-control").addClass("active")
+    }
+    else if(window.location.href.includes("ourTeam.html")){
+      $("#dash").removeClass("active")
+      $("#slider").removeClass("active")
+      $("#expertise").removeClass("active")
+      $("#about-why").removeClass("active")
+      $('#vertical').removeClass('active')
+      $("#site-control").removeClass("active")
+      $("#ourTeam").addClass("active")
     }
 
   </script>

@@ -313,8 +313,9 @@ function displayExpertiseTable({ professtionsToDisplay }) {
   }
   tables += head + table;
   tablesHolderHTML.innerHTML = tables;
-
+  $('select').selectpicker();
   activeDesDropdownFun();
+  
   // exeJquery();
 }
 
@@ -460,19 +461,21 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
     </td>
 
     <td>
-      <select id="${rowId}_des" class="selectpicker" multiple >
+      <select id="${rowId}_des" class="selectpicker" multiple data-live-search="true" >
         ${designationFun({ designations: designations, prof: professionTitle, vId: vId, vName: vName, svName: svName })}
       </select>
     </td>
     <td>
       <select
-        class="selectpicker"
+        class="selectpicker" 
         style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
       >
       ${expirencesFun()}
       </select>
     </td>
   </tr>`;
+  
+ 
   return row;
 }
 

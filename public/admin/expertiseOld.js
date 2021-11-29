@@ -92,9 +92,9 @@ db.collection("verticals").onSnapshot((snaps) => {
       .then((doc) => {
         if (doc.exists) {
           
-          for (let i in doc.data().professions) {
-            document.getElementById(VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")).innerHTML+=` <li style="color:purple">`+doc.data().professions[i].prof+`&nbsp;<i  ></i>
-            <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().professions[i].prof.split(" ").join("")+`">
+          for (let i in doc.data().expertise) {
+            document.getElementById(VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")).innerHTML+=` <li style="color:purple">`+doc.data().expertise[i].category+`&nbsp;<i  ></i>
+            <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().expertise[i].category.split(" ").join("")+`">
             </ul>
             </li>`
             
@@ -120,16 +120,16 @@ db.collection("verticals").onSnapshot((snaps) => {
       .then((doc) => {
         if (doc.exists) {
   
-          for (let i in doc.data().professions) {
+          for (let i in doc.data().expertise) {
             
-            for(let j in doc.data().professions[i].designation){
+            for(let j in doc.data().expertise[i].subCategory){
              
-                console.log(doc.data().professions[i].designation[j])
+                console.log(doc.data().expertise[i].subCategory[j].name)
        
-                document.getElementById(VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().professions[i].prof.split(" ").join("")).innerHTML+=` 
+                document.getElementById(VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().expertise[i].category.split(" ").join("")).innerHTML+=` 
                
-                <li style="color:green"><span style="color:red">*</span>`+doc.data().professions[i].designation[j]+`</li>
-                <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().professions[i].prof.split(" ").join("")+"_"+doc.data().professions[i].designation[j].split(" ").join("")+"_"+j+`">
+                <li style="color:green"><span style="color:red">*</span>`+doc.data().expertise[i].subCategory[j].name+`</li>
+                <ul id="`+VERTICALS[k].id.split(" ").join("")+"_"+subVer.split(" ").join("")+"_"+doc.data().expertise[i].category.split(" ").join("")+"_"+doc.data().expertise[i].subCategory[j].name.split(" ").join("")+"_"+j+`">
                 </ul>
                 </li>`
               
@@ -234,21 +234,21 @@ const expertiseForm = async (e) => {
         .then((doc) => {
           if (doc.exists) {
           
-            for (let i in doc.data().professions) {
-              fetchedArr.push(doc.data().professions[i]);
+            for (let i in doc.data().expertise) {
+              fetchedArr.push(doc.data().expertise[i]);
               if (
-                doc.data().professions[i].prof ==
+                doc.data().expertise[i].category ==
                 document.getElementById("expertiseDropdown").value
               ) {
                 // alert(doc.data().expertise[i].category)
-                for (let j in doc.data().professions[i].designation) {
-                  subCatFetchedArr.push(doc.data().professions[i].designation[j]);
+                for (let j in doc.data().expertise[i].subCategory) {
+                  subCatFetchedArr.push(doc.data().expertise[i].subCategory[j]);
                   
                 }
-                // for (let j in doc.data().professions[i].tags) {
-                //   updatedTagsArr.push(doc.data().professions[i].tags[j]);
-                //   $('#tags').tagsinput('add', doc.data().professions[i].tags[j]);
-                // }
+                for (let j in doc.data().expertise[i].tags) {
+                  updatedTagsArr.push(doc.data().expertise[i].tags[j]);
+                  $('#tags').tagsinput('add', doc.data().expertise[i].tags[j]);
+                }
                 // for (let j in expertiseTagList) {
                 //   updatedTagsArr.push(expertiseTagList[j]);
                 
@@ -261,22 +261,24 @@ const expertiseForm = async (e) => {
               if (document.getElementById("editExpertise").checked == true) {
             
                 let updatedObject = {};
-                let subExpArr = []
-                //let subExpArr = [];
+                let subExpObj = {}
+                let subExpArr = [];
                 console.log(subCatFetchedArr)
-            
+                // subExpObj["name"] = subCat
+                // subExpObj["tags"] = expertiseTagList
+                // subExpArr.push(subExpObj)
+                console.log( subExpArr)
                 for (let i in fetchedArr) {
                   if (
-                    fetchedArr[i].prof ==
+                    fetchedArr[i].category ==
                     document.getElementById("expertiseDropdown").value
                   ) {                   
-                    updatedObject["prof"] = fetchedArr[i].prof;  
+                    updatedObject["category"] = fetchedArr[i].category;  
                     delete fetchedArr[i];
                     if(subCatFetchedArr.length!=0){
-                      for(let j in subCatFetchedArr){  
-                                       
-                        if(subCatFetchedArr[j] == document.getElementById("subCatDropdown").value && document.getElementById("toggleSubExpertise").checked){                       
-                          subExpArr.push(subCat)
+                      for(let j in subCatFetchedArr){                    
+                        if(subCatFetchedArr[j].name == document.getElementById("subCatDropdown").value && document.getElementById("toggleSubExpertise").checked){                       
+                          subExpObj["name"] = subCat
                           //subExpObj["tags"] = expertiseTagList                         
                           delete subCatFetchedArr[j];    
                           subCatFetchedArr.splice(j, 1, subExpObj);
@@ -286,34 +288,32 @@ const expertiseForm = async (e) => {
                           alert("Expertise Already Present .")
                           return;
                         }else if(!document.getElementById("toggleSubExpertise").checked){                        
-                          subExpArr.push(document.getElementById("subCatInput").value)
+                          subExpObj["name"] = document.getElementById("subCatInput").value
                           //subExpObj["tags"] = expertiseTagList
                               // subExpArr.push(subExpObj)
-                                         
-                          
-                          subCatFetchedArr.push.apply(subCatFetchedArr,subExpArr)
+                          console.log(document.getElementById("subCatInput").value)                 
+                          subCatFetchedArr.push(subExpObj)
                           break;
                         }
                       }
                     }else{
                       if(!document.getElementById("toggleSubExpertise").checked){
-                        subExpArr.push(document.getElementById("subCatInput").value)
+                        subExpObj["name"] = document.getElementById("subCatInput").value
                         //subExpObj["tags"] = expertiseTagList
                             // subExpArr.push(subExpObj)
-                                              
-                        subCatFetchedArr =subExpArr
+                        console.log(document.getElementById("subCatInput").value)                         
+                        subCatFetchedArr.push(subExpObj)  
                       }                  
                     }                  
                     console.log(subCatFetchedArr)
-                    updatedObject["designation"] =  subCatFetchedArr  
+                    updatedObject["subCategory"] =  subCatFetchedArr  
                     fetchedArr.splice(i, 1, updatedObject);                   
                   }
                 }
                 
                 let finalUpdatedObj = {};
-                finalUpdatedObj["professions"] = fetchedArr;
+                finalUpdatedObj["expertise"] = fetchedArr;
                 finalUpdatedObj["name"] = subVer;
-                console.log(finalUpdatedObj)
                 subDocRef.update(finalUpdatedObj);
                 nowuiDashboard.showNotification(
                   "top",
@@ -324,7 +324,6 @@ const expertiseForm = async (e) => {
                 $('#tags').tagsinput('removeAll');
   
               } else {
-               
                 let subExpObj = {}
                 let subExpArr = [];
                 let newExpertiseObj = {};
@@ -335,17 +334,17 @@ const expertiseForm = async (e) => {
                 }else{
                   nameVal = document.getElementById("subCatInput").value
                 }
-               // subExpObj["name"] = nameVal
+                subExpObj["name"] = nameVal
                 //subExpObj["tags"] = expertiseTagList
-                subExpArr.push(nameVal)
+                subExpArr.push(subExpObj)
                 console.log(subExpArr)
                 
-                newExpertiseObj["prof"] = expertiseCategorySelected;
-                newExpertiseObj["designation"] = subExpArr; 
+                newExpertiseObj["category"] = expertiseCategorySelected;
+                newExpertiseObj["subCategory"] = subExpArr; 
                 fetchedArr.push(newExpertiseObj);
                 console.log(newExpertiseObj);
                 console.log(fetchedArr);
-                finalUpdatedObj["professions"] = fetchedArr;
+                finalUpdatedObj["expertise"] = fetchedArr;
                 finalUpdatedObj["name"] = subVer;
                 subDocRef.update(finalUpdatedObj);
                 nowuiDashboard.showNotification(
@@ -382,7 +381,7 @@ document.getElementById("expertisesdeleteBtn").addEventListener('click',confirmD
 
 ////////////////////DELETE EXPERTISE//////////////////////////
 function confirmDelete(){
- let ans =  confirm("Are you sure to delete the professions ? ")
+ let ans =  confirm("Are you sure to delete the expertise ? ")
  if(ans){
   deleteExpertise()
   
@@ -407,8 +406,8 @@ function deleteExpertise(){
     .then(async (doc) => {
       if (doc.exists) {
         console.log("Document data:", doc.data());
-        for (let i in doc.data().professions) {
-          fetchedArr.push(doc.data().professions[i]);
+        for (let i in doc.data().expertise) {
+          fetchedArr.push(doc.data().expertise[i]);
         }
         console.log(fetchedArr)
         if(fetchedArr.length>0){
@@ -417,7 +416,7 @@ function deleteExpertise(){
             let updatedObject = {};
             for (let i in fetchedArr) {
               if (
-                fetchedArr[i].prof ==
+                fetchedArr[i].category ==
                 document.getElementById("expertiseDropdown").value
               ) {
               
@@ -430,7 +429,7 @@ function deleteExpertise(){
             }
             console.log(fetchedArr)
             let finalUpdatedObj = {};
-            finalUpdatedObj["professions"] = fetchedArr;
+            finalUpdatedObj["expertise"] = fetchedArr;
             finalUpdatedObj["name"] = subVer;
             await subDocRef.update(finalUpdatedObj).then(function(){
               nowuiDashboard.showNotification(
@@ -479,13 +478,10 @@ expertiseFormHTML.addEventListener("change", (e) => {
 });
 ///////////////// Trigger Expertise Func////////
 function triggerExpertise(subVer2) {
-  
   subVerId = subVer2;
   let ver = document.getElementById("verticalsDropdown").value;
   let subVer = document.getElementById(subVer2).value;
-  console.log(ver)
   let docRef = db.collection("verticals").doc(ver);
-
   docRef
     .get()
     .then((doc) => {
@@ -505,13 +501,12 @@ function triggerExpertise(subVer2) {
   subDocRef.get().then((doc) => {
     if (doc.exists) {
       console.log("Document data:", doc.data());
-      for (let i in doc.data().professions) {
-        console.log(doc.data().professions[i].prof);
-        
+      for (let i in doc.data().expertise) {
+        console.log(doc.data().expertise[i].category);
         document.getElementById("expertiseDropdown").innerHTML +=
           `
-          <option>` +
-          doc.data().professions[i].prof +
+                <option>` +
+          doc.data().expertise[i].category +
           `</option>
             `;
       }

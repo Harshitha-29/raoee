@@ -151,7 +151,7 @@ const addSubVertical = async (e) => {
       .doc(subVertical)
       .set({
         name: subVertical,
-        expertise: [],
+       
       });
     const ref = await db.collection("verticals").doc(name);
     const refDoc = await ref.get();
