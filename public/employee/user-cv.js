@@ -96,8 +96,6 @@ let userVerticalsSelected = [];
 let flag = false;
 
 function verticalsSelected(e) {
-  let prevUserVerticalsSelected = userVerticalsSelected;
-
   if (e) {
     userVerticalsSelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
@@ -122,9 +120,6 @@ function verticalsSelected(e) {
     }
   })
   console.log('verticalsSelected : TEMP_VERTICALS_DATA', TEMP_VERTICALS_DATA);
-
-
-
 
   if (!flag) {
     displaySubVerticalDropdown({ subVerticalsToDisplay: subVerticalsToDisplay });
@@ -314,55 +309,6 @@ function displayExpertiseTable({ professtionsToDisplay }) {
   tables += head + table;
   tablesHolderHTML.innerHTML = tables;
   $('select').selectpicker();
-  activeDesDropdownFun();
-  
-  // exeJquery();
-}
-
-// ////////////////////////
-
-function exeJquery() {
-  (function ($) {
-    $.fn.multiselect = function () {
-      var selector = this;
-      var options = $.extend(
-        {
-          onChange: function (val) {
-            console.log(val);
-          },
-        },
-        arguments[0] || {}
-      );
-      activate();
-
-      /////////
-
-      function activate() {
-        //events
-        $(selector)
-          .find(".title")
-          .on("click", function (e) {
-            $(this).parent().find(".select-options").toggle();
-          });
-
-        $(selector)
-          .find('input[type="checkbox"]')
-          .change(function (e) {
-            options.onChange.call(this);
-          });
-      }
-    };
-  })(jQuery);
-
-  $(document).ready(function () {
-    $(".select-list").multiselect({
-      onChange: () => {
-        var checkboxValue = $(this).val();
-        var isChecked = $(this).is(":checked");
-      },
-      disabled: true,
-    });
-  });
 }
 
 // ////////////////////////
@@ -375,6 +321,7 @@ function expirencesFun() {
   return eOptions;
 }
 
+
 // ////////////////////////
 
 function designationFun({ designations, vId, vName, svName, prof }) {
@@ -383,11 +330,11 @@ function designationFun({ designations, vId, vName, svName, prof }) {
     let fullName = `${vId}__${vName}__${svName}__${prof}__${d}`;
     let isChecked = '';
     if(userSelectedDesignation.includes(fullName)) {
-      isChecked = 'checked';
+      isChecked = 'selected';
     } else {
       isChecked = '';
     }
-    options += `<option data-checkdata="${vId}__${vName}__${svName}__${prof}__${d}">${d}</option>`;
+    options += `<option ${isChecked} data-checkdata="${vId}__${vName}__${svName}__${prof}__${d}">${d}</option>`;
   })
   return options;
 }
@@ -395,36 +342,33 @@ function designationFun({ designations, vId, vName, svName, prof }) {
 // ////////////////////////
 
 let userSliderChecked = [];
+let userSelectedRowIds = [];
 
 function sliderToggle(e, self) {
   const value = e.target.checked;
-  const targetElement = self.parentNode.parentNode.nextElementSibling.childNodes[1];
+  console.log(value);
   const metaData = e.target.dataset.sliderdata;
-
+  console.log(self.parentNode.id);
+  let id = self.parentNode.id.split('_')[1];
+  console.log(id);
+  id = `r_${id}`;
   if (value) {
-    targetElement.style.pointerEvents = "all";
-    targetElement.style.opacity = 1;
-    self.parentNode.childNodes[5].innerHTML = 'Yes';
     userSliderChecked.push(metaData);
-
+    userSelectedRowIds.push(id);
+    document.querySelector(`#${id}_des`).disabled = false;
+    document.querySelector(`#${id}_exp`).disabled = false;
+    console.log(document.querySelector(`#${id}_des`));
   } else {
     const updatedDes = userSelectedDesignation.filter(d => !d.includes(metaData));
     userSelectedDesignation = updatedDes;
-    targetElement.style.pointerEvents = "none"
-    targetElement.style.opacity = 0.4;
-    console.log(targetElement.childNodes);
-    targetElement.childNodes[3].style.display = "none";
-    self.parentNode.childNodes[5].innerHTML = 'No';
+    document.querySelector(`#${id}_des`).disabled = true;
+    document.querySelector(`#${id}_exp`).disabled = true;
+    userSelectedRowIds = userSelectedRowIds.filter(r => r !== id);
     const sliderIndex = userSliderChecked.findIndex(s => s.includes(metaData));
     userSliderChecked.splice(sliderIndex, 1);
   }
 }
 
-// // ////////////////////////
-
-function activeDesDropdownFun() {
-  
-}
 
 // ////////////////////////
 
@@ -434,7 +378,6 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
 
   if(userSliderChecked.includes(fullName)) {
     isChecked = `checked`;
-    sliderToggle(null, )
   } else {
     isChecked = '';
   }
@@ -452,7 +395,8 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
 // ////////////////////////
 
 function profEachRow({ designations, professionTitle, vId, vName, svName }) {
-  const rowId = Math.round(Math.random() * (9999 - 1000 +1) + 1000);
+  let rowId = Math.round(Math.random() * (9999 - 1000 +1) + 1000);
+  rowId = `r_${rowId}`
   let row = `
   <tr>
     <td>${professionTitle}</td>
@@ -461,13 +405,15 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
     </td>
 
     <td>
-      <select id="${rowId}_des" class="selectpicker" multiple data-live-search="true" >
+      <select id="${rowId}_des"  multiple data-live-search="true" onchange="toggleDesignation(event)" >
         ${designationFun({ designations: designations, prof: professionTitle, vId: vId, vName: vName, svName: svName })}
       </select>
     </td>
     <td>
       <select
-        class="selectpicker" 
+        id="${rowId}_exp"
+        ${userSelectedRowIds.includes(rowId) ? '' : 'disabled'}
+         
         style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
       >
       ${expirencesFun()}
@@ -483,20 +429,17 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
 
 let userSelectedDesignation = []
 function toggleDesignation(e) {
-  const metaData = e.target.dataset.checkdata;
-  const value = e.target.checked;
-
-  const vId = metaData.split('__')[0];
-  const vName = metaData.split('__')[1];
-  const svName = metaData.split('__')[2];
-  const prof = metaData.split('__')[3];
-  const des = metaData.split('__')[4];
-  if(value) {
-    userSelectedDesignation.push(metaData)
+  userSelectedDesignation = [];
+  for(let  i = 0; i < e.target.selectedOptions.length; i++) {
+    const node = e.target.selectedOptions[i];
+    const dataset = node.dataset.checkdata;
+    const vId = dataset.split('__')[0];
+    const vName = dataset.split('__')[1];
+    const svName = dataset.split('__')[2];
+    const prof = dataset.split('__')[3];
+    const des = dataset.split('__')[4];
+    userSelectedDesignation.push(dataset)
   }
-
-  console.log(metaData);
-  console.log(value);
 }
 
 // ////////////////////////////
