@@ -27,10 +27,6 @@ var qualificationDrop = new Choices("#qualification", {
   searchResultLimit: 100,
   renderChoiceLimit: 100,
 }).disable();
-<<<<<<< HEAD:public/employee/OldUser1.js
-=======
-
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     USER_RAW = user;
@@ -305,15 +301,9 @@ function getUserPreferences() {
     const designation = all[4];
     const index = all[5];
     if (!document.querySelector(`input[name=slider_${index}]:checked`)) {
-<<<<<<< HEAD:public/employee/OldUser1.js
       // console.log(
       //   !document.querySelector(`input[name=slider_${index}]:checked`)
       // );
-=======
-      console.log(
-        !document.querySelector(`input[name=slider_${index}]:checked`)
-      );
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
       continue;
     }
 
@@ -330,11 +320,7 @@ function getUserPreferences() {
     });
   }
 
-<<<<<<< HEAD:public/employee/OldUser1.js
-  //console.log("getUserPreferences : cvVerticals", cvVerticals);
-=======
   console.log("getUserPreferences : cvVerticals", cvVerticals);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   if (cvVerticals.length == 0) {
     document.getElementById("progressBar").style.display = "none";
     alert("Select atleast 1 Designation");
@@ -405,15 +391,9 @@ function getUserPreferences() {
     }
   });
 
-<<<<<<< HEAD:public/employee/OldUser1.js
   // console.log("getUserPreferences : vv", vv);
   // console.log("getUserPreferences : sv", sv);
   // console.log("getUserPreferences : prof", prof);
-=======
-  console.log("getUserPreferences : vv", vv);
-  console.log("getUserPreferences : sv", sv);
-  console.log("getUserPreferences : prof", prof);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 
   return { verticals: vv, subVerticals: sv, professions: prof };
 }
@@ -473,15 +453,9 @@ const updateCv = async (e) => {
   }
 
   const { verticals, subVerticals, professions } = getUserPreferences();
-<<<<<<< HEAD:public/employee/OldUser1.js
   // console.log("updateCv : verticals", verticals);
   // console.log("updateCv : subVerticals", subVerticals);
   // console.log("updateCv : professions", professions);
-=======
-  console.log("updateCv : verticals", verticals);
-  console.log("updateCv : subVerticals", subVerticals);
-  console.log("updateCv : professions", professions);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 
   let resStorage, resURL;
   let data = {};
@@ -518,21 +492,12 @@ const updateCv = async (e) => {
       data.url = USER.cv.url;
       data.fileName = USER.cv.fileName;
     } else {
-<<<<<<< HEAD:public/employee/OldUser1.js
       nowuiDashboard.showNotification(
         "top",
         "center",
         "Please Update the CV File ",
         "primary"
       );
-=======
-      // nowuiDashboard.showNotification(
-      //   "top",
-      //   "center",
-      //   "Please Update the CV File ",
-      //   "primary"
-      // );
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
       return;
     }
   }
@@ -605,30 +570,17 @@ const updateCv = async (e) => {
     return;
   }
 
-<<<<<<< HEAD:public/employee/OldUser1.js
   nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
-=======
-  // nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   document.getElementById("progressBar2").style.display = "none";
   cvEditHolderHTML.style.display = "none";
   cvInfoHolderHTML.style.display = "block";
   editCvBtnHTML.checked = false;
-<<<<<<< HEAD:public/employee/OldUser1.js
   nowuiDashboard.showNotification(
     "top",
     "center",
     "Data updated successfully",
     "primary"
   );
-=======
-  // nowuiDashboard.showNotification(
-  //   "top",
-  //   "center",
-  //   "Data updated successfully",
-  //   "primary"
-  // );
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   setTimeout(function () {
     location.reload();
@@ -733,11 +685,7 @@ const updateCollectionsDb = async ({ collectionName }) => {
 
 let retryDB = 0;
 const uploadCVToDb = async ({ data }) => {
-<<<<<<< HEAD:public/employee/OldUser1.js
   // console.log('uploadCVToDb : data :', data);
-=======
-  console.log('uploadCVToDb : data :', data);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   let collectionName = ``;
   data.verticals.map((v) => {
     collectionName += `${v.id}_`;
@@ -921,11 +869,7 @@ db.collection("verticals").onSnapshot(async (snaps) => {
 const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown() {
-<<<<<<< HEAD:public/employee/OldUser1.js
     var options = "";
-=======
-  let options = "";
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 
   if (USER.cvAdded) {
     document.getElementById("editResumeBtn").style.display="block"
@@ -1015,13 +959,8 @@ function verticalSelected(e) {
 
   // getSelectedVerticals();
   userSelectedVerticals.length = 0;
-<<<<<<< HEAD:public/employee/OldUser1.js
   // console.log('verticalSelected :', userSelectedMainVerticals);
   // console.log('verticalSelected :', resDeleted);
-=======
-  console.log('verticalSelected :', userSelectedMainVerticals);
-  console.log('verticalSelected :', resDeleted);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   userSelectedMainVerticals.map((uv) => {
     if (resDeleted && resDeleted[0] === uv.name) {
       uv.subVerticals.map((svv) => {
@@ -1222,11 +1161,7 @@ function subVerticalSelected(e = false, initial = false) {
 function getSelectedVerticals(initial = false) {
   userSelectedVerticals = [];
 
-<<<<<<< HEAD:public/employee/OldUser1.js
   // console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
-=======
-  console.log('getSelectedVerticals : userSelectedMainVerticals', userSelectedMainVerticals);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   userSelectedMainVerticals.map((v) => {
     let flag = false;
     for (let i = 0; i < subVerticalsSelected.length; i++) {
@@ -1272,11 +1207,6 @@ function getSelectedVerticals(initial = false) {
 
 
 function sliderToggle(e) {
-<<<<<<< HEAD:public/employee/OldUser1.js
-
-=======
-  
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   const eleRowId = e.target.dataset.rowid;
   //console.log(eleRowId)
   let numId=(eleRowId.substring(6)) 
@@ -1299,7 +1229,6 @@ function sliderToggle(e) {
     document.querySelector(".select-options").style.display = "none";
   });
   var table_id= ("table_"+eleRowId.substring(6,8))
-<<<<<<< HEAD:public/employee/OldUser1.js
   let arr=[]
   if (e.target.checked) {
     let allSelectedTogs = JSON.parse(window.localStorage.getItem("selectedToggles"))
@@ -1312,9 +1241,6 @@ function sliderToggle(e) {
     window.localStorage.setItem("selectedToggles",JSON.stringify(arr))
    
 
-=======
-  if (e.target.checked) {
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 
     for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
       
@@ -1325,11 +1251,7 @@ function sliderToggle(e) {
         document.getElementById(tog_id).disabled=true;
       }
     }
-<<<<<<< HEAD:public/employee/OldUser1.js
   
-=======
-    document.getElementById("select-list_"+eleRowId).style.pointerEvents
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
    
     el.disabled=false;
     document.getElementById("select-list_"+eleRowId).style.pointerEvents = "all"
@@ -1338,7 +1260,6 @@ function sliderToggle(e) {
     optionSelected(false, { data: el.value, selected: true });
 
   } else {
-<<<<<<< HEAD:public/employee/OldUser1.js
     let allSelectedTogs = JSON.parse(window.localStorage.getItem("selectedToggles"))
     if(allSelectedTogs){
       for(let i in allSelectedTogs){
@@ -1352,8 +1273,6 @@ function sliderToggle(e) {
       }
       window.localStorage.setItem("selectedToggles",JSON.stringify(allSelectedTogs))
     }
-=======
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
     for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`).length;i++){
       
       let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
@@ -1450,18 +1369,9 @@ function commonExpirencesFun() {
 
 function commonSelectExpirencesFun(selectedOP) {
   commonExpirencesOptions = '';
-<<<<<<< HEAD:public/employee/OldUser1.js
   commonExpirences.map((exp) => {
 
     if(selectedOP === exp) {
-=======
-  console.log(selectedOP);
-  commonExpirences.map((exp) => {
-    console.log(exp)
-    if(selectedOP === exp) {
-      console.log(selectedOP);
-      console.log(exp);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
       commonExpirencesOptions += `<option selected value="${exp}" >${exp}</option> `;
     } else {
       commonExpirencesOptions += `<option  value="${exp}" >${exp}</option> `;
@@ -1481,22 +1391,12 @@ async function displayExpertiseTable(initial = false) {
     commonExpirencesFun();
   }
 
-<<<<<<< HEAD:public/employee/OldUser1.js
   // console.log(
   //   "displayExpertiseTable : userSelectedVerticals",
   //   userSelectedVerticals
   // );
   userSelectedVerticals.map((v) => {
    // console.log("displayExpertiseTable : userSelectedVerticals : v", v);
-=======
-  console.log(
-    "displayExpertiseTable : userSelectedVerticals",
-    userSelectedVerticals
-  );
-  userSelectedVerticals.map((v) => {
-    let options = ''
-    console.log("displayExpertiseTable : userSelectedVerticals : v", v);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
     let head = `
     <h6 style="font-weight: 600">
       Select Expertise (
@@ -1505,7 +1405,6 @@ async function displayExpertiseTable(initial = false) {
     <label>Tick the box if applicable</label>`;
     let table = ``;
     v.subverticals.map((sv) => {
-<<<<<<< HEAD:public/employee/OldUser1.js
       //console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
 
       let isDisabled = true;
@@ -1807,266 +1706,12 @@ async function displayExpertiseTable(initial = false) {
       }
     };
   })(jQuery);
-=======
-      console.log("displayExpertiseTable : userSelectedVerticals : sv", sv);
-      let isDisabled = true;
-      
-
-      let rows = ``;
-      let tglTxt = "";
-      let randNum = Math.round(Math.random() * (9999 - 1000) + 1000);
-      let rowIdT;
-      sv.expertise.map((exp, index) => {
-        let rowId = `rowId_${randNum + index}`;
-        rowIdT = `rowId_${randNum + index}`;
-        console.log("displayExpertiseTable : userSelectedVerticals : exp", exp);
-
-        isDisabled = true;
-        if (exp.subCategory) {
-          exp.subCategory.map((Iop, subIndex) => {
-            
-            let lastIndex = false;
-            if( exp.subCategory.length == subIndex + 1) {
-              lastIndex = true;
-            }
-            // rowId = `rowId_${randNum + index}_${subIndex}`;
-            // console.log("displayExpertiseTable : sv : exp : Iop ", Iop);
-            
-            if (exp?.selected) {
-              isDisabled = false;
-            } else {
-              isDisabled = true;
-            }
-            if (initial) {
-              if (USER.cvAdded) {
-                
-              
-                let allDesSets = new Set();
-                let allUnDesSets = new Set();
-                let flag = false;
-                console.log('if aaa flag', flag);
-                // console.log('USER.cv :', USER.cv);
-                let prevDes = false;
-                for (let i = 0; i < USER.cv.professions.length; i++) {
-                  prevDes = false;
-                  console.log('if aaa i', i);
-                  // if (flag) {
-                  //   break;
-                  // }
-                  rowId = `rowId_${randNum + index}`;
-                  const eachSelectedVExpertise = USER.cv.professions[i];
-                  const cvv = eachSelectedVExpertise.ver;
-                  // console.log('eachSelectedVExpertise', eachSelectedVExpertise);
-                  console.log('if aaa flag', flag);
-                  for (let j = 0; j < eachSelectedVExpertise.svers.length; j++) {
-                    // if (flag) {
-                    //   break;
-                    // }
-                    const eachSelectedVSExpertise =
-                      eachSelectedVExpertise.svers[j];
-                    const cvsv = eachSelectedVSExpertise.sver;
-                    // console.log('eachSelectedVSExpertise :', eachSelectedVSExpertise);
-                    for (
-                      let k = 0;
-                      k < eachSelectedVSExpertise.profs.length;
-                      k++
-                    ) {
-                      const eachSelectedExpertise = eachSelectedVSExpertise.profs[k];
-                      const cvProf = eachSelectedExpertise.prof;
-                      const cvDesigations = eachSelectedExpertise.designations;
-                      const cvVal = eachSelectedExpertise.value;
-
-                      for(let l = 0; l < eachSelectedExpertise.designations.length; l++) {
-                        const des = eachSelectedExpertise.designations[l];
-                        console.log('zzz des', des, cvProf, cvsv, cvv);
-                        if (
-                          cvv === v._id &&
-                          sv.name === cvsv &&
-                          exp.category === cvProf &&
-                          cvDesigations.includes(des) 
-                        ) {
-                          commonSelectExpirencesFun(eachSelectedExpertise.value)
-                          allDesSets.add(des);
-                          console.log('zzz allDesSets : ', allDesSets);
-                          exp.selected = true;
-                          isDisabled = false;
-                          flag = true;
-                        } 
-                      }
-                    }
-                  }
-                }
-
-
-                console.log('zzza allDesSets : ', allDesSets, Iop.name);
-
-                allDesSets.forEach(d => {
-                  if(d === Iop.name) {
-                    console.log('qqq d name',d, Iop.name );
-                      prevDes = Iop.name;
-                      options += `
-                      <div class="option"  > 
-                        <input  type="checkbox" class="plus-minus" checked name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                        <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                      </div>
-                    `;
-                  } else {
-                    if(prevDes !== Iop.name) {
-                      console.log('allDesSets.has(prevDes)', allDesSets.has(prevDes), Iop.name);
-                      if(!allDesSets.has(Iop.name)) {
-                        prevDes = Iop.name
-                        options += `
-                        <div class="option"  > 
-                          <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                          <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                        </div>
-                      `;
-                      }
-                    }
-                  }
-                })
-
-              }
-            } else {
-              console.log('ggg outer else ',v._id, v.name, sv.name,  exp.category, Iop.name, rowId, initial);
-              if(exp.value === Iop) {
-              console.log('ggg selected ', exp.category, Iop.name);
-                options += `
-                  <div class="option"  > 
-                    <input checked type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}" value="${Iop.name}" />
-                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                  </div>
-                `;
-              } else {
-              console.log('ggg else  ', exp.category, Iop.name);
-                if(Iop.name!="None" && Iop.name!="none" && Iop.name!="N"){
-                  console.log('ggg if');
-                  options += `
-                  <div class="option"> 
-                    <input  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                    <label for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">${Iop.name}</label>
-                  </div>
-                  `;
-                  console.log('ggg', options);
-                } 
-                else {
-                  console.log('ggg else  else', exp.category, Iop.name);
-                  options += `
-                  <div class="option" hidden > 
-                    <input hidden checked  type="checkbox" class="plus-minus" name="designation_checkbox" id="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}"  data-rowID="${rowId}"  value="${Iop.name}" />
-                    <label hidden for="${v._id}__${v.name}__${sv.name}__${exp.category}__${Iop.name}__${rowId}">Not Listed/Required</label>
-                  </div>
-                `;
-                console.log('ggg', options);
-                }
-              }
-            }
-          });
-
-          if (isDisabled) {
-            tglTxt = "No";
-          } else {
-            console.log("came")
-            tglTxt = "Yes";
-          }
-
-          rows +=
-          `<tr>
-            <td>${exp.category}</td>
-            <td>
-              <label class="switch">
-              <input type="checkbox" name="slider_${rowId}" cat="toggle_btns" id="toggle_${rowId}"  data-rowid="${rowId}"  ${
-                isDisabled ? "" : checkMe("toggle_"+rowId)
-              }  onchange="sliderToggle(event)">
-              <span class="slider round"></span>
-              <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;" id="${rowId}">${tglTxt}</span>
-            </label>
-            </td>
-          
-            <td style="">
-              <div class="select-list" id="select-list_` +
-            rowId +
-            `" style="pointer-events:none;opacity:0.4"  >
-                  <div class="title" id="title_` +
-            rowId +
-            
-            `">Select Designation</div>
-                  <div class="select-options" style="max-height:250px;overflow-y:scroll" disable onchange="optionSelected(event)" data-rowid="${rowId}" name="designation" id="designation_${rowId}">
-                    ${options}
-                  </div>
-              </div>
-            </td>
-            <td>
-              <select
-                disabled
-                id="exper_${rowId}"
-                data-rowid="${rowId}" 
-                class="selectpicker"
-                name="expertise-${rowId}"
-                style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
-              >
-              ${commonExpirencesOptions}
-              </select>
-            </td>
-          </tr>`;
-          function checkMe(id){
-            
-            setTimeout(function(){
-              document.getElementById(id).checked="true"
-              openDesignationDropdown(id,rowId)
-            },500)
-            
-          }
-          // setTimeout(function(){
-          //   if(options.includes("hidden")){
-          //     document.getElementById("select-list_"+rowId).classList.remove("select-list")
-          //     document.getElementById("title_"+rowId).innerHTML="----"
-          //     document.getElementById("toggle_"+rowId)
-          //   }
-          // },500)
-          
-        }
-      });
-      let tableHead = `
-      <table id="table_${rowIdT.substring(6,8)}" class="table table-bordered">
-        <thead class="thead-dark">
-          <tr style="text-align: center">
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col center"
-            >
-              Designation 
-              <br>
-              (${sv.name})
-            </th>
-            <th  style="text-align: center; font-weight: 600"
-            scope="col center">
-              Applicable?
-            </th>
-            <th  style="text-align: center; font-weight: 600"
-            scope="col center">
-              Select Expertise
-            </th>
-            <th
-              style="text-align: center; font-weight: 600"
-              scope="col"
-            >
-              Your Maximum Experience
-            </th>
-          </tr>
-        </thead>
-        <tbody>`;
-      let tableBody = rows;
-      let tableEnd = ` </tbody>
-      </table>`;
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 
   $(document).ready(function () {
     $(".select-list").multiselect({
       onChange: updateTable,
       disabled: true,
     });
-<<<<<<< HEAD:public/employee/OldUser1.js
   });
 
   
@@ -2104,89 +1749,10 @@ async function storeAllNamesIds() {
   ID_NAME_VERTICALS = VERTICALS.map((v) => {
     return { name: v.name, id: v._id };
   });
-=======
-    tables += head + table;
-  });
-
-  tablesHolderHTML.innerHTML = tables;
-
-  (function ($) {
-    $.fn.multiselect = function () {
-      var selector = this;
-      var options = $.extend(
-        {
-          onChange: function (val) {
-            console.log(val);
-          },
-        },
-        arguments[0] || {}
-      );
-      activate();
-
-      /////////
-
-      function activate() {
-        //events
-        $(selector)
-          .find(".title")
-          .on("click", function (e) {
-            $(this).parent().find(".select-options").toggle();
-          });
-
-        $(selector)
-          .find('input[type="checkbox"]')
-          .change(function (e) {
-            options.onChange.call(this);
-          });
-      }
-    };
-  })(jQuery);
-
-  $(document).ready(function () {
-    $(".select-list").multiselect({
-      onChange: updateTable,
-      disabled: true,
-    });
-  });
-}
-function openDesignationDropdown(toggleId,rowId){
-  document.getElementById("select-list_"+rowId).style.pointerEvents="all";
-  document.getElementById("select-list_"+rowId).style.opacity=1;
-  document.getElementById("exper_"+rowId).disabled=false;
-  let eleRowId = rowId
-  var table_id= ("table_"+eleRowId.substring(6,8))
-  for(let i=0;i<document.querySelectorAll(`input[cat=toggle_btns]`,`table[id="table_${eleRowId.substring(6,7)}"]`).length;i++){
-      
-    let tog_id= document.querySelectorAll(`input[cat=toggle_btns]`)[i].id
-
-    if( tog_id !="toggle_"+eleRowId && table_id.substring(6) == tog_id.substring(13,15)) {
-      
-      document.getElementById(tog_id).disabled=true;
-    }
-  }
-  
-}
-function updateTable() {
-  var checkboxValue = $(this).val();
-  var isChecked = $(this).is(":checked");
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 }
 
 // //////////////////////////////////////////
 
-<<<<<<< HEAD:public/employee/OldUser1.js
-=======
-let ID_NAME_VERTICALS = [];
-
-async function storeAllNamesIds() {
-  ID_NAME_VERTICALS = VERTICALS.map((v) => {
-    return { name: v.name, id: v._id };
-  });
-}
-
-// //////////////////////////////////////////
-
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
 function getNameOfId(id) {
   // if(ID_NAME_VERTICALS.length === 0) await storeAllNamesIds();
 
@@ -2251,11 +1817,7 @@ async function displayCvDetails() {
     workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
 
 
-<<<<<<< HEAD:public/employee/OldUser1.js
     //console.log(USER.cv.workCountry)
-=======
-    console.log(USER.cv.workCountry)
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
     //cvFormHTML['country'].value = USER.cv.workCountry;
     let optionsState = ""
     let optionsCountry="";
@@ -2300,11 +1862,7 @@ async function displayCvDetails() {
     
     // console.log('displayCvDetails : cv', USER.cv);
     USER.cv.professions.map(async (v) => {
-<<<<<<< HEAD:public/employee/OldUser1.js
       //console.log('displayCvDetails : cv : v', v);
-=======
-      console.log('displayCvDetails : cv : v', v);
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
       let name = await getNameOfId(v.ver);
       let head = `
       <div id="${v.ver}" class="collapse">
@@ -2322,29 +1880,17 @@ async function displayCvDetails() {
                 scope="col"
               >
                 Proffestions
-<<<<<<< HEAD:public/employee/OldUser1.js
               </th>
               <th
                 style="text-align: center; font-weight: 600"
                 scope="col"
               >
                 Designations
-=======
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
               </th>
               <th
                 style="text-align: center; font-weight: 600"
                 scope="col"
               >
-<<<<<<< HEAD:public/employee/OldUser1.js
-=======
-                Designations
-              </th>
-              <th
-                style="text-align: center; font-weight: 600"
-                scope="col"
-              >
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
                 Expertice
               </th>
             </tr>
@@ -2500,21 +2046,13 @@ async function uploadImgToDB() {
 
   if (!resStorage.status) {
     
-<<<<<<< HEAD:public/employee/OldUser1.js
     nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
-=======
-    // nowuiDashboard.showNotification('top','center',resStorage.message,"primary");
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
     return;
   }
   const resUrl = await getUrlOfImg({ ref: `${USER.userType}s` });
   if (!resUrl.status) {
    
-<<<<<<< HEAD:public/employee/OldUser1.js
      nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
-=======
-    // nowuiDashboard.showNotification('top','center',resUrl.message,"primary");
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
     return;
   }
 
@@ -2524,11 +2062,7 @@ async function uploadImgToDB() {
   await USER_REF.update(data);
   getUserDetails({ uid: USER_ID, userType: USER.userType });
   
-<<<<<<< HEAD:public/employee/OldUser1.js
   nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
-=======
-  // nowuiDashboard.showNotification('top','center',"Image Uploaded Successfully","primary");
->>>>>>> 60e5db61e5b8a797fb2566a171f21a80c2940793:public/employee/old-user1.js
   document.getElementById("progressBar").style.display="none"
 }
 
