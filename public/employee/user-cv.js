@@ -355,14 +355,13 @@ function sliderToggle(e, self) {
   if (value) {
     userSliderChecked.push(metaData);
     userSelectedRowIds.push(id);
-    document.querySelector(`#${id}_des`).disabled = false;
-    document.querySelector(`#${id}_exp`).disabled = false;
-    console.log(document.querySelector(`#${id}_des`));
+    $("button[data-id='"+id+"_des']").prop("disabled", false);
+    $("button[data-id='"+id+"_exp']").prop("disabled", false);
   } else {
     const updatedDes = userSelectedDesignation.filter(d => !d.includes(metaData));
     userSelectedDesignation = updatedDes;
-    document.querySelector(`#${id}_des`).disabled = true;
-    document.querySelector(`#${id}_exp`).disabled = true;
+    $("button[data-id='"+id+"_des']").prop("disabled", true);
+    $("button[data-id='"+id+"_exp']").prop("disabled", true);
     userSelectedRowIds = userSelectedRowIds.filter(r => r !== id);
     const sliderIndex = userSliderChecked.findIndex(s => s.includes(metaData));
     userSliderChecked.splice(sliderIndex, 1);
@@ -405,14 +404,14 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
     </td>
 
     <td>
-      <select id="${rowId}_des"  multiple data-live-search="true" onchange="toggleDesignation(event)" >
+      <select id="${rowId}_des" multiple data-live-search="true" onchange="toggleDesignation(event)"  >
         ${designationFun({ designations: designations, prof: professionTitle, vId: vId, vName: vName, svName: svName })}
       </select>
     </td>
     <td>
       <select
         id="${rowId}_exp"
-        ${userSelectedRowIds.includes(rowId) ? '' : 'disabled'}
+        ${userSelectedRowIds.includes(rowId) ? '' : ''}
          
         style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
       >
@@ -420,7 +419,11 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
       </select>
     </td>
   </tr>`;
-  
+  setTimeout(function(){
+    $("button[data-id='"+rowId+"_des']").prop("disabled", true);
+    $("button[data-id='"+rowId+"_exp']").prop("disabled", true);
+  },300)
+
  
   return row;
 }
