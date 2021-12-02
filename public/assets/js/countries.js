@@ -734,7 +734,7 @@ function populateCountries(countryElementId, stateElementId) {
     searchResultLimit: 100,
     renderChoiceLimit: 100,
   });
-  console.log(count_ind)
+
   // Assigned all countries. Now assign event listener for the states.
 
   if (stateElementId) {

@@ -1,12 +1,3 @@
-const cvUrlHTML = document.querySelector("#cvUrl");
-const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
-const verticalsTablesHTML = document.querySelector("#verticalsTables");
-const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
-const workCountryHTML = document.querySelector('#work-country');
-const workStatesHTML = document.querySelector('#work-states');
-const workCitiesHTML = document.querySelector('#work-cities');
-const stsHTML = document.querySelector('#sts');
-
 let VERTICALS_DATA = [];
 let TEMP_VERTICALS_DATA = [];
 
@@ -31,7 +22,7 @@ getDbCollData({ collectionName: 'verticals' }).then(async (res) => {
   }
 
   console.log(VERTICALS_DATA);
-  displayVerticalDropdown();
+  displayVerticalDropdown({isInital: false, data: false});
   // storeAllNamesIds();
   // displayCvDetails();
 })
@@ -49,10 +40,18 @@ getDbData({ collectionName: 'experienceTags', docId: 'tags' }).then(res => {
 
 const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
-function displayVerticalDropdown() {
+function displayVerticalDropdown({isInital = false, data = false}) {
   let options = "";
-
+  console.log(isInital, data);
   VERTICALS_DATA.map((ver) => {
+    if(isInital) {
+      let isPreset = data.filter(v => v === `${ver._id}__${ver.name}`);
+      console.log(isPreset);
+      if(isPreset.length > 0) {
+        options += `<option selected value="${ver._id}__${ver.name}">${ver.name}</option>`;
+        return;
+      } 
+    }
     options += `<option value="${ver._id}__${ver.name}">${ver.name}</option>`;
   });
 
@@ -83,26 +82,34 @@ function displayVerticalDropdown() {
 
 // ///////////////////////////////
 
-function verticalDeleted({ previousVerticals, newVerticals }) {
-  const updatedVerticals = previousVerticals.filter(
-    (element) => !newVerticals.includes(element)
-  );
-
-}
-
-// ///////////////////////////////
-
 let userVerticalsSelected = [];
 let flag = false;
 
-function verticalsSelected(e) {
+function verticalsSelected(e, isInital = false) {
   if (e) {
     userVerticalsSelected = Array.from(e.target.selectedOptions).map(
       (x) => x.value ?? x.text
     );
+  } 
+
+
+  if(isInital) {
+    if(VERTICALS_DATA.length === 0) {
+      const verDataInterval = setInterval(() => {
+        if(VERTICALS_DATA.length === 0) return;
+        userVerticalsSelected = USER.cv.verticals.map(v => `${v.vId}__${v.vName}`);
+        console.log(userVerticalsSelected);
+        displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
+        clearInterval(verDataInterval);
+      }, 500);
+    } else {
+      userVerticalsSelected = USER.cv.verticals.map(v => `${v.vId}__${v.vName}`);
+      console.log(userVerticalsSelected);
+      displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
+    }
   }
   console.log('verticalsSelected : userVerticalsSelected', userVerticalsSelected);
-
+  console.log('verticalsSelected : VERTICALS_DATA', VERTICALS_DATA);
 
   let subVerticalsToDisplay = [];
 
@@ -120,8 +127,28 @@ function verticalsSelected(e) {
     }
   })
   console.log('verticalsSelected : TEMP_VERTICALS_DATA', TEMP_VERTICALS_DATA);
+  console.log('verticalsSelected : subVerticalsToDisplay', subVerticalsToDisplay);
 
-  if (!flag) {
+  if(isInital) {
+    const d = [];
+    console.log(USER.cv.svers);
+    for(let j = 0; j < USER.cv.svers.length; j++) {
+      const v = USER.cv.svers[j];
+
+      for(let i = 0; i < v.svers.length; i++) {
+        d.push(`${v.vId}__${v.vName}__${v.svers[i]}`); 
+      }
+    }
+    console.log('verticalsSelected : d :', d);
+    displaySubVerticalDropdown({ subVerticalsToDisplay: subVerticalsToDisplay, selectedSubV: d,  });
+    flag = true;
+    setTimeout(() => {
+      subVerticalSelected(null, true);
+    }, 500);
+    return;
+  } 
+
+  if (!flag ) {
     displaySubVerticalDropdown({ subVerticalsToDisplay: subVerticalsToDisplay });
     flag = true;
     return;
@@ -131,7 +158,6 @@ function verticalsSelected(e) {
     document.querySelector("#subverticals-dropdown").selectedOptions
   ).map((x) => x.value ?? x.text)
   displaySubVerticalDropdown({ subVerticalsToDisplay: subVerticalsToDisplay, selectedSubV: selectedSubV });
-
 }
 
 
@@ -141,12 +167,13 @@ const subVerticalDropHolderHTML = document.querySelector("#subVerticalDropHolder
 
 function displaySubVerticalDropdown({ subVerticalsToDisplay, selectedSubV = false }) {
   let options = "";
-  console.log('displaySubVerticalDropdown : subVerticalsToDisplay', subVerticalsToDisplay);
+  // console.log('displaySubVerticalDropdown : subVerticalsToDisplay', subVerticalsToDisplay);
+  // console.log('displaySubVerticalDropdown : selectedSubV', selectedSubV);
+  
   subVerticalsToDisplay.map((ver) => {
     ver.subVerticals.map(v => {
       let name = `${ver._id}__${ver.name}__${v}`;
       if (selectedSubV) {
-        console.log(selectedSubV);
         if (selectedSubV.includes(name)) {
           options += `<option selected value="${name}">${v}</option>`;
         } else {
@@ -187,7 +214,7 @@ function displaySubVerticalDropdown({ subVerticalsToDisplay, selectedSubV = fals
 
 let userSubVerticalsSelected = [];
 
-function subVerticalSelected(e) {
+function subVerticalSelected(e, isInital = false) {
   if (e) {
     userSubVerticalsSelected = Array.from(e.target.selectedOptions).map((x) => x.value ?? x.text);
   } else {
@@ -195,8 +222,9 @@ function subVerticalSelected(e) {
       document.querySelector("#subverticals-dropdown").selectedOptions
     ).map((x) => x.value ?? x.text);
   }
-  // console.log('subVerticalSelected : userSubVerticalsSelected :', userSubVerticalsSelected);
-  // console.log('subVerticalSelected : TEMP_VERTICALS_DATA :', TEMP_VERTICALS_DATA);
+
+  console.log('subVerticalSelected : userSubVerticalsSelected :', userSubVerticalsSelected);
+  console.log('subVerticalSelected : TEMP_VERTICALS_DATA :', TEMP_VERTICALS_DATA);
 
   let professtionsToDisplay = [];
 
@@ -207,6 +235,7 @@ function subVerticalSelected(e) {
       if (usvIndex === -1) return;
       let vIndex = professtionsToDisplay.findIndex(vv => vv._id === v._id);
       let allProfs = TEMP_VERTICALS_DATA[i].allSubVerticals.filter(svv => svv.name === sv);
+      console.log('subVerticalSelected : allProfs', allProfs);
       allProfs = allProfs[0].professions;
       if (vIndex === -1) {
         professtionsToDisplay.push({
@@ -233,28 +262,35 @@ function subVerticalSelected(e) {
       }
     })
   })
-  // console.log(`subVerticalSelected : professtionsToDisplay :`, professtionsToDisplay);
-  displayExpertiseTable({ professtionsToDisplay: professtionsToDisplay })
+  console.log(`subVerticalSelected : professtionsToDisplay :`, professtionsToDisplay);
+
+  if(isInital) {
+    displayExpertiseTable({ professtionsToDisplay: professtionsToDisplay, isInital: true })
+  } else {
+    displayExpertiseTable({ professtionsToDisplay: professtionsToDisplay, isInital: false })
+  }
 }
 
 // ///////////////////////
 
 const tablesHolderHTML = document.querySelector("#tablesHolder");
 
-function displayExpertiseTable({ professtionsToDisplay }) {
+function displayExpertiseTable({ professtionsToDisplay, isInital= false }) {
   let tables = ``;
   let head = ``;
   let table = ``;
+  isInital = isInital ? isInital : false;
 
-  console.log('displayExpertiseTable : professtionsToDisplay ', professtionsToDisplay);
+  // console.log('displayExpertiseTable : professtionsToDisplay ', professtionsToDisplay);
+  // console.log('displayExpertiseTable : isInital ', isInital);
   for (let i = 0; i < professtionsToDisplay.length; i++) {
     const v = professtionsToDisplay[i];
-    head = `
-    <h6 style="font-weight: 600">
-      Select Expertise (
-      <b style="color: red">Vertical Selected : ${v.name}</b> )
-    </h6>
-    <label>Tick the box if applicable</label>`;
+    // head = `
+    // <h6 style="font-weight: 600">
+    //   Select Expertise (
+    //   <b style="color: red">Vertical Selected : ${v.name}</b> )
+    // </h6>
+    // <label>Tick the box if applicable</label>`;
 
     let tableHead, tableBody;
 
@@ -297,7 +333,9 @@ function displayExpertiseTable({ professtionsToDisplay }) {
           professionTitle: prof.prof, 
           vId: v._id, 
           svName: sv.name, 
-          vName: v.name });
+          vName: v.name, 
+          isInital});
+
       }
       tableBody = allRows;
       let tableEnd = `</tbody></table>`;
@@ -313,10 +351,14 @@ function displayExpertiseTable({ professtionsToDisplay }) {
 
 // ////////////////////////
 
-function expirencesFun() {
+function expirencesFun({isInital = false, value = false}) {
   let eOptions = '';
   expertiseOptions.map((exp) => {
-    eOptions += `<option  value="${exp}" >${exp}</option> `;
+    if(isInital && exp === value) {
+      eOptions += `<option selected value="${exp}" >${exp}</option> `;
+    } else {
+      eOptions += `<option  value="${exp}" >${exp}</option> `;
+    }
   });
   return eOptions;
 }
@@ -342,32 +384,32 @@ function designationFun({ designations, vId, vName, svName, prof }) {
 // ////////////////////////
 
 let userSliderChecked = [];
-let userSelectedRowIds = [];
 
 function sliderToggle(e, self) {
   const value = e.target.checked;
-  console.log(value);
   const metaData = e.target.dataset.sliderdata;
-  console.log(self.parentNode.id);
   let id = self.parentNode.id.split('_')[1];
-  console.log(id);
   id = `r_${id}`;
   if (value) {
     userSliderChecked.push(metaData);
-    userSelectedRowIds.push(id);
-    $("button[data-id='"+id+"_des']").prop("disabled", false);
-    $("button[data-id='"+id+"_exp']").prop("disabled", false);
+    document.querySelector(`#${id}_des`).parentElement.classList.remove('disabled');
+    document.querySelector(`#${id}_des`).parentElement.childNodes[0].classList.remove('disabled');
+    document.querySelector(`#${id}_exp`).parentElement.childNodes[0].classList.remove('disabled');
+    document.querySelector(`#${id}_des`).disabled = false;
+    document.querySelector(`#${id}_exp`).disabled = false;
   } else {
     const updatedDes = userSelectedDesignation.filter(d => !d.includes(metaData));
     userSelectedDesignation = updatedDes;
-    $("button[data-id='"+id+"_des']").prop("disabled", true);
-    $("button[data-id='"+id+"_exp']").prop("disabled", true);
-    userSelectedRowIds = userSelectedRowIds.filter(r => r !== id);
+    document.querySelector(`#${id}_des`).parentElement.classList.add('disabled');
+    document.querySelector(`#${id}_des`).parentElement.childNodes[0].classList.add('disabled');
+    document.querySelector(`#${id}_exp`).parentElement.childNodes[0].classList.add('disabled');
+    document.querySelector(`#${id}_des`).parentElement.disabled = true;
+    document.querySelector(`#${id}_des`).disabled = true;
+    document.querySelector(`#${id}_exp`).disabled = true;
     const sliderIndex = userSliderChecked.findIndex(s => s.includes(metaData));
     userSliderChecked.splice(sliderIndex, 1);
   }
 }
-
 
 // ////////////////////////
 
@@ -383,7 +425,7 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
 
   let slider = `
   <label id="${rowId}_switch" class="switch">
-    <input type="checkbox" ${isChecked} data-sliderdata="${vId}__${vName}__${svName}__${prof}" onchange="sliderToggle(event, this)" >
+    <input name="slider_checkbox" type="checkbox" ${isChecked} data-sliderdata="${vId}__${vName}__${svName}__${prof}" onchange="sliderToggle(event, this)" >
     <span class="slider round"></span>
     <span id="sliderText" style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
   </label>`;
@@ -393,10 +435,74 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
 
 // ////////////////////////
 
-function profEachRow({ designations, professionTitle, vId, vName, svName }) {
+let userSelectedDesignation = []
+function toggleDesignation(e, data = false) {
+  userSelectedDesignation = [];
+  if(e) {
+    for(let  i = 0; i < e.target.selectedOptions.length; i++) {
+      const node = e.target.selectedOptions[i];
+      const dataset = node.dataset.checkdata;
+      const vId = dataset.split('__')[0];
+      const vName = dataset.split('__')[1];
+      const svName = dataset.split('__')[2];
+      const prof = dataset.split('__')[3];
+      const des = dataset.split('__')[4];
+      userSelectedDesignation.push(dataset)
+    }
+  }
+  console.log('toggleDesignation : userSelectedDesignation',userSelectedDesignation);
+}
+
+// ////////////////////////////
+
+function profEachRow({ designations, professionTitle, vId, vName, svName, isInital = false }) {
+  // console.log('profEachRow : designations, professionTitle, vId, vName, svName', designations, professionTitle, vId, vName, svName, isInital);
   let rowId = Math.round(Math.random() * (9999 - 1000 +1) + 1000);
-  rowId = `r_${rowId}`
-  let row = `
+  rowId = `r_${rowId}`;
+  const vn = `${vId}__${vName}__${svName}__${professionTitle}`;
+  let isDisabled = ``;
+
+  let row = '';
+  let isPreset = false;
+  if(userSliderChecked.includes(vn)) {
+    isDisabled = '';
+  } else {
+    isDisabled = 'disabled';
+  }
+  let props = {
+    isInital: false,
+    value: false
+  }
+
+  if(isInital) {
+    for(let i = 0; i < USER.cv.all.length; i++) {
+      const v = USER.cv.all[i];
+      for(let j = 0; j < v.svers.length; j++) {
+        const sv = v.svers[j];
+        // console.log(v.vId, vId);
+        // console.log(sv.svName, svName);
+        // console.log(sv.prof, professionTitle);
+        if(v.vId === vId && sv.svName === svName && sv.prof === professionTitle) {
+          let fullName = `${vId}__${vName}__${svName}__${professionTitle}`;
+          userSliderChecked.push(fullName);
+          isPreset = true;
+          isDisabled = '';
+          props = {
+            isInital: true,
+            value: sv.exp
+          }
+          for(let k = 0; k < sv.des.length; k++) {
+            const des = sv.des[k];
+            let fullNameDes = `${fullName}__${des}`;
+            userSelectedDesignation.push(fullNameDes);
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  row = `
   <tr>
     <td>${professionTitle}</td>
     <td>
@@ -404,45 +510,23 @@ function profEachRow({ designations, professionTitle, vId, vName, svName }) {
     </td>
 
     <td>
-      <select id="${rowId}_des" multiple data-live-search="true" onchange="toggleDesignation(event)"  >
+      <select ${isDisabled} id="${rowId}_des" multiple data-live-search="true" onchange="toggleDesignation(event)"  >
         ${designationFun({ designations: designations, prof: professionTitle, vId: vId, vName: vName, svName: svName })}
       </select>
     </td>
     <td>
       <select
+        ${isDisabled}
         id="${rowId}_exp"
-        ${userSelectedRowIds.includes(rowId) ? '' : ''}
-         
         style="width:100%;border-radius:10px;border:none;background-color:lightgray;padding:5px"
       >
-      ${expirencesFun()}
+      ${expirencesFun({...props})}
       </select>
     </td>
   </tr>`;
-  setTimeout(function(){
-    $("button[data-id='"+rowId+"_des']").prop("disabled", true);
-    $("button[data-id='"+rowId+"_exp']").prop("disabled", true);
-  },300)
-
- 
   return row;
 }
 
 // //////////////////////
 
-let userSelectedDesignation = []
-function toggleDesignation(e) {
-  userSelectedDesignation = [];
-  for(let  i = 0; i < e.target.selectedOptions.length; i++) {
-    const node = e.target.selectedOptions[i];
-    const dataset = node.dataset.checkdata;
-    const vId = dataset.split('__')[0];
-    const vName = dataset.split('__')[1];
-    const svName = dataset.split('__')[2];
-    const prof = dataset.split('__')[3];
-    const des = dataset.split('__')[4];
-    userSelectedDesignation.push(dataset)
-  }
-}
 
-// ////////////////////////////

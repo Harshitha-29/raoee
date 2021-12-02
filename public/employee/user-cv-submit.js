@@ -17,9 +17,9 @@ function selectedCountry(e) {
 
 // ///////////////////////////////
 
+let FILE = false;
+let FILE_NAME = false;
 const cvFormHTML = document.querySelector("#cvForm");
-// let FILE = false;
-// let FILE_NAME = false;
 
 const updateCv = async (e) => {
   e.preventDefault();
@@ -33,57 +33,55 @@ const updateCv = async (e) => {
 
   const workCity = cvFormHTML["work-city"].value;
 
-  if (countrySelected === 0 || statesSelected.length === 0) {
-    if (oldStateArr.length == 0) {
-      document.getElementById("progressBar2").style.display = "none";
-      // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-      return;
-    } else {
-      statesSelected = oldStateArr.map((s) => s);
-    }
-    if (oldCountryArr.length == 0) {
-      document.getElementById("progressBar2").style.display = "none";
-      // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-      return;
-    } else {
-      countrySelected = oldCountryArr.map((s) => s);
-    }
+  if (countrySelected === 0) {
+    alert('Enter country');
+    // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+    return;
+
+    // if (oldStateArr.length == 0) {
+    //   document.getElementById("progressBar2").style.display = "none";
+    //   // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+    //   return;
+    // } else {
+    //   statesSelected = oldStateArr.map((s) => s);
+    // }
+    // if (oldCountryArr.length == 0) {
+    //   document.getElementById("progressBar2").style.display = "none";
+    //   // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
+    //   return;
+    // } else {
+    //   countrySelected = oldCountryArr.map((s) => s);
+    // }
   }
 
-  const { verticals, subVerticals, professions } = getUserPreferences();
-  console.log("updateCv : verticals", verticals);
-  console.log("updateCv : subVerticals", subVerticals);
-  console.log("updateCv : professions", professions);
-
+  const {allSelected, allSelectedSv, allSelectedV} = getUserPreferences();
   let resStorage, resURL;
   let data = {};
 
   if (FILE_NAME) {
-    resStorage = await uploadFileToStorage({ ref: `${USER.userType}s` });
-    retryStorage = 0;
+    resStorage = await uploadFileToStorage({ ref: `employees/${USER_ID}`, fileName: FILE_NAME, file: FILE  });
     if (!resStorage.status) {
       alert(resStorage.message);
       return;
     }
 
-    resURL = await getUrlOfFile({ ref: `${USER.userType}s` });
-    retryURL = 0;
+    resURL = await getUrlOfFile({ ref: `employees/${USER_ID}`, fileName: FILE_NAME });
     if (!resURL.status) {
       alert(resURL.message);
       return;
     }
+
     data.url = resURL.data.url;
     data.fileName = FILE_NAME;
 
     if (USER.cvAdded) {
-      const resDeleteStorage = await deleteStorage({
-        ref: `${USER.userType}s/${USER.uid}`,
-        fileName: USER.cv.fileName,
-      });
-      if (!resDeleteStorage.status) {
-        alert(resDB.message);
-        // return;
-      }
+      // const resDeleteStorage = await deleteStorage({
+      //   ref: `employees/${USER_ID}`,
+      //   fileName: USER.cv.fileName,
+      // });
+      // if (!resDeleteStorage.status) {
+      //   alert(resDB.message);
+      // }
     }
   } else {
     if (USER.cvAdded) {
@@ -100,9 +98,9 @@ const updateCv = async (e) => {
     }
   }
 
-  data.verticals = verticals;
-  data.subVerticals = subVerticals;
-  data.professions = professions;
+  data.verticals = allSelectedV;
+  data.svers = allSelectedSv;
+  data.all = allSelected;
   data.userType = USER.userType;
   data.userId = USER.uid;
   data.fname = USER.fname;
@@ -122,51 +120,51 @@ const updateCv = async (e) => {
   data.certifiedInternationally = USER.basicInfo.certifiedInternationally;
   data.gender = USER.basicInfo.gender;
 
-  const resDB = await uploadCVToDb({ data });
-  retryDB = 0;
+  let cvCollectionName = ``;
+  data.verticals.map((v) => {
+    cvCollectionName += `${v.vId}_`;
+  });
+
+
+  const resDB = await setDbData({ collectionName: cvCollectionName, docId: USER_ID, dataToUpdate: data  });
   if (!resDB.status) {
     alert(resDB.message);
     return;
   }
 
   data = {
-    verticals,
-    subVerticals,
-    professions,
+    verticals : allSelectedV,
+    svers : allSelectedSv,
+    all: allSelected,
     fileName: FILE_NAME ? FILE_NAME : USER.cv.fileName,
     url: FILE_NAME ? resURL.data.url : USER.cv.url,
-    collectionName: resDB.data.collectionName,
-    docId: resDB.data.docId,
+    collectionName: cvCollectionName,
+    docId: USER_ID,
     workCountry: countrySelected,
     workStates: statesSelected,
     workCity: workCity,
   };
 
-  const resUpdateCvDb = await updateCollectionsDb({
-    collectionName: resDB.data.collectionName,
+  const resUpdateCvDb = await updateDbDoc({
+    ref: USER_REF, dataToUpdate: {...USER, cv: {...data}, cvAdded: true}, resetData: true
   });
+
   if (!resUpdateCvDb.status) {
     alert(resDB.message);
     // return;
   }
 
-  if (USER.cvAdded) {
-    const resDeleteCvDb = await deleteCvDb({
-      collectionName: USER.cv.collectionName,
-      docId: USER.cv.docId,
-    });
-    if (!resDeleteCvDb.status) {
-      alert(resDB.message);
-      // return;
-    }
-  }
+  // if (USER.cvAdded) {
+  //   const resDeleteCvDb = await deleteDbDoc({
+  //     collectionName: USER.cv.collectionName,
+  //     docId: USER.cv.docId,
+  //   });
+  //   if (!resDeleteCvDb.status) {
+  //     alert(resDB.message);
+  //     // return;
+  //   }
+  // }
 
-  const resUserDB = await uploadToUserDb({ data });
-  retryUserDB = 0;
-  if (!resUserDB.status) {
-    alert(resUserDB.message);
-    return;
-  }
 
   // nowuiDashboard.showNotification('top','center',"Verticals Added Successfully","primary");
   document.getElementById("progressBar2").style.display = "none";
@@ -179,10 +177,10 @@ const updateCv = async (e) => {
   //   "Data updated successfully",
   //   "primary"
   // );
-  getUserDetails({ uid: USER_ID, userType: USER.userType });
-  setTimeout(function () {
+  // getUserDetails({ uid: USER_ID, userType: USER.userType });
+  // setTimeout(function () {
     location.reload();
-  }, 2000);
+  // }, 2000);
 };
 
 cvFormHTML.addEventListener("submit", updateCv);
@@ -191,121 +189,102 @@ cvFormHTML.addEventListener("submit", updateCv);
 
 
 function getUserPreferences() {
-  const cvVerticals = [];
+  const all = [];
+  const allSelectedV = [];
+  const allSelectedSv = [];
 
-  for (
-    let i = 0;
-    i <
-    document.querySelectorAll(`input[name=designation_checkbox]:checked`)
-      .length;
-    i++
-  ) {
-    const e = document.querySelectorAll(
-      `input[name=designation_checkbox]:checked`
-    )[i];
-    const all = e.id.split("__");
-    const selectedVId = all[0];
-    const selectedVName = all[1];
-    const selectedSubV = all[2];
-    const profession = all[3];
-    const designation = all[4];
-    const index = all[5];
-    if (!document.querySelector(`input[name=slider_${index}]:checked`)) {
-      console.log(
-        !document.querySelector(`input[name=slider_${index}]:checked`)
-      );
-      continue;
-    }
+  const allEles = document.querySelectorAll(`input[name=slider_checkbox]:checked`);
+  for (let i = 0; i < allEles.length; i++) { 
+    const e = allEles[i];
+    let id = e.parentElement.id;
+    id = id.split('_')[1];
+    let idNum = id;
+    id = `r_${idNum}_des`;
+    let des = document.querySelector(`#${id}`);
+    let allDesSelected = [];
+    for(let  i = 0; i < des.selectedOptions.length; i++) {
+      const node = des.selectedOptions[i];
+      const dataset = node.dataset.checkdata;
+      const vId = dataset.split('__')[0];
+      const vName = dataset.split('__')[1];
+      const svName = dataset.split('__')[2];
 
-    const value = document.querySelector(
-      `select[name=expertise-${index}`
-    ).value;
-    cvVerticals.push({
-      verName: selectedVName,
-      ver: selectedVId,
-      subVertical: selectedSubV,
-      profession,
-      designation,
-      value,
-    });
-  }
-
-  console.log("getUserPreferences : cvVerticals", cvVerticals);
-  if (cvVerticals.length == 0) {
-    document.getElementById("progressBar").style.display = "none";
-    alert("Select atleast 1 Designation");
-    return;
-  }
-
-  const vv = [];
-  const sv = [];
-  const prof = [];
-  cvVerticals.map((cvv) => {
-    console.log(vv);
-    console.log(cvv);
-    let vIndex = vv.findIndex((v) => v.id === cvv.ver);
-    console.log(vIndex);
-    if (vIndex === -1) {
-      vv.push({ id: cvv.ver, name: cvv.verName });
-      sv.push({
-        ver: cvv.ver,
-        sver: [],
-      });
-      prof.push({
-        ver: cvv.ver,
-        svers: [],
-      });
-    }
-
-    vIndex = sv.findIndex((v) => v.ver === cvv.ver);
-    let svIndex = sv[vIndex].sver.findIndex((sv) => sv === cvv.subVertical);
-    if (svIndex === -1) {
-      sv[vIndex].sver.push(cvv.subVertical);
-    }
-
-    const profvIndex = prof.findIndex((p) => p.ver == cvv.ver);
-    const profsvIndex = prof[profvIndex].svers.findIndex(
-      (p) => p.sver === cvv.subVertical
-    );
-    if (profsvIndex === -1) {
-      prof[profvIndex].svers.push({
-        sver: cvv.subVertical,
-        profs: [
-          {
-            prof: cvv.profession,
-            designations: [cvv.designation],
-            value: cvv.value,
-          },
-        ],
-      });
-    } else {
-      let profIndex = prof[profvIndex].svers[profsvIndex].profs.findIndex(
-        (p) => p.prof === cvv.profession
-      );
-      if (profIndex === -1) {
-        prof[profvIndex].svers[profsvIndex].profs.push({
-          prof: cvv.profession,
-          designations: [cvv.designation],
-          value: cvv.value,
-        });
-      } else {
-        const desigIndex = prof[profvIndex].svers[profsvIndex].profs[
-          profIndex
-        ].designations.findIndex((d) => d === cvv.designation);
-        if (desigIndex === -1) {
-          prof[profvIndex].svers[profsvIndex].profs[
-            profIndex
-          ].designations.push(cvv.designation);
-        }
+      const vIndex = allSelectedV.findIndex(v => v.vId === vId);
+      if(vIndex === -1) {
+        allSelectedV.push({vId, vName})
+        allSelectedSv.push({
+          vId,
+          vName,
+          svers: [svName]
+        })
       }
+
+      const svIndex = allSelectedSv.findIndex(v => v.vId === vId);
+      if(svIndex !== -1) {
+        console.log(allSelectedSv[svIndex].svers);
+        const i = allSelectedSv[svIndex].svers.findIndex(v => v === svName);
+        console.log(i);
+        if(i === -1) {
+          allSelectedSv[svIndex].svers.push(svName)
+        }
+      } 
+      console.log('allSelectedSv', allSelectedSv);
+
+      // const prof = dataset.split('__')[3];
+      // const des = dataset.split('__')[4];
+      allDesSelected.push(dataset)
     }
-  });
+    id = `r_${idNum}_exp`;
+    const exp = document.querySelector(`#${id}`);
+    all.push({des: allDesSelected, exp: exp.value})
+  }
 
-  console.log("getUserPreferences : vv", vv);
-  console.log("getUserPreferences : sv", sv);
-  console.log("getUserPreferences : prof", prof);
+  const allSelected = [];
+  all.map((wholeValue, i) => {
+    console.log('wholeValue', wholeValue);
 
-  return { verticals: vv, subVerticals: sv, professions: prof };
+    wholeValue.des.map(d => {
+      console.log('d', d);
+      const vId = d.split('__')[0];
+      const vName = d.split('__')[1];
+      const svName = d.split('__')[2];
+      const prof = d.split('__')[3];
+      const des = d.split('__')[4];
+
+      console.log('allSelected', allSelected);
+      const vIndex = allSelected.findIndex((cv, index) => cv.vId === vId);
+      console.log('vIndex', vIndex);
+      if(vIndex > -1) {
+        const svIndex = allSelected[vIndex].svers.findIndex(cv => cv.svName === svName);
+        console.log('svIndex', svIndex);
+        if(svIndex > -1) {
+          allSelected[vIndex].svers[svIndex].des.push(des);
+        } else {
+          allSelected[vIndex].svers.push({
+            svName: svName,
+            prof: prof,
+            des: [des],
+            exp: wholeValue.exp
+          })
+        }
+      } else {
+        allSelected.push({
+          vId: vId,
+          vName: vName,
+          svers : [{
+            svName: svName,
+            prof: prof,
+            des: [des],
+            exp: wholeValue.exp
+          }]
+        })
+      }
+      console.log('allSelected', allSelected);
+    })
+  })
+
+
+  return {allSelected, allSelectedSv, allSelectedV };
 }
 
 // ///////////////////////

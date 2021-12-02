@@ -60,6 +60,9 @@ auth.onAuthStateChanged(async (user) => {
   USER = userDetailsRes.data;
   displayAuthSigns();
   displayUserDetails();
+  if(USER.cv) {
+    displayUserCvDetails();
+  }
 });
 
 
@@ -81,7 +84,7 @@ const fullNameProfileHTML = document.querySelector("#fullNameProfile");
 const aboutMeProfileHTML = document.querySelector("#aboutMeProfile");
 const blahHTML = document.querySelector("#blah");
 const editCvBtnHTML = document.querySelector("#editCvBtn");
-const editCvBtnHTML2 = document.querySelector("#editCvBtn2");
+const uploadViewCvSliderHTML = document.querySelector("#upload-view-cv-slider");
 const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
 const cvEditHolderHTML = document.querySelector("#cvEditHolder");
 
@@ -95,7 +98,6 @@ function displayUserDetails() {
     userBasicFormHTML["experienceYear"].value = USER.basicInfo.experienceYear;
   fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
   if (USER.basicInfoAdded) {
-
     userBasicFormHTML["qualification"].value = USER.basicInfo.qualification;
     userBasicFormHTML["employmentStatus"].value =
       USER.basicInfo.employmentStatus;
@@ -105,14 +107,18 @@ function displayUserDetails() {
     userBasicFormHTML["certified-internationally"].value =
       USER.basicInfo.certifiedInternationally;
     userBasicFormHTML["gender"].value = USER.basicInfo.gender;
-    blahHTML.src = USER?.basicInfo?.imgUrl || `../assets/img/userProfile.png`;
   }
+  blahHTML.src = USER.img || `../assets/img/userProfile.png`;
 
   if (!USER.cvAdded) {
     editCvBtnHTML.checked = true;
     cvEditHolderHTML.style.display = "block";
     cvInfoHolderHTML.style.display = "none";
     editCvBtnHTML.disabled = true;
+  } else {
+    setTimeout(() => {
+      verticalsSelected(null, true);
+    }, 1500);
   }
 }
 
@@ -122,6 +128,7 @@ const toggleCvDisplay = (e) => {
   if (e?.target?.checked) {
     cvEditHolderHTML.style.display = "block";
     cvInfoHolderHTML.style.display = "none";
+    
   } else {
     cvEditHolderHTML.style.display = "none";
     cvInfoHolderHTML.style.display = "block";
@@ -140,8 +147,54 @@ const toggleUploadCvDisplay = (e) => {
 };
 
 editCvBtnHTML.addEventListener("change", toggleCvDisplay);
-editCvBtnHTML2.addEventListener("change", toggleUploadCvDisplay);
+editCvBtnHTML.disabled = true;
 
+uploadViewCvSliderHTML.addEventListener("change", toggleUploadCvDisplay);
+
+setTimeout(() => {
+  editCvBtnHTML.disabled = false;
+  if(!USER.cvAdded) {
+    uploadViewCvSliderHTML.checked = true;
+    uploadViewCvSliderHTML.disabled = true;
+  } else {
+    document.getElementById("cv-file").style.display = "none";
+    document.getElementById("uploadNewCv").style.display = "none";
+    document.getElementById("editCvUrlHolder").style.display = "block";
+  }
+}, 2000);
+
+
+// ////////////////////////////////////////////
+
+function displayCountriesStates() {
+  let optionsState = ""
+  let optionsCountry="";
+  document.getElementById("sts").innerHTML = `
+		<select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+   
+  document.getElementById("cts").innerHTML=`
+    <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+  `
+
+  document.getElementById('country').innerHTML+=optionsCountry
+  populateCountries("country", "state");
+  
+  // populateStates("country","state")
+  setTimeout(function () {
+  
+    document.getElementById("state").innerHTML += optionsState
+    new Choices("#state", {
+      removeItemButton: true,
+      maxItemCount: 100,
+      searchResultLimit: 100,
+      renderChoiceLimit: 100,
+      placeholder: 'Chosse Country first',
+    });
+    
+    document.getElementById("stateOpt").style.display = "block";
+  }, 500);
+}
+displayCountriesStates();
 // ////////////////////////////////////////////
 
 const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
@@ -186,22 +239,25 @@ const toggleBasicInfoDisplay = (e) => {
 editBasicInfoBtnHTML.addEventListener("change", toggleBasicInfoDisplay);
 
 // ////////////////////////////////////////////
-
-// let IMG = false;
-// let IMG_NAME = false;
-
 const userImageHTML = document.querySelector("#userImage");
 
-const uploadImgLocal = (e) => {
+const uploadImgLocal = async(e) => {
   if (!USER.basicInfoAdded) {
     // nowuiDashboard.showNotification('top','center',"Please add all your details in order to update the profile image","primary");
     blahHTML.src = `../assets/img/userProfile.png`;
     return;
   }
   readURL(e);
-  IMG = e.target.files[0];
-  IMG_NAME = `${new Date().valueOf()}__${IMG.name}`;
-  // uploadImgToDB();
+  let img = e.target.files[0];
+  let imgName = `${new Date().valueOf()}__${img.name}`;
+  await uploadFileToStorage({ref: `employees/${USER_ID}`, fileName: imgName, file: img});
+  const imgRes = await getUrlOfFile({ref: `employees/${USER_ID}`, fileName: imgName });
+  if(!imgRes.status) {
+    alert(imgRes.message);
+    return;
+  }
+  const link = imgRes.data.url;
+  updateDbDoc({ref: USER_REF, docData: USER, dataToUpdate: {imgName: imgName, img: link}})
 };
 
 userImageHTML.addEventListener("change", uploadImgLocal);
@@ -242,39 +298,184 @@ const updateBasicInfo = async (e) => {
     basicInfoAdded: true,
   };
 
-  try {
-    if (USER.cvAdded) {
-      if (
-        fname !== USER.fname ||
-        lname !== USER.lname ||
-        lname !== USER.lname
-      ) {
-        const cvRef = await db
-          .collection(USER.cv.collectionName)
-          .doc(USER.cv.docId);
-        const cvDoc = await cvRef.get();
-        const cvData = await cvDoc.data();
-        cvData.fname = fname;
-        cvData.lname = lname;
-        await cvRef.update(cvData);
-      }
+  if (USER.cvAdded) {
+    if (
+      fname !== USER.fname ||
+      lname !== USER.lname ||
+      lname !== USER.lname
+    ) {
+      const updateRes = await updateDbDoc({collectionName: USER.cv.collectionName, docId: USER.cv.docId, dataToUpdate: {
+        fname, lname
+      }, resetData: false})
+      // if(updateRes.status) {
+        
+      // }
     }
-
-    // await USER_REF.update(data);
-
-    // nowuiDashboard.showNotification(
-    //   "top",
-    //   "center",
-    //   "Basic Data updated Successfully",
-    //   "primary"
-    // );
-    // getDbData({ uid: USER_ID, userType: USER.userType });
-  } catch (error) {
-    console.error(error);
-    alert(`Try again. Reason: ${error.message}`);
   }
+
+  const res = await updateDbDoc({ref: USER_REF, dataToUpdate: data, resetData: false});
+  if(res.status) {
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Basic Data updated Successfully",
+      "primary"
+    );
+  }
+
 };
 
 userBasicFormHTML.addEventListener("submit", updateBasicInfo);
 
 // ////////////////////////////////////
+
+
+const cvUrlHTML = document.querySelector("#cvUrl");
+const verticalsBtnsHTML = document.querySelector("#verticalsBtns");
+const verticalsTablesHTML = document.querySelector("#verticalsTables");
+const editCvUrlHolderHTML = document.querySelector('#editCvUrlHolder');
+const workCountryHTML = document.querySelector('#work-country');
+const workStatesHTML = document.querySelector('#work-states');
+const workCitiesHTML = document.querySelector('#work-cities');
+const stsHTML = document.querySelector('#sts');
+
+function displayUserCvDetails() {
+  let oldStateArr = [];
+  let oldCountryArr  = [];
+  cvUrlHTML.href = USER.cv.url;
+  verticalsBtnsHTML.innerHTML = ``;
+  workCountryHTML.innerText = USER.cv.workCountry;
+  let states ="<ul>";
+  USER.cv.workStates.map(s => {
+    states += `<li>${s}</li>`
+  })
+  states += `</ul>`;
+  workStatesHTML.innerHTML = states;
+
+  workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
+
+
+  //console.log(USER.cv.workCountry)
+  //cvFormHTML['country'].value = USER.cv.workCountry;
+  let optionsState = ""
+  let optionsCountry="";
+  document.getElementById("sts").innerHTML = `
+  <select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
+  USER.cv.workStates.map((s) => {
+    optionsState += `<option value="${s}" selected>${s}</option>`;
+    oldStateArr.push(s)
+  });
+  document.getElementById("cts").innerHTML=`
+   <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
+  `
+  USER.cv.workCountry.map((c) => {
+    optionsCountry+= `<option value="${c}" selected>${c}</option>`;
+    oldCountryArr.push(c)
+  });
+
+ 
+
+  document.getElementById('country').innerHTML+=optionsCountry
+  populateCountries("country", "state");
+  
+ // populateStates("country","state")
+  setTimeout(function () {
+ 
+    document.getElementById("state").innerHTML += optionsState
+    new Choices("#state", {
+      removeItemButton: true,
+      maxItemCount: 100,
+      searchResultLimit: 100,
+      renderChoiceLimit: 100,
+    });
+    
+    document.getElementById("stateOpt").style.display = "block";
+  }, 500);
+    
+  USER.cv.verticals.map((v, i) => {
+    verticalsBtnsHTML.innerHTML += `
+    <button type="button" class="btn btn-info" style="background-color: rgb(31, 126, 189);" data-parent="#acd" data-toggle="collapse" href="#${v.vId}">${v.vName} ></button>
+    `;
+  });
+  
+  // console.log('displayCvDetails : cv', USER.cv);
+  USER.cv.all.map(async (v) => {
+    let head = `
+    <div id="${v.vId}" class="collapse">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr style="text-align: center">
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Sub-Vertical [${v.vName}]
+            </th>
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Proffestions
+            </th>
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Designations
+            </th>
+            <th
+              style="text-align: center; font-weight: 600"
+              scope="col"
+            >
+              Expertice
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    let body = ``;
+    let rows = "";
+    v.svers.map((sv) => {
+        rows += `
+        <tr>
+          <td>
+          ${sv.svName}
+          </td>
+          <td>
+          ${sv.prof}
+          </td>
+          <td>
+            ${sv.des.join(', ')}
+          </td>
+          <td>
+            ${sv.exp}
+          </td>
+        </tr>
+        `;
+      });
+      body = rows;
+
+    let end = `
+      </table>
+    </div>
+    `;
+
+    let whole = head + body + end;
+    verticalsTablesHTML.innerHTML += whole;
+  });
+
+    
+  editCvUrlHolderHTML.innerHTML = `
+  <a target="_blank" href="${USER.cv.url}" >
+    <label
+      class="btn btn-tertiary js-labelFile"
+      style="background-color: transparent"
+    >
+      <i class="icon fa fa-eye"></i>
+      <span class="js-fileName"
+        >View Your CSV</span
+      >
+    </label>
+  </a>`;
+}

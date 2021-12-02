@@ -54,7 +54,7 @@ const updateDbDoc = async ({ collectionName = false, docId = false, ref = false,
     if (!ref) {
       ref = await db.collection(collectionName).doc(docId);
       const docDoc = await docRef.get();
-      docData = await docData.data();
+      docData = await docDoc.data();
     }
 
     if (resetData) {
@@ -94,7 +94,7 @@ const updateDbDoc = async ({ collectionName = false, docId = false, ref = false,
 let retryGetURL = 0;
 const getUrlOfFile = async ({ ref, fileName }) => {
   try {
-    const url = await storage.ref(fileName).child(fileName).getDownloadURL();
+    const url = await storage.ref(ref).child(fileName).getDownloadURL();
     return {
       status: true,
       message: "Success. Fetched the file url from storage.",
@@ -263,6 +263,36 @@ async function getDbCollData({ collectionName }) {
     }
   }
 }
+
+// /////////////////////////
+
+let retrySetDbData = 0;
+async function setDbData({ collectionName, docId, dataToUpdate }) {
+  // console.log('insertDbData :', collectionName, docId);
+  try {
+    const ref = await db.collection(collectionName).doc(docId);
+    await ref.set(dataToUpdate)
+
+    return {
+      status: true,
+      ref,
+      message: 'Successfully saved the data'
+    }
+  } catch (error) {
+    console.error(error);
+    if (retrySetDbData < 2) {
+      retrySetDbData++;
+      alert(`Attempt: ${retrySetDbData} Unable to save the data. Reason: ${error.message}`);
+      setDbData({ collectionName, docId, dataToUpload });
+    } else {
+      return {
+        status: false,
+        message: `Unable to save the data. Reson: ${error.message}`,
+      };
+    }
+  }
+}
+
 
 // /////////////////////////
 
