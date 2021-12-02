@@ -62,15 +62,9 @@ function displayAuthSigns() {
     <a onclick="logoutUser()" class="dropdown-item" href="#"><i class="now-ui-icons arrows-1_minimal-left"><span style="color:black;"></span></i>Logout</a>
     `;
     topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`
-    if(USER.basicInfoAdded) {
- 
-      if(USER.basicInfo.imgUrl) {
-     
-      
-        topbarImgHTML.src = USER.basicInfo.imgUrl;
-      }
+    if(USER.img) {
+      topbarImgHTML.src = USER.img;
     }
-
     navLoginHTML.innerHTML = `
     <li class="ace">
       <a href="./${USER_TYPE}/user.html">

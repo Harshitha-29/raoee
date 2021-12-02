@@ -670,8 +670,8 @@ code {
                 <div class="card-header" style="display: flex">
                   <h5 class="title">My CV's</h5>
                   <h5 class="title responsiveEdit" style="float: right ; margin-left: 80%;">
-                    <label class="switch">
-                      <input type="checkbox" id="editCvBtn" />
+                    <label class="switch" id="showCv2sec" style="display:none">
+                      <input type="checkbox" id="editCvBtn"/>
                       <span class="slider round"></span>
                       <span style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;"> Edit</span>
                     </label>
@@ -1082,9 +1082,9 @@ code {
   </body>
   <script>
     $(document).ready(function () {
-      // setTimeout(() => {
-  //   $('.selectpicker').selectpicker();
-  // }, 2000)
+      setTimeout(() => {
+        document.getElementById("showCv2sec").style.display="block";
+      }, 1500)
   
       var cnt=0;
         let int= setInterval(function(){
