@@ -33,10 +33,16 @@ const updateCv = async (e) => {
 
   const workCity = cvFormHTML["work-city"].value;
 
-  if (countrySelected === 0) {
-    alert('Enter country');
+  if (countrySelected.length === 0) {
+    // countrySelected = USER_SELECTED_COUNT;
+    // statesSelected = USER_SELECTED_STATE;
+    if(countrySelected.length==0){
+      nowuiDashboard.showNotification('top','center',"Please select country","primary");
+      return;
+    }
+    //alert('Enter country');
     // nowuiDashboard.showNotification('top','center',"Please enter the state where user emplyee wants to work","primary");
-    return;
+    //return;
 
     // if (oldStateArr.length == 0) {
     //   document.getElementById("progressBar2").style.display = "none";

@@ -98,18 +98,20 @@ function verticalsSelected(e, isInital = false) {
       const verDataInterval = setInterval(() => {
         if(VERTICALS_DATA.length === 0) return;
         userVerticalsSelected = USER.cv.verticals.map(v => `${v.vId}__${v.vName}`);
-        console.log(userVerticalsSelected);
-        displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
+        //displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
         clearInterval(verDataInterval);
       }, 500);
     } else {
       userVerticalsSelected = USER.cv.verticals.map(v => `${v.vId}__${v.vName}`);
-      console.log(userVerticalsSelected);
-      displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
+      //displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
     }
+    setTimeout(function(){
+      displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
+    },1000)
+  
   }
-  console.log('verticalsSelected : userVerticalsSelected', userVerticalsSelected);
-  console.log('verticalsSelected : VERTICALS_DATA', VERTICALS_DATA);
+  // console.log('verticalsSelected : userVerticalsSelected', userVerticalsSelected);
+  // console.log('verticalsSelected : VERTICALS_DATA', VERTICALS_DATA);
 
   let subVerticalsToDisplay = [];
 
@@ -236,6 +238,9 @@ function subVerticalSelected(e, isInital = false) {
       let vIndex = professtionsToDisplay.findIndex(vv => vv._id === v._id);
       let allProfs = TEMP_VERTICALS_DATA[i].allSubVerticals.filter(svv => svv.name === sv);
       console.log('subVerticalSelected : allProfs', allProfs);
+      if(allProfs.length==0){
+        window.location.reload();
+      }
       allProfs = allProfs[0].professions;
       if (vIndex === -1) {
         professtionsToDisplay.push({

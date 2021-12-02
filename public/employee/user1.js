@@ -89,6 +89,7 @@ const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
 const cvEditHolderHTML = document.querySelector("#cvEditHolder");
 
 function displayUserDetails() {
+  topbarImgHTML.src = USER.img;
   userBasicFormHTML["fname"].value = USER.fname;
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
@@ -147,21 +148,21 @@ const toggleUploadCvDisplay = (e) => {
 };
 
 editCvBtnHTML.addEventListener("change", toggleCvDisplay);
-editCvBtnHTML.disabled = true;
+//editCvBtnHTML.disabled = true;
 
 uploadViewCvSliderHTML.addEventListener("change", toggleUploadCvDisplay);
 
-setTimeout(() => {
-  editCvBtnHTML.disabled = false;
-  if(!USER.cvAdded) {
-    uploadViewCvSliderHTML.checked = true;
-    uploadViewCvSliderHTML.disabled = true;
-  } else {
-    document.getElementById("cv-file").style.display = "none";
-    document.getElementById("uploadNewCv").style.display = "none";
-    document.getElementById("editCvUrlHolder").style.display = "block";
-  }
-}, 2000);
+// setTimeout(() => {
+//   //editCvBtnHTML.disabled = false;
+//   if(!USER.cvAdded) {
+//     uploadViewCvSliderHTML.checked = true;
+//     uploadViewCvSliderHTML.disabled = true;
+//   } else {
+//     document.getElementById("cv-file").style.display = "none";
+//     document.getElementById("uploadNewCv").style.display = "none";
+//     document.getElementById("editCvUrlHolder").style.display = "block";
+//   }
+// }, 2000);
 
 
 // ////////////////////////////////////////////
@@ -248,6 +249,7 @@ const uploadImgLocal = async(e) => {
     return;
   }
   readURL(e);
+  document.getElementById("progressBar").style.display="block"
   let img = e.target.files[0];
   let imgName = `${new Date().valueOf()}__${img.name}`;
   await uploadFileToStorage({ref: `employees/${USER_ID}`, fileName: imgName, file: img});
@@ -257,7 +259,10 @@ const uploadImgLocal = async(e) => {
     return;
   }
   const link = imgRes.data.url;
-  updateDbDoc({ref: USER_REF, docData: USER, dataToUpdate: {imgName: imgName, img: link}})
+  await updateDbDoc({ref: USER_REF, docData: USER, dataToUpdate: {imgName: imgName, img: link}})
+  document.getElementById("progressBar").style.display="none"
+  blahHTML.src=link;
+  
 };
 
 userImageHTML.addEventListener("change", uploadImgLocal);
@@ -338,10 +343,15 @@ const workCountryHTML = document.querySelector('#work-country');
 const workStatesHTML = document.querySelector('#work-states');
 const workCitiesHTML = document.querySelector('#work-cities');
 const stsHTML = document.querySelector('#sts');
+let USER_SELECTED_COUNT= []
+let USER_SELECTED_STATE= []
 
 function displayUserCvDetails() {
-  let oldStateArr = [];
-  let oldCountryArr  = [];
+  document.getElementById("cv-file").style.display = "none";
+  document.getElementById("uploadNewCv").style.display = "none";
+  document.getElementById("editCvUrlHolder").style.display = "block";
+  USER_SELECTED_COUNT=USER.cv.workCountry;
+  USER_SELECTED_STATE = USER.cv.workStates;
   cvUrlHTML.href = USER.cv.url;
   verticalsBtnsHTML.innerHTML = ``;
   workCountryHTML.innerText = USER.cv.workCountry;
@@ -350,8 +360,8 @@ function displayUserCvDetails() {
     states += `<li>${s}</li>`
   })
   states += `</ul>`;
-  workStatesHTML.innerHTML = states;
 
+  workStatesHTML.innerHTML = states;
   workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
 
 
@@ -363,14 +373,14 @@ function displayUserCvDetails() {
   <select onchange="selectedState(event)" style="padding: 7px;" name ="state"  id="state" multiple >`;
   USER.cv.workStates.map((s) => {
     optionsState += `<option value="${s}" selected>${s}</option>`;
-    oldStateArr.push(s)
+    USER_SELECTED_STATE.push(s)
   });
   document.getElementById("cts").innerHTML=`
    <select style="padding: 7px;width: 85%;"  id="country" name ="country" multiple></select> 
   `
   USER.cv.workCountry.map((c) => {
     optionsCountry+= `<option value="${c}" selected>${c}</option>`;
-    oldCountryArr.push(c)
+    USER_SELECTED_COUNT.push(c)
   });
 
  
