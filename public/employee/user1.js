@@ -41,17 +41,17 @@ auth.onAuthStateChanged(async (user) => {
 
   USER_RAW = user;
   USER_ID = user.uid;
-  // console.log('onAuthStateChanged : user.displayName :',user.displayName);
-  // if (user.emailVerified === false) {
-  //   $("#exampleModalCenter").modal({
-  //     backdrop: "static",
-  //     keyboard: false,
-  //     show: true,
-  //   });
-  //   document.getElementById("emailID").innerHTML = user.email;
-  //   return;
-  // }
+  console.log('onAuthStateChanged : user.emailVerified :',user.emailVerified);
+  if (user.emailVerified == false) {
 
+    $("#exampleModalCenter").modal({
+      backdrop: "static",
+      keyboard: false,
+      show: true,
+    });
+    document.getElementById("emailID").innerHTML = user.email;
+    return;
+  }
   const userDetailsRes = await getDbData({
     collectionName: 'employees',
     docId: USER_ID
@@ -73,10 +73,21 @@ const topbarImgHTML = document.querySelector("#topbar-img");
 
 function displayAuthSigns() {
   topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`;
-  if (USER.basicInfoAdded && USER.basicInfo.imgUrl) {
-    topbarImgHTML.src = USER.basicInfo.imgUrl;
-  }
+  topbarImgHTML.src = USER.img;
 }
+
+// ////////////////////////////////////////////
+
+const logoutBtnTopHTML = document.querySelector('#logoutBtnTop');
+const logoutBtnMenuHTML = document.querySelector('#logoutBtnMenu');
+
+logoutBtnTopHTML.addEventListener('click', () => {
+  logouAuthtUser({redirectURL: `./../index.html`});
+})
+
+logoutBtnMenuHTML.addEventListener('click', () => {
+  logouAuthtUser({redirectURL: `./../index.html`});
+})
 
 // ////////////////////////////////////////////
 
@@ -89,7 +100,6 @@ const cvInfoHolderHTML = document.querySelector("#cvInfoHolder");
 const cvEditHolderHTML = document.querySelector("#cvEditHolder");
 
 function displayUserDetails() {
-  topbarImgHTML.src = USER.img;
   userBasicFormHTML["fname"].value = USER.fname;
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
@@ -489,3 +499,5 @@ function displayUserCvDetails() {
     </label>
   </a>`;
 }
+
+// /////////////////////////

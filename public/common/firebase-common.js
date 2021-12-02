@@ -146,7 +146,7 @@ const uploadFileToStorage = async ({ ref, fileName, file }) => {
 
 let retryLogout = 0;
 
-function logoutUser({ redirectURL }) {
+function logouAuthtUser({ redirectURL }) {
   auth
     .signOut()
     .then(() => {
