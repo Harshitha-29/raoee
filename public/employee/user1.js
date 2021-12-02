@@ -347,6 +347,7 @@ let USER_SELECTED_COUNT= []
 let USER_SELECTED_STATE= []
 
 function displayUserCvDetails() {
+    
   document.getElementById("cv-file").style.display = "none";
   document.getElementById("uploadNewCv").style.display = "none";
   document.getElementById("editCvUrlHolder").style.display = "block";

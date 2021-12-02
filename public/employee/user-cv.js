@@ -397,6 +397,7 @@ function sliderToggle(e, self) {
   id = `r_${id}`;
   if (value) {
     userSliderChecked.push(metaData);
+    document.getElementById("sliderText"+id).innerHTML="Yes";
     document.querySelector(`#${id}_des`).parentElement.classList.remove('disabled');
     document.querySelector(`#${id}_des`).parentElement.childNodes[0].classList.remove('disabled');
     document.querySelector(`#${id}_exp`).parentElement.childNodes[0].classList.remove('disabled');
@@ -405,6 +406,7 @@ function sliderToggle(e, self) {
   } else {
     const updatedDes = userSelectedDesignation.filter(d => !d.includes(metaData));
     userSelectedDesignation = updatedDes;
+    document.getElementById("sliderText"+id).innerHTML="No";
     document.querySelector(`#${id}_des`).parentElement.classList.add('disabled');
     document.querySelector(`#${id}_des`).parentElement.childNodes[0].classList.add('disabled');
     document.querySelector(`#${id}_exp`).parentElement.childNodes[0].classList.add('disabled');
@@ -424,6 +426,10 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
 
   if(userSliderChecked.includes(fullName)) {
     isChecked = `checked`;
+    setTimeout(function(){
+      document.getElementById("sliderText"+rowId).innerHTML="Yes";
+    },400)
+  
   } else {
     isChecked = '';
   }
@@ -432,7 +438,7 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
   <label id="${rowId}_switch" class="switch">
     <input name="slider_checkbox" type="checkbox" ${isChecked} data-sliderdata="${vId}__${vName}__${svName}__${prof}" onchange="sliderToggle(event, this)" >
     <span class="slider round"></span>
-    <span id="sliderText" style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
+    <span id="sliderText`+rowId+`" style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
   </label>`;
 
   return slider;
