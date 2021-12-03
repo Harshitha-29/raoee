@@ -284,7 +284,7 @@ function displayExpertiseTable({ professtionsToDisplay, isInital= false }) {
   let head = ``;
   let table = ``;
   isInital = isInital ? isInital : false;
-
+  let idObj={};
   // console.log('displayExpertiseTable : professtionsToDisplay ', professtionsToDisplay);
   // console.log('displayExpertiseTable : isInital ', isInital);
   for (let i = 0; i < professtionsToDisplay.length; i++) {
@@ -297,11 +297,12 @@ function displayExpertiseTable({ professtionsToDisplay, isInital= false }) {
     // <label>Tick the box if applicable</label>`;
 
     let tableHead, tableBody;
-
+    
     for (let j = 0; j < v.subVerticals.length; j++) {
       const sv = v.subVerticals[j];
+      let idArr=[]
       tableHead = `
-      <table class="table table-bordered">
+      <table id="table_`+j+`" class="table table-bordered">
         <thead class="thead-dark">
           <tr style="text-align: center">
             <th
@@ -337,7 +338,9 @@ function displayExpertiseTable({ professtionsToDisplay, isInital= false }) {
           professionTitle: prof.prof, 
           vId: v._id, 
           svName: sv.name, 
-          vName: v.name, 
+          vName: v.name,
+          tableId : "table_"+j,
+          arr : idArr, 
           isInital});
 
       }
@@ -345,7 +348,10 @@ function displayExpertiseTable({ professtionsToDisplay, isInital= false }) {
       let tableEnd = `</tbody></table>`;
 
       table += tableHead + tableBody + tableEnd;
+
+      idObj["table_"+j]=idArr;
     }
+    window.localStorage.setItem("tables",JSON.stringify(idObj))
 
   }
   tables += head + table;
@@ -389,12 +395,21 @@ function designationFun({ designations, vId, vName, svName, prof }) {
 
 let userSliderChecked = [];
 
-function sliderToggle(e, self) {
+function sliderToggle(e, self,tableId) {
+  let tableID=tableId.id;
   const value = e.target.checked;
   const metaData = e.target.dataset.sliderdata;
   let id = self.parentNode.id.split('_')[1];
   id = `r_${id}`;
+  console.log(tableID)
   if (value) {
+    let allIds = JSON.parse(window.localStorage.getItem("tables"));
+    for(let i in allIds[tableID]){
+      console.log(allIds[tableID][i]+"--"+id)
+      if(allIds[tableID][i] != id){
+        document.getElementById("toggle_"+allIds[tableID][i]).disabled=true;
+      }
+    }
     userSliderChecked.push(metaData);
     document.getElementById("sliderText"+id).innerHTML="Yes";
     document.querySelector(`#${id}_des`).parentElement.classList.remove('disabled');
@@ -403,6 +418,11 @@ function sliderToggle(e, self) {
     document.querySelector(`#${id}_des`).disabled = false;
     document.querySelector(`#${id}_exp`).disabled = false;
   } else {
+    let allIds = JSON.parse(window.localStorage.getItem("tables"));
+    for(let i in allIds[tableID]){
+      document.getElementById("toggle_"+allIds[tableID][i]).disabled=false;
+
+    }
     const updatedDes = userSelectedDesignation.filter(d => !d.includes(metaData));
     userSelectedDesignation = updatedDes;
     document.getElementById("sliderText"+id).innerHTML="No";
@@ -419,7 +439,7 @@ function sliderToggle(e, self) {
 
 // ////////////////////////
 
-function sliderFun({vId, vName, svName, prof, rowId}) {
+function sliderFun({vId, vName, svName, prof, rowId,tableId,arr}) {
   let isChecked = ``;
   let fullName = `${vId}__${vName}__${svName}__${prof}`;
 
@@ -435,7 +455,7 @@ function sliderFun({vId, vName, svName, prof, rowId}) {
 
   let slider = `
   <label id="${rowId}_switch" class="switch">
-    <input name="slider_checkbox" type="checkbox" ${isChecked} data-sliderdata="${vId}__${vName}__${svName}__${prof}" onchange="sliderToggle(event, this)" >
+    <input name="slider_checkbox" type="checkbox" ${isChecked} cat="toggle_btns" data-sliderdata="${vId}__${vName}__${svName}__${prof}" id="toggle_${rowId}" onchange="sliderToggle(event, this ,`+tableId+`)" >
     <span class="slider round"></span>
     <span id="sliderText`+rowId+`" style="font-size: 12px;position: absolute;padding-top: 20px;padding-left: 10px;">No</span>
   </label>`;
@@ -465,13 +485,12 @@ function toggleDesignation(e, data = false) {
 
 // ////////////////////////////
 
-function profEachRow({ designations, professionTitle, vId, vName, svName, isInital = false }) {
-  // console.log('profEachRow : designations, professionTitle, vId, vName, svName', designations, professionTitle, vId, vName, svName, isInital);
+function profEachRow({ designations, professionTitle, vId, vName, svName,tableId, arr, isInital = false }) {
   let rowId = Math.round(Math.random() * (9999 - 1000 +1) + 1000);
   rowId = `r_${rowId}`;
   const vn = `${vId}__${vName}__${svName}__${professionTitle}`;
   let isDisabled = ``;
-
+  arr.push(rowId)
   let row = '';
   let isPreset = false;
   if(userSliderChecked.includes(vn)) {
@@ -511,12 +530,12 @@ function profEachRow({ designations, professionTitle, vId, vName, svName, isInit
       }
     }
   }
-
+  
   row = `
   <tr>
     <td>${professionTitle}</td>
     <td>
-      ${sliderFun({vId: vId, vName: vName, svName: svName, prof: professionTitle, rowId: rowId})}
+      ${sliderFun({vId: vId, vName: vName, svName: svName, prof: professionTitle, rowId: rowId,tableId:tableId})}
     </td>
 
     <td>
