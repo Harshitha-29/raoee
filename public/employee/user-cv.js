@@ -1,5 +1,6 @@
 let VERTICALS_DATA = [];
 let TEMP_VERTICALS_DATA = [];
+let IS_DROPDOWN_INIT =false;
 
 getDbCollData({ collectionName: 'verticals' }).then(async (res) => {
   for (let i = 0; i < res.data.length; i++) {
@@ -22,9 +23,10 @@ getDbCollData({ collectionName: 'verticals' }).then(async (res) => {
   }
 
   console.log(VERTICALS_DATA);
-  displayVerticalDropdown({isInital: false, data: false});
-  // storeAllNamesIds();
-  // displayCvDetails();
+  if(!IS_DROPDOWN_INIT){
+    IS_DROPDOWN_INIT = true; 
+    displayVerticalDropdown({isInital: false, data: false});
+  }
 })
 
 // /////////////////////////////////////
@@ -104,9 +106,9 @@ function verticalsSelected(e, isInital = false) {
       userVerticalsSelected = USER.cv.verticals.map(v => `${v.vId}__${v.vName}`);
       //displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
     }
-    setTimeout(function(){
-      displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
-    },1000)
+    IS_DROPDOWN_INIT = true;
+    displayVerticalDropdown({isInital: true, data: userVerticalsSelected})
+    
   
   }
   // console.log('verticalsSelected : userVerticalsSelected', userVerticalsSelected);
@@ -168,8 +170,8 @@ const subVerticalDropHolderHTML = document.querySelector("#subVerticalDropHolder
 
 function displaySubVerticalDropdown({ subVerticalsToDisplay, selectedSubV = false }) {
   let options = "";
-  // console.log('displaySubVerticalDropdown : subVerticalsToDisplay', subVerticalsToDisplay);
-  // console.log('displaySubVerticalDropdown : selectedSubV', selectedSubV);
+   console.log('displaySubVerticalDropdown : subVerticalsToDisplay', subVerticalsToDisplay);
+   console.log('displaySubVerticalDropdown : selectedSubV', selectedSubV);
   
   subVerticalsToDisplay.map((ver) => {
     ver.subVerticals.map(v => {
@@ -386,7 +388,12 @@ function designationFun({ designations, vId, vName, svName, prof }) {
     } else {
       isChecked = '';
     }
-    options += `<option ${isChecked} data-checkdata="${vId}__${vName}__${svName}__${prof}__${d}">${d}</option>`;
+    if(d!="N" && d!="none"&&d!="n"&&d!="None"){
+      options += `<option ${isChecked} data-checkdata="${vId}__${vName}__${svName}__${prof}__${d}">${d}</option>`;
+    }else{
+      options += `<option selected disabled data-checkdata="${vId}__${vName}__${svName}__${prof}__${d}">"Not Present"</option>`;
+    }
+   
   })
   return options;
 }

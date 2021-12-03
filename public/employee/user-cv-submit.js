@@ -25,7 +25,7 @@ const updateCv = async (e) => {
   e.preventDefault();
 
   if (!USER.basicInfoAdded) {
-    alert("Before adding CV, Please add basic information first .");
+    nowuiDashboard.showNotification('top','center',"Before adding CV, Please add your basic information.","primary");
     return;
   }
 
@@ -34,8 +34,15 @@ const updateCv = async (e) => {
   const workCity = cvFormHTML["work-city"].value;
 
   if (countrySelected.length === 0) {
-    // countrySelected = USER_SELECTED_COUNT;
-    // statesSelected = USER_SELECTED_STATE;
+    console.log(USER_SELECTED_COUNT)
+     countrySelected = USER_SELECTED_COUNT;
+     statesSelected = USER_SELECTED_STATE;
+     countrySelected = countrySelected.filter(function(item, pos) {
+      return countrySelected.indexOf(item) == pos;
+      })
+      statesSelected = statesSelected.filter(function(item, pos) {
+        return statesSelected.indexOf(item) == pos;
+        })
     if(countrySelected.length==0){
       nowuiDashboard.showNotification('top','center',"Please select country","primary");
       return;

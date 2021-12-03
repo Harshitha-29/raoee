@@ -61,7 +61,11 @@ auth.onAuthStateChanged(async (user) => {
   displayAuthSigns();
   displayUserDetails();
   if(USER.cv) {
+ 
     displayUserCvDetails();
+  }else{
+ 
+    displayCountriesStates();
   }
 });
 
@@ -73,7 +77,9 @@ const topbarImgHTML = document.querySelector("#topbar-img");
 
 function displayAuthSigns() {
   topbarUsernameHTML.innerHTML = `Welcome ${USER.fname}`;
-  topbarImgHTML.src = USER.img;
+  if(USER.img)
+    topbarImgHTML.src = USER.img;
+  
 }
 
 // ////////////////////////////////////////////
@@ -104,7 +110,7 @@ function displayUserDetails() {
   userBasicFormHTML["lname"].value = USER.lname;
   userBasicFormHTML["email"].value = USER.email;
   userBasicFormHTML["phone"].value = USER.phone;
-
+  userBasicFormHTML["gender"].value = USER.gender
   if(USER?.basicInfo?.experienceYear)
     userBasicFormHTML["experienceYear"].value = USER.basicInfo.experienceYear;
   fullNameProfileHTML.innerHTML = `<h5 class="title" style="color: black">${USER.fname} ${USER.lname}</h5>`;
@@ -205,7 +211,7 @@ function displayCountriesStates() {
     document.getElementById("stateOpt").style.display = "block";
   }, 500);
 }
-displayCountriesStates();
+//displayCountriesStates();
 // ////////////////////////////////////////////
 
 const editBasicInfoBtnHTML = document.querySelector("#editBasicInfoBtn");
@@ -253,7 +259,14 @@ editBasicInfoBtnHTML.addEventListener("change", toggleBasicInfoDisplay);
 const userImageHTML = document.querySelector("#userImage");
 
 const uploadImgLocal = async(e) => {
+ 
   if (!USER.basicInfoAdded) {
+    nowuiDashboard.showNotification(
+      "top",
+      "center",
+      "Please update your basic info first.",
+      "primary"
+    );
     // nowuiDashboard.showNotification('top','center',"Please add all your details in order to update the profile image","primary");
     blahHTML.src = `../assets/img/userProfile.png`;
     return;
@@ -336,6 +349,9 @@ const updateBasicInfo = async (e) => {
       "Basic Data updated Successfully",
       "primary"
     );
+    setTimeout(function(){
+      window.location.reload()
+    },200)
   }
 
 };
@@ -374,7 +390,7 @@ function displayUserCvDetails() {
 
   workStatesHTML.innerHTML = states;
   workCitiesHTML.innerHTML = `<p>${USER.cv.workCity}</p>`
-
+  document.getElementById("userCity").value = USER.cv.workCity
 
   //console.log(USER.cv.workCountry)
   //cvFormHTML['country'].value = USER.cv.workCountry;
@@ -411,6 +427,7 @@ function displayUserCvDetails() {
     });
     
     document.getElementById("stateOpt").style.display = "block";
+    
   }, 500);
     
   USER.cv.verticals.map((v, i) => {
