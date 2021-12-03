@@ -41,7 +41,7 @@ auth.onAuthStateChanged(async (user) => {
 
   USER_RAW = user;
   USER_ID = user.uid;
-  console.log('onAuthStateChanged : user.emailVerified :',user.emailVerified);
+  //console.log('onAuthStateChanged : user.emailVerified :',user.emailVerified);
   if (user.emailVerified == false) {
 
     $("#exampleModalCenter").modal({

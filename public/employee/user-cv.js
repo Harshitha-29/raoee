@@ -22,7 +22,7 @@ getDbCollData({ collectionName: 'verticals' }).then(async (res) => {
     }
   }
 
-  console.log(VERTICALS_DATA);
+  //console.log(VERTICALS_DATA);
   if(!IS_DROPDOWN_INIT){
     IS_DROPDOWN_INIT = true; 
     displayVerticalDropdown({isInital: false, data: false});
@@ -34,7 +34,7 @@ getDbCollData({ collectionName: 'verticals' }).then(async (res) => {
 let expertiseOptions = [];
 
 getDbData({ collectionName: 'experienceTags', docId: 'tags' }).then(res => {
-  console.log(res);
+  //console.log(res);
   expertiseOptions = res.data.tags;
 })
 
@@ -47,7 +47,7 @@ function displayVerticalDropdown({isInital = false, data = false}) {
   VERTICALS_DATA.map((ver) => {
     if(isInital) {
       let isPreset = data.filter(v => v === `${ver._id}__${ver.name}`);
-      console.log(isPreset);
+      //console.log(isPreset);
       if(isPreset.length > 0) {
         options += `<option selected value="${ver._id}__${ver.name}">${ver.name}</option>`;
         return;
@@ -129,12 +129,12 @@ function verticalsSelected(e, isInital = false) {
       TEMP_VERTICALS_DATA.push(v)
     }
   })
-  console.log('verticalsSelected : TEMP_VERTICALS_DATA', TEMP_VERTICALS_DATA);
-  console.log('verticalsSelected : subVerticalsToDisplay', subVerticalsToDisplay);
+  // console.log('verticalsSelected : TEMP_VERTICALS_DATA', TEMP_VERTICALS_DATA);
+  // console.log('verticalsSelected : subVerticalsToDisplay', subVerticalsToDisplay);
 
   if(isInital) {
     const d = [];
-    console.log(USER.cv.svers);
+    //console.log(USER.cv.svers);
     for(let j = 0; j < USER.cv.svers.length; j++) {
       const v = USER.cv.svers[j];
 
@@ -142,7 +142,7 @@ function verticalsSelected(e, isInital = false) {
         d.push(`${v.vId}__${v.vName}__${v.svers[i]}`); 
       }
     }
-    console.log('verticalsSelected : d :', d);
+    //console.log('verticalsSelected : d :', d);
     displaySubVerticalDropdown({ subVerticalsToDisplay: subVerticalsToDisplay, selectedSubV: d,  });
     flag = true;
     setTimeout(() => {
@@ -170,8 +170,8 @@ const subVerticalDropHolderHTML = document.querySelector("#subVerticalDropHolder
 
 function displaySubVerticalDropdown({ subVerticalsToDisplay, selectedSubV = false }) {
   let options = "";
-   console.log('displaySubVerticalDropdown : subVerticalsToDisplay', subVerticalsToDisplay);
-   console.log('displaySubVerticalDropdown : selectedSubV', selectedSubV);
+  //  console.log('displaySubVerticalDropdown : subVerticalsToDisplay', subVerticalsToDisplay);
+  //  console.log('displaySubVerticalDropdown : selectedSubV', selectedSubV);
   
   subVerticalsToDisplay.map((ver) => {
     ver.subVerticals.map(v => {
@@ -226,8 +226,8 @@ function subVerticalSelected(e, isInital = false) {
     ).map((x) => x.value ?? x.text);
   }
 
-  console.log('subVerticalSelected : userSubVerticalsSelected :', userSubVerticalsSelected);
-  console.log('subVerticalSelected : TEMP_VERTICALS_DATA :', TEMP_VERTICALS_DATA);
+  // console.log('subVerticalSelected : userSubVerticalsSelected :', userSubVerticalsSelected);
+  // console.log('subVerticalSelected : TEMP_VERTICALS_DATA :', TEMP_VERTICALS_DATA);
 
   let professtionsToDisplay = [];
 
@@ -238,7 +238,7 @@ function subVerticalSelected(e, isInital = false) {
       if (usvIndex === -1) return;
       let vIndex = professtionsToDisplay.findIndex(vv => vv._id === v._id);
       let allProfs = TEMP_VERTICALS_DATA[i].allSubVerticals.filter(svv => svv.name === sv);
-      console.log('subVerticalSelected : allProfs', allProfs);
+      //console.log('subVerticalSelected : allProfs', allProfs);
       if(allProfs.length==0){
         window.location.reload();
       }
@@ -268,7 +268,7 @@ function subVerticalSelected(e, isInital = false) {
       }
     })
   })
-  console.log(`subVerticalSelected : professtionsToDisplay :`, professtionsToDisplay);
+  //console.log(`subVerticalSelected : professtionsToDisplay :`, professtionsToDisplay);
 
   if(isInital) {
     displayExpertiseTable({ professtionsToDisplay: professtionsToDisplay, isInital: true })
@@ -408,11 +408,11 @@ function sliderToggle(e, self,tableId) {
   const metaData = e.target.dataset.sliderdata;
   let id = self.parentNode.id.split('_')[1];
   id = `r_${id}`;
-  console.log(tableID)
+  //console.log(tableID)
   if (value) {
     let allIds = JSON.parse(window.localStorage.getItem("tables"));
     for(let i in allIds[tableID]){
-      console.log(allIds[tableID][i]+"--"+id)
+      //onsole.log(allIds[tableID][i]+"--"+id)
       if(allIds[tableID][i] != id){
         document.getElementById("toggle_"+allIds[tableID][i]).disabled=true;
       }
@@ -487,7 +487,7 @@ function toggleDesignation(e, data = false) {
       userSelectedDesignation.push(dataset)
     }
   }
-  console.log('toggleDesignation : userSelectedDesignation',userSelectedDesignation);
+  //console.log('toggleDesignation : userSelectedDesignation',userSelectedDesignation);
 }
 
 // ////////////////////////////

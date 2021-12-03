@@ -259,7 +259,7 @@ s_a[251]="Central|Copperbelt|Eastern|Luapula|Lusaka|North-Western|Northern|South
 s_a[252]="Bulawayo|Harare|ManicalandMashonaland Central|Mashonaland East|Mashonaland West|Masvingo|Matabeleland North|Matabeleland South|Midlands";
 
 function populateStates(countryElementId, stateElementId) {
-  console.log(countryElementId._prevState.items)
+  //console.log(countryElementId._prevState.items)
   var result = [];
  
   // countryElementId._prevState.items.forEach(function(item) {
@@ -268,7 +268,7 @@ function populateStates(countryElementId, stateElementId) {
   //     }
   // });
   let selectedCountry=(countryElementId._prevState.items)
-  console.log(selectedCountry)
+  //console.log(selectedCountry)
   for(let k in selectedCountry){
     var selectedCountryIndex =
     selectedCountry[k].choiceId;
@@ -277,9 +277,9 @@ function populateStates(countryElementId, stateElementId) {
      //stateElement.length = 0; // Fixed by Julian Woods
     // stateElement.options[0] = new Option('Select State','');
     //stateElement.selectedIndex = 0;
-    console.log(selectedCountryIndex)
+    //console.log(selectedCountryIndex)
     var state_arr = s_a[selectedCountryIndex].split("|");
-    console.log(state_arr)
+    //console.log(state_arr)
     for (var i = 0; i < state_arr.length; i++) {
     
         stateElement.options[stateElement.length] = new Option(
@@ -321,7 +321,7 @@ function populateCountries(countryElementId, stateElementId) {
   populateStates(count_ind, stateElementId);
   if (stateElementId) {
     countryElement.onchange = function () {
-      console.log("called")
+      //console.log("called")
       document.getElementById("sts").innerHTML = "";
       document.getElementById("stateOpt").style.display = "none";
       document.getElementById("sts").innerHTML = `
