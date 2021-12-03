@@ -42,7 +42,6 @@ const verticalDropHolderHTML = document.querySelector("#verticalDropHolder");
 
 function displayVerticalDropdown({isInital = false, data = false}) {
   let options = "";
-  console.log(isInital, data);
   VERTICALS_DATA.map((ver) => {
     if(isInital) {
       let isPreset = data.filter(v => v === `${ver._id}__${ver.name}`);
